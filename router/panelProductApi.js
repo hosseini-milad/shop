@@ -162,12 +162,14 @@ router.post('/list-product',jsonParser,async (req,res)=>{
     try{const data={
         category:req.body.category,
         title:req.body.title,
+        sku:req.body.sku,
         brand:req.body.brand,
         offset:req.body.offset,
         pageSize:pageSize
     }
         const productList = await ProductSchema.aggregate([
             { $match:data.title?{title:new RegExp('.*' + data.title + '.*')}:{}},
+            { $match:data.sku?{sku:new RegExp('.*' + data.sku + '.*')}:{}},
             { $match:data.category?{category:data.category}:{}},
             
             ])
@@ -176,7 +178,7 @@ router.post('/list-product',jsonParser,async (req,res)=>{
             const typeUnique = [...new Set(productList.map((item) => item.category))];
             
            res.json({filter:products,type:typeUnique,
-            size:productList.length})
+            size:productList.length,full:productList.filter(({_id,sku})=>({_id,sku}))})
     }
     catch(error){
         res.status(500).json({message: error.message})
@@ -188,13 +190,15 @@ router.post('/editProduct',jsonParser,async(req,res)=>{
     try{ 
         const data = {
             title:  req.body.title,
-            category: req.body.category,
-            brand: req.body.brand,
+            catId: req.body.catId,
+            brandId: req.body.brandId,
             type:req.body.type,
             value:req.body.value,
             enTitle:req.body.enTitle,
             description:req.body.description,
             fullDesc:req.body.fullDesc,
+            productUrl:req.body.productUrl,
+            metaTitle: req.body.metaTitle,
             productMeta:req.body.productMeta,
             sku: req.body.sku,
             productCode: req.body.productCode,
@@ -222,30 +226,23 @@ router.post('/updateProduct',jsonParser,async(req,res)=>{
     try{ 
         const newRawData = await fetch(OLD_SITE_URL+"/api/v1/getProduct/"+productId,
             {method: 'GET' ,headers:{"content-type": "application/json"}});
-        const result = await newRawData.json()
+        var result = ''
+        try{result =await newRawData.json()}
+        catch{
+            res.status(400).json({error:"Api not find"})
+            return
+        }
         const newData = result.data
 
-        const location = "./upload/product/"
-        const imageUrl = location+productId+"."+"png"
-        const thumbUrl = location+productId+"Thumb."+"png"
+        const location = "/upload/product/"
+        const imageUrl = newData.image_url?location+productId+"."+newData.image_url.split('.').pop():
+            "https://sharifoilco.com/images/motor-oil.jpg"
+        const thumbUrl = newData.image_url?location+productId+"Thumb."+newData.image_url.split('.').pop():
+            "https://sharifoilco.com/images/motor-oil.jpg"
         var status = 0
         await download(OLD_SITE_URL+newData.image_url,imageUrl , function(){
             status=1;
         });
-
-        //var resultImage=await fetchImage(imageUrl)
-        /*var imageUrlRaw = await fetch("http://localhost:"+API_PORT+"/api/panel/user/upload",
-        {method:'post',
-          headers: {
-              "content-type": "application/json"
-          },
-          body:JSON.stringify({base64image:resultImage,
-                              imgName:productId+".png",
-                            folderName:"product"})})
-        var imageUrl = await imageUrlRaw.json()
-        if(imageUrl.status==='success')
-            imageUrl = "http://localhost:"+API_PORT+imageUrl.url
-        console.log(imageUrl)*/
         await resizeImage(imageUrl,thumbUrl)
         //const newImage = resultImage
         //console.log(resultImage)
@@ -257,14 +254,11 @@ router.post('/updateProduct',jsonParser,async(req,res)=>{
     }
 })
 var download =async function(uri, filename, callback){
-    var url = ''
+    return new Promise(resolve => {
     request.head(uri, function(err, res, body){
+      request(encodeURI(uri)).pipe(fs.createWriteStream("."+filename)).on('close', resolve);
       
-      request(uri).pipe(fs.createWriteStream(filename)).on('close', callback);
-      
-    });
-    console.log(url)
-    return(url)
+    })})
   };
 function fetchImage(url) {
     return new Promise(function (resolve, reject) {
@@ -280,12 +274,12 @@ request.get(url,
 
 async function resizeImage(imageData,outUrl){
     //const imageRaw = fs.readFileSync(imageData, 'binary')
-    const image = await resizeImg(fs.readFileSync(imageData), {
+    const image = await resizeImg(fs.readFileSync("."+imageData), {
         width: 150,
         height: 150
     });
  
-    fs.writeFileSync(outUrl, image);
+    fs.writeFileSync("."+outUrl, image);
 }
 
 /*Product*/
@@ -335,15 +329,14 @@ router.post('/editBrand',jsonParser,async(req,res)=>{
     try{ 
         const data = {
             title:  req.body.title,
-            category: req.body.category,
+            enTitle: req.body.sku, 
+            productMeta: req.body.productMeta,
             type:req.body.type,
             value:req.body.value,
             description:req.body.description,
             fullDesc:req.body.fullDesc,
-            sku: req.body.sku, 
             brandCode: req.body.brandCode,
             price: req.body.price,
-            quantity: req.body.quantity,
             sort: req.body.sort,
             brandUrl:  req.body.brandUrl,
             imageUrl:  req.body.imageUrl

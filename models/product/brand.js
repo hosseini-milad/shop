@@ -5,9 +5,6 @@ var Schema = mongoose.Schema;
 const BrandSchema = new Schema({
     title:  String,
     enTitle:String,
-    lenzIndex:[String],
-    material: [String],
-    Coating:[String],
     purchase:String,
     purchaseContact:String,
     imageUrl: String,

@@ -10,6 +10,7 @@ const ProductSchema = new Schema({
     description:String,
     fullDesc:String,
     productMeta:String,
+    metaTitle:String,
     ItemID:{ type: String , unique: true},
     
     config:String,
@@ -18,10 +19,9 @@ const ProductSchema = new Schema({
         type:String
     },
     imgGallery:String,
-    thumbUrl: {
-        type:String
-    },
+    thumbUrl: {type:String},
     price:String,
-    categories:String
+    brandId:String,
+    catId:String
 })
 module.exports = mongoose.model('product',ProductSchema);
