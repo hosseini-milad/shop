@@ -229,7 +229,7 @@ router.post('/updateProduct',jsonParser,async(req,res)=>{
         const imageUrl = location+productId+"."+"png"
         const thumbUrl = location+productId+"Thumb."+"png"
         var status = 0
-        download(OLD_SITE_URL+newData.image_url,imageUrl , function(){
+        await download(OLD_SITE_URL+newData.image_url,imageUrl , function(){
             status=1;
         });
 
@@ -256,7 +256,7 @@ router.post('/updateProduct',jsonParser,async(req,res)=>{
         res.status(500).json({message: error.message})
     }
 })
-var download = function(uri, filename, callback){
+var download =async function(uri, filename, callback){
     var url = ''
     request.head(uri, function(err, res, body){
       
