@@ -22,6 +22,7 @@ const ProductSchema = new Schema({
     thumbUrl: {type:String},
     price:String,
     brandId:String,
-    catId:String
+    catId:String,
+    sharifId:String
 })
 module.exports = mongoose.model('product',ProductSchema);

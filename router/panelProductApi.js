@@ -16,6 +16,7 @@ const ProductSchema = require('../models/product/products');
 const BrandSchema = require('../models/product/brand')
 const category = require('../models/product/category');
 const { env } = require('process');
+const filterNumber = require('../middleware/Functions');
 
 router.post('/fetch-service',jsonParser,async (req,res)=>{
     var serviceId = req.body.serviceId?req.body.serviceId:''
@@ -164,6 +165,7 @@ router.post('/list-product',jsonParser,async (req,res)=>{
         title:req.body.title,
         sku:req.body.sku,
         brand:req.body.brand,
+        active:req.body.active,
         offset:req.body.offset,
         pageSize:pageSize
     }
@@ -171,6 +173,7 @@ router.post('/list-product',jsonParser,async (req,res)=>{
             { $match:data.title?{title:new RegExp('.*' + data.title + '.*')}:{}},
             { $match:data.sku?{sku:new RegExp('.*' + data.sku + '.*')}:{}},
             { $match:data.category?{category:data.category}:{}},
+            { $match:data.active?{enTitle:{ $exists: true}}:{}},
             
             ])
             const products = productList.slice(offset,
@@ -192,6 +195,7 @@ router.post('/editProduct',jsonParser,async(req,res)=>{
             title:  req.body.title,
             catId: req.body.catId,
             brandId: req.body.brandId,
+            sharifId: req.body.sharifId,
             type:req.body.type,
             value:req.body.value,
             enTitle:req.body.enTitle,
@@ -222,6 +226,7 @@ router.post('/editProduct',jsonParser,async(req,res)=>{
 })
 router.post('/updateProduct',jsonParser,async(req,res)=>{
     var productId= req.body.productId?req.body.productId:''
+    productId=filterNumber(productId)
     if(productId === "new")productId=''
     try{ 
         const newRawData = await fetch(OLD_SITE_URL+"/api/v1/getProduct/"+productId,
@@ -233,7 +238,6 @@ router.post('/updateProduct',jsonParser,async(req,res)=>{
             return
         }
         const newData = result.data
-
         const location = "/upload/product/"
         const imageUrl = newData.image_url?location+productId+"."+newData.image_url.split('.').pop():
             "https://sharifoilco.com/images/motor-oil.jpg"
