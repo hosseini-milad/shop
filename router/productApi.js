@@ -18,7 +18,29 @@ const users = require('../models/auth/users');
 const quickCart = require('../models/product/quickCart');
 const bankAccounts = require('../models/product/bankAccounts');
 const sepidarFetch = require('../middleware/Sepidar');
+router.post('/getlist', async (req,res)=>{
+    try{
+        const allProducts = await productSchema.find({enTitle:{$exists:true}})
+        .limit(12)
 
+        //logger.warn("main done")
+        res.json({data:allProducts,message:"Products List"})
+    }
+    catch(error){
+        res.status(500).json({error: error.message})
+    }
+})
+router.post('/getProduct', async (req,res)=>{
+    try{
+        const productData = await productSchema.findOne({sku:req.body.sku})
+
+        //logger.warn("main done")
+        res.json({data:productData,message:"Products List"})
+    }
+    catch(error){
+        res.status(500).json({error: error.message})
+    }
+})
 router.post('/products', async (req,res)=>{
     try{
         const allProducts = await productSchema.find()
