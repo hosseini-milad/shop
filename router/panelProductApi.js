@@ -18,6 +18,9 @@ const category = require('../models/product/category');
 const { env } = require('process');
 const filterNumber = require('../middleware/Functions');
 
+const productCount = require('../models/product/productCount');
+const productPrice = require('../models/product/productPrice');
+
 router.post('/fetch-service',jsonParser,async (req,res)=>{
     var serviceId = req.body.serviceId?req.body.serviceId:''
     try{
@@ -178,10 +181,19 @@ router.post('/list-product',jsonParser,async (req,res)=>{
             ])
             const products = productList.slice(offset,
                 (parseInt(offset)+parseInt(pageSize)))  
+            var quantity = []
+            var price = []
+            for(var i=0;i<products.length;i++){
+                quantity.push(await productCount.findOne(
+                    {ItemID:products[i].ItemID,Stock:"6"},{quantity:1,_id:0}))
+                price.push(await productPrice.findOne(
+                    {ItemID:products[i].ItemID,saleType:"13"},{price:1,_id:0}))
+            }
             const typeUnique = [...new Set(productList.map((item) => item.category))];
             
            res.json({filter:products,type:typeUnique,
-            size:productList.length,full:productList.filter(({_id,sku})=>({_id,sku}))})
+            size:productList.length,full:productList,
+            quantity:quantity,price:price})
     }
     catch(error){
         res.status(500).json({message: error.message})
