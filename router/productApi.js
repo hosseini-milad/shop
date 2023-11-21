@@ -19,16 +19,29 @@ const quickCart = require('../models/product/quickCart');
 const bankAccounts = require('../models/product/bankAccounts');
 const sepidarFetch = require('../middleware/Sepidar');
 router.post('/getlist', async (req,res)=>{
+    var pageSize = req.body.pageSize?req.body.pageSize:"12";
+    var offset = req.body.offset?(parseInt(req.body.offset)*parseInt(pageSize)):0;
+
     const filter = req.body
     try{
         const catData = await category.findOne({link:filter.category})
         const allProducts = await productSchema.find(
             {enTitle:{$exists:true}})
-
-        .limit(12)
+        const products = allProducts.slice(offset,
+            (parseInt(offset)+parseInt(pageSize)))  
+        var quantity = []
+        var price = []
+        for(var i=0;i<products.length;i++){
+            quantity.push(await productCount.findOne(
+                {ItemID:products[i].ItemID,Stock:"6"},{quantity:1,_id:0}))
+            price.push(await productPrice.findOne(
+                {ItemID:products[i].ItemID,saleType:"13"},{price:1,_id:0}))
+        }
+        
 
         //logger.warn("main done")
-        res.json({data:allProducts,message:"Products List",catData:catData})
+        res.json({data:products,message:"Products List",size:allProducts.length,
+        catData:catData,quantity:quantity,price:price})
     }
     catch(error){
         res.status(500).json({error: error.message})
