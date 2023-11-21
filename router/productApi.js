@@ -19,12 +19,16 @@ const quickCart = require('../models/product/quickCart');
 const bankAccounts = require('../models/product/bankAccounts');
 const sepidarFetch = require('../middleware/Sepidar');
 router.post('/getlist', async (req,res)=>{
+    const filter = req.body
     try{
-        const allProducts = await productSchema.find({enTitle:{$exists:true}})
+        const catData = await category.findOne({link:filter.category})
+        const allProducts = await productSchema.find(
+            {enTitle:{$exists:true}})
+
         .limit(12)
 
         //logger.warn("main done")
-        res.json({data:allProducts,message:"Products List"})
+        res.json({data:allProducts,message:"Products List",catData:catData})
     }
     catch(error){
         res.status(500).json({error: error.message})

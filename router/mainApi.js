@@ -4,6 +4,8 @@ const { default: fetch } = require("node-fetch");
 const slider = require('../models/main/slider');
 const authApi = require('./authApi');
 const taskApi = require('./taskApi');
+const appApi = require('./appApi');
+const settingApi = require('./settingApi');
 const productApi = require('./productApi');
 const formApi = require('./formApi');
 const userApi = require('./userApi');
@@ -33,12 +35,14 @@ router.get('/main', async (req,res)=>{
 
 router.use('/auth', authApi)
 router.use('/task', taskApi)
+router.use('/setting', settingApi)
+router.use('/app', appApi)
 router.use('/product', productApi)
 router.use('/form', formApi)
 router.use('/user', userApi)
 router.use('/panel/user', panelUserApi)
 router.use('/panel/product', panelProductApi)
-schedule.scheduleJob('0 0 * * *', async() => { 
+0&&schedule.scheduleJob('0 0 * * *', async() => { 
     response = await fetch(ONLINE_URL+"/sepidar-product",
         {method: 'GET'});
     response = await fetch(ONLINE_URL+"/sepidar-price",

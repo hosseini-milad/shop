@@ -405,17 +405,17 @@ router.post('/editCats',jsonParser,async(req,res)=>{
     try{ 
         const data = {
             title:  req.body.title,
-            category: req.body.category,
+            link: req.body.link,
             type:req.body.type,
             value:req.body.value,
             description:req.body.description,
-            fullDesc:req.body.fullDesc,
             sku: req.body.sku, 
             catCode:req.body.catCode,
             price: req.body.price,
             quantity: req.body.quantity,
             sort: req.body.sort,
-            imageUrl:  req.body.imageUrl
+            imageUrl:  req.body.imageUrl,
+            thumbUrl:  req.body.thumbUrl
         }
         var catResult = ''
         if(catId) catResult=await category.updateOne({_id:catId},
