@@ -59,7 +59,7 @@ router.post('/getProduct', async (req,res)=>{
         const price = await productPrice.findOne(
             {ItemID:productData.ItemID,saleType:SaleType})
         
-        productData.price = price.price?NormalTax(price.price):''
+        productData.price = price?NormalTax(price.price):''
         productData.count = quantity?quantity.quantity:''  
 
         //logger.warn("main done")
