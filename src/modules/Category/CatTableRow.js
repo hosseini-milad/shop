@@ -1,6 +1,6 @@
 import React ,{ useState } from "react"
 import Status from "../Components/Status"
-import  { normalPriceCount, rxFindCount } from "../../env"
+import  env, { normalPriceCount, rxFindCount } from "../../env"
 import CatQuickDetail from "./CatComponent/CatQuickDetail"
 
 function CatTableRow(props){
@@ -18,12 +18,13 @@ function CatTableRow(props){
                 <div className="order-id">
                   <p onClick={()=> window.location.href=
                     "/category/detail/"+cat._id}>
-                    {cat._id}</p>
+                    {cat.catCode}</p>
                 </div>
             </td>
             <td>
               <div className="cu-avatar">
-                  <img src="/img/avatar/avatar_1.jpg" alt="avatar"/>
+                  <img src={cat?(env.siteApiUrl+cat.thumbUrl):''} 
+                    alt={cat.title}/>
                   <div className="cu-name" onClick={()=>
                   window.location.href="/category/detail/"+cat._id}>
                     <p className="name">{cat.title}</p>
@@ -43,7 +44,7 @@ function CatTableRow(props){
               </td>
               <td>
                 <div className="order-num">
-                  <p>{cat.brand}</p>
+                  <p>{cat.link}</p>
                 </div>
               </td>
               <td>

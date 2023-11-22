@@ -1,31 +1,31 @@
 import React, { useRef ,useEffect, useState} from 'react';
 import env from "../../../env"
-import Status from "../../Components/Status"
 import errortrans from "../../../translate/error"
 import tabletrans from "../../../translate/tables"
 import formtrans from "../../../translate/forms"
-import CatDetails from './CatDetails';
-import CatImage from './CatImage';
+import SliderDetails from './SliderDetails';
+import SliderImage from './SliderImage';
+import Cookies from 'universal-cookie';
+const cookies = new Cookies();
 
-function CatDetailHolder(props){
+function SliderDetailHolder(props){
   const url = window.location.pathname.split('/')[3]
   const direction = props.lang?props.lang.dir:errortrans.defaultDir;
   const lang = props.lang?props.lang.lang:errortrans.defaultLang;
   const [error,setError] = useState({errorText:'',errorColor:"brown"})
-
+  const token=cookies.get(env.cookieName)
   const [content,setContent] = useState('')
-  const [catChange,setCatChange] = useState('')
+  const [sliderChange,setSliderChange] = useState('')
   
-
   useEffect(()=>{
     if(url==="new")return
     var postOptions={
       method:'post',
       headers: {'Content-Type': 'application/json'},
-      body:JSON.stringify({catId:url})
+      body:JSON.stringify({sliderId:url})
     }
    
-fetch(env.siteApi + "/panel/product/fetch-category",postOptions)
+fetch(env.siteApi + "/setting/fetch-slider",postOptions)
 .then(res => res.json())
 .then(
   (result) => {
@@ -48,16 +48,16 @@ fetch(env.siteApi + "/panel/product/fetch-category",postOptions)
   }
 )
   },[])
-  const saveCategory=()=>{
+  const saveSlider=()=>{
     //if(newCustomer) {
       var postOptions={
           method:'post',
-          headers: {'Content-Type': 'application/json'},
-          body:JSON.stringify({catId:url,
-            ...catChange})
+          headers: {'Content-Type': 'application/json',
+          "x-access-token":token&&token.token,"userId":token&&token.userId},
+          body:JSON.stringify({sliderId:url,
+            ...sliderChange})
         }
-       console.log(postOptions)
-    fetch(env.siteApi + "/panel/product/editCats",postOptions)
+    fetch(env.siteApi + "/setting/updateSlider",postOptions)
     .then(res => res.json())
     .then(
       (result) => {
@@ -70,7 +70,7 @@ fetch(env.siteApi + "/panel/product/fetch-category",postOptions)
           else{
             setError({errorText:result.success,
               errorColor:"green"})
-            setTimeout(()=>window.location.href="/category",2000)
+            setTimeout(()=>window.location.href="/sliders",2000)
           }
           
       },
@@ -79,22 +79,23 @@ fetch(env.siteApi + "/panel/product/fetch-category",postOptions)
       }
     )
   }
-console.log(content)
 return(
   <div className="new-item" style={{direction:direction}}>
       <div className="create-product">
-      <h4>{tabletrans.addCategory[lang]}</h4>
+      <h4>{tabletrans.addBrand[lang]}</h4>
       {content||url==="new"?<div className="pages-wrapper">
         <div className="item-box">
-          <CatDetails direction={direction} lang={lang} content={content}
-            setCatChange={setCatChange} catChange={catChange}/>
-          <CatImage lang={lang} content={content} value="imageUrl"
-                catChange={catChange} part={1}
-                setCatChange={setCatChange} />
+          <SliderDetails direction={direction} lang={lang} content={content}
+            setSliderChange={setSliderChange} sliderChange={sliderChange}/>
+            <div className='imageHolder'>
+              <SliderImage lang={lang} content={content} value="imageUrl"
+                sliderChange={sliderChange} part={1}
+                setSliderChange={setSliderChange} />
+            </div>
           </div>
         <div className="create-btn-wrapper">
-          <div className="save-btn" onClick={saveCategory}>{formtrans.saveChanges[lang]}</div>
-          <div className="cancel-btn" onClick={()=>window.location.href="/brands"}>{formtrans.cancel[lang]}</div>
+          <div className="save-btn" onClick={saveSlider}>{formtrans.saveChanges[lang]}</div>
+          <div className="cancel-btn" onClick={()=>window.location.href="/sliders"}>{formtrans.cancel[lang]}</div>
         </div>
         
       </div>:<div>{env.loader}</div>}
@@ -102,4 +103,4 @@ return(
   </div>
   )
 }
-export default CatDetailHolder
+export default SliderDetailHolder

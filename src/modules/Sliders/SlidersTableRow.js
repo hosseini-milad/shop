@@ -1,50 +1,58 @@
 import React ,{ useState } from "react"
 import Status from "../Components/Status"
 import  env, { normalPriceCount, rxFindCount } from "../../env"
-import ProductQuickDetail from "./ProductComponent/ProductQuickDetail"
 
-function ProductTableRow(props){
+function SlidersTableRow(props){
   const [openOption,setOpenOption] = useState(0)
   const [checkState,setCheckState] = useState(false)
   const activeAcc = props.index===props.detail
-  const product=props.product
+  const slider=props.slider
     return(<React.Fragment>
         <tr 
             className={activeAcc?"activeAccordion":"accordion"}>
             <td className="checkBoxStyle">
               <input type="checkbox" name="" id="" checked={checkState}
               onChange={(e)=>setCheckState(checkState?false:true)}/></td>
-            
+            <td>
+                <div className="order-id">
+                  {slider.sliderCode}
+                </div>
+            </td>
             <td>
               <div className="cu-avatar">
-                  <img src={product.thumbUrl?(env.siteApiUrl+product.thumbUrl):env.defaultProduct} 
-                  alt={product?product.title:"default"}/>
+                  <img src={slider?(env.siteApiUrl+slider.thumbUrl):''} 
+                    alt={slider?slider.title:"default"}/>
                   <div className="cu-name" onClick={()=>
-                  window.location.href="/products/detail/"+product._id}>
-                    <p className="name">{product.title}</p>
-                    <p className="email">{product.sku}</p>
+                  window.location.href="/sliders/detail/"+slider._id}>
+                    <p className="name">{slider.title}</p>
+                    <p className="email">{slider.sku}</p>
                   </div>
-                  {product.moreInformation?
-                    <i className="fa fa-comment-o" title={product.moreInformation}></i>:<></>}
+                  {slider.moreInformation?
+                    <i className="fa fa-comment-o" title={slider.moreInformation}></i>:<></>}
                 </div>
               </td>
               <td>
                 <div className="order-num">
-                  <p>{product.brand}</p>
+                  <p>{slider.sliderCode}</p>
                 </div>
               </td>
               <td>
                 <div className="order-num">
-                  <p>{props.count?props.count.quantity:"ناموجود"}</p>
+                  <p>{slider.slider}</p>
+                </div>
+              </td>
+              <td>
+                <div className="order-num">
+                  <p>{"product"}</p>
                 </div>
               </td>
               <td>
                 <div className="order-price">
-                  <p>{normalPriceCount(props.price&&props.price.price)}</p>
+                  <p>{normalPriceCount(slider.totalPrice)}</p>
                 </div>
               </td>
               <td>
-                <Status status={product.status} class={"order-status"} 
+                <Status status={slider.status} class={"order-status"} 
                   lang={props.lang}/>
               </td>
             <td>
@@ -52,7 +60,7 @@ function ProductTableRow(props){
               <i className={`tableIcon fas ${activeAcc?"fa-chevron-up":"fa-chevron-down"}`} 
                 onClick={()=>props.showDetail(activeAcc?"-1":props.index)} ></i>
                 <i className="tableIcon fas fa-edit" onClick={()=>
-                  window.location.href="/products/detail/"+product._id}></i>
+                  window.location.href="/sliders/detail/"+slider._id}></i>
                 <i className="tableIcon fas fa-ellipsis-v" 
                   onClick={()=>setOpenOption(openOption?0:1)}></i>
               </div>
@@ -68,10 +76,8 @@ function ProductTableRow(props){
               </div>:<></>}
             </td>
           </tr>
-          {activeAcc?<tr className="sub-order">
-        <td colSpan="9"><ProductQuickDetail product={product}/></td></tr>
-          :<React.Fragment></React.Fragment>}
+          
           </React.Fragment>
     )
 }
-export default ProductTableRow
+export default SlidersTableRow

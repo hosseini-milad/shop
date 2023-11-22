@@ -34,6 +34,8 @@ import BrandDetailHolder from './modules/Brands/BrandData/BrandDetailHolder';
 import Category from './pages/Category';
 import CatDetailHolder from './modules/Category/CatData/CatDetailHolder';
 import Sepidar from './modules/Config/Sepidar';
+import Sliders from './pages/Sliders';
+import SliderDetailHolder from './modules/Sliders/SliderData/SliderDetailHolder';
 
 const cookies = new Cookies();
 const style = document.getElementById('style-direction');
@@ -75,6 +77,8 @@ root.render(
 
 
         <Route path="/config/sepidar" element={<Layout><Sepidar lang={lang}/></Layout>}/>
+        <Route path="/sliders" element={<Layout><Sliders lang={lang}/></Layout>}/>
+        <Route path="/sliders/detail/:orderId" element={<Layout><SliderDetailHolder lang={lang}/></Layout>}/>
 
       </Routes>:
         <Routes>

@@ -56,7 +56,7 @@ function Products(props){
   )},[filters])
   const RefreshItems=async()=>{
     const productList = content.full
-    setCounter(1)
+    setCounter(content.full.length)
     /*for(var i=0;i<productList.length;i++){
       const outData =await fetchData(productList[i].sku)
       if(outData&&outData.success){
@@ -79,7 +79,7 @@ function Products(props){
   const counterFunction=async()=>{
     const outData =await fetchData(content.full[counter-1].sku)
     
-    setTimeout(()=>setCounter(counter+1),3000)
+    setTimeout(()=>setCounter(counter-1),3000)
   }
   const fetchData=async(sku)=>{
       const postOptions={

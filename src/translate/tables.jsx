@@ -142,6 +142,10 @@ const tabletrans ={
         english:"Notification",
         persian:"هشدارها"
     },
+    link:{
+        english:"Link",
+        persian:"لینک"
+    },
     socialLink:{
         english:"Social Links",
         persian:"شبکه های اجتماعی"

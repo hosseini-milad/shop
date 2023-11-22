@@ -22,7 +22,12 @@ function Sepidar(){
             <input type="button" value="Update Customers"
             onClick={()=>updateSepidar("customer")}/>
             <input type="button" value="Update Products"
-            onClick={()=>updateSepidar("product")}/>
+            onClick={()=>console.log("product")}/>
+            <hr/>
+            <input type="button" value="Update Quantity"
+            onClick={()=>updateSepidar("quantity")}/>
+            <input type="button" value="Update Price"
+            onClick={()=>updateSepidar("price")}/>
         </main>
     )
 }

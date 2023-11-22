@@ -11,6 +11,10 @@ const formtrans ={
         english: "English Title",
         persian: "نام انگلیسی"
     },
+    link:{
+        english: "Linke",
+        persian: "لینک"
+    },
     phoneNumber:{
         english: "Phone Number",
         persian: "شماره تماس"

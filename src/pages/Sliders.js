@@ -10,10 +10,10 @@ import env from '../env';
 import ProductTable from '../modules/Products/ProductTable';
 import tabletrans from '../translate/tables';
 import BrandTable from '../modules/Brands/BrandTable';
-import CatTable from '../modules/Category/CatTable';
+import SlidersTable from '../modules/Sliders/SlidersTable';
 const cookies = new Cookies();
 
-function Category(props){
+function Sliders(props){
     const direction = props.lang?props.lang.dir:errortrans.defaultDir;
     const lang = props.lang?props.lang.lang:errortrans.defaultLang;
     const [content,setContent] = useState("")
@@ -40,7 +40,7 @@ function Category(props){
           body:JSON.stringify(body)
         }
         console.log(postOptions)
-    fetch(env.siteApi + "/panel/product/list-category",postOptions)
+    fetch(env.siteApi + "/setting/sliders",postOptions)
     .then(res => res.json())
     .then(
       (result) => {
@@ -61,13 +61,13 @@ function Category(props){
         <div className="od-header-info">
           
           <div className="od-header-name">
-            <p>{tabletrans.category[lang]}</p>
+            <p>{tabletrans.brands[lang]}</p>
           </div>
           
         </div>
         <div className="od-header-btn">
           <div className="edit-btn add-btn" 
-            onClick={()=>window.location.href="/category/detail/new"}>
+            onClick={()=>window.location.href="/sliders/detail/new"}>
             <i className="fa-solid fa-plus"></i>
             <p>{tabletrans.addNew[lang]}</p>
           </div>
@@ -78,12 +78,8 @@ function Category(props){
         </div>
       </div>
       <div className="list-container">
-        <StatusBar lang={lang} token={token} filters={filters}
-         status={content.rxStatus} setFilters={setFilters}/>
-        <OrderFilters lang={props.lang} setFilters={setFilters}
-          options={content.brand} filters={filters}/>
         <div className="user-list"> 
-          {loading?env.loader:<CatTable cat={content} lang={lang}/>}
+          {loading?env.loader:<SlidersTable slider={content} lang={lang}/>}
         </div>
         <Paging content={content} setFilters={setFilters} filters={filters} 
           lang={props.lang}/>
@@ -91,4 +87,4 @@ function Category(props){
     </div>
     )
 }
-export default Category
+export default Sliders

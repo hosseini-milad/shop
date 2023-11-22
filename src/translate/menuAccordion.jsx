@@ -121,6 +121,14 @@ menu:[
             icon:"fa-dashboard",
             href:"/config/sepidar",
             url:"config"
+        },
+        {
+            english: "Sliders",
+            persian: "اسلایدرها",
+            index:0,
+            icon:"fa-dashboard",
+            href:"/sliders",
+            url:"sliders"
         }
         ]
     },

@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react"
 import env, { normalPriceCount, rxFindCount } from "../../../env"
 
-function CatQuickDetail(props){
-    const cat = props.cat
+function BrandQuickDetail(props){
+    const product = props.product
     
     return(
     <div className="sub-order-table">
@@ -12,15 +12,18 @@ function CatQuickDetail(props){
                 <img src="/img/lenz01.jpg"
                 alt={"sku.sku"}/>
                 <div className="sub-info">
-                <p className="sub-name">{cat.title}</p>
+                <p className="sub-name">{product.title}</p>
+                <p className="sub-id"> {product.description}</p>
                 </div>
             </div>
             </div>
+            <div className="sub-num">کد محصول</div>
+            <div className="sub-price">{product.sku}</div>
         </div>
         <div className="sub-row">
-            <p dangerouslySetInnerHTML={{__html:cat.description}}></p>
+            <p dangerouslySetInnerHTML={{__html:product.fullDesc}}></p>
         </div>
     </div>
     )
 }
-export default CatQuickDetail
+export default BrandQuickDetail

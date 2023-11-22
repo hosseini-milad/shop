@@ -1,9 +1,9 @@
 import { useState } from "react"
 import tabletrans from "../../translate/tables"
-import CatTableRow from "./CatTableRow";
+import SlidersTableRow from "./SlidersTableRow";
 
-function CatTable(props){
-  const cat = props.cat
+function SlidersTable(props){
+  const slider = props.slider
   const lang=props.lang;
   const [detail,showDetail] = useState(-1)
     return(
@@ -13,19 +13,19 @@ function CatTable(props){
           <th className="checkBoxStyle">
               <input type="checkbox" name="" id=""/></th>
             <th>
-              <p>{tabletrans.code[lang]}</p>
+              <p>{tabletrans.order[lang]}</p>
               <i></i>
             </th>
             <th>
-              <p>{tabletrans.category[lang]}</p>
+              <p>{tabletrans.brandName[lang]}</p>
               <i></i>
             </th>
             <th>
-              <p>{tabletrans.date[lang]}</p>
+              <p>{tabletrans.brandCode[lang]}</p>
               <i></i>
             </th>
             <th>
-              <p>{tabletrans.link[lang]}</p>
+              <p>{tabletrans.brand[lang]}</p>
               <i></i>
             </th>
             <th>
@@ -45,9 +45,9 @@ function CatTable(props){
           </tr>
         </thead>
         <tbody>
-          {cat&&cat.filter?cat.filter.map((cat,i)=>(
-            <CatTableRow detail={detail} showDetail={showDetail} 
-            cat={cat} index={i} key={i} lang={lang}/>
+          {slider&&slider.filter?slider.filter.map((slider,i)=>(
+            <SlidersTableRow detail={detail} showDetail={showDetail} 
+            slider={slider} index={i} key={i} lang={lang}/>
           )):''}
           
         </tbody>
@@ -55,4 +55,4 @@ function CatTable(props){
 
     )
 }
-export default CatTable
+export default SlidersTable
