@@ -185,7 +185,7 @@ router.post('/list-product',jsonParser,async (req,res)=>{
             var price = []
             for(var i=0;i<products.length;i++){
                 quantity.push(await productCount.findOne(
-                    {ItemID:products[i].ItemID,Stock:"13"},{quantity:1,_id:0}))
+                    {ItemID:products[i].ItemID,Stock:"21"},{quantity:1,_id:0}))
                 price.push(await productPrice.findOne(
                     {ItemID:products[i].ItemID,saleType:"13"},{price:1,_id:0}))
             }
