@@ -51,7 +51,7 @@ router.post('/getProduct', async (req,res)=>{
     try{
         const productData = await productSchema.findOne({sku:req.body.sku})
         const quantity = await productCount.findOne(
-            {ItemID:productData.ItemID,Stock:"6"},{quantity:1,_id:0})
+            {ItemID:productData.ItemID,Stock:"21"},{quantity:1,_id:0})
         const price = await productPrice.findOne(
             {ItemID:productData.ItemID,saleType:"13"},{price:1,_id:0})
 
