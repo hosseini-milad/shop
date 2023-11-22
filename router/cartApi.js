@@ -16,201 +16,75 @@ const sepidarPOST = require('../middleware/SepidarPost');
 const cartLog = require('../models/product/cartLog');
 const users = require('../models/auth/users');
 const quickCart = require('../models/product/quickCart');
-const {StockId,SaleType} = process.env;
 const bankAccounts = require('../models/product/bankAccounts');
 const sepidarFetch = require('../middleware/Sepidar');
+const sepCart = require('../models/product/sepCart');
 const NormalTax = require('../middleware/NormalTax');
-router.post('/getlist', async (req,res)=>{
-    var pageSize = req.body.pageSize?req.body.pageSize:"12";
-    var offset = req.body.offset?(parseInt(req.body.offset)*parseInt(pageSize)):0;
+const {StockId,SaleType} = process.env;
 
-    const filter = req.body
+router.post('/addToCart', async (req,res)=>{
+    const userId =req.headers['userid'];
+    const sku = req.body.sku
     try{
-        const catData = await category.findOne({link:filter.category})
-        const allProducts = await productSchema.find(
-            {enTitle:{$exists:true}})
-        const products = allProducts.slice(offset,
-            (parseInt(offset)+parseInt(pageSize)))  
-        var quantity = []
-        var price = []
-        for(var i=0;i<products.length;i++){
-            const countData = await productCount.findOne(
-                {ItemID:products[i].ItemID,Stock:StockId})
-            const priceData = await productPrice.findOne(
-                {ItemID:products[i].ItemID,saleType:SaleType})
-            products[i].price = priceData.price?NormalTax(priceData.price):''
-            products[i].count = countData?countData.quantity:''
-        }
-        
-
-        //logger.warn("main done")
-        res.json({data:products,message:"Products List",size:allProducts.length,
-        catData:catData,quantity:quantity,price:price})
-    }
-    catch(error){
-        res.status(500).json({error: error.message})
-    }
-})
-router.post('/getProduct', async (req,res)=>{
-    try{
-        const productData = await productSchema.findOne({sku:req.body.sku})
-        const quantity = await productCount.findOne(
-            {ItemID:productData.ItemID,Stock:StockId})
-        const price = await productPrice.findOne(
-            {ItemID:productData.ItemID,saleType:SaleType})
-        
-        productData.price = price.price?NormalTax(price.price):''
-        productData.count = quantity?quantity.quantity:''  
-
-        //logger.warn("main done")
-        res.json({data:productData,message:"Products List",quantity:quantity,price:price})
-    }
-    catch(error){
-        res.status(500).json({error: error.message})
-    }
-})
-router.post('/products', async (req,res)=>{
-    try{
-        const allProducts = await productSchema.find()
-
-        //logger.warn("main done")
-        res.json({products:allProducts})
-    }
-    catch(error){
-        res.status(500).json({message: error.message})
-    }
-})
-router.post('/find-products', async (req,res)=>{
-    const search = req.body.search
-    try{  
-        const searchProducts = await productSchema.
-        aggregate([{$match:
-            {$or:[
-                {sku:{$regex: search, $options : 'i'}},
-                {title:{$regex: search, $options : 'i'}}
-            ]}
-        },
-        {$lookup:{
-            from : "productprices", 
-            localField: "ItemID", 
-            foreignField: "ItemID", 
-            as : "priceData"
-        }},
-        {$lookup:{
-            from : "productcounts", 
-            localField: "ItemID", 
-            foreignField: "ItemID", 
-            as : "countData"
-        }}])
-        var searchProductResult=[]
-        const cartList = await cart.find()
-        const qCartList = await qCart.find()
-        var index = 0
-        for(var i=0;i<searchProducts.length;i++){
-            var count = (searchProducts[i].countData.find(item=>item.Stock==='13'))
-            var cartCount = findCartCount(searchProducts[i].sku,cartList.concat(qCartList))
-            if(count)count.quantity = parseInt(count.quantity)-parseInt(cartCount)
-            if(count&&count.quantity){
-                index++
-                searchProductResult.push({...searchProducts[i],
-                    count:count})
-                if(index===4)break
-            }
-        }
-        res.json({products:searchProductResult})
-    }
-    catch(error){
-        res.status(500).json({message: error.message})
-    }
-})
-const findCartCount=(item,cart)=>{
-    var cartCount =0
-    for(var i=0;i<cart.length;i++){
-        var cartItem =cart[i].cartItems 
-        for(var c=0;c<cartItem.length;c++){
-            if(cartItem[c].sku === item){
-                cartCount=parseInt(cartCount)+parseInt(cartItem[c].count)
-            }
-        }
-    }
-    return(cartCount)
-    
-}
-router.post('/update-product',jsonParser,auth, async (req,res)=>{
-    const data={
-        title:req.body.title,
-        sku:req.body.sku,
-        date:Date.now()
-    }
-    try{
-        var status = "";
-        const searchProduct = await productSchema.findOne({sku:data.sku})
-        if(!searchProduct){
-            await productSchema.create(data)
-            status = "new product"
-        }
-        else{
-            await productSchema.updateOne(
-                {sku:data.sku},{$set:data})
-            status = "update product"
-        }
-        const allProducts = await productSchema.find()
-        //logger.warn("main done")
-        res.json({products:allProducts,status:status})
-    }
-    catch(error){
-        res.status(500).json({message: error.message})
-    }
-})
-
-router.post('/categories', async (req,res)=>{
-    try{
-        const allCategories = await category.find()
-
-        //logger.warn("main done")
-        res.json({categories:allCategories})
-    }
-    catch(error){
-        res.status(500).json({message: error.message})
-    }
-})
-router.post('/update-category',jsonParser,auth, async (req,res)=>{
-    const data={
-        title:req.body.title,
-        parent:req.body.parent,
-        body:req.body.body,
-        date:Date.now()
-    }
-    try{
-        var status = "";
-        const searchCategory = await category.findOne({catCode:req.body.catCode})
-        if(!searchCategory){
-            await category.create(data)
-            status = "new category"
-        }
-        else{
-            await category.updateOne(
-                {catCode:req.body.catCode},{$set:data})
-            status = "update category"
-        }
-        const allCategory = await category.find()
-        res.json({categories:allCategory,status:status})
-    }
-    catch(error){
-        res.status(500).json({message: error.message})
-    }
-})
-
-router.post('/cart', async (req,res)=>{
-    const userId =req.body.userId?req.body.userId:req.headers['userid'];
-    try{
-        const cartDetails = await findCartFunction(userId)
+        const cartDetails = await sepCart.findOne({userId:userId,sku:sku})
+        if(cartDetails)
+            await sepCart.updateOne({userId:userId,sku:sku},{
+                progressDate: Date.now(),
+                count:newCount(req.body.count,cartDetails.count)
+            })
+        else
+            await sepCart.create({
+                sku:  sku,
+                initDate:  Date.now(),
+                progressDate: Date.now(),
+                userId:userId,
+                count:req.body.count
+            })
         res.json(cartDetails)
     }
     catch(error){
         res.status(500).json({message: error.message})
     }
 })
+
+const newCount=(count1,count2)=>{
+    var outPut = 0;
+    try{outPut += parseInt(count1)}catch{}
+    try{outPut += parseInt(count2)}catch{}
+    return(outPut)
+}
+
+router.post('/cart-detail', async (req,res)=>{
+    const userId =req.headers['userid'];
+    try{
+        const cartDetails = await sepCart.aggregate([
+            {$match:{userId:userId}},
+            {$lookup:{
+                from : "products", 
+                localField: "sku", 
+                foreignField: "sku", 
+                as : "productData"
+            }},
+            
+        ])
+        var priceSet=[]
+        for(var c=0;c<cartDetails.length;c++){
+            const ItemId = cartDetails[c].productData[0]
+            const priceData = await productPrice.findOne(
+                {ItemID:ItemId.ItemID,saleType:SaleType},
+                {price:1,_id:0})
+            cartDetails[c].price=NormalTax(priceData.price)
+            }
+        
+        
+        res.json({cart:cartDetails})
+    }
+    catch(error){
+        res.status(500).json({message: error.message})
+    }
+})
+
+
 const findCartFunction=async(userId)=>{
     
     try{
@@ -584,155 +458,6 @@ const pureCartPrice=(cartItem,payValue)=>{
     return cartItems
 }
 
-router.post('/faktor', async (req,res)=>{
-    const offset =req.body.offset?parseInt(req.body.offset):0 
-    const userId =req.body.userId?req.body.userId:req.headers['userid'];
-    try{
-        const faktorTotalCount = await FaktorSchema.find().count()
-        const faktorList = await FaktorSchema.aggregate
-        ([
-        {$lookup:{
-            from : "customers", 
-            localField: "customerID", 
-            foreignField: "CustomerID", 
-            as : "userData"
-        }},
-        {$lookup:{
-            from : "productcounts", 
-            localField: "ItemID", 
-            foreignField: "ItemID", 
-            as : "countData"
-        }},{$sort:{"initDate":-1}},
-    {$skip:offset},{$limit:10}])
-        //logger.warn("main done")
-        res.json({faktor:faktorList,faktorCount:faktorTotalCount})
-    }
-    catch(error){
-        res.status(500).json({message: error.message})
-    }
-})
-router.post('/faktor-find', async (req,res)=>{
-    const faktorId =req.body.faktorId;
-    try{
-        const faktorData = await //FaktorSchema.findOne({faktorNo:faktorId})
-        FaktorSchema.aggregate
-        ([{$match:{faktorNo:faktorId},
-        },
-        {$lookup:{
-            from : "customers", 
-            localField: "customerID", 
-            foreignField: "CustomerID", 
-            as : "userData"
-        }}])
-        //logger.warn("main done")
-
-        const OnlineFaktor = await sepidarFetch("data","/api/invoices/"+faktorId)
-        res.json({faktor:OnlineFaktor})
-    }
-    catch(error){
-        res.status(500).json({message: error.message})
-    }
-})
-router.post('/update-faktor',jsonParser, async (req,res)=>{
-    const data={
-        userId:req.body.userId?req.body.userId:req.headers['userid'],
-        manageId:req.headers['userid'],
-        date:req.body.date,
-        progressDate:Date.now()
-    }
-    const cartID=req.body.cartID
-    try{
-        const cartList = await cart.aggregate
-        ([{ $addFields: { "cartID": { "$toString": "$_id" }}},
-        cartID.length?{$match:{cartID:{$in:cartID}}}:{$match:{}},
-            { $addFields: { "userId": { "$toObjectId": "$userId" }}},
-        {$lookup:{
-            from : "customers", 
-            localField: "userId", 
-            foreignField: "_id", 
-            as : "userData"
-        }},
-        {$lookup:{
-            from : "users", 
-            localField: "userId", 
-            foreignField: "_id", 
-            as : "adminData"
-        }}])
-        
-        const faktorSeprate = totalCart(cartList)
-        const faktorDetail = await IntegrateCarts(faktorSeprate)
-        
-        var sepidarQuery=[]
-        var addFaktorResult=[]
-        var faktorNo=0
-        for(var i=0;i<faktorDetail.length;i++){
-            faktorNo= await createfaktorNo("F","02","21")
-            sepidarQuery[i] = await SepidarFunc(faktorDetail[i],faktorNo)
-            addFaktorResult[i] = await sepidarPOST(sepidarQuery[i],"/api/invoices")
-            console.log(addFaktorResult[i])
-            if(!addFaktorResult[i]||addFaktorResult[0].Message||!addFaktorResult[i].Number){
-                res.status(400).json({error:addFaktorResult[0].Message?addFaktorResult[0].Message:"error occure",
-                    query:sepidarQuery[i],status:"faktor"})
-                return
-            }
-            else{
-                const cartDetail =findCartSum(faktorDetail[i].cartItems)
-                await FaktorSchema.create(
-                    {...data,faktorItems:faktorDetail[i].cartItems,
-                        customerID:faktorDetail[i].userId,
-                        faktorNo:faktorNo,
-                        totalPrice:cartDetail.totalPrice,
-                        totalCount:cartDetail.totalCount,
-                        InvoiceNumber:addFaktorResult[i].Number,
-                        InvoiceID:addFaktorResult[i].InvoiceID})
-                await cart.deleteMany({_id:{$in:cartID}})
-                
-            }
-        }
-        const recieptQuery = await RecieptFunc(req.body.receiptInfo,addFaktorResult[0],faktorNo)
-        const recieptResult = 1//await sepidarPOST(recieptQuery,"/api/Receipts/BasedOnInvoice")
-        //const SepidarFaktor = await SepidarFunc(faktorDetail)
-        if(!recieptQuery||recieptResult.Message){
-            res.json({error:recieptResult.Message,query:recieptQuery,status:"reciept"})
-                return
-        }
-        else{
-            res.json({recieptInfo:faktorDetail,
-                users:users,
-                faktorInfo:addFaktorResult,
-                faktorData:sepidarQuery,
-                status:"done"})
-            }
-        
-    }
-    catch(error){
-        res.status(500).json({message: error.message})
-    }
-})
-const IntegrateCarts = async(carts)=>{
-    var cartList=carts
-    for(var i =0 ;i<cartList.length;i++){
-        cartList[i].cartItems= setCart(cartList[i].cartItems)
-        
-    }
-    return(cartList)
-}
-const setCart=(cartItems)=>{
-    var tempCart=[]
-    for(var i=0;i<cartItems.length;i++){
-        repeat = 0
-        for(var j=0;j<tempCart.length;j++){
-            if(cartItems[i].id===tempCart[j].id){
-                tempCart[j].count=parseInt(tempCart[j].count)+
-                                    parseInt(cartItems[i].count)
-                repeat=1
-                break
-            }
-        }
-        !repeat&&tempCart.push({...cartItems[i]})
-    }
-    return(tempCart)
-}
 const SepidarFunc=async(data,faktorNo)=>{
     const notNullCartItem = []
     for(var i=0;i<data.cartItems.length;i++)
@@ -783,27 +508,7 @@ const RecieptFunc=async(data,FaktorInfo,faktorNo)=>{
       }
     return(query)
 }
-const updateCount = async(items)=>{
-    for(var i=0;i<items.length;i++){
-        await productCount.updateOne({ItemID:items[i].id,Stock:"13"},
-            {$inc:{quantity:toInt(items[i].count,"1",-1)}})
-    }
-}
-const returnUpdateCount = async(itemID,count)=>{
-    await productCount.updateOne({ItemID:itemID,Stock:"13"},
-        {$inc:{quantity:toInt(count)}})
-    
-}
-const createfaktorNo= async(Noun,year,userCode)=>{
-    var faktorNo = '';
-    for(var i=0;i<10;i++){
-        faktorNo = Noun+year+userCode+
-        Math.floor(Math.random()* (99999 - 10000) + 10000)
-        const findFaktor = await FaktorSchema.findOne({faktorNo:faktorNo})
-        if(!findFaktor)
-            return(faktorNo)
-    }
-}
+
 const toInt=(strNum,count,align)=>{
     if(!strNum)return(0)
     
@@ -821,12 +526,7 @@ const normalPriceCount=(priceText,count,tax)=>{
       (rawPrice.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",").replace( /^\D+/g, ''))
     )
   }
-const roundNumber = (number)=>{
-    var rawNumber = parseInt(number.toString().replace( /,/g, '')
-    .replace(/\D/g,''))
-    return(parseInt(Math.round(rawNumber/1000))*1000)
 
-}
 const minusInt=(quantity,minus)=>{
     if(!quantity)return(0)
     
@@ -837,45 +537,6 @@ const compareCount=(count1,count2)=>{
     return(parseInt(count1.toString().replace(/\D/g,''))>=
     (parseInt(count2.toString().replace(/\D/g,''))))
 } 
-router.post('/customer-find', async (req,res)=>{
-    const search = req.body.search
-    try{ 
-        var searchCustomer = await users.
-        aggregate([{$match:
-            {$or:[
-                {username:{$regex: search, $options : 'i'}},
-                {Code:{$regex: search, $options : 'i'}}
-            ]}
-        },
-        {$limit:6}])
-        if(!searchCustomer.length){
-            searchCustomer = await customerSchema.
-            aggregate([{$match:
-                {$or:[
-                    {username:{$regex: search, $options : 'i'}},
-                    {Code:{$regex: search, $options : 'i'}}
-                ]}
-            },
-            {$limit:6}])
-        }
-            
-        //logger.warn("main done")
-        res.json({customers:searchCustomer})
-    }
-    catch(error){
-        res.status(500).json({message: error.message})
-    }
-})
-router.post('/bankCustomer', async (req,res)=>{
-    const search = req.body.search
-    try{ 
-        var bankCustomer = await bankAccounts.find()
-        
-        res.json({bankList:bankCustomer})
-    }
-    catch(error){
-        res.status(500).json({message: error.message})
-    }
-})
+
 
 module.exports = router;

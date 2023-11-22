@@ -5,6 +5,7 @@ const slider = require('../models/main/slider');
 const authApi = require('./authApi');
 const taskApi = require('./taskApi');
 const appApi = require('./appApi');
+const cartApi= require('./cartApi');
 const settingApi = require('./settingApi');
 const productApi = require('./productApi');
 const formApi = require('./formApi');
@@ -37,6 +38,7 @@ router.use('/auth', authApi)
 router.use('/task', taskApi)
 router.use('/setting', settingApi)
 router.use('/app', appApi)
+router.use('/cart', cartApi)
 router.use('/product', productApi)
 router.use('/form', formApi)
 router.use('/user', userApi)

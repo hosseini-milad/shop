@@ -7,7 +7,7 @@ const jsonParser = bodyParser.json();
 const router = express.Router()
 const auth = require("../middleware/auth");
 var ObjectID = require('mongodb').ObjectID;
-const { OLD_SITE_URL,API_PORT} = process.env;
+const { OLD_SITE_URL,API_PORT,StockId,SaleType} = process.env;
 var im = require('imagemagick');
 const resizeImg = require('resize-img');
  
@@ -184,10 +184,12 @@ router.post('/list-product',jsonParser,async (req,res)=>{
             var quantity = []
             var price = []
             for(var i=0;i<products.length;i++){
-                quantity.push(await productCount.findOne(
-                    {ItemID:products[i].ItemID,Stock:"21"},{quantity:1,_id:0}))
-                price.push(await productPrice.findOne(
-                    {ItemID:products[i].ItemID,saleType:"4"},{price:1,_id:0}))
+                const countData = await productCount.findOne(
+                    {ItemID:products[i].ItemID,Stock:StockId})
+                const priceData = await productPrice.findOne(
+                    {ItemID:products[i].ItemID,saleType:SaleType})
+                products[i].price = priceData.price
+                products[i].count = countData.quantity
             }
             const typeUnique = [...new Set(productList.map((item) => item.category))];
             
