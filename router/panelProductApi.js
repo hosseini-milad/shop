@@ -20,6 +20,7 @@ const filterNumber = require('../middleware/Functions');
 
 const productCount = require('../models/product/productCount');
 const productPrice = require('../models/product/productPrice');
+const NormalTax = require('../middleware/NormalTax');
 
 router.post('/fetch-service',jsonParser,async (req,res)=>{
     var serviceId = req.body.serviceId?req.body.serviceId:''
@@ -189,6 +190,7 @@ router.post('/list-product',jsonParser,async (req,res)=>{
                 const priceData = await productPrice.findOne(
                     {ItemID:products[i].ItemID,saleType:SaleType})
                 products[i].price = priceData?priceData.price:''
+                products[i].taxPrice=NormalTax(products[i].price)
                 products[i].count = countData?countData.quantity:''
             }
             const typeUnique = [...new Set(productList.map((item) => item.category))];
