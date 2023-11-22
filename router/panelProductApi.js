@@ -188,8 +188,8 @@ router.post('/list-product',jsonParser,async (req,res)=>{
                     {ItemID:products[i].ItemID,Stock:StockId})
                 const priceData = await productPrice.findOne(
                     {ItemID:products[i].ItemID,saleType:SaleType})
-                products[i].price = priceData.price
-                products[i].count = countData.quantity
+                products[i].price = priceData.price?priceData.price:''
+                products[i].count = countData.quantity?countData.quantity:''
             }
             const typeUnique = [...new Set(productList.map((item) => item.category))];
             
