@@ -1,0 +1,114 @@
+.profileContainer{
+    display: flex;
+}
+.profileSideBar{
+    display: grid;
+    height: auto;
+    background-color: #F0F0F0;
+    width: 18%;
+    align-content: flex-start;
+}
+.profileHeader{
+    display: flex;
+    word-break: break-all;
+    border-bottom: 1px solid #CDCDCD;
+    padding:.5rem 1rem;
+}
+
+.profileMain{
+    width:80%;
+    margin: 0 3%;
+}
+.profileMain strong{
+    margin-bottom: 20px;
+    display: block;
+}
+.profileForm{
+    display: flex;
+    flex-wrap: wrap;
+    margin-top: 30px;
+}
+.profileInput{
+    min-width: 60px;
+    position: relative;
+    height: 60px;
+    width: 50%;
+}
+.profileInput ul{
+    display: grid !important;
+    text-align: right;
+}
+.profileTitle{
+    display:flex;
+    justify-content: space-between;
+    width: 94%;
+}
+.profileTitle input{
+    padding: 5px 30px;
+}
+.profileLeft input{
+    direction: ltr;
+}
+.addressDetail{
+    margin: auto 0;
+    font-size: 12px;
+    font-weight: normal;
+    background-color: var(--second-color);
+    padding: 0px 5px;
+    border-radius: 3px;
+    color: #fff;
+    display: block;
+    text-align: center;
+    width: fit-content;
+    cursor: pointer;
+}
+.profileInput label{
+    position: absolute;
+    font-size: 12px;
+    top: -12px;
+    background-color: #fff;
+    height: 14px;
+    padding: 0 4px;
+    color:var(--main-color);
+    z-index: 2;
+}
+.profileInput input{
+    padding: 10px 5px 2px;
+    width: 85%;
+}
+.profileMenu{
+    list-style: none;
+    padding: 0;
+}
+.profileMenu li{
+    border-right:4px solid transparent;
+    height: 25px;
+    padding: .75rem 1.25rem;
+    cursor: pointer;
+}
+.profileMenuActive, .profileMenu li:hover{
+    border-right:4px solid var(--second-color) !important;
+    background-color: #fff;
+}
+.profileOut{
+    cursor: pointer;
+    color: var(--button-border);
+    background-color: #fff;
+    padding: 10px 35px;
+    border-radius: 3px;
+    border-color: var(--button-border);
+    line-height: 20px;
+    text-align: center;
+    display: block;
+    width: 85%;
+    margin: 25px auto;
+}
+.profileOut:hover{
+    background-color: var(--button-border);
+    border-color: var(--button-border);
+    color: #ffffff;
+}
+
+.addressList{
+    width:100%;
+}

@@ -1,0 +1,96 @@
+@font-face {
+    font-family: iran;
+    src: url("https://sharifoilco.com//fonts/iran/IRANSansWeb.eot")format("embedded-opentype");
+    src: url("https://sharifoilco.com//fonts/iran/IRANSansWeb.eot")format("embedded-opentype"),
+    url("https://sharifoilco.com//fonts/iran/IRANSansWeb.ttf")format("truetype"),
+    url("https://sharifoilco.com//fonts/iran/IRANSansWeb.woff")format("woff"),
+    url("https://sharifoilco.com//fonts/iran/IRANSansWeb.woff2")format("woff2");
+}
+
+@font-face{font-family:"Font Awesome 5 Brands";font-style:normal;font-weight:400;font-display:block;src:url(https://sharifoilco.com//fonts/iran/fa-brands-400.eot);src:url(https://sharifoilco.com//fonts/iran/fa-brands-400.eot?#iefix) format("embedded-opentype"),url(https://sharifoilco.com//fonts/iran/fa-brands-400.woff2) format("woff2"),url(https://sharifoilco.com//fonts/iran/fa-brands-400.woff) format("woff"),url(https://sharifoilco.com//fonts/iran/fa-brands-400.ttf) format("truetype"),url(https://sharifoilco.com//fonts/iran/fa-brands-400.svg#fontawesome) format("svg")}.fab{font-family:"Font Awesome 5 Brands"}
+@font-face{font-family:"Font Awesome 4";font-style:normal;font-weight:400;font-display:block;src:url(https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/fonts/fontawesome-webfont.eot);src:url(https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/fonts/fontawesome-webfont.eot?#iefix) format("embedded-opentype"),url(https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/fonts/fontawesome-webfont.woff2) format("woff2"),url(https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/fonts/fontawesome-webfont.woff) format("woff"),url(https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/fonts/fontawesome-webfont.ttf) format("truetype"),url(https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/fonts/fontawesome-webfont.svg#fontawesome) format("svg")}
+@font-face{font-family:"Font Awesome 5 Free";font-style:normal;font-weight:400;font-display:block;src:url(https://sharifoilco.com//fonts/iran/fa-regular-400.eot);src:url(https://sharifoilco.com//fonts/iran/fa-regular-400.eot?#iefix) format("embedded-opentype"),url(https://sharifoilco.com//fonts/iran/fa-regular-400.woff2) format("woff2"),url(https://sharifoilco.com//fonts/iran/fa-regular-400.woff) format("woff"),url(https://sharifoilco.com//fonts/iran/fa-regular-400.ttf) format("truetype"),url(https://sharifoilco.com//fonts/iran/fa-regular-400.svg#fontawesome) format("svg")}.fab,.far{font-weight:400;font-style: normal;}
+@font-face{font-family:"Font Awesome 5 Free";font-style:normal;font-weight:900;font-display:block;src:url(https://sharifoilco.com//fonts/iran/fa-solid-900.eot);src:url(https://sharifoilco.com//fonts/iran/fa-solid-900.eot?#iefix) format("embedded-opentype"),url(https://sharifoilco.com//fonts/iran/fa-solid-900.woff2) format("woff2"),url(https://sharifoilco.com//fonts/iran/fa-solid-900.woff) format("woff"),url(https://sharifoilco.com//fonts/iran/fa-solid-900.ttf) format("truetype"),url(https://sharifoilco.com//fonts/iran/fa-solid-900.svg#fontawesome) format("svg")}
+.fa,.far,.fas{font-family:"Font Awesome 5 Free"}.fa,.fas{font-weight:900}
+
+.star-icon {
+    color: #ffcc1c;
+    font-size: 1rem;
+    margin: 0 -2px;
+}
+.enLang{
+    font-family: calibri;
+}
+.fa, .far, .fas {
+    font-family: "Font Awesome 5 Free";
+	font-style: normal;
+	margin: auto;
+}
+
+.fa-search::before {
+    content: "\f002";
+}
+.fa-user-circle::before {
+    content: "\f2bd";
+}
+.fa-user::before {
+    content: "\f007";
+}
+.fa-angle-down::before {
+    content: "\f107";
+}
+.fa-angle-left::before {
+    content: "\f104";
+}
+.fa-angle-right::before {
+    content: "\f105";
+}
+.fa-close::before {
+    content: "\f057";
+}
+.fa-address::before {
+    content: "\f3c5";
+}
+.fa-book::before {
+    content: "\f02d";
+}
+.fa-shopping-cart::before {
+    content: "\f07a";
+}
+.fa-price::before {
+    content: "\f02c";
+}
+.fa-chevron-down::before {
+    content: "\f078";
+}
+.fa-chevron-right::before {
+    content: "\f054";
+}
+.fa-instagram::before {
+    content: "\f16d";
+}
+.fa-copy::before {
+    content: "\f0c5";
+}
+.fa-star::before {
+    content: "\f005";
+}
+.fa-truck::before {
+    content: "\f0d1";
+}
+.fa-eye::before {
+    content: "\f06e";
+}
+.fa-swatch::before {
+    content: "\f5c3";
+}
+.fa-car::before {
+    content: "\f1b9";
+}
+.fa-filter::before {
+    content: "\f0b0";
+}
+.fa-twitter:before{content:"\f099";}
+.fa-facebook:before{content:"\f09a"}
+.fa-telegram:before{content:"\f3fe"}
+.fa-whatsapp:before{content:"\f232"}
