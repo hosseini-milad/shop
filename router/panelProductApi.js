@@ -273,6 +273,8 @@ router.post('/updateProduct',jsonParser,async(req,res)=>{
         res.status(500).json({message: error.message})
     }
 })
+
+
 var download =async function(uri, filename, callback){
     return new Promise(resolve => {
     request.head(uri, function(err, res, body){
@@ -383,7 +385,8 @@ router.post('/fetch-category',jsonParser,async (req,res)=>{
             return
         }
         const catData = await category.findOne({_id: ObjectID(catId)})
-       res.json({filter:catData})
+        const catList = await category.find()
+       res.json({filter:catData,options:catList})
     }
     catch(error){
         res.status(500).json({message: error.message})
@@ -418,18 +421,20 @@ router.post('/list-category',jsonParser,async (req,res)=>{
 router.post('/editCats',jsonParser,async(req,res)=>{
     var catId= req.body.catId?req.body.catId:''
     if(catId === "new")catId=''
-    try{ 
+    try{
         const data = {
             title:  req.body.title,
             link: req.body.link,
             type:req.body.type,
             value:req.body.value,
+            parent:req.body.parent,
             description:req.body.description,
             sku: req.body.sku, 
             catCode:req.body.catCode,
             price: req.body.price,
             quantity: req.body.quantity,
             sort: req.body.sort,
+            iconUrl:  req.body.iconUrl,
             imageUrl:  req.body.imageUrl,
             thumbUrl:  req.body.thumbUrl
         }

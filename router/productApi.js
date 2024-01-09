@@ -20,6 +20,7 @@ const {StockId,SaleType} = process.env;
 const bankAccounts = require('../models/product/bankAccounts');
 const sepidarFetch = require('../middleware/Sepidar');
 const NormalTax = require('../middleware/NormalTax');
+
 router.post('/getlist', async (req,res)=>{
     var pageSize = req.body.pageSize?req.body.pageSize:"12";
     var offset = req.body.offset?(parseInt(req.body.offset)*parseInt(pageSize)):0;
@@ -28,7 +29,7 @@ router.post('/getlist', async (req,res)=>{
     try{
         const catData = await category.findOne({link:filter.category})
         const allProducts = await productSchema.find(
-            {enTitle:{$exists:true}})
+            {catId:catData.catCode,enTitle:{$exists:true}})
         const products = allProducts.slice(offset,
             (parseInt(offset)+parseInt(pageSize)))  
         var quantity = []
@@ -41,11 +42,11 @@ router.post('/getlist', async (req,res)=>{
             products[i].price = priceData.price?NormalTax(priceData.price):''
             products[i].count = countData?countData.quantity:''
         }
-        
+        const categoryList = await category.find()
 
         //logger.warn("main done")
         res.json({data:products,message:"Products List",size:allProducts.length,
-        catData:catData,quantity:quantity,price:price})
+        catData:catData,quantity:quantity,price:price,categories:categoryList})
     }
     catch(error){
         res.status(500).json({error: error.message})
@@ -123,6 +124,44 @@ router.post('/find-products', async (req,res)=>{
         res.status(500).json({message: error.message})
     }
 })
+router.post('/subcategory', async (req,res)=>{
+    const catName = req.body.catName
+    const limit = 4
+    try{  
+        const categoryData = await category.findOne({link:catName})
+        const subCategory= await category.find({"parent.link":categoryData.link})
+        const catPool = subCategory.map(item=>item.catCode)
+        const catProduct = await productSchema.aggregate([
+            {$match:{catId:{$in:catPool}}},
+            {$limit:limit}
+        ])
+        var tempProduct = []
+        for(var i =0 ;i<limit;i++){
+            if(!catProduct[i])break
+            var newProduct = catProduct[i]
+            var tempData = await findPriceCount(catProduct[i])
+            newProduct.price = tempData.price;
+            newProduct.count=tempData.count
+            tempProduct.push(newProduct)
+        }
+        res.json({catData:categoryData,
+            subCategory:subCategory,
+            catProduct:tempProduct})
+    }
+    catch(error){
+        res.status(500).json({message: error.message})
+    }
+})
+
+const findPriceCount=async(products)=>{
+    const countData = await productCount.findOne(
+        {ItemID:products.ItemID,Stock:StockId})
+    const priceData = await productPrice.findOne(
+        {ItemID:products.ItemID,saleType:SaleType})
+    return({price:priceData.price?NormalTax(priceData.price):'',
+           count:countData?countData.quantity:''})
+}
+
 const findCartCount=(item,cart)=>{
     var cartCount =0
     for(var i=0;i<cart.length;i++){

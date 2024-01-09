@@ -4,6 +4,7 @@ const { default: fetch } = require("node-fetch");
 const slider = require('../models/main/slider');
 const authApi = require('./authApi');
 const taskApi = require('./taskApi');
+const yasApi = require('./yasApi');
 const appApi = require('./appApi');
 const cartApi= require('./cartApi');
 const settingApi = require('./settingApi');
@@ -42,6 +43,8 @@ router.use('/cart', cartApi)
 router.use('/product', productApi)
 router.use('/form', formApi)
 router.use('/user', userApi)
+
+router.use('/yas', yasApi)
 router.use('/panel/user', panelUserApi)
 router.use('/panel/product', panelProductApi)
 0&&schedule.scheduleJob('0 0 * * *', async() => { 
