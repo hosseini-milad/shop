@@ -7,6 +7,7 @@ const customerSchema = new mongoose.Schema({
   phone: { type: String, unique: true },
   password: { type: String },
   meliCode:{type: String },
+  mobile:{type: String },
   email: { type: String},
   oldEmail: { type: String},
   access:{type:String},

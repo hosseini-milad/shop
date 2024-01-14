@@ -361,6 +361,7 @@ exports.pay = async (req, res) => {
             payStatus: "undone",
             description:"Test order"
         })
+        if(newOrder) await sepCart.deleteMany({userId:ObjectID(userid)})
         if(!orderData)
             return res.status(422).json({error: 'سفارش پیدا نشد'});
         //const credit = orderData.stockOrderPrice

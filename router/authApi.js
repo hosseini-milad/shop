@@ -15,6 +15,8 @@ const sendMailChangeEmailBrevo = require('../middleware/sendMailChange');
 const task = require('../models/main/task');
 const customers = require('../models/auth/customers');
 var Kavenegar = require('kavenegar');
+const address = require('../models/auth/address');
+const orders = require('../models/orders/orders');
 var api = Kavenegar.KavenegarApi({
   apikey: process.env.SMS_API
 });
@@ -374,6 +376,16 @@ router.post('/find-users',auth,jsonParser, async (req,res)=>{
       res.status(500).json({message: error.message})
   }
 })
+router.get('/find-users',auth,jsonParser, async (req,res)=>{
+  try {
+      console.log(req.headers["userid"])
+        const userOwner = await customers.findOne({_id:ObjectID(req.headers["userid"])});
+        res.status(200).json({data:userOwner,message:"User Data"})
+      } 
+  catch(error){
+      res.status(500).json({message: error.message})
+  }
+})
 router.post('/change-email',auth,jsonParser, async (req,res)=>{
   const data={
     email:req.body.email,
@@ -498,26 +510,17 @@ router.post('/forget-password-set',jsonParser, async (req,res)=>{
 router.post('/change-user',auth,jsonParser, async (req,res)=>{
   try {
       const data = {
-        username: req.body.username,
         cName: req.body.cName,
         sName:req.body.sName,
         phone:req.body.phone,
         email:req.body.email,
-        nif:req.body.nif,
-
-        nameCompany:req.body.nameCompany,
-        firma:req.body.firma,
-        morada:req.body.morada,
-        nifCompany:req.body.nifCompany,
-        phoneCompany:req.body.phoneCompany,
-        emailCompany:req.body.emailCompany,
-        IBANCompany:req.body.IBANCompany,
-  
+        meliCode:req.body.meliCode,
+        mobile:req.body.mobile,
         active:req.body.active,
         date: Date.now()
       }
       // Validate if user exist in our database
-      const userOwner = await User.updateOne({_id:ObjectID(req.body._id)},
+      const userOwner = await customers.updateOne({_id:ObjectID(req.headers["userid"])},
         {$set:data});
       //console.log(await bcrypt.compare(userOwner.password, data.oldPass))
       
@@ -531,6 +534,55 @@ router.post('/change-user',auth,jsonParser, async (req,res)=>{
   }
 })
 
+router.post('/add-address',auth,jsonParser, async (req,res)=>{
+  try {
+      const data = {
+        userId:ObjectID(req.headers["userid"]),
+        city: req.body.city,
+        province:req.body.province,
+        name: req.body.name,
+        mobile: req.body.mobile,
+        zip_code:req.body.zip_code,
+        address:req.body.address,
+        location:req.body.location,
+      }
+      // Validate if user exist in our database
+      const userAddress = await address.create(data);
+      //console.log(await bcrypt.compare(userOwner.password, data.oldPass))
+      
+      res.status(200).json({address:userAddress,message:"Address Added."})
+      
+      } 
+  catch(error){
+      res.status(500).json({error: error})
+  }
+})
+router.post('/list-address',auth,jsonParser, async (req,res)=>{
+  try {
+      // Validate if user exist in our database
+      const userAddress = await address.find({userId:req.headers["userid"]});
+      //console.log(await bcrypt.compare(userOwner.password, data.oldPass))
+      
+      res.status(200).json({data:userAddress,message:"Address List."})
+      
+      } 
+  catch(error){
+      res.status(500).json({error: error})
+  }
+})
+router.get('/list-orders',auth,jsonParser, async (req,res)=>{
+  try {
+      // Validate if user exist in our database
+      const userOrders = await orders.find({userId:ObjectID(req.headers["userid"])});
+      //console.log(await bcrypt.compare(userOwner.password, data.oldPass))
+      
+      res.status(200).json({data:userOrders,message:"Order List."})
+      
+      } 
+  catch(error){
+      res.status(500).json({error: error})
+  }
+})
 router.get('/sendmail',jsonParser, async (req,res)=>{
   try {
       //sendEmailNow()
