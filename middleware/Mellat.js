@@ -2,6 +2,11 @@ var soap = require('soap');
 var moment = require('moment');
 const orders = require('../models/orders/orders');
 const PayLogSchema = require('../models/orders/payLog');
+const cart = require('../models/product/cart');
+const sepCart = require('../models/product/sepCart');
+const customers = require('../models/auth/customers');
+const PrepareOrder = require('./PrepareOrder');
+var ObjectID = require('mongodb').ObjectID;
 
 moment.locale('en');
 const {PayURL,PayCallback, PayTerminalID, PayUsername, PayPassword} = process.env
@@ -337,27 +342,38 @@ async function reversePay(orderId, saleOrderId, saleReferenceId) {
 
  
 exports.pay = async (req, res) => {
-    if(req.query.orderid) {
+    if(req.query.userid) {
 
         //const credit = parseInt(req.query.credit);
 
-        var orderId = req.query.orderid
+        var userid = req.query.userid
 
-        const orderData = await orders.findOne({stockOrderNo:orderId})
+        const orderDetail = await PrepareOrder(userid)
+        const orderId = orderDetail.orderId
+        const orderPrice = orderDetail.orderPrice
+        const orderData = orderDetail.orderData
+        const newOrder = await orders.create({
+            userId:ObjectID(userid),
+            orderNo:orderId,
+            orderPrice:orderPrice,
+            orderItems:orderData,
+            status:"initial",
+            payStatus: "undone",
+            description:"Test order"
+        })
         if(!orderData)
             return res.status(422).json({error: 'سفارش پیدا نشد'});
-        const credit = orderData.stockOrderPrice
+        //const credit = orderData.stockOrderPrice
         //orderId = await OrderNoBank(orderId,1)
         //const orderId = moment().valueOf();
         console.log("Request Now: ");
             let payRequestResult =''
-            const query = {orderNoInt:orderId,payStatus:"sendToBank",
-            userId:orderData.userId,stockOrderNo:orderData.stockOrderNo,
-            stockOrderPrice: orderData.stockOrderPrice,}
+            const query = {orderNo:orderId,payStatus:"sendToBank",
+            userId:userid,orderPrice:orderPrice}
             //return
             await PayLogSchema.create(query)
             try{
-                payRequestResult = await bpPayRequest(orderId, credit, 'ok', callbackUrl);
+                payRequestResult = await bpPayRequest(orderId, orderPrice, 'ok', callbackUrl);
             }
             catch{
                 return res.status(422).json({error: 'اطلاعات ورودی اشتباه است.'});
@@ -420,11 +436,10 @@ exports.callBack = async (req, res) => {
             if(resultInquiryRequest !== 0) {
                 reversePay(saleOrderId, saleOrderId, saleReferenceId);
                 const error = desribtionStatusCode(resultCode_bpinquiryRequest);
-                const orderNo = saleOrderId//await OrderNoBank(saleOrderId,2)
-                const query = {orderNoInt:saleOrderId,payStatus:"undone", stockOrderNo:orderNo,
+                const query = {orderNo:saleOrderId,payStatus:"undone",
                 saleReferenceId:saleReferenceId,statusCode:resultInquiryRequest}
                 await PayLogSchema.create(query)
-                await orders.updateOne({stockOrderNo:orderNo},{$set:{payStatus:"undone"}})
+                await orders.updateOne({orderNo:saleOrderId},{$set:{payStatus:"undone"}})
                 return res.render('mellat_payment_result.ejs', {error});
             }
         }
@@ -439,11 +454,10 @@ exports.callBack = async (req, res) => {
             //ﺗﺮاﻛﻨﺶ_ﺑﺎ_ﻣﻮﻓﻘﻴﺖ_اﻧﺠﺎم_ﺷﺪ
             if(resultCode_bpSettleRequest === 0 || resultCode_bpSettleRequest === 45) {
                 //success payment
-                const orderNo = saleOrderId//await OrderNoBank(saleOrderId,2)
-                const query = {orderNoInt:saleOrderId,payStatus:"paid", stockOrderNo:orderNo,
+                const query = {orderNo:saleOrderId,payStatus:"paid",
                 saleReferenceId:saleReferenceId}
                 await PayLogSchema.create(query)
-                await orders.updateOne({stockOrderNo:orderNo},{$set:{payStatus:"paid"}})
+                await orders.updateOne({orderNo:saleOrderId},{$set:{payStatus:"paid"}})
                 let msg = 'تراکنش شما با موفقیت انجام شد ';
                 msg += " لطفا شماره پیگیری را یادداشت نمایید" + saleReferenceId;
 
@@ -454,12 +468,10 @@ exports.callBack = async (req, res) => {
             }
         }else {
             if (saleOrderId != -999 && saleReferenceId != -999) {
-                const orderNo = saleOrderId//await OrderNoBank(saleOrderId,2)
-                const query = {orderNoInt:saleOrderId,payStatus:"undone",
-                stockOrderNo:orderNo,
+                const query = {orderNo:saleOrderId,payStatus:"undone",
                 saleReferenceId:saleReferenceId,errorMessage:"123",errorCode:resultCode_bpPayRequest}
                 await PayLogSchema.create(query)
-                await orders.updateOne({stockOrderNo:orderNo},{$set:{payStatus:"undone"}})
+                await orders.updateOne({orderNo:saleOrderId},{$set:{payStatus:"undone"}})
                 if(resultCode_bpPayRequest !== 17)
                     reversePay(saleOrderId, saleOrderId, saleReferenceId);
             }
@@ -473,11 +485,10 @@ exports.callBack = async (req, res) => {
                 if(resultCode_bpPayRequest !== 17)
                 reversePay(saleOrderId, saleOrderId, saleReferenceId);
                 const error = desribtionStatusCode(resultCode_bpPayRequest);
-                const orderNo = saleOrderId//await OrderNoBank(saleOrderId,2)
-                const query = {orderNoInt:saleOrderId,payStatus:"undone", stockOrderNo:orderNo,
+                const query = {orderNo:saleOrderId,payStatus:"undone",
                 saleReferenceId:saleReferenceId,errorMessage:"123",errorCode:resultCode_bpPayRequest}
                 await PayLogSchema.create(query)
-                await orders.updateOne({stockOrderNo:orderNo},{$set:{payStatus:"undone"}})
+                await orders.updateOne({stockOrderNo:saleOrderId},{$set:{payStatus:"undone"}})
                 return res.render('mellat_payment_result.ejs', {error});
             }
     }

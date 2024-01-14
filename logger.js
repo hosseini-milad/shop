@@ -4,6 +4,7 @@ require("./middleware/database").connect();
 var expressWinston = require('express-winston');
 var winston = require('winston'); // for transports.Console
 var app = module.exports = express();
+const path = require('path');
 
 const cors = require("cors");
 app.use(cors());
@@ -38,6 +39,11 @@ router.get('/error', function(req, res, next) {
 });
 
 router.use('/api', mainApi)
+global.publicDir = __dirname + "/payment/";
+app.use(express.static(path.join(__dirname, 'publicPay')));
+app.set('views', path.join(__dirname, 'publicPay'));
+app.set('view engine', 'ejs');
+
 router.use(cors());
 // express-winston logger makes sense BEFORE the router
 app.use(expressWinston.logger({

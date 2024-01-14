@@ -20,11 +20,12 @@ const bankAccounts = require('../models/product/bankAccounts');
 const sepidarFetch = require('../middleware/Sepidar');
 const sepCart = require('../models/product/sepCart');
 const NormalTax = require('../middleware/NormalTax');
-const {StockId,SaleType} = process.env;
+const CalcCart = require('../middleware/CalcCart');
 
 router.post('/addToCart', async (req,res)=>{
     const userId =req.headers['userid'];
     const sku = req.body.sku
+    const ItemID = req.body.ItemID
     try{
         const cartDetails = await sepCart.findOne({userId:userId,sku:sku})
         if(cartDetails)
@@ -38,6 +39,7 @@ router.post('/addToCart', async (req,res)=>{
                 initDate:  Date.now(),
                 progressDate: Date.now(),
                 userId:userId,
+                ItemId:ItemID,
                 count:req.body.count
             })
         res.json(cartDetails)
@@ -68,16 +70,8 @@ router.post('/cart-detail', async (req,res)=>{
             
         ])
         var priceSet=[]
-        var totalPrice = 0
-        for(var c=0;c<cartDetails.length;c++){
-            const ItemId = cartDetails[c].productData[0]
-            const priceData = await productPrice.findOne(
-                {ItemID:ItemId.ItemID,saleType:SaleType},
-                {price:1,_id:0})
-            
-            cartDetails[c].price=NormalTax(priceData.price)
-            totalPrice += cartDetails[c].price
-            }
+        var totalPrice = await CalcCart(orderData)
+        
         
         
         res.json({cart:cartDetails,totalprice:totalPrice})

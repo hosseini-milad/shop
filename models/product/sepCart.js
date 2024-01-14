@@ -4,6 +4,7 @@ var Schema = mongoose.Schema;
 
 const SepCartSchema = new Schema({
     sku:  { type : String},
+    ItemId:  { type : String},
     initDate: { type: Date, default: Date.now },
     progressDate: { type: Date },
     userId:{ type: String },
