@@ -7,14 +7,17 @@ const jsonParser = bodyParser.json();
 const router = express.Router()
 const auth = require("../middleware/auth");
 const User = require("../models/auth/users");
-const sendEmailNow = require('../middleware/sendMail');
-const sendBitrix = require('../middleware/Bitrix');
-const bitrixDeal = require('../middleware/Bitrixdeal');
+const loginLogSchema = require('../models/auth/logs')
 const LogCreator = require('../middleware/LogCreator')
 const sendMailBrevo = require('../middleware/sendMail');
 const sendMailRegBrevo = require('../middleware/sendMailReg');
 const sendMailChangeEmailBrevo = require('../middleware/sendMailChange');
 const task = require('../models/main/task');
+const customers = require('../models/auth/customers');
+var Kavenegar = require('kavenegar');
+var api = Kavenegar.KavenegarApi({
+  apikey: process.env.SMS_API
+});
 
 router.post('/login',jsonParser, async (req,res)=>{
     try {
@@ -70,6 +73,103 @@ const createOTP=(cName)=>{
   return(cName+(Math.floor(Math.random() * 10000000)
    + 10000000))
 }
+router.post('/sendOtp',jsonParser,async(req,res)=>{
+  try {
+    const { phone } = req.body;
+    ////console.log((phone)
+    var otpValue = Math.floor(Math.random() * 8999)+1000 ;
+    
+    const user = await customers.findOne({phone: phone });
+    ////console.log((otpValue)
+    if(user){
+      
+    /*console.log({
+      token: otpValue,
+      template: process.env.template,//"mgmVerify",
+      receptor: phone
+  }) */
+      api.VerifyLookup({
+        token: otpValue,
+        template: process.env.template,//"mgmVerify",
+        receptor: phone
+    },);
+      const newUser = await customers.updateOne(
+        {phone:phone},{$set:{otp:otpValue}});
+        ////console.log((newUser)
+      res.status(200).json({message:"sms sent for "+phone});
+    }
+    else {
+      api.VerifyLookup({
+        token: otpValue,
+        template: process.env.template,//"mgmVerify",
+        receptor: phone 
+    },);
+      const newUser = await customers.create(
+        { phone:phone,
+          otp:otpValue,
+          email:phone+"@mgmlenz.com",
+          date:Date.now()});
+      //res.status(200).json({"error":"user not found"});
+      const newUserLog = await loginLogSchema.create({
+        title: "ثبت مشتری جدید",
+        user: newUser._id,
+        phone: phone,
+        kind:"crm",
+        description: "کاربر با شماره تماس "+phone+ "در سامانه ثبت نام کرده است",
+        status: "unread",
+        date:Date.now()
+      })
+      ////console.log((newUserLog)
+      res.status(200).json({message:"welcome to sharif, sms sent for "+phone});
+    }
+  }
+  catch (error){
+    res.status(400).json({message:"login error",error:error});
+  }
+})
+
+
+router.post('/verifyOtp',jsonParser,async(req,res)=>{
+try {
+  // Get user input
+  const data ={ phone, otp } = req.body;
+
+  // Validate user input
+  if (!(phone && otp)) {
+    res.status(400).send("All input is required");
+    return;
+  }
+  // Validate if user exist in our database
+  const user = await customers.findOne({phone: phone });
+  ////console.log((user , phone)
+  if (user && otp===user.otp) {
+    // Create token
+    const token = jwt.sign(
+      { user_id: user._id, phone },
+      process.env.TOKEN_KEY,
+      {
+        expiresIn: "6h",
+      }
+    );
+
+    // save user token
+    user.token = token;
+
+    // user
+    res.status(200).json(user);
+    return;
+  }
+  if(user && otp!==user.otp){
+    res.status(200).json({
+      "error":"wrong otp"
+    });
+  }
+  //res.status(400).send("Invalid Credentials");
+} catch (err) {
+  //console.log((err);
+}
+})
+
 router.post('/forget',jsonParser, async (req,res)=>{
   try {
       const { email } = req.body;

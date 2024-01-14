@@ -10,6 +10,7 @@ const cartApi= require('./cartApi');
 const settingApi = require('./settingApi');
 const productApi = require('./productApi');
 const formApi = require('./formApi');
+const paymentApi = require('./paymentApi');
 const userApi = require('./userApi');
 const panelUserApi = require('./panelUserApi')
 const panelProductApi = require('./panelProductApi')
@@ -34,7 +35,6 @@ router.get('/main', async (req,res)=>{
         res.status(500).json({message: error.message})
     }
 })
-
 router.use('/auth', authApi)
 router.use('/task', taskApi)
 router.use('/setting', settingApi)
@@ -43,6 +43,7 @@ router.use('/cart', cartApi)
 router.use('/product', productApi)
 router.use('/form', formApi)
 router.use('/user', userApi)
+router.use('/payment',paymentApi)
 
 router.use('/yas', yasApi)
 router.use('/panel/user', panelUserApi)
