@@ -13,7 +13,7 @@ const {PayURL,PayCallback, PayTerminalID, PayUsername, PayPassword} = process.en
 
 const mellatWsdl = PayURL;//"https://bpm.shaparak.ir/pgwchannel/services/pgw?wsdl";
 const PgwSite = "https://bpm.shaparak.ir/pgwchannel/startpay.mellat";
-const callbackUrl = PayCallback;
+const callbackUrl = PayCallback; 
 const terminalId = PayTerminalID;//this send to you by mellat bank
 const userName = PayUsername;//this send to you by mellat bank
 const password = PayPassword;//this send to you by mellat bank

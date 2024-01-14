@@ -75,6 +75,7 @@ const createOTP=(cName)=>{
 }
 router.post('/sendOtp',jsonParser,async(req,res)=>{
   try {
+    var smsResult = ''
     const { phone } = req.body;
     ////console.log((phone)
     var otpValue = Math.floor(Math.random() * 8999)+1000 ;
@@ -88,7 +89,7 @@ router.post('/sendOtp',jsonParser,async(req,res)=>{
       template: process.env.template,//"mgmVerify",
       receptor: phone
   }) */
-      api.VerifyLookup({
+  smsResult =api.VerifyLookup({
         token: otpValue,
         template: process.env.template,//"mgmVerify",
         receptor: phone
@@ -99,7 +100,7 @@ router.post('/sendOtp',jsonParser,async(req,res)=>{
       res.status(200).json({message:"sms sent for "+phone});
     }
     else {
-      api.VerifyLookup({
+      smsResult = api.VerifyLookup({
         token: otpValue,
         template: process.env.template,//"mgmVerify",
         receptor: phone 
@@ -120,11 +121,13 @@ router.post('/sendOtp',jsonParser,async(req,res)=>{
         date:Date.now()
       })
       ////console.log((newUserLog)
-      res.status(200).json({message:"welcome to sharif, sms sent for "+phone});
+      res.status(200).json({message:"welcome to sharif, sms sent for "+phone,
+      smsResult:smsResult});
     }
   }
   catch (error){
-    res.status(400).json({message:"login error",error:error});
+    res.status(400).json({message:"login error",error:error,
+    smsResult:smsResult});
   }
 })
 
