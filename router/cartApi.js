@@ -70,7 +70,7 @@ router.post('/cart-detail', async (req,res)=>{
             
         ])
         var priceSet=[]
-        var totalPrice = await CalcCart(orderData)
+        var totalPrice = await CalcCart(cartDetails)
         
         
         
