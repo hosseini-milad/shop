@@ -74,8 +74,8 @@ const createOTP=(cName)=>{
    + 10000000))
 }
 router.post('/sendOtp',jsonParser,async(req,res)=>{
+  var smsResult = ''
   try {
-    var smsResult = ''
     const { phone } = req.body;
     ////console.log((phone)
     var otpValue = Math.floor(Math.random() * 8999)+1000 ;
@@ -100,11 +100,13 @@ router.post('/sendOtp',jsonParser,async(req,res)=>{
       res.status(200).json({message:"sms sent for "+phone});
     }
     else {
+      console.log(phone)
       smsResult = api.VerifyLookup({
         token: otpValue,
         template: process.env.template,//"mgmVerify",
         receptor: phone 
     },);
+    console.log("sms Sent")
       const newUser = await customers.create(
         { phone:phone,
           otp:otpValue,
