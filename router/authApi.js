@@ -100,19 +100,17 @@ router.post('/sendOtp',jsonParser,async(req,res)=>{
       res.status(200).json({message:"sms sent for "+phone});
     }
     else {
-      console.log(phone)
       smsResult = api.VerifyLookup({
         token: otpValue,
         template: process.env.template,//"mgmVerify",
         receptor: phone 
     },);
-    console.log("sms Sent")
       const newUser = await customers.create(
-        { phone:phone,
+        { username:phone,
+          phone:phone,
           otp:otpValue,
           email:phone+"@mgmlenz.com",
           date:Date.now()});
-      console.log("user Created")
       //res.status(200).json({"error":"user not found"});
       const newUserLog = await loginLogSchema.create({
         title: "ثبت مشتری جدید",
@@ -123,7 +121,6 @@ router.post('/sendOtp',jsonParser,async(req,res)=>{
         status: "unread",
         date:Date.now()
       })
-      console.log("Log Created")
       ////console.log((newUserLog)
       res.status(200).json({message:"welcome to sharif, sms sent for "+phone,
       smsResult:smsResult});
