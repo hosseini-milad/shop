@@ -1,10 +1,10 @@
 const mongoose = require("mongoose");
 
 const customerSchema = new mongoose.Schema({
-  username: { type: String, unique: true },
+  username: { type: String},
   cName: { type: String},
   sName:{ type: String},
-  phone: { type: String},
+  phone: { type: String, unique: true },
   password: { type: String },
   meliCode:{type: String },
   email: { type: String},
