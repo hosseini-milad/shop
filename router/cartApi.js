@@ -42,7 +42,7 @@ router.post('/addToCart', async (req,res)=>{
                 ItemId:ItemID,
                 count:req.body.count
             })
-        res.json(cartDetails)
+        res.json({cart:cartDetails,message:"محصول به سبد اضافه شد"})
     }
     catch(error){
         res.status(500).json({message: error.message})
