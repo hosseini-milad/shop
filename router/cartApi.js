@@ -49,6 +49,19 @@ router.post('/addToCart', async (req,res)=>{
     }
 })
 
+router.post('/removeItem', async (req,res)=>{
+    const userId =req.headers['userid'];
+    const sku = req.body.sku
+    try{
+        const cartDetails = await sepCart.deleteOne({userId:userId,sku:sku})
+        
+        res.json({cart:cartDetails,message:"محصول از سبد حذف شد"})
+    }
+    catch(error){
+        res.status(500).json({message: error.message})
+    }
+})
+
 const newCount=(count1,count2)=>{
     var outPut = 0;
     try{outPut += parseInt(count1)}catch{}
