@@ -6,6 +6,7 @@ var tax = process.env.TaxRate
 
 const CalcCart=async(cartDetails)=>{
     var totalPrice = 0
+    var totalCount = 0
     for(var c=0;c<cartDetails.length;c++){
     const ItemId = cartDetails[c].productData[0]
     const priceData = await productPrice.findOne(
@@ -14,8 +15,9 @@ const CalcCart=async(cartDetails)=>{
     
     cartDetails[c].price=NormalTax(priceData.price)
     totalPrice += cartDetails[c].price*cartDetails[c].count
+    totalCount += parseInt(cartDetails[c].count)
     }
-    return(totalPrice)
+    return({totalPrice:totalPrice,totalCount:totalCount})
 }
 
 module.exports =CalcCart

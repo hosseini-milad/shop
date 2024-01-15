@@ -83,11 +83,14 @@ router.post('/cart-detail', async (req,res)=>{
             
         ])
         var priceSet=[]
-        var totalPrice = await CalcCart(cartDetails)
+        var totalCartData = await CalcCart(cartDetails)
+        var totalPrice = totalCartData.totalPrice
+        var totalCount = totalCartData.totalCount
         
         
         
-        res.json({cart:cartDetails,totalprice:totalPrice})
+        res.json({cart:cartDetails,totalprice:totalPrice,
+            totalCount:totalCount})
     }
     catch(error){
         res.status(500).json({message: error.message})

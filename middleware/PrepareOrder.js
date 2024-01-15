@@ -21,7 +21,8 @@ const PrepareOrder=async(userid)=>{
     const orderId = await checkRep(usersData.phone,dateNow.toLocaleDateString('fa'))
     
     const orderPrice = await CalcCart(orderData)
-    return({orderId:orderId,orderPrice:orderPrice,orderData:orderData})
+    return({orderId:orderId,orderPrice:orderPrice.totalPrice,
+        orderData:orderData})
 }
 const checkRep=async(phone,dateYear)=>{
     var orderDate = dateYear.split('/')[0]

@@ -21,6 +21,7 @@ const ProductSchema = new Schema({
     imgGallery:String,
     thumbUrl: {type:String},
     price:String,
+    count:String,
     brandId:String,
     catId:String,
     sharifId:String

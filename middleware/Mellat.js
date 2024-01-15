@@ -355,6 +355,7 @@ exports.pay = async (req, res) => {
         const newOrder = await orders.create({
             userId:ObjectID(userid),
             orderNo:orderId,
+            transport:req.query.transport,
             orderPrice:orderPrice,
             orderItems:orderData,
             status:"initial",

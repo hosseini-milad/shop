@@ -37,14 +37,15 @@ router.post('/getlist', async (req,res)=>{
         for(var i=0;i<products.length;i++){
             const countData = await productCount.findOne(
                 {ItemID:products[i].ItemID,Stock:StockId})
+            
             const priceData = await productPrice.findOne(
                 {ItemID:products[i].ItemID,saleType:SaleType})
             products[i].price = priceData.price?NormalTax(priceData.price):''
             products[i].count = countData?countData.quantity:''
+            console.log(products[i].count )
         }
         const categoryList = await category.find()
 
-        //logger.warn("main done")
         res.json({data:products,message:"Products List",size:allProducts.length,
         catData:catData,quantity:quantity,price:price,categories:categoryList})
     }
