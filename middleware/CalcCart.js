@@ -13,7 +13,7 @@ const CalcCart=async(cartDetails)=>{
         {price:1,_id:0})
     
     cartDetails[c].price=NormalTax(priceData.price)
-    totalPrice += cartDetails[c].price
+    totalPrice += cartDetails[c].price*cartDetails[c].count
     }
     return(totalPrice)
 }
