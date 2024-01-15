@@ -10,7 +10,7 @@ const OrdersSchema = new mongoose.Schema({
   status:{ type: String },
   payStatus: {type: String},
   description:{ type: String },
-  transort:{ type: String },
+  transport:{ type: String },
   date:{ type: Date ,default:Date.now()}, 
   progressDate:{ type: Date ,default:Date.now()},
 });

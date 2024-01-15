@@ -7,15 +7,7 @@ var ObjectID = require('mongodb').ObjectID;
 var tax = process.env.TaxRate
 
 const PrepareOrder=async(userid)=>{
-    const orderData = await sepCart.aggregate([
-        {$match:{userId:userid}},
-        {$lookup:{
-            from : "products", 
-            localField: "sku", 
-            foreignField: "sku", 
-            as : "productData"
-        }}
-    ])
+    const orderData = await sepCart.find({userId:userid})
     const usersData = await customers.findOne({_id:ObjectID(userid)})
     const dateNow = new Date()
     const orderId = await checkRep(usersData.phone,dateNow.toLocaleDateString('fa'))
