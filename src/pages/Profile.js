@@ -2,25 +2,46 @@ import BreadCrumb from "../modules/allPages/BreadCrumb";
 import ProfileMain from "../modules/profilePage/profileMain";
 import ProfileSideBar from "../modules/profilePage/profileSideBar";
 import '../css/profile.css'
-import { useState } from "react";
-import SimpleAuth from "../components/simpleAuth";
-import env, { siteApi } from "../env";
-function Profile(){
-    const[profilePage,setProfilePage] = useState(0)
-    const token= JSON.parse(localStorage.getItem('token-oil'));
-    const userInfo= SimpleAuth(siteApi+env.userInfo)
-   // console.log(userInfo)
+import { useEffect, useState } from "react";
+import env, { siteApi, siteApiUrl } from "../env";
+import Cookies from 'universal-cookie';
+const cookies = new Cookies();
+
+function Profile(){ 
+    const token=cookies.get(env.cookieName)
+    const[profile,setProfile] = useState()
+    const[profileTab,setProfileTab] = useState(0)
+    useEffect(()=>{
+        if(!token) return('')
+        const getOptions={
+            method:'get',
+            headers: {'Content-Type': 'application/json',
+            "x-access-token":token.token,"userId":token.userId}
+        }
+        fetch(siteApi+"/auth/find-users",getOptions)
+        .then(res => res.json())
+        .then(
+            (result) => {
+            console.log(result)
+            setProfile(result)
+            },
+            (error,res) => {
+            console.log(error,res);
+            }
+        )
+          
+    },[]) 
+    console.log(profile)
     return(<>
-        {token&&<main>
+        {profile?<main>
             <BreadCrumb pName={"حساب کاربری"}/>
-            {userInfo&&<div className="profileContainer">
-                <ProfileSideBar pageSet={setProfilePage} page={profilePage} userInfo={userInfo.data}/>
-                <ProfileMain page={profilePage} userInfo={userInfo}/>
+            {profile&&<div className="profileContainer">
+                <ProfileSideBar pageSet={setProfileTab} page={profileTab} 
+                    userInfo={profile}/>
+                <ProfileMain page={profileTab} userInfo={profile}
+                 token={token}/>
             </div> }
-        </main>}
-        {!token&&<main>
-            Please Login</main>}
-        
+        </main>:<></>}
         </>
     )
 }

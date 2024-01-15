@@ -42,9 +42,8 @@ function Footer(props){
 				<h4>فروشگاه</h4>
 				<ul>
 					<li><a href="/category/motor-oil">روغن موتور</a></li>	
-					<li><a href="/category/lubricants">روان کننده ها و پروکانت</a></li>
-					<li><a href="/category/accessories">محصولات جانبی</a></li>
-					<li><a href="/category/air-filter">فیلتر هوا</a></li>
+					<li><a href="/category-landing/lubricants">روان کننده ها و پروکانت</a></li>
+					<li><a href="/category-landing/accessories">محصولات جانبی</a></li>
 				</ul>
 			</div>
 			<div className="col25">

@@ -41,6 +41,7 @@ root.render(
        <Routes>
         <Route path="/" element={<Home/>}/>
         <Route path="/category" element={<Category/>/*<CategoryLanding/>*/}/>
+        <Route path="/category-landing/:title" element={<CategoryLanding/>}/>
         <Route path="/category/:catID" element={<Category/>}/>
         <Route path="/brand/:brandID" element={<Category/>}/>
         <Route path="/oil-brand/:brandID" element={<Category/>}/>
@@ -52,7 +53,7 @@ root.render(
         <Route path="/callback-url/:state" element={<CallbackUrl/>}/>
         <Route path="/landing/:title" element={<SheetLabel/>}/>
         <Route path="/quick-search" element={<QuickSearchPage />} />
-        <Route path="/category-landing/:title" element={<CategoryLanding />} />
+        
 
         <Route path="/brands" element={<Brand/>}/>
         <Route path="/oil-brands" element={<OilBrand/>}/>

@@ -140,14 +140,15 @@ function Header(props){
 			</div>
 			<div className="cart">
 				<div className="mainHolder" onMouseOver={handleCartHover}
-						onMouseOut={handleCartOut}>
+						onMouseOut={handleCartOut}
+						onClick={()=>window.location.href="/cart"}>
 							{cart&&cart.data&&cart.data.orderLists.length?<b className="cartNum">{cart.data.orderLists.length}</b>:''}
 					<i className="icon-size circleIcon fas fa-shopping-cart"  style={{backgroundColor:currentHover===4?"var(--second-color)":""}}></i>
 					<span className="cart-heading">سبد خرید</span>
-					<div className="megaMenuHeader megaMenuSingle" style={{visibility:cartMenu}}>
+					{/*<div className="megaMenuHeader megaMenuSingle" style={{visibility:cartMenu}}>
 						{cart&&!cart.error&&cart!=="register"?<CartMenu cart={cart.data}/>:''}
 						<span style={{color:"gray"}}>{cart==="register"&&"لطفا ثبت نام کنید."}</span>
-					</div>
+				</div>*/}
 					<small>{cart&&!cart.error&&cart!=="register"?cart.data.orderLists.totalPrice:''}</small>
 					
 				</div>
@@ -159,10 +160,10 @@ function Header(props){
 			<ul>
 					<li className="menuItem" onMouseOver={handleOilMenuHover}
 						onMouseOut={handleOilMenuOut}><a href="/category/motor-oil"> روغن موتور</a>
-						<i className="fas fa-chevron-down"></i>
+						{/*<i className="fas fa-chevron-down"></i>
 						<div className="MegaMenuLable" style={{display:oilMenu}}>
 							<MegaMenuOil setting={setting} category={props.category&&props.category.data}/>
-						</div>
+						</div>*/}
 					</li>
 					<li className="menuItem" onMouseOver={handleLubMenuHover}
 						onMouseOut={handleLubMenuOut}>

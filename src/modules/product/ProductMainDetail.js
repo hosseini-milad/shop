@@ -12,7 +12,6 @@ function ProductMainDetail(props){
 
     const product = props.product.data;
     const cart = props.cart;
-    console.log(product)
     const [pop,setPop] = useState(0);
     const [count,setCount] = useState(1);
     const [error,setError] = useState('');
@@ -23,12 +22,14 @@ function ProductMainDetail(props){
             method: 'post',
             headers: { 'Content-Type': 'application/json' ,
             "x-access-token":token&&token.token,"userId":token&&token.userId},
-            body: JSON.stringify({sku:product.sku,count:count}),
+            body: JSON.stringify({sku:product.sku,count:count,ItemID:product.ItemID}),
           }
           fetch(siteApi + "/cart/addToCart", postOptions)
             .then((res) => res.json())
             .then((result) => {
-              console.log( result)
+                setError(result.message)
+                setPop(1)
+                //setTimeout(()=>setError(''),3000)
             })
         
     }
@@ -65,16 +66,7 @@ function ProductMainDetail(props){
                         </div>
                     </div>
                 </div>:<p>برای مشاهده قیمت، ابتدا حجم را انتخاب کنید</p>}
-                {product.cat_id!==234&&<div className="mobileFlex"><label>اندازه بسته:</label>
-                <select className="filterSort" >
-                    
-                    {product.get_product_warranty&&product.get_product_warranty.map(priceVolume=>(
-                       <option key={priceVolume.id} id={priceVolume.id} title={priceVolume.price1} value={priceVolume.price2}>
-                            {priceVolume.color_name}</option> 
-                    ))}
-                    
-                </select>
-                </div>}
+                
                 <div className="mobileFlex">
                     <label>تعداد محصول:</label>
                     <CounterInput
@@ -85,17 +77,14 @@ function ProductMainDetail(props){
                     />
                 </div>
                 {!token?<LoginMenu />:
-                <a className="modal-sub-btn" onClick={addToCart}>
-                        افزودن به سبد خرید</a>}
-                {0&&cart&&cart.data&&cart.data.orderLists.find(item=>item.payload.product_sku==product.sku)&&
-                cart.data.orderLists.find(item=>item.payload.product_sku==product.sku).payload.count===
-                product.get_product_warranty[0].product_number_cart?<div>
-                    <a className="modal-sub-btn disableBtn" >افزودن به سبد خرید</a>
-                    <sub >حداکثر {product.get_product_warranty[0].product_number_cart} کالا از این محصول در سبد می توانید داشته باشید</sub></div>:
-                0&&<a className="modal-sub-btn" onClick={()=>console.log(product.id,1)}>افزودن به سبد خرید
-                </a>}
+                product.count?<a className="modal-sub-btn" onClick={addToCart}>
+                        افزودن به سبد خرید</a>:
+                        <a className="modal-sub-btn disableBtn">
+                        عدم موجودی</a>}
+                
                 <small className="errorHandle">{error}</small>
-                {pop?<AddPop product={product} setPop={setPop} error={error}/>:''}
+                {pop?<AddPop product={product} setPop={setPop} error={error}
+                token={token}/>:''}
             </div>
             
         </div>

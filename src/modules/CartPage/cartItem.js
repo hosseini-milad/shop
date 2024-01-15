@@ -5,9 +5,6 @@ function CartItem(props){
     console.log(cartItem)
     const productData = cartItem&&cartItem.productData[0]
 
-    const removeFromCart=()=>{
-        console.log("Remove")
-    }
     if(!cartItem)
         return("Waiting")
     else
@@ -36,7 +33,7 @@ function CartItem(props){
         <td className="mobileHide">{normalPriceCount(cartItem.price,
             cartItem.count)}
             <sub className="base-Toman">تومان</sub></td>
-        <td><i onClick={()=>removeFromCart(cartItem.orderListID)} className="icon-size fas fa-close"></i></td>
+        <td><i onClick={()=>props.removeFromCart(cartItem.sku)} className="icon-size fas fa-close"></i></td>
     </tr>
                     
     )

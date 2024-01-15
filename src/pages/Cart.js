@@ -31,7 +31,7 @@ function Cart() {
       .then(
         (result) => {
           console.log(result)
-          setCart(result.cart)
+          setCart(result)
         },
         (error) => {
           console.log(error)
@@ -48,47 +48,26 @@ function Cart() {
             <div className='cartHandler'>
               <h1 className='shoppingCartHeading'>سبد خرید</h1>
               <div className='items-total'>
-                {' '}
-                مجموع اقلام سبد:{' '}
-                {cart &&
-                  !cart.error &&
-                  cart.data &&
-                  cart.length}
-                <div>
-                  <a href='/category' className='modal-sub-btn-normal'>
-                    انتقال به فروشگاه
-                  </a>
-                </div>
+                مجموع اقلام سبد: {cart.totalCount}
+                
               </div>
               <div className='cartMainPart'>
-                <CartMainPart
-                  cart={cart}
+                <CartMainPart token={token}
+                  cart={cart?cart.cart:{}}
                 />
               </div>
-              <div>
-                <button
-                  onClick={handleClick}
-                  type='button'
-                  className='promptButton'
-                >
-                  click me
-                </button>
-              </div>
+             
             </div>
             <div className='cartSide'>
               <CartSidePart
-                cart={cart &&0&& !cart.error && cart.data}
+                cart={cart}
                 address={address}
               />
             </div>
           </div>
         </main>
       )}
-      {!cart ? (
-        <main>لطفا صبر کنید</main>
-      ) : (
-        !cart.data && <main>سبد خرید خالی است</main>
-      )}
+      
       {!token && <main>لطفا وارد سایت شوید</main>}
     </>
   )

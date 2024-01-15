@@ -1,5 +1,5 @@
 import { useState } from "react";
-import env,{siteApi,validPhone} from "../../../env";
+import env,{logoff, siteApi,validPhone} from "../../../env";
 import UserPassLogin from "./UserPassLogin";
 import Cookies from 'universal-cookie';
 const cookies = new Cookies();
@@ -22,19 +22,23 @@ function LoginMenu(props){
       const postOptions={
         method:'post',
         headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ username: mobile_phone})
+          body: JSON.stringify({ phone: mobile_phone})
       }
-      validPhone(mobile_phone)?
-      fetch(siteApi+"/auth/login",postOptions)
+      console.log(postOptions)
+      fetch(siteApi+"/auth/sendOtp",postOptions)
     .then(res => res.json())
     .then(
       (result) => {
         console.log(result)
-        setError('');
+        if(result.error){
+          setError(result.error)
+        }
+        else{
+        setError(result.message);
         //setToken(result.data.token);
         setCounter(100)
         var tempCounter = 100;
-
+        setLogin(1)
         //while(tempCounter>0){
           setTimeout(function(e) {
             var interval = setInterval(function(){
@@ -48,22 +52,22 @@ function LoginMenu(props){
             }, 1000)
           })
             
-      //  }
+        }
       },
       (error) => {
         console.log(error);
       }
-    ):setError("شماره تماس معتبر نیست");
+    )
   }
   //console.log(props)
   const handleLogin=()=>{
     const postOptions={
       method:'post',
       headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ verification_code: otp,
-          token:token})
+        body: JSON.stringify({ otp: otp,
+          phone:mobile_phone})
     }
-    fetch(siteApi+"/authentication/verify-user-by-sms",postOptions)
+    fetch(siteApi+"/auth/verifyOtp",postOptions)
   .then(res => res.json())
   .then(
     (result) => {
@@ -71,10 +75,20 @@ function LoginMenu(props){
       if(!result.error){
       setLogin(1)
       setError('با موفقیت وارد سایت شدید');
-      localStorage.setItem('token-oil',JSON.stringify(
-        {"token":result.data.access_token,
-        "mobile":mobile_phone}))
-        setTimeout(()=>document.location.reload(),2000);
+      var user = result.user?result.user:result
+      const accessLevel = user.access
+      cookies.set(env.cookieName, {
+          userId:user._id,
+          access:user.access,
+          level:accessLevel==="manager"?10:accessLevel==="agency"?5:
+          accessLevel==="agent"?4:accessLevel==="customer"?2:1,
+          name:user.cName+" "+user.sName,
+          name:user.phone,
+          date:user.date,
+          token:user.token,
+          username:(user.cName+" "+result.sName)
+      }, { path: '/' });
+      window.location.href=("/")
     }
     else{
       setError(result.error.message)
@@ -85,15 +99,12 @@ function LoginMenu(props){
   );
   }
     const logOut=()=>{
-      const cookies = new Cookies();
-      cookies.remove(env.cookieName,{ path: '/' });
-      setTimeout(()=>(window.location.reload(),1000))
+      
     }
     
     return(<>
     {!token&&<div className="notLogin">
-        {!login?!userPass?
-        <div className="minicartData">
+        {!login?<div className="minicartData">
             <div className="item-cart-quantity" style={{display:"grid"}}>
                 <b>ورود/ثبت نام</b>
                 <small>شماره موبایل</small>
@@ -109,8 +120,7 @@ function LoginMenu(props){
                 دریافت کد</a>
             </div>
             <sub style={{color:"brown"}}>{error}</sub>
-        </div>:
-        <UserPassLogin setUserPass={setUserPass}/>
+        </div>
         :
         
             <div className="minicartData">
@@ -145,7 +155,7 @@ function LoginMenu(props){
           <a href="/profile" className="modal-sub-btn">
                 حساب کاربری</a>
           <form>
-            <input onClick={logOut} type="submit" value="خروج" className="modal-sub-btn logout"/>
+            <input onClick={logoff} type="submit" value="خروج" className="modal-sub-btn logout"/>
           </form>
           </div>}
 

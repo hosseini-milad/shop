@@ -3,8 +3,8 @@ import env, { siteApi } from "../../env";
 import ComboBox from 'react-responsive-combo-box'
 import 'react-responsive-combo-box/dist/index.css'
 
-function AddAddress({token,stateList}){
-    //var states = [];
+function AddAddress(props){
+    const token = props.token
     //if(!states.length)
     //    for(var i=0;i<stateList.length;i++)
     //        states.push(stateList.data[i].name)
@@ -44,8 +44,8 @@ function AddAddress({token,stateList}){
     const addNewAddress= event=>{
         event.preventDefault();
         const body={
-            "province_id": stateData.stateId,
-            "city_id": cityData.cityId,
+            "province": event.target[0].value,
+            "city": event.target[1].value,
             "name": event.target[2].value,
             "mobile":event.target[3].value,
             "address" : event.target[4].value,
@@ -55,12 +55,12 @@ function AddAddress({token,stateList}){
         const postOptions={
             method:'post',
             headers: { 'Content-Type': 'application/json',
-            "Authorization": "Bearer "+token.token
+            "x-access-token":token.token,"userId":token.userId
          },
               body:  JSON.stringify(body)
           }
           console.log(postOptions)
-       fetch(siteApi+env.userAddAddress,postOptions)
+       fetch(siteApi+"/auth/add-address",postOptions)
       .then(res => res.json())
       .then(
         (result) => {
@@ -80,20 +80,12 @@ function AddAddress({token,stateList}){
     <form style={{flexWrap:"wrap",display:"flex"}}
             onSubmit={addNewAddress}>
             <div className="profileInput">
-                <label>استان</label>
-                <ComboBox options={stateList.map(item=>item.name)} 
-                onSelect={(option)=>{setStateData({state:option,
-                stateId:stateList.find(record=>record.name===option).id});
-                
-                setCityNow(stateList.find(record=>record.name===option).id)}}/>
-                
+              <label>استان</label>
+                <input type="input" onChange={onChange}/>
             </div>
             <div className="profileInput">
-                <label>شهرستان</label>
-                <ComboBox options={city&&city.map(item=>item.name)||[]} enableAutocomplete defaultValue={0||''}
-                onSelect={(option)=>{setCityData({city:option,
-                    cityId:city&&city.find(record=>record.name===option).id});}}/>
-                
+              <label>شهرستان</label>
+                <input type="input" onChange={onChange}/>
             </div>
             <div className="profileInput profileLeft">
                 <label>نام تحویل گیرنده</label>

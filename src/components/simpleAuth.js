@@ -1,24 +1,26 @@
-import {useState, useEffect } from "react";
-function SimpleAuth(apiUrl,post){
-    const [item, setItem] = useState('')
-    var token = JSON.parse(localStorage.getItem('token-oil'));
-    if(token !== null)token = token.token
-    const postOptions={
-      method:post?'post':'get',
-      headers: { 'Content-Type': 'application/json' ,
-      "Authorization": "Bearer "+token}
+import Cookies from 'universal-cookie';
+import env from "../env";
+const cookies = new Cookies();
+
+async function SimpleAuth(apiUrl){
+    const token=cookies.get(env.cookieName)
+    
+    if(token === null)return("not authorized")
+    const getOptions={
+      method:'get',
+      headers: {'Content-Type': 'application/json',
+      "x-access-token":token.token,"userId":token.userId}
     }
-    useEffect(()=>{
-    !item&&fetch(apiUrl,postOptions)
+    fetch(apiUrl,getOptions)
       .then(res => res.json())
       .then(
         (result) => {
-          setItem(result)
+          console.log(result)
+          return(result)
         },
         (error) => {
-          setItem("register");
+          return(error);
         }
-      )});
-      return (item&&item)
+      )
     }
 export default SimpleAuth

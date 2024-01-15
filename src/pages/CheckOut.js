@@ -4,9 +4,33 @@ import Step2 from '../modules/CartPage/step2'
 import '../css/cart.css'
 import { useState } from "react";
 import { useEffect } from "react";
-const token= JSON.parse(localStorage.getItem('token-oil'));
+import Cookies from 'universal-cookie';
+const cookies = new Cookies();
+
 function Checkout(){
-    const cart = SimpleAuth(siteApi+env.cartDetailApi)
+    const token=cookies.get(env.cookieName)
+    const [cart,setCart] = useState()
+    useEffect(() => {
+        if (!token) return
+        const postOptions = {
+          method: 'post',
+          headers: {
+            'Content-Type': 'application/json',
+            "x-access-token":token&&token.token,"userId":token&&token.userId
+          },
+        }
+        fetch(siteApi + "/cart/cart-detail", postOptions)
+          .then((res) => res.json())
+          .then(
+            (result) => {
+              console.log(result)
+              setCart(result)
+            },
+            (error) => {
+              console.log(error)
+            }
+          )
+      }, [])
     return(
         <>{/*<div className="mainHeader cartHeader">
             
@@ -25,7 +49,8 @@ function Checkout(){
                 </div>
             </div>
             </div>*/}
-            {token?cart&&cart.data&&cart.data.totalPrice?<Step2 cart={cart.data}/>:
+            {token?cart&&cart.totalprice?
+                <Step2 cart={cart} token={token}/>:
             <main>لطفا صبر کنید</main>:
             <main>لطفا وارد سایت شوید</main>}
         

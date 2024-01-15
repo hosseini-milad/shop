@@ -1,7 +1,8 @@
+import Cookies from "universal-cookie";
+
 const siteUrl='http://localhost:3000';
 //export const siteApi='https://shopadmin.sharifoilco.com/api';
 //export const siteApiUrl='https://shopadmin.sharifoilco.com';
-//export const siteApi='https://admin.sharifoilco.com/api/v1';
 export const siteApi = 'http://localhost:6090/api'
 export const siteApiUrl='http://localhost:6090';
 
@@ -61,7 +62,7 @@ export default env
 export function normalPrice(priceText){
     if(priceText === null||priceText === undefined) return(priceText)
     return(
-      ((priceText/10).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",").replace( /^\D+/g, ''))
+      ((priceText).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",").replace( /^\D+/g, ''))
     )
 }
 export function normalPriceCount(priceText,count){
@@ -102,7 +103,7 @@ export function sumPrice(priceText){
   for(var i=0;i<tempSum.length;i++)
     TotalSum += tempSum[i]?(parseInt(tempSum[i])|| 0):0;
   return(
-    ((TotalSum/10).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",").replace( /^\D+/g, ''))
+    ((TotalSum).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",").replace( /^\D+/g, ''))
   )
 }
 export function roundPrice(priceText,roundUnit){
@@ -185,4 +186,9 @@ export function toEnglishNumber(strNum,name) {
       cache = cache.replace(regex_fa, en[i]);
   }
   return(cache.replace( /^\D+/g, ''));
+}
+export function logoff(){
+  const cookies = new Cookies();
+  cookies.remove(env.cookieName,{ path: '/' });
+  setTimeout(()=>(window.location.reload(),1000))
 }

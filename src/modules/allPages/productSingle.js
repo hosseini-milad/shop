@@ -47,8 +47,10 @@ function ProductSingle(props){
                         </div>
                         <strong>{normalPrice(23000)} <sub>تومان</sub></strong></>:
                         <><div className="offPriceHolder"></div>
-                        {(product.price)?<strong>{normalPrice(product.price)} <sub>تومان</sub></strong>:
-                            <a href="https://wa.me/+989398920184">تماس بگیرید</a>}</>}
+                        {(product.price&&product.count)?<strong>{normalPrice(product.price)} <sub>تومان</sub></strong>:
+                            (product.count)?
+                            <a href="https://wa.me/+989398920184">تماس بگیرید</a>:
+                            <a href="https://wa.me/+989398920184">عدم موجودی</a>}</>}
                         
                     </div>
                     {/*<div className="youSave">
@@ -56,11 +58,21 @@ function ProductSingle(props){
                         <a href="" className="saveButton"><small>شرایط تخفیف</small></a>
     </div>*/}
                 </div>
-                <a className="offerButton" 
-                    style={{display:siteWidth>700?"block":"none"}}>
-                    <QuickView product={{data:product}} cart={props.cart}/>
+                {product.count&&product.price?
+                    <a className="offerButton" 
+                        style={{display:siteWidth>700?"block":"none"}}>
+                    
+                        <QuickView product={{data:product}} cart={props.cart}/>
+                    </a>:
+                    <a className="offerButton disableBtn" 
+                        style={{display:siteWidth>700?"block":"none"}}>
+                    
+                        <div className="buttonHandler">
+                            <i className="icon-size fas fa-shopping-cart"></i> 
+                        </div>
+                    </a>}
+
                     {/*<span>مشاهده محصول</span>*/}
-                </a>
             </div>
         </div>
     )

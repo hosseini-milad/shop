@@ -1,14 +1,33 @@
 import Popup from 'reactjs-popup';
-import React ,{ useState } from 'react';
-import SimpleAuth from "../../components/simpleAuth";
+import React ,{ useEffect, useState } from 'react';
 import env, {siteApi } from "../../env";
 import { normalPrice, siteApiUrl } from '../../env';
 
 function AddPop(props){
+    const token = props.token
+    const [cart,setCart] = useState()
     const productInfo = props.product;
-    const kind = props.vData;
-    const cart= SimpleAuth(siteApi+env.cartDetailApi)
-    console.log(kind)
+    useEffect(() => {
+        if (!token) return
+        const postOptions = {
+          method: 'post',
+          headers: {
+            'Content-Type': 'application/json',
+            "x-access-token":token&&token.token,"userId":token&&token.userId
+          },
+        }
+        0&&fetch(siteApi + "/cart/cart-detail", postOptions)
+          .then((res) => res.json())
+          .then(
+            (result) => {
+              console.log(result)
+              setCart(result)
+            },
+            (error) => {
+              console.log(error)
+            }
+          )
+      }, [])
     const closeNow=()=>{
         console.log(props)
         props.setPop(0)
@@ -20,14 +39,14 @@ function AddPop(props){
                     ×
                 </div>
                 <div className="modal-top">
-                    <img src={siteApiUrl+productInfo.image_url}/>
+                    <img src={siteApiUrl+productInfo.thumbUrl}/>
                     <div className='modalText'>
-                        <h4 style={{marginBottom:"5px"}}> {productInfo.sku} 
-                        {props.error}</h4>
-                        <small>{productInfo.title} - 
-                                <small className='base-price'>{kind.volume}</small></small>
+                        <small style={{marginBottom:"5px"}}> 
+                        {props.error}</small>
+                        <b>{productInfo.title} </b>
+                        <small className='base-price' style={{width:"fit-content"}}>{productInfo.sku} </small>
                         <p></p>
-                        <span>قیمت واحد: {normalPrice(kind.price)} تومان</span>
+                        <span>قیمت واحد: {normalPrice(productInfo.price)} تومان</span>
                         {/*cart&&cart.data&&<div className='modalTotal'>
                             <span>تعداد در سبد: {cart.data.orderLists.length} </span>
                             <span>مجموع: {normalPrice(cart.data.totalPrice)} تومان </span>

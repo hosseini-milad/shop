@@ -41,7 +41,7 @@ function CartSidePart(props){
             <div className="cartTotals">
             <small>
                 <p className="total-wrap">
-                    جمع ارقام:<span>{cart&&normalPrice(cart.totalPrice)}
+                    جمع ارقام:<span>{cart&&normalPrice(cart.totalprice)}
                         <sub className="base-Toman">تومان</sub></span>
                 </p>
                 <p className="total-wrap">
@@ -53,12 +53,11 @@ function CartSidePart(props){
             </small>
 
             <h5 className="total-wrap totalPrice">
-                جمع کل<span> {cart&&transport&&(comparePrice(cart.totalPrice,transport.min_amount_free))?
-                    sumPrice(cart.totalPrice+"+"+transport.price)
-                :normalPrice(cart.totalPrice)}<sub className="base-Toman">تومان</sub></span>
+                جمع کل<span> {cart&&normalPrice(cart.totalprice)}
+                    <sub className="base-Toman">تومان</sub></span>
             </h5>
-            {cart.totalPrice?cart.oilRatio?<a href="/checkout" className="modal-sub-btn">نهایی کردن سفارش</a>:
-                <a href="#" className="modal-sub-btn disabled">تکمیل سبد خرید</a>:''
+            {cart.totalprice?<a href="/checkout" className="modal-sub-btn">نهایی کردن سفارش</a>:
+                <a href="#" className="modal-sub-btn disabled">تکمیل سبد خرید</a>
             }
 
 

@@ -14,13 +14,14 @@ function Category() {
   const urlSplit = window.location.pathname.split('/')[2]
   var brandName = urlSplit[1] === 'brand' ? urlSplit[2] : ''
   var oilBrandName = urlSplit[1] === 'oil-brand' ? urlSplit[2] : ''
-  //console.log(brandName)
+  
   const [catData, setCatData] = useState()
   const [products, setProducts] = useState()
   const [parentName, setParentName] = useState()
   const [catName, setCatName] = useState()
   const [brandId, setBrandId] = useState()
- 
+  console.log(catData)
+  
   var catEName = ''
   useEffect(() => {
     const packageBody = {
@@ -111,13 +112,13 @@ function Category() {
             </div>
             <div className='categoryHolder'>
               <div className='categorySide'>
-                {catData.categories && (
+                {products.categories && (
                   <SideBar
                     productQuery={JSON.parse(productQuery)}
                     catId={pathName.split('/')[2]}
-                    filters={catData.filtersSideBar}
-                    categories={catData.categories}
-                    brands={catData.brands}
+                    filters={products.filtersSideBar}
+                    categories={products.categories}
+                    brands={products.brands}
                   />
                 )}
               </div>

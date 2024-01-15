@@ -30,7 +30,7 @@ function SideBar(props){
     const filters = props.filters
     //console.log(filters)
     const categories = props.categories;
-//console.log(filters)
+    console.log(categories)
     var filterQuery =props.productQuery;
     //var filterQuery=`filter=${filterNum}&cat=${props.catId}&search=روغن`
     //const filters = ''
@@ -82,14 +82,14 @@ function SideBar(props){
                    &&categories.find(cat=>cat.ename===props.catId).name}</h3>
     <h4>محصول</h4>
     {/*<span>روغن موتور</span>*/}
-    {categories&&categories.map(categories=>(
+    {categories&&categories.map((categories,i)=>(
         //categories.products.length>2&&
-        <div key={categories.id}
-            className={`filterCat ${categories.ename===props.catId?'filterActive':'notActive'} `}>
-                <a href={categories.ename==="motor-oil"||categories.ename==="package"?
-                `/category/${categories.ename}`:
-                `/category-landing/${categories.ename}`}> 
-                {categories.name}</a>
+        <div key={i}
+            className={`filterCat ${categories.link===props.catId?'filterActive':'notActive'} `}>
+                <a href={categories.parent||categories.link==="motor-oil"?
+                `/category/${categories.link}`:
+                `/category-landing/${categories.link}`}> 
+                {categories.title}</a>
                 
         </div>
     ))}

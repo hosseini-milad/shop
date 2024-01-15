@@ -6,45 +6,30 @@ const token = JSON.parse(localStorage.getItem('token-oil'));
 
 function AddressDetail(props){
     const selectAddress = props.selectAddress;
+    const token = props.token
     const [newAddress,setNewAddress] = useState(0);
     const [addressTab,setAddressTab] = useState(-1)
     const [data,setData] = useState();
+    const [address,setAddress] = useState();
     const [selectedCity,SelectCity]= useState('')
     useEffect(()=>{
       const postOptions={
         method:'post',
         headers: { 'Content-Type': 'application/json' ,
-        "Authorization": "Bearer "+(token&&token.token)}
+        "x-access-token":token.token,"userId":token.userId}
       }
-      const getOptions={
-        method:'get',
-        headers: { 'Content-Type': 'application/json' ,
-        "Authorization": "Bearer "+(token&&token.token)}
-      }
-      fetch(siteApi+env.userAddApi,getOptions)
+      fetch(siteApi+"/auth/list-address",postOptions)
         .then(res => res.json())
         .then(
         (result) => {
-            setData(previousState => {
-                return { ...previousState, userAddress: result }
-              });
+          if(result.data&&result.data.length)
+            setAddress(result.data);
         },
         (error) => {
           console.log(error);
         })
         
-        fetch(siteApi+env.stateListApi,postOptions)
-        .then(res => res.json())
-        .then(
-        (result) => {
-            setData(previousState => {
-                return { ...previousState, 
-                  stateList: result.data.map(item=>({name:item.name,id:item.id}))}
-              });
-        })
-        //console.log(data)
     },[])
-    //console.log(selectedCity)
     //const userAddress= SimpleAuth(siteApi+env.userAddApi);
     //const stateList = SimpleAuth(siteApi+env.stateListApi,"post")
     //console.log(data)
@@ -52,24 +37,20 @@ function AddressDetail(props){
     const handleSubmit= event =>{
         event.preventDefault();
         console.log(event);
-        var body='';var cityTemp=''
-        try{ 
-          cityTemp = data.cityList&&
-          {"city_id": data.cityList.find(record=>record.name===event.target[2].value).id}
-          body={
-            "province_id": data.stateList.find(record=>record.name===event.target[1].value).id,
+        var body={
+            "province": event.target[1].value,
+            "city": event.target[2].value,
             "name": event.target[3].value,
             "mobile":event.target[4].value,
             "zip_code":event.target[5].value,
             "address" : event.target[6].value,
         }
-      }catch{alert('اطلاعات ورودی اشتباه است');}
         const postOptions={
             method:'post',
             headers: { 'Content-Type': 'application/json',
             "Authorization": "Bearer "+token.token
          },
-              body:  JSON.stringify({...body,...cityTemp})
+              body:  JSON.stringify(body)
           }
           console.log(postOptions)
        body&&fetch(siteApi+env.userEditAddress+event.target[0].value,postOptions)
@@ -134,12 +115,12 @@ function AddressDetail(props){
         }
       );
     }
-    return(<><h2>آدرس های من</h2>
+    return(<>
         
-        {data&&data.userAddress&&data.userAddress.data.map((address,i)=>(
+        {address&&address.map((address,i)=>(
         <div key={i} >
             <div className="profileTitle">
-                <strong > - {address.address}<a className="addressDetail" 
+                <strong > - {address.name}<a className="addressDetail" 
                   onClick={()=>setAddressTab(i)}>مشاهده جزئیات</a></strong>
                 {selectAddress?<input type="button" value={"انتخاب"} className="offerButton addButton"
                 onClick={()=>{selectAddress(address);props.close()}}/>:''}
@@ -147,19 +128,14 @@ function AddressDetail(props){
           <form className="profileForm" style={{display:addressTab===i?"flex":"none"}} onSubmit={handleSubmit}>
             <input type="hidden" value={address.id}/>
             <div className="profileInput">
-                <label>استان</label>
-                <ComboBox options={data.stateList&&data.stateList.map(item=>item.name)||[]} 
-                
-                defaultValue={address.get_province.name}
-                onSelect={(event) => onStateChange(event)}/>
-                
+              <label>استان</label>
+                <input type="input" onChange={onChange}
+                   defaultValue={address.province}/>
             </div>
             <div className="profileInput">
-                <label>شهرستان</label>
-                <ComboBox options={data.cityList&&data.cityList.map(item=>item.name)||[]} 
-                
-                defaultValue={address.get_city.name}
-                onSelect={(e)=>{SelectCity(e)}}/>
+              <label>شهرستان</label>
+                <input type="input" onChange={onChange}
+                   defaultValue={address.city}/>
                 
             </div>
             <div className="profileInput profileLeft">
@@ -188,9 +164,9 @@ function AddressDetail(props){
         </form></div>))}
         <hr/>
         
-        <input type="button" value="+افزودن آدرس" style={{marginBottom: "20px"}} 
-            onClick={()=>setNewAddress('flex')} />
-        {newAddress?<AddAddress token={token} stateList={data.stateList}/>:''}
+        {!address?<input type="button" value="+افزودن آدرس" style={{marginBottom: "20px"}} 
+            onClick={()=>setNewAddress('flex')}/> :<></>}
+        {newAddress?<AddAddress token={token}/>:''}
     </>)
 
 }

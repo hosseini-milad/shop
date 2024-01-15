@@ -3,22 +3,21 @@ import CartItem from "./cartItem";
 
 function CartMainPart(props){
     const cart= props.cart;
-    const token = ''//JSON.parse(localStorage.getItem('token-oil'));
+    const token = props.token //JSON.parse(localStorage.getItem('token-oil'));
     console.log(cart)
-    const removeFromCart=(product_id)=>{
+    const removeFromCart=(sku)=>{
         const postOptions={
             method:'post',
             headers: { 'Content-Type': 'application/json',
-            "Authorization": "Bearer "+token.token
-         },
-              body:  JSON.stringify({'order_list_id':product_id})
+            "x-access-token":token&&token.token,"userId":token&&token.userId},
+              body:  JSON.stringify({'sku':sku})
           }
-       fetch(siteApi+env.cartRemoveApi,postOptions)
+       fetch(siteApi+"/cart/removeItem",postOptions)
       .then(res => res.json())
       .then(
         (result) => {
           console.log(result)
-          setTimeout(()=>document.location.reload(),2000);
+          setTimeout(()=>document.location.reload(),500);
         },
         (error) => {
           console.log(error);
@@ -38,7 +37,7 @@ function CartMainPart(props){
                     <th className="cartAltTH"> </th>
                 </tr>
                 {cart&&cart.map((cartItem,i)=>(
-                        <CartItem cartItem={cartItem} key={i} />
+                        <CartItem cartItem={cartItem} key={i} removeFromCart={removeFromCart}/>
                     ))}
                 </tbody>
                 </table>

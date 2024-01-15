@@ -1,23 +1,23 @@
 import { useState ,useEffect } from "react";
 import env, { normalPrice, siteApi } from "../../env";
 
-const token = JSON.parse(localStorage.getItem('token-oil'));
-function OrderDetail(){
-    const [orders,setOrders] = useState(1);
+function OrderDetail(props){
+    const token = props.token
+    const [orders,setOrders] = useState();
     const [tabShow,setTabShow] = useState(0);
     const [orderDetail,setOrderDetail] = useState(0);
     useEffect(()=>{
       const getOptions={
         method:'get',
         headers: { 'Content-Type': 'application/json' ,
-        "Authorization": "Bearer "+(token&&token.token)}
+        "x-access-token":token.token,"userId":token.userId}
       }
-      fetch(siteApi+env.newUserOrder,getOptions)
+      fetch(siteApi+"/auth/list-orders",getOptions)
         .then(res => res.json())
         .then(
         (result) => {
             //console.log(result.data.orders)
-            setOrders(result);
+            setOrders(result.data);
         },
         (error) => {
           console.log(error);
@@ -45,18 +45,25 @@ function OrderDetail(){
     return(
     <div className="orderHolders">
         <h2>لیست سفارشات</h2>
-        <div className="orderList">
-            {orders&&orders.data&&orders.data.orders.map((order,i)=>(
-                <div className="orderItem" key={i}>
-                    <div className="orderNo">
-                        <span>شماره سفارش: {order.payload.order_no}</span>
-                        <span>تاریخ سفارش: {order.payload.date}</span>
-                        <span>وضعیت سفارش: {order.payload.status}</span>
-                    </div> 
+        <table className="orderList">
+            <tbody>
+                <tr>
+                    <th>شماره سفارش</th>
+                    <th>تاریخ سفارش</th>
+                    <th>وضعیت سفارش</th>
+                    <th>وضعیت پرداخت</th>
+                </tr>
+                {orders&&orders.map((order,i)=>(<>
+                    <tr className="orderItem" key={i}>
+                        <td className="orderNo">{order.orderNo}</td>
+                        <td>تاریخ سفارش: {order.date}</td>
+                        <td>وضعیت سفارش: {order.status}</td>
+                        <td>وضعیت پرداخت: {order.payStatus}</td>
+                    </tr> 
                     <div className="orderDetail">
                         <button className="orderBtnShow" 
                             onClick={()=>{setTabShow(tabShow===i+1?0:i+1);
-                                loadOrder(order.payload.order_no)}}>
+                                loadOrder(order.orderNo)}}>
                                 {tabShow===i+1?"بستن جزئیات":"جزئیات سفارش"}</button>
                         <table style={{display:(tabShow===i+1)?"block":"none"}}>
                             <tbody>
@@ -68,23 +75,22 @@ function OrderDetail(){
                                     <th>قیمت واحد</th>
                                     <th>قیمت محصول</th>
                                 </tr>
-                                {orderDetail&&orderDetail.data&&orderDetail.data.orderLists&&
-                                    orderDetail.data.orderLists.map((cartItem,i)=>(
+                                {order.orderItems&&order.orderItems.map((cartItem,i)=>(
                                     <tr key={i}>
                                         <td>{i+1}</td>
-                                        <td>{cartItem.payload.product_sku}</td>
-                                        <td>{cartItem.payload.product_title}</td>
-                                        <td>{cartItem.payload.count}</td>
-                                        <td>{normalPrice(cartItem.payload.price)}</td>
+                                        <td>{cartItem[0].sku}</td>
+                                        <td>{cartItem[0].title}</td>
+                                        <td>{cartItem[0].count}</td>
+                                        <td>{normalPrice(cartItem[0].price)}</td>
 
                                     </tr>
                                 ))}
                             </tbody>
                         </table>
-                    </div>
-                </div>
-            ))}
-        </div>
+                    </div></>
+                ))}
+            </tbody>
+        </table>
     </div>
     
     )

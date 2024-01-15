@@ -1,46 +1,24 @@
 import {useEffect, useState} from 'react'
 import SimpleAuth from '../../components/simpleAuth';
 
-import env,{discountPercent, normalPrice, purePrice, siteApi, sumPrice} from '../../env'
+import env,{discountPercent, normalPrice, purePrice, siteApi, siteApiUrl, sumPrice} from '../../env'
 import AccountDetail from '../profilePage/accountDetail';
 import AddressDetail from '../profilePage/addressDetail';
 import AddressPop from './AddressPop';
+import Transport from './CheckoutModules/Transport';
 
 function Step2(props){
     const cart = props.cart;
-    const userInfo= SimpleAuth(siteApi+env.userInfo)
     const [userAddress,setUserAddress]= useState('')
-    
-    const [userData,setUserData]= useState(0);
+    const userInfo = 0
+    const [transportDetail,setTransportDetail]= useState();
     const [address,setAddress]= useState(0);
     const [transport,setTransport]= useState(0);
 
-    //console.log(cart)
-    useEffect(() => {
-      var token = JSON.parse(localStorage.getItem('token-oil'));
-      const postOptions={
-        method:'get',
-        headers: { 'Content-Type': 'application/json' ,
-        "Authorization": "Bearer "+token.token}
-      }
-      //console.log(postOptions)
-      fetch(siteApi+env.userAddApi,postOptions)
-      .then(res => res.json())
-      .then(
-        (result) => {
-          setUserAddress(result)
-          setAddress(result.data[0]);
-        },
-        (error) => {
-          console.log(error)
-          setUserAddress("register");
-        })
-  },[])
-    //console.log(userInfo)
     const [transportPrice,setTransportPrice]= useState({price:0,minPrice:0});
     //console.log(userAddress)
     //const price=cart.total.replace( /^\D+/g, '');
-    const token = JSON.parse(localStorage.getItem('token-oil'))
+    const token = props.token
     
     const setAddressFunc=(addressId)=>{
       const postOptions={
@@ -105,37 +83,31 @@ function Step2(props){
     //console.log(cart.totalPrice>=transportPrice.minPrice?"Free":"15000")
     return(
         <div className="checkMain">
-        {userInfo&&userAddress&&
+        {1&&
         <div className="mainCheck">
         <div className="checkTab">
             <h3>شیوه پرداخت</h3>
           <div style={{display:"flex"}}><input type="radio" checked onChange={()=>{}}/><p>پرداخت اینترنتی</p></div>
           {<>   
-            <h3>اطلاعات سفارش</h3>
-            <div style={{display:"flex",justifyContent: "space-between"}}>
-              <div style={{width:"48%"}}>
-                <strong>تحویل گیرنده: </strong>
-                
-                {userInfo&&!userInfo.error?<h4 style={{marginBottom:"10px"}}>{userInfo.data.first_name + " " + userInfo.data.last_name}</h4>:
-                  <AccountDetail userInfo={userInfo}/>}
-                {userAddress&&userAddress.total?<small>{userAddress.data[0].address}</small>:
-                <AddressDetail selectAddress={setAddress}/>}
-              </div>
-            </div>
+            <h3>نحوه تحویل</h3>
+            <Transport setAddress={setAddress} token={token}
+            setTransportDetail={setTransportDetail} transportDetail={transportDetail}/>
         </>} 
       </div>
       <div className="checkTab">
       <h3>خلاصه سفارش
         <div className='order-detail'>
-          <small>{cart.orderLists.length} کالا</small>
-        <strong>{normalPrice(cart.totalPrice)} تومان </strong>
+          <small>تعداد اقلام: {cart.totalCount}</small>
+        <strong>{normalPrice(cart.totalprice)} تومان </strong>
         </div>
       </h3>
       <ul>
-            {cart.orderLists.map((cartItem,i)=>(
+            {cart.cart.map((cartItem,i)=>(
                <li key={i}>
-                <img src={cartItem.payload.product_image_url} />
-                <small>{cartItem.payload.product_title}</small>
+                <img src={cartItem.productData[0]?
+                  siteApiUrl+cartItem.productData[0].thumbUrl:''} />
+                <small>{cartItem.productData[0]?
+                  cartItem.productData[0].title:''}</small>
                 </li>
             ))}
       </ul>
@@ -146,19 +118,21 @@ function Step2(props){
       <div className="cartSideBar">
           <div className="cartSidePrice">
               <div className="priceCalc">
-                  <span>قیمت کالاها<br/>تخفیف کالاها<br/>هزینه ارسال
+                  <span>قیمت کالاها<br/>تخفیف کالاها<br/>نحوه ارسال
                   </span>
                   <div style={{textAlign:"left"}}>
-                      <strong> {normalPrice(cart.totalPrice)} تومان 
-                      </strong>
-                      <strong className="off">
-                        {cart.total_discount_price?normalPrice(cart.total_discount_price):0} تومان 
-                      </strong>
-                      <strong>
-                        {cart.transportationPrice?(normalPrice(cart.transportationPrice)+" تومان "):"ارسال رایگان"}
-                          
-                      </strong>
-                      {transportPrice.minPrice?<sub>ارسال رایگان برای خرید بالای {normalPrice(transportPrice.minPrice)}</sub>:''}
+                    <strong> {normalPrice(cart.totalprice)} تومان 
+                    </strong>
+                    <strong className="off">
+                    {cart.discountprice?normalPrice(cart.discountprice):0} تومان 
+                    </strong>
+                    <strong>
+                    {/*cart.transportationPrice?(normalPrice(cart.transportationPrice)+" تومان "):"ارسال رایگان"*/}
+                    {transportDetail?transportDetail._id?
+                      "تحویل در محل":
+                      "تحویل حضوری":
+                      "انتخاب کنید"}
+                   </strong>
                   </div>
               </div>
               
@@ -167,7 +141,7 @@ function Step2(props){
                       جمع سبد خرید
                   </strong>
                   <strong>
-                  {sumPrice(cart.totalPrice+"+"+cart.transportationPrice)+" تومان "}
+                  {sumPrice(cart.totalprice+"+"+cart.transportationPrice)+" تومان "}
                   </strong>
               </div>
               <form >
@@ -181,13 +155,22 @@ function Step2(props){
             </form> 
           </div>
           
-      <div className="checkTab">
-        <h3>کد تخفیف</h3>
-        <div className="offHolder"><input type="text" className="offInput" placeholder="افزودن کد تخفیف" />
-            <a className="registerCode" href="#" >ثبت</a> 
+        <div className="checkTab">
+          <h3>کد تخفیف</h3>
+          <div className="offHolder"><input type="text" className="offInput" placeholder="افزودن کد تخفیف" />
+              <a className="registerCode" href="#" >ثبت</a> 
+          </div>
+          
         </div>
-        
-      </div>
+        {cart.totalprice?transportDetail?
+        <a href={siteApi + "/payment/mellat?userid="+token.userId+
+          "&transport="+((transportDetail&&transportDetail._id)?
+          transportDetail._id:
+          transportDetail)} 
+          className="modal-sub-btn">پرداخت</a>:
+          <a href="#" className="modal-sub-btn disabled">انتخاب نحوه ارسال</a>:
+                <a href="#" className="modal-sub-btn disabled">تکمیل سبد خرید</a>
+            }
       </div>
       </div>
         )

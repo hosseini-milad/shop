@@ -5,34 +5,35 @@ import env, { siteApi } from "../../env"
 function AccountDetail(props){
     const userInfo = props.userInfo;
     const[value,setValue] = useState(!userInfo.error&&{
-        name:userInfo.data.first_name,
-        family:userInfo.data.last_name,
-        meli:userInfo.data.national_number,
-        phone:userInfo.data.mobile_phone,
+        name:userInfo.data.cName,
+        family:userInfo.data.sName,
+        meli:userInfo.data.meliCode,
+        phone:userInfo.data.mobile,
         email:userInfo.data.email
     })
     //console.log(userInfo);
-    const token = JSON.parse(localStorage.getItem('token-oil'));
+    const token = props.token
     
     const handleSubmit = event => {
         event.preventDefault();
         //console.log(event.target[0].value);
 
         const body={
-            "first_name": event.target[0].value,
-            "last_name" : event.target[1].value,
-            "national_identity_number": event.target[2].value,
-            "mobile_phone":event.target[3].value,
+            "cName": event.target[0].value,
+            "sName" : event.target[1].value,
+            "meliCode": event.target[2].value,
+            "mobile":event.target[3].value,
             "email":event.target[4].value,
         }
         const postOptions={
             method:'post',
             headers: { 'Content-Type': 'application/json',
-            "Authorization": "Bearer "+token.token
+            "x-access-token":token.token,"userId":token.userId
          },
               body:  JSON.stringify(body)
           }
-       fetch(siteApi+env.userAddInfoApi,postOptions)
+          console.log(postOptions)
+       fetch(siteApi+"/auth/change-user",postOptions)
       .then(res => res.json())
       .then(
         (result) => {
