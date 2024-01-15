@@ -7,6 +7,7 @@ var ObjectID = require('mongodb').ObjectID;
 const multer = require('multer');
 const fs = require('fs');
 const user = require('../models/auth/customers');
+const payLog = require('../models/orders/payLog');
 
 
 router.post('/fetch-user',jsonParser,async (req,res)=>{
@@ -104,5 +105,35 @@ router.post('/upload',uploadImg.single('upload'), async(req, res, next)=>{
     } catch (e) {
         res.send({"status":"failed",error:e});
     }
+})
+
+router.post('/transactions',jsonParser,async (req,res)=>{
+    var pageSize = req.body.pageSize?req.body.pageSize:"10";
+    var offset = req.body.offset?(parseInt(req.body.offset)*parseInt(pageSize)):0;
+    try{const data={
+        orderNo:req.body.orderNo,
+        status:req.body.status,
+        customer:req.body.customer
+    }
+        const reportList = await payLog.aggregate([
+            { $match:data.orderNo?{stockOrderNo:data.orderNo}:{}},
+            {$lookup:{
+                from : "users", 
+                localField: "userId", 
+                foreignField: "_id", 
+                as : "userDetail"
+            }}, 
+            { $match:data.status?{payStatus:data.status}:{}},
+        ]) 
+        const filter1Report = /*data.customer?
+        reportList.filter(item=>item&&item.cName&&
+            item.cName.includes(data.customer)):*/reportList;
+        const logList = filter1Report.slice(offset,
+            (parseInt(offset)+parseInt(pageSize))) 
+       res.json({filter:logList,size:filter1Report.length})
+    }
+    catch(error){
+        res.status(500).json({message: error.message})
+    } 
 })
 module.exports = router;
