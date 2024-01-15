@@ -6,6 +6,7 @@ const OrdersSchema = new mongoose.Schema({
   orderNo:{type:String},
 
   orderPrice:{type:String},
+  orderCount:{type:String},
   orderItems:[{type:Array}],
   status:{ type: String },
   payStatus: {type: String},

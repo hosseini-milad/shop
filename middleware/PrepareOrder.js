@@ -14,7 +14,7 @@ const PrepareOrder=async(userid)=>{
     
     const orderPrice = await CalcCart(orderData)
     return({orderId:orderId,orderPrice:orderPrice.totalPrice,
-        orderData:orderData})
+        orderData:orderData,orderCount:orderPrice.totalCount})
 }
 const checkRep=async(phone,dateYear)=>{
     var orderDate = dateYear.split('/')[0]
