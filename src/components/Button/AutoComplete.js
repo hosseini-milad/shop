@@ -22,7 +22,7 @@ function StyleSelect(props){
         stylisPlugins: []
       });
     return(
-        <CacheProvider value={props.direction==="rtl"?cacheRtl:cacheltR}>
+        //<CacheProvider value={props.direction==="rtl"?cacheRtl:cacheltR}>
             <Autocomplete
             getOptionLabel={(option) => (option&&option[props.label])?
                 option[props.label]:option}
@@ -36,7 +36,7 @@ function StyleSelect(props){
                 onChange={(e)=>props.textChange?props.textChange(e.target.value):''}
             />)}
             />
-        </CacheProvider>
+        //</CacheProvider>
     )
 }
 export default StyleSelect

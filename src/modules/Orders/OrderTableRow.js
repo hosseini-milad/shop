@@ -17,16 +17,17 @@ function OrderTableRow(props){
             <td>
                 <div className="order-id">
                   <p onClick={()=> window.location.href=
-                    "/orders/detail/"+order.rxOrderNo}>
-                    {order.rxOrderNo}</p>
+                    "/orders/detail/"+order.orderNo}>
+                    {order.orderNo}</p>
                 </div>
             </td>
             <td>
               <div className="cu-avatar">
                   <img src="/img/avatar/avatar_1.jpg" alt="avatar"/>
                   <div className="cu-name">
-                    <p className="name">{order.userInfo[0].cName}</p>
-                    <p className="email">{order.userInfo[0].phone}</p>
+                    <p className="name">{order.userInfo[0]?order.userInfo[0].cName+" "+
+                    order.userInfo[0].sName:''}</p>
+                    <p className="email">{order.userInfo[0]?order.userInfo[0].phone:''}</p>
                   </div>
                   {order.moreInformation?
                     <i className="fa fa-comment-o" title={order.moreInformation}></i>:<></>}
@@ -42,17 +43,17 @@ function OrderTableRow(props){
               </td>
               <td>
                 <div className="order-num">
-                  <p>{order.brand}</p>
+                  <p>{order.transport}</p>
                 </div>
               </td>
               <td>
                 <div className="order-num">
-                  <p>{rxFindCount(order)}</p>
+                  <p>{order.orderCount}</p>
                 </div>
               </td>
               <td>
                 <div className="order-price">
-                  <p>{normalPriceCount(order.totalPrice)}</p>
+                  <p>{normalPriceCount(order.orderPrice)}</p>
                 </div>
               </td>
               <td>
@@ -81,7 +82,7 @@ function OrderTableRow(props){
             </td>
           </tr>
           {activeAcc?<tr className="sub-order">
-        <td colSpan="9"><OrderQuickDetail order={order}/></td></tr>
+        <td colSpan="9"><OrderQuickDetail order={order.orderItems}/></td></tr>
           :<React.Fragment></React.Fragment>}
           </React.Fragment>
     )

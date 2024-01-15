@@ -64,6 +64,14 @@ menu:[
                 href:"/orders",
                 url:"orders"
             },
+            {
+                english: "Transactions",
+                persian: "تراکنش ها",
+                index:0,
+                icon:"fa-tasks",
+                href:"/transactions",
+                url:"transactions"
+            },
             ]
     },
     {

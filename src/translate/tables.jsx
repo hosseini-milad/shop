@@ -31,6 +31,10 @@ const tabletrans ={
         english: "Brand",
         persian: "برند"
     },
+    transport:{
+        english: "Transport",
+        persian: "نحوه ارسال"
+    },
     order:{
         english: "Order",
         persian: "سفارش"
@@ -46,6 +50,10 @@ const tabletrans ={
     price:{
         english: "Price",
         persian: "قیمت"
+    },
+    taxPrice:{
+        english: "Tax Price",
+        persian: "قیمت با مالیات"
     },
     details:{
         english: "Details",

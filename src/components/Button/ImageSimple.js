@@ -24,18 +24,18 @@ import Divider from "@material-ui/core/Divider";
 //Tabs
 import { withStyles } from "@material-ui/core/styles";
 
-const resizeFile = (file) =>
+const resizeFile = (file,type) =>
   new Promise((resolve) => {
     Resizer.imageFileResizer(
-      file,1500,900,"JPEG",100,0,
+      file,1500,900,type,100,0,
       (uri) => {
         resolve(uri);
       },"base64");
   });
-const resizeThumb = (file) =>
+const resizeThumb = (file,type) =>
   new Promise((resolve) => {
     Resizer.imageFileResizer(
-      file,150,150,"JPEG",100,0,
+      file,150,150,type,70,0,
       (uri) => {
         resolve(uri);
       },"base64");
@@ -114,8 +114,11 @@ class ImageUploadCard extends React.Component {
 
   handleUploadClick = async event => {
     var fileRaw = event.target.files[0];
-    const tempfile = await resizeFile(fileRaw);
-    const thumbFile = await resizeThumb(fileRaw);
+    var fileType= fileRaw.type
+    if(fileType==="image/png")fileType="PNG"
+    else fileType="JPEG"
+    const tempfile = await resizeFile(fileRaw,fileType);
+    const thumbFile = await resizeThumb(fileRaw,fileType);
     //console.log(fileRaw.name.replaceAll(' ','_'))
     //console.log(this.props)
     //this.props.setSender(this.props.sender)

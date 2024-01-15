@@ -19,6 +19,10 @@ const errortrans ={
         english: "Email",
         persian: "آدرس ایمیل"
     },
+    transactions:{
+        english:"Transactions",
+        persian:"تراکنش ها"
+    },
     password:{
         english: "Password",
         persian: "رمز عبور"

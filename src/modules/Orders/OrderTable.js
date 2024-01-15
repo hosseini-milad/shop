@@ -25,7 +25,7 @@ function OrderTable(props){
               <i></i>
             </th>
             <th>
-              <p>{tabletrans.brand[lang]}</p>
+              <p>{tabletrans.transport[lang]}</p>
               <i></i>
             </th>
             <th>

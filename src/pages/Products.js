@@ -14,7 +14,7 @@ function Products(props){
     const direction = props.lang?props.lang.dir:errortrans.defaultDir;
     const lang = props.lang?props.lang.lang:errortrans.defaultLang;
     const [content,setContent] = useState("")
-    const [filters,setFilters] = useState("")
+    const [filters,setFilters] = useState({active:"1"})
     const [tempProduct,setTempProduct] = useState("")
     const [loading,setLoading] = useState(0)
     const [counter,setCounter] = useState(0)

@@ -35,12 +35,17 @@ function ProductTableRow(props){
               </td>
               <td>
                 <div className="order-num">
-                  <p>{props.count?props.count.quantity:"ناموجود"}</p>
+                  <p>{product.count?product.count:"ناموجود"}</p>
                 </div>
               </td>
               <td>
                 <div className="order-price">
-                  <p>{normalPriceCount(props.price&&props.price.price)}</p>
+                  <p>{normalPriceCount(product.price&&product.price)}</p>
+                </div>
+              </td>
+              <td>
+                <div className="order-price">
+                  <p>{normalPriceCount(product.taxPrice&&product.taxPrice)}</p>
                 </div>
               </td>
               <td>

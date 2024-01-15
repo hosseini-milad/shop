@@ -23,12 +23,12 @@ function CatTableRow(props){
             </td>
             <td>
               <div className="cu-avatar">
-                  <img src={cat?(env.siteApiUrl+cat.thumbUrl):''} 
+                  <img src={cat?(env.siteApiUrl+cat.iconUrl):''} 
                     alt={cat.title}/>
                   <div className="cu-name" onClick={()=>
                   window.location.href="/category/detail/"+cat._id}>
                     <p className="name">{cat.title}</p>
-                    <p className="email">{cat.sku}</p>
+                    <p className="email">{cat.link}</p>
                   </div>
                   {cat.moreInformation?
                     <i className="fa fa-comment-o" title={cat.moreInformation}></i>:<></>}
@@ -49,12 +49,8 @@ function CatTableRow(props){
               </td>
               <td>
                 <div className="order-num">
-                  <p>{"product"}</p>
-                </div>
-              </td>
-              <td>
-                <div className="order-price">
-                  <p>{normalPriceCount(cat.totalPrice)}</p>
+                  <img src={cat?(env.siteApiUrl+cat.thumbUrl):''} 
+                    alt={cat.title}/>
                 </div>
               </td>
               <td>

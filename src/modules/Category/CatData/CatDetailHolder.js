@@ -15,6 +15,7 @@ function CatDetailHolder(props){
 
   const [content,setContent] = useState('')
   const [catChange,setCatChange] = useState('')
+  const [catOptions,setCatOptions] = useState('')
   
 
   useEffect(()=>{
@@ -39,6 +40,7 @@ fetch(env.siteApi + "/panel/product/fetch-category",postOptions)
         setError({errorText:"سرویس پیدا شد",
           errorColor:"green"})
           setContent(result.filter)
+          setCatOptions(result.options)
         setTimeout(()=>setError({errorText:'',errorColor:"brown"}),2000)
       }
       
@@ -79,7 +81,7 @@ fetch(env.siteApi + "/panel/product/fetch-category",postOptions)
       }
     )
   }
-console.log(content)
+//console.log(content)
 return(
   <div className="new-item" style={{direction:direction}}>
       <div className="create-product">
@@ -87,7 +89,8 @@ return(
       {content||url==="new"?<div className="pages-wrapper">
         <div className="item-box">
           <CatDetails direction={direction} lang={lang} content={content}
-            setCatChange={setCatChange} catChange={catChange}/>
+            setCatChange={setCatChange} catChange={catChange}
+            options={catOptions}/>
           <CatImage lang={lang} content={content} value="imageUrl"
                 catChange={catChange} part={1}
                 setCatChange={setCatChange} />

@@ -21,6 +21,7 @@ function ProductFilters(props){
               }))}/>
             <StyleSelect title={"Active"} direction={props.lang.dir} 
               options={["active","deactive"]} 
+              defaultValue="active"
               action={(e)=>props.setFilters(prevState => ({
                 ...prevState,
                 active:e==="active"?1:0

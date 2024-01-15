@@ -3,10 +3,12 @@ import { Editor } from '@tinymce/tinymce-react';
 import StyleInput from "../../../components/Button/Input"
 import formtrans from "../../../translate/forms"
 import tabletrans from "../../../translate/tables"
+import StyleSelect from '../../../components/Button/AutoComplete';
 
 function CatDetails(props){
     const editorRef = useRef(null);
     const content=props.content 
+    const options=props.options 
     return(
         <div className="serviceItem">
           <StyleInput title={formtrans.title[props.lang]} direction={props.direction} 
@@ -26,6 +28,13 @@ function CatDetails(props){
           action={(e)=>props.setCatChange(prevState => ({
             ...prevState,
             catCode:e
+          }))}/>
+          <StyleSelect title={formtrans.catParent[props.lang]} direction={props.direction} 
+          options={options||[]}
+          defaultValue={content?content.parent:''} class={"formInput"} label="title"
+          action={(e)=>props.setCatChange(prevState => ({
+            ...prevState,
+            parent:e
           }))}/>
           <div className="content">
             <Editor

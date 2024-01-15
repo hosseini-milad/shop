@@ -67,6 +67,10 @@ const formtrans ={
         english: "Category Code",
         persian: "کد دسته بندی"
     },
+    catParent:{
+        english: "Category Parent",
+        persian: "پرنت دسته بندی"
+    },
     cancel:{
         english: "Cancel",
         persian: "انصراف"
