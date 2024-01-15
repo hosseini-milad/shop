@@ -8,6 +8,7 @@ const SepCartSchema = new Schema({
     initDate: { type: Date, default: Date.now },
     progressDate: { type: Date },
     userId:{ type: String },
-    count:{ type: String }
+    count:{ type: String },
+    price:{ type: String }
 })
 module.exports = mongoose.model('sepcart',SepCartSchema);
