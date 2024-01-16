@@ -189,7 +189,7 @@ router.post('/list-product',jsonParser,async (req,res)=>{
                 const countData = await productCount.findOne(
                     {ItemID:products[i].ItemID,Stock:StockId})
                 var openCount = 0
-                const openList = await openOrders.find({sku:products[i].sku})
+                const openList = await openOrders.find({sku:products[i].sku,payStatus:"paid"})
                 for(var c=0;c<openList.length;c++) openCount+= parseInt(openList[c].count)
                 const priceData = await productPrice.findOne(
                     {ItemID:products[i].ItemID,saleType:SaleType})

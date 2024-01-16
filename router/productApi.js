@@ -20,6 +20,7 @@ const {StockId,SaleType} = process.env;
 const bankAccounts = require('../models/product/bankAccounts');
 const sepidarFetch = require('../middleware/Sepidar');
 const NormalTax = require('../middleware/NormalTax');
+const openOrders = require('../models/orders/openOrders');
 
 router.post('/getlist', async (req,res)=>{
     var pageSize = req.body.pageSize?req.body.pageSize:"12";
@@ -64,7 +65,10 @@ router.post('/getProduct', async (req,res)=>{
         
         productData.price = price?NormalTax(price.price):''
         productData.count = quantity?quantity.quantity:''  
-
+        var openCount = 0
+        const openList = await openOrders.find({sku:products[i].sku,payStatus:"paid"})
+        for(var c=0;c<openList.length;c++) openCount+= parseInt(openList[c].count)
+        productData.openOrderCount = openCount
         //logger.warn("main done")
         res.json({data:productData,message:"Products List",
         quantity:quantity,price:price,categoryData:catData})
