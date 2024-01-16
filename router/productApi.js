@@ -66,7 +66,7 @@ router.post('/getProduct', async (req,res)=>{
         productData.price = price?NormalTax(price.price):''
         productData.count = quantity?quantity.quantity:''  
         var openCount = 0
-        const openList = await openOrders.find({sku:products[i].sku,payStatus:"paid"})
+        const openList = await openOrders.find({sku:productData.sku,payStatus:"paid"})
         for(var c=0;c<openList.length;c++) openCount+= parseInt(openList[c].count)
         productData.openOrderCount = openCount
         //logger.warn("main done")
