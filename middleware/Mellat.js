@@ -462,6 +462,7 @@ exports.callBack = async (req, res) => {
                 saleReferenceId:saleReferenceId}
                 await PayLogSchema.create(query)
                 await orders.updateOne({orderNo:saleOrderId},{$set:{payStatus:"paid"}})
+                await openOrders.updateMany({orderNo:saleOrderId},{$set:{payStatus:"paid"}})
                 let msg = 'تراکنش شما با موفقیت انجام شد ';
                 msg += " لطفا شماره پیگیری را یادداشت نمایید" + saleReferenceId;
 
