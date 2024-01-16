@@ -1,4 +1,5 @@
 const customers = require("../models/auth/customers");
+const openOrders = require("../models/orders/openOrders");
 const orders = require("../models/orders/orders");
 const sepCart = require("../models/product/sepCart");
 const CalcCart = require("./CalcCart");
@@ -13,6 +14,13 @@ const PrepareOrder=async(userid)=>{
     const orderId = await checkRep(usersData.phone,dateNow.toLocaleDateString('fa'))
     
     const orderPrice = await CalcCart(orderData)
+    for(var i=0;i<orderData.length;i++)
+        await openOrders.create({
+            orderNo:orderId,
+            count:orderData[i][0].count,
+            sku:orderData[i][0].sku,
+            payStatus:"initial"
+        })
     return({orderId:orderId,orderPrice:orderPrice.totalPrice,
         orderData:orderData,orderCount:orderPrice.totalCount})
 }

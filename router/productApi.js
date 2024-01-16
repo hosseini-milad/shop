@@ -56,6 +56,7 @@ router.post('/getlist', async (req,res)=>{
 router.post('/getProduct', async (req,res)=>{
     try{
         const productData = await productSchema.findOne({sku:req.body.sku})
+        const catData = productData.catId&&await category.findOne({catCode:productData.catId})
         const quantity = await productCount.findOne(
             {ItemID:productData.ItemID,Stock:StockId})
         const price = await productPrice.findOne(
@@ -65,7 +66,8 @@ router.post('/getProduct', async (req,res)=>{
         productData.count = quantity?quantity.quantity:''  
 
         //logger.warn("main done")
-        res.json({data:productData,message:"Products List",quantity:quantity,price:price})
+        res.json({data:productData,message:"Products List",
+        quantity:quantity,price:price,categoryData:catData})
     }
     catch(error){
         res.status(500).json({error: error.message})
