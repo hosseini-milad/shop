@@ -17,8 +17,8 @@ const PrepareOrder=async(userid)=>{
     for(var i=0;i<orderData.length;i++)
         await openOrders.create({
             orderNo:orderId,
-            count:orderData[i][0].count,
-            sku:orderData[i][0].sku,
+            count:orderData[i].count,
+            sku:orderData[i].sku,
             payStatus:"initial"
         })
     return({orderId:orderId,orderPrice:orderPrice.totalPrice,
