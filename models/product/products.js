@@ -22,6 +22,7 @@ const ProductSchema = new Schema({
     thumbUrl: {type:String},
     price:String,
     count:String,
+    openOrderCount:String,
     brandId:String,
     catId:String,
     sharifId:String
