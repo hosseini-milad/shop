@@ -1,9 +1,12 @@
 const customers = require("../models/auth/customers");
 const openOrders = require("../models/orders/openOrders");
 const orders = require("../models/orders/orders");
+const productCount = require("../models/product/productCount");
+const products = require("../models/product/products");
 const sepCart = require("../models/product/sepCart");
 const CalcCart = require("./CalcCart");
 var ObjectID = require('mongodb').ObjectID;
+var {StockId,SaleType} = process.env;
 
 var tax = process.env.TaxRate
 

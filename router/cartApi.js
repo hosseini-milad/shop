@@ -21,6 +21,8 @@ const sepidarFetch = require('../middleware/Sepidar');
 const sepCart = require('../models/product/sepCart');
 const NormalTax = require('../middleware/NormalTax');
 const CalcCart = require('../middleware/CalcCart');
+const openOrders = require('../models/orders/openOrders');
+var {StockId,SaleType} = process.env;
 
 router.post('/addToCart', async (req,res)=>{
     const userId =req.headers['userid'];
@@ -550,6 +552,39 @@ const compareCount=(count1,count2)=>{
     return(parseInt(count1.toString().replace(/\D/g,''))>=
     (parseInt(count2.toString().replace(/\D/g,''))))
 } 
+
+router.post('/check-exist',jsonParser, async (req,res)=>{
+    const ordersList = req.body.orderList
+    try{
+        const exist = await checkExistance(ordersList.cart)
+        if(exist){
+            res.json({data:exist,message:"not enough"})
+            return
+        }
+        else{
+            res.json({data:0}) 
+            return
+        }
+    }
+    catch(error){
+        res.status(500).json({message: error.message})
+    }
+})
+const checkExistance=async(orderList)=>{
+    for(var i=0;i<orderList.length;i++){
+        const productData = await productSchema.findOne({sku:orderList[i].sku})
+        const quantity = await productCount.findOne(
+            {ItemID:productData.ItemID,Stock:StockId})
+            var openCount = 0
+        const openList = await openOrders.find({sku:productData.sku,payStatus:"paid"})
+            for(var c=0;c<openList.length;c++) openCount+= parseInt(openList[c].count)
+        const compare= ''
+        if(parseInt(orderList[i].count)>(quantity&&quantity.quantity))
+            return(orderList[i].sku)
+        
+    }
+    return(0)
+}
 
 
 module.exports = router;
