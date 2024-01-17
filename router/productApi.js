@@ -36,7 +36,7 @@ router.post('/getlist', async (req,res)=>{
 
             const countData = await productCount.findOne(
                 {ItemID:allProducts[a].ItemID,Stock:StockId})
-            if(countData){
+            if(countData&&countData!=="0"){
                 allProducts[a].count = countData?countData.quantity:''
                 availableItems.push(allProducts[a])
             }
@@ -73,7 +73,7 @@ router.post('/getProduct', async (req,res)=>{
             {ItemID:productData.ItemID,saleType:SaleType})
         
         productData.price = price?NormalTax(price.price):''
-        productData.count = quantity?quantity.quantity:''  
+        productData.count = (quantity&&quantity!=="0")?quantity.quantity:''  
         var openCount = 0
         const openList = await openOrders.find({sku:productData.sku,payStatus:"paid"})
         for(var c=0;c<openList.length;c++) openCount+= parseInt(openList[c].count)
