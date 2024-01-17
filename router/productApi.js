@@ -31,23 +31,32 @@ router.post('/getlist', async (req,res)=>{
         const catData = await category.findOne({link:filter.category})
         const allProducts = await productSchema.find(
             {catId:catData.catCode,enTitle:{$exists:true}})
-        const products = allProducts.slice(offset,
+        const availableItems = [];
+        for(var a=0;a<allProducts.length;a++){
+
+            const countData = await productCount.findOne(
+                {ItemID:allProducts[a].ItemID,Stock:StockId})
+            if(countData){
+                allProducts[a].count = countData?countData.quantity:''
+                availableItems.push(allProducts[a])
+            }
+
+        }
+        const products = availableItems.slice(offset,
             (parseInt(offset)+parseInt(pageSize)))  
         var quantity = []
         var price = []
         for(var i=0;i<products.length;i++){
-            const countData = await productCount.findOne(
-                {ItemID:products[i].ItemID,Stock:StockId})
             
             const priceData = await productPrice.findOne(
                 {ItemID:products[i].ItemID,saleType:SaleType})
             products[i].price = priceData.price?NormalTax(priceData.price):''
-            products[i].count = countData?countData.quantity:''
-            console.log(products[i].count )
+            
         }
         const categoryList = await category.find()
 
-        res.json({data:products,message:"Products List",size:allProducts.length,
+        res.json({data:products,message:"Products List",size:availableItems.length,
+        pages:Math.floor(availableItems.length/parseInt(pageSize)),
         catData:catData,quantity:quantity,price:price,categories:categoryList})
     }
     catch(error){
