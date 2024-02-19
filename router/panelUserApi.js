@@ -8,6 +8,8 @@ const multer = require('multer');
 const fs = require('fs');
 const user = require('../models/auth/customers');
 const payLog = require('../models/orders/payLog');
+const tasks = require('../models/crm/tasks');
+const ProfileAccess = require('../models/auth/ProfileAccess');
 
 
 router.post('/fetch-user',jsonParser,async (req,res)=>{
@@ -71,6 +73,71 @@ router.post('/update-user',jsonParser,async (req,res)=>{
     } 
 })
 
+/*Profile*/
+router.post('/fetch-profile',jsonParser,async (req,res)=>{
+    var profileId = req.body.profileId
+    try{
+        const profileData = await ProfileAccess.findOne({_id: ObjectID(profileId)})
+       res.json({data:profileData})
+    }
+    catch(error){
+        res.status(500).json({message: error.message})
+    } 
+}) 
+router.post('/list-profiles',jsonParser,async (req,res)=>{
+    var pageSize = req.body.pageSize?req.body.pageSize:"10";
+    var offset = req.body.offset?(parseInt(req.body.offset)*parseInt(pageSize)):0;
+    try{
+        const data={
+            rderNo:req.body.orderNo,
+        }
+        const profilesList = await ProfileAccess.find()
+        res.json({profiles:profilesList})
+    }
+    catch(error){
+        res.status(500).json({message: error.message})
+    } 
+})
+router.post('/update-profile',jsonParser,async (req,res)=>{
+    var profileId = req.body.profileId
+    if(profileId==="new")profileId= ''
+    const data={
+        profileName: req.body.profileName,
+        profileCode: req.body.profileCode,
+        manId: req.body.manId,
+        parentId: req.body.parentId,
+        access: req.body.access,
+    }
+    try{
+        //const profile = await ProfileAccess.find({_id: ObjectID(profileId)})
+        var profileData = ''
+        if(profileId)
+           profileData = await ProfileAccess.updateOne({_id: ObjectID(profileId)},{$set:data})
+        else
+            profileData = await ProfileAccess.create(data)
+        
+       res.json({data:profileData,success:"تغییرات اعمال شدند"})
+    }
+    catch(error){
+        res.status(500).json({message: error.message})
+    } 
+})
+
+router.get('/allow-menu',auth,jsonParser,async (req,res)=>{
+    var userId = req.headers["userid"]
+    if(!userId){
+        res.status(500).json({error: "no Credit"})
+    }
+    try{
+        const userData = await user.findOne({_id: ObjectID(userId)})
+        const profileData = await ProfileAccess.findOne({_id: ObjectID(userData.profile)})
+        
+       res.json({access:profileData.access,message:"Profile List"})
+    }
+    catch(error){
+        res.status(500).json({message: error.message})
+    } 
+})
 
 var storage = multer.diskStorage(
     {
@@ -135,5 +202,23 @@ router.post('/transactions',jsonParser,async (req,res)=>{
     catch(error){
         res.status(500).json({message: error.message})
     } 
+})
+
+router.post('/taskData', async (req,res)=>{
+    const taskId=req.body.taskId
+    try{
+        const taskDetail =taskId&&await tasks.findOne({_id:taskId})
+        const currentUser = taskDetail&&taskDetail.assign&&
+            await user.findOne({_id:taskDetail.assign})
+        const currentProfile = taskDetail&&taskDetail.profile&&
+            await ProfileAccess.findOne({_id:taskDetail.profile})
+        const profileList= await ProfileAccess.find()
+        const userDetails= await user.find({profile:{$exists:true}})
+        res.json({user:userDetails,currentAssign:currentUser?currentUser:currentProfile,
+            profileList:profileList,message:"list users"})
+    }
+    catch(error){
+        res.status(500).json({message: error.message})
+    }
 })
 module.exports = router;

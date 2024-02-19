@@ -13,6 +13,7 @@ const formApi = require('./formApi');
 const paymentApi = require('./paymentApi');
 const userApi = require('./userApi');
 const panelUserApi = require('./panelUserApi')
+const CRMPanelApi = require('./panelCrmApi')
 const panelOrderApi = require('./panelOrderApi')
 const panelProductApi = require('./panelProductApi')
 const sepidarFetch = require('../middleware/Sepidar');
@@ -50,6 +51,8 @@ router.use('/yas', yasApi)
 router.use('/panel/user', panelUserApi)
 router.use('/panel/order', panelOrderApi)
 router.use('/panel/product', panelProductApi)
+
+router.use('/panel/crm',CRMPanelApi)
 0&&schedule.scheduleJob('0 0 * * *', async() => { 
     response = await fetch(ONLINE_URL+"/sepidar-product",
         {method: 'GET'});
