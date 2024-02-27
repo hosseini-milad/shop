@@ -184,19 +184,26 @@ router.post('/transactions',jsonParser,async (req,res)=>{
     }
         const reportList = await payLog.aggregate([
             { $match:data.orderNo?{stockOrderNo:data.orderNo}:{}},
-            {$lookup:{
-                from : "users", 
-                localField: "userId", 
-                foreignField: "_id", 
-                as : "userDetail"
-            }}, 
-            { $match:data.status?{payStatus:data.status}:{}},
+            
+            { $match:data.status?{payStatus:data.status}:
+                {payStatus:{$in:["paid","undone"]}}},
+            {$sort:{"payDate":-1}}
         ]) 
         const filter1Report = /*data.customer?
         reportList.filter(item=>item&&item.cName&&
             item.cName.includes(data.customer)):*/reportList;
         const logList = filter1Report.slice(offset,
             (parseInt(offset)+parseInt(pageSize))) 
+            for(var i=0;i<logList.length;i++){
+                var orderData = await orders.aggregate([
+                    {$match:{stockOrderNo:logList[i].stockOrderNo}},
+                    {$addFields: { "user_Id": { $toObjectId: "$userId" }}},
+                    {$lookup:{from : "users", 
+                    localField: "user_Id", foreignField: "_id", as : "userDetail"}}
+                ])
+                    logList[i].orderData = orderData
+                logList[i].userDetail=[]
+            }
        res.json({filter:logList,size:filter1Report.length})
     }
     catch(error){
