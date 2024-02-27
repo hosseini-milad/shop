@@ -1,4 +1,8 @@
 const tabletrans ={
+    notEntered:{
+        english: "not entered",
+        persian: "وارد نشده"
+    },
     dkmehrDashboard:{
         english: "DKMehr Dashboard",
         persian: "داشبورد داده کاوان"
@@ -35,9 +39,17 @@ const tabletrans ={
         english: "Transport",
         persian: "نحوه ارسال"
     },
+    transportationStatus:{
+        english: "Transportation Status",
+        persian: "وضعیت تحویل"
+    },
     order:{
         english: "Order",
         persian: "سفارش"
+    },
+    orderNumber: {
+        english: "Order Number",
+        persian: "شماره سفارش",
     },
     item:{
         english: "Item",
@@ -46,6 +58,10 @@ const tabletrans ={
     status:{
         english: "Status",
         persian: "وضعیت"
+    },
+    payStatus:{
+        english: "Payment status",
+        persian: "وضعیت پرداخت"
     },
     price:{
         english: "Price",
