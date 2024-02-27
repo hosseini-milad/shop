@@ -29,6 +29,10 @@ function TransactionTable(props){
               <i></i>
             </th>
             <th>
+            <p>شماره تراکنش</p>
+              <i></i>
+            </th>
+            <th>
             <p>{tabletrans.status[lang]}</p>
               <i></i>
             </th>

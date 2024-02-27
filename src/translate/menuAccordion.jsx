@@ -23,12 +23,12 @@ menu:[
             url:""
         },
         {
-            english: "Report",
-            persian: "گزارش",
+            english: "Tasks",
+            persian: "وظایف و پیگیری",
             index:1,
             icon:"fa-bar-chart",
-            href:"/report",
-            url:"report"
+            href:"/crm",
+            url:"crm"
         },
         ]
     },
@@ -140,6 +140,24 @@ menu:[
         }
         ]
     },
+],
+setting:[
+    {
+        english: "Access",
+        persian: "دسترسی ها",
+        index:0,
+        icon:"fa-key",
+        href:"/access",
+        url:"access"
+    },
+    {
+        english: "Filters",
+        persian: "فیلترها",
+        index:1,
+        icon:"fa-key",
+        href:"/filter",
+        url:"filter"
+    }
 ]
 }
 export default menutrans

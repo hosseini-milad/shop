@@ -293,9 +293,6 @@
   .sale-input input{
     margin:auto 5px;
   }
-  .navbar-nav .nav-link:hover{
-    background-color: var(--bs-primary) !important;
-  }
   .create-btn-wrapper p { width: 17%;}
   .halfWidth{
     width: 41%;
@@ -366,3 +363,76 @@
     margin-bottom: -19px;
     padding: 15;
   }
+  .topMenu .nav-link {
+    font-size: 1.2rem;
+    padding: 0 7px !important;
+  }
+  .topMenu .nav-link i:hover {
+    color: var(--bs-primary);
+    transition: all .3s;
+  }
+
+  
+  /* Profile */
+  .profileRtl th{
+    text-align: right;
+  }
+  .section-member{
+    padding-right: 0;
+  }
+  .asso-btnRTL{
+    margin-left: 10px;
+    margin-right: auto;
+  }
+  .slideBar{
+    width:45%;
+    display: flex;
+    margin: 0 10%;
+  min-width: 200px;
+  }
+  .slideBarTitle{
+    margin-top: -40px;
+    font-size: 12px;
+    
+  }
+  .disable-label{
+    background: silver;
+  }
+  .settingSide{
+    top:70px !important;
+  }
+  .info-wrapper div:nth-child(9) {
+    width: initial;
+  }
+  .new-member{
+    position: relative;
+    width: fit-content;
+    display: flex;
+  }
+  .addClassBtn{
+    padding: 7px 12px;
+    display: grid;
+  }
+  .addClassBtn:hover{
+    color:rgb(89, 108, 255);
+    cursor: pointer;
+  }
+  .main-setting{
+    width: 100%;
+  }
+  .optionItem{
+    display: flex;
+    justify-content: space-around;
+  }
+.userItem{
+  padding: 0.5rem 0;
+  width: 100%;
+  margin-top: 20px;
+}
+.userItem .MuiAutocomplete-root{
+  width: 85% !important;
+}
+.newUser{
+  width: 300px;
+  margin-bottom: 20px;
+}

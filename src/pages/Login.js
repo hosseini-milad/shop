@@ -23,7 +23,7 @@ function Login(props){
       .then(res => res.json())
       .then(
         (result) => {
-            console.log(result)
+            
             if(result.error){
                 setError({errorText:result.error,
                   errorColor:"brown"})

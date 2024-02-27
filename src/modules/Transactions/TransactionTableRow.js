@@ -3,6 +3,7 @@ import Status from "../Components/Status"
 import  env, { normalPriceCount, stockFindCount } from "../../env"
 import tabletrans from "../../translate/tables"
 import Cookies from 'universal-cookie';
+import TransactionQuickDetail from "./TransactionQuick";
 const cookies = new Cookies();
 
 function TransactionTableRow(props){
@@ -11,6 +12,8 @@ function TransactionTableRow(props){
   const activeAcc = props.index===props.detail
   const token=cookies.get(env.cookieName)
   const content=props.content
+  const query = content&&content.query
+  const orderData = content&&content.orderData&&content.orderData[0]
   const cancelOrder=(orderNo)=>{
     const postOptions={
       method:'post',
@@ -49,10 +52,10 @@ fetch(env.siteApi + "/panel/order/editOrder",postOptions)
               <div className="cu-avatar">
                   <img src="/img/avatar/avatar_1.jpg" alt="avatar"/>
                   <div className="cu-name">
-                    <p className="name">{content.userDetail[0]?
-                      content.userDetail[0].cName:content.userId}</p>
-                    <p className="email">{content.userDetail[0]?
-                      content.userDetail[0].mobile:''}</p>
+                  <p className="name">{orderData.userDetail[0]?
+                      orderData.userDetail[0].cName:orderData.userId}</p>
+                    <p className="email">{orderData.userDetail[0]?
+                      orderData.userDetail[0].phone:''}</p>
                   </div>
                   {content.moreInformation?
                     <i className="fa fa-comment-o" title={content.moreInformation}></i>:<></>}
@@ -67,9 +70,8 @@ fetch(env.siteApi + "/panel/order/editOrder",postOptions)
                 </div>
               </td>
               <td>
-                <div className="order-price">
-                  <p>{normalPriceCount(content.stockOrderPrice)}</p>
-                </div>
+              <p>{normalPriceCount(orderData&&
+                      orderData.orderPrice)}</p>
               </td>
               <td>
                 <Status status={content.payStatus} class={"order-status"} 
@@ -77,7 +79,8 @@ fetch(env.siteApi + "/panel/order/editOrder",postOptions)
               </td>
             <td>
               <div className="more-btn">
-              
+              <i className={`tableIcon fas ${activeAcc?"fa-chevron-up":"fa-chevron-down"}`} 
+                onClick={()=>props.showDetail(activeAcc?"-1":props.index)} ></i>
                 <i className="tableIcon fas fa-ellipsis-v" 
                   onClick={()=>setOpenOption(openOption?0:1)}></i>
               </div>
@@ -94,8 +97,9 @@ fetch(env.siteApi + "/panel/order/editOrder",postOptions)
               </div>:<></>}
             </td>
           </tr>
+          
           {activeAcc?<tr className="sub-order">
-        <td colSpan="9"></td></tr>
+        <td colSpan="9"><TransactionQuickDetail query={query}/></td></tr>
           :<React.Fragment></React.Fragment>}
           </React.Fragment>
     )
