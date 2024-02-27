@@ -8,6 +8,7 @@ const PayLogSchema = new mongoose.Schema({
   saleReferenceId:{type: String},
   errorMessage:{type: String},
   errorCode:{type: String},
+  query:{type: Object},
   payDate:{ type: Date,default:Date.now()}
 });
 

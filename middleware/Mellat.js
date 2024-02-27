@@ -192,7 +192,7 @@ function desribtionStatusCode(statusCode)
         callBackUrl: callbackUrl,
         payerId: 0
     };
-    console.log(args)
+    //console.log(args)
      var options = {
          overrideRootElement: {
              namespace: 'ns1'
@@ -459,7 +459,7 @@ exports.callBack = async (req, res) => {
             if(resultCode_bpSettleRequest === 0 || resultCode_bpSettleRequest === 45) {
                 //success payment
                 const query = {orderNo:saleOrderId,payStatus:"paid",
-                saleReferenceId:saleReferenceId}
+                saleReferenceId:saleReferenceId,query:req.body}
                 await PayLogSchema.create(query)
                 await orders.updateOne({orderNo:saleOrderId},{$set:{payStatus:"paid"}})
                 await openOrders.updateMany({orderNo:saleOrderId},{$set:{payStatus:"paid"}})
@@ -473,7 +473,7 @@ exports.callBack = async (req, res) => {
             }
         }else {
             if (saleOrderId != -999 && saleReferenceId != -999) {
-                const query = {orderNo:saleOrderId,payStatus:"undone",
+                const query = {orderNo:saleOrderId,payStatus:"undone",query:req.body,
                 saleReferenceId:saleReferenceId,errorMessage:"123",errorCode:resultCode_bpPayRequest}
                 await PayLogSchema.create(query)
                 await orders.updateOne({orderNo:saleOrderId},{$set:{payStatus:"undone"}})
