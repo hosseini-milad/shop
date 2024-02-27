@@ -1,13 +1,18 @@
 import React ,{ useState } from "react"
 import Status from "../Components/Status"
+import PayStatus from "../Components/PayStatus"
 import  { normalPriceCount, rxFindCount } from "../../env"
 import OrderQuickDetail from "./OrderComponent/OrderQuickDetail"
+import tabletrans from "../../translate/tables"
+
 
 function OrderTableRow(props){
   const [openOption,setOpenOption] = useState(0)
   const [checkState,setCheckState] = useState(false)
   const activeAcc = props.index===props.detail
   const order=props.order
+  const lang=props.lang;
+
     return(<React.Fragment>
         <tr 
             className={activeAcc?"activeAccordion":"accordion"}>
@@ -25,12 +30,25 @@ function OrderTableRow(props){
               <div className="cu-avatar">
                   <img src="/img/avatar/avatar_1.jpg" alt="avatar"/>
                   <div className="cu-name">
-                    <p className="name">{order.userInfo[0]?order.userInfo[0].cName+" "+
-                    order.userInfo[0].sName:''}</p>
-                    <p className="email">{order.userInfo[0]?order.userInfo[0].phone:''}</p>
+                    <p className="name">{order.userInfo[0]?order.userInfo[0].cName+"---"+
+                    order.userInfo[0].sName:'---'}</p>
                   </div>
                   {order.moreInformation?
                     <i className="fa fa-comment-o" title={order.moreInformation}></i>:<></>}
+                </div>
+              </td>
+              <td>
+                <div className="order-num">
+                <p className="email">{order.userInfo[0]?order.userInfo[0].phone:tabletrans.notEntered[lang]}</p>
+                </div>
+              </td>
+              <td>
+                <PayStatus payStatus={order.payStatus} class={"order-status"} 
+                  lang={props.lang}/>
+              </td>
+              <td>
+                <div className="order-num">
+                  <p>{order.transport}</p>
                 </div>
               </td>
               <td>
@@ -41,16 +59,8 @@ function OrderTableRow(props){
                   .toLocaleTimeString(props.lang==="persian"?'fa':'en')}</p>
                 </div>
               </td>
-              <td>
-                <div className="order-num">
-                  <p>{order.transport}</p>
-                </div>
-              </td>
-              <td>
-                <div className="order-num">
-                  <p>{order.orderCount}</p>
-                </div>
-              </td>
+
+
               <td>
                 <div className="order-price">
                   <p>{normalPriceCount(order.orderPrice)}</p>
@@ -60,6 +70,7 @@ function OrderTableRow(props){
                 <Status status={order.status} class={"order-status"} 
                   lang={props.lang}/>
               </td>
+
             <td>
               <div className="more-btn">
               <i className={`tableIcon fas ${activeAcc?"fa-chevron-up":"fa-chevron-down"}`} 

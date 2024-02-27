@@ -13,15 +13,19 @@ function OrderTable(props){
           <th className="checkBoxStyle">
               <input type="checkbox" name="" id=""/></th>
             <th>
-              <p>{tabletrans.order[lang]}</p>
+              <p>{tabletrans.orderNumber[lang]}</p>
               <i></i>
             </th>
             <th>
-              <p>{tabletrans.customer[lang]}</p>
+              <p>{tabletrans.customerInfo[lang]}</p>
               <i></i>
             </th>
             <th>
-              <p>{tabletrans.date[lang]}</p>
+              <p>{tabletrans.phoneNumber[lang]}</p>
+              <i></i>
+            </th>
+            <th>
+            <p>{tabletrans.payStatus[lang]}</p>
               <i></i>
             </th>
             <th>
@@ -29,15 +33,20 @@ function OrderTable(props){
               <i></i>
             </th>
             <th>
-              <p>{tabletrans.item[lang]}</p>
+              <p>{tabletrans.date[lang]}</p>
               <i></i>
             </th>
+
+            {/* <th>
+              <p>{tabletrans.item[lang]}</p>
+              <i></i>
+            </th> */}
             <th>
             <p>{tabletrans.price[lang]}</p>
               <i></i>
             </th>
             <th>
-            <p>{tabletrans.status[lang]}</p>
+            <p>{tabletrans.transportationStatus[lang]}</p>
               <i></i>
             </th>
             <th>
