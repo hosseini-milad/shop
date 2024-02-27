@@ -10,6 +10,7 @@ const user = require('../models/auth/customers');
 const payLog = require('../models/orders/payLog');
 const tasks = require('../models/crm/tasks');
 const ProfileAccess = require('../models/auth/ProfileAccess');
+const orders = require('../models/orders/orders');
 
 
 router.post('/fetch-user',jsonParser,async (req,res)=>{
@@ -196,7 +197,7 @@ router.post('/transactions',jsonParser,async (req,res)=>{
             (parseInt(offset)+parseInt(pageSize))) 
             for(var i=0;i<logList.length;i++){
                 var orderData = await orders.aggregate([
-                    {$match:{stockOrderNo:logList[i].stockOrderNo}},
+                    {$match:{orderNo:logList[i].orderNo}},
                     {$addFields: { "user_Id": { $toObjectId: "$userId" }}},
                     {$lookup:{from : "users", 
                     localField: "user_Id", foreignField: "_id", as : "userDetail"}}
