@@ -35,7 +35,9 @@ function ProductTableRow(props){
               </td>
               <td>
                 <div className="order-num">
-                  <p>{product.count?product.count:"ناموجود"}</p>
+                  <span>{product.count?product.count:"ناموجود"}</span>
+                  <small> {product.openOrderCount?"(متنظر تایید: "+
+                           product.openOrderCount+")":''}</small>
                 </div>
               </td>
               <td>

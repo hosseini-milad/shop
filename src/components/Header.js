@@ -4,10 +4,12 @@ import env from '../env';
 
 import errortrans from "../translate/error";
 import Configuration from './Configuration';
+import Setting from './Setting';
 
 const Header = (props)=>{
     const cookies = new Cookies();
     const [configure,setConfigure] = useState(0)
+    const [setting,setSetting] = useState(0)
     const token=cookies.get(env.cookieName)||1;
     const lang = props.lang?props.lang.lang:errortrans.defaultLang;
     const logOff=()=>{
@@ -15,7 +17,7 @@ const Header = (props)=>{
        setTimeout(()=>(document.location.reload(),500))
     }
     return(
-    <nav className="navbar navbar-main navbar-expand-lg px-0 mx-4 shadow-none border-radius-xl" 
+    <nav className="navbar topMenu navbar-main navbar-expand-lg px-0 mx-4 shadow-none border-radius-xl" 
       style={{direction:props.lang.dir}} id="navbarBlur" data-scroll="true">
         <div className="container-fluid py-1 px-3">
         <nav className="collapseMenu nav-item d-xl-none ps-3 d-flex align-items-center">
@@ -47,13 +49,13 @@ const Header = (props)=>{
                 <a className="btn btn-outline-primary btn-sm mb-0 me-3" 
                   target="_blank" href="https://psyum.3cx.eu:5443/ahmad">{errortrans.support[lang]}</a>
               </li>
-              
               <li className="nav-item d-flex align-items-center">
                 <a href="#" className="nav-link text-body p-0"
-                onClick={()=>setConfigure(1)}>
-                  <i className="fa fa-cog fixed-plugin-button-nav cursor-pointer"></i>
+                onClick={()=>setSetting(1)}>
+                  <i className="fa fa-wrench fixed-plugin-button-nav cursor-pointer"></i>
                 </a>
               </li>
+              
               <li className="nav-item d-flex align-items-center">
                 <a href="#" className="nav-link text-body p-0" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
                   <i className="fa fa-bell cursor-pointer"></i>
@@ -116,7 +118,7 @@ const Header = (props)=>{
                 </ul>
               </li>
               <li className="nav-item d-flex align-items-center">
-                <a href="../pages/sign-in.html" className="nav-link text-body font-weight-bold px-0">
+                <a href="#" className="nav-link text-body font-weight-bold px-0">
                   <i className="fa fa-user me-sm-1"></i>
                 </a>
               </li>
@@ -124,6 +126,7 @@ const Header = (props)=>{
           </div>
         </div>
         <Configuration show={configure} setConfigure={setConfigure}/>
+        <Setting show={setting} setSetting={setSetting} lang={lang}/>
       </nav> 
     )
 }

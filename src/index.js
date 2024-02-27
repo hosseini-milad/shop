@@ -2,6 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 
 import './css/App.css';
+import './css/board.css';
 import './css/fontAwesome.css';
 import './css/salimi.css';
 import './css/reyham.css';
@@ -21,6 +22,8 @@ import Cookies from 'universal-cookie';
 import errortrans from './translate/error';
 import LayoutLogin from './components/LayoutLogin';
 import env from './env';
+import AccessHolder from './modules/AccessControl/AccessHolder';
+import ProfileAdd from './modules/AccessControl/ProfileAdd';
 import UserDetailHolder from './modules/Users/UserData/UserDetailHolder';
 import Orders from './pages/Orders';
 import OrderDetailHolder from './modules/Orders/OrderData/OrderDetailHolder';
@@ -37,6 +40,9 @@ import Sepidar from './modules/Config/Sepidar';
 import Sliders from './pages/Sliders';
 import SliderDetailHolder from './modules/Sliders/SliderData/SliderDetailHolder';
 import Transactions from './pages/Transactions';
+import CRM from './pages/Crm';
+import CrmList from './modules/Crm/CRMList/crmList';
+import CRMAdd from './modules/Crm/CRMList/crmAdd';
 
 const cookies = new Cookies();
 const style = document.getElementById('style-direction');
@@ -62,7 +68,12 @@ root.render(
         <Route path="/dashboard" element={<Layout><Dashboard lang={lang}/></Layout>}/>
         <Route path="/users" element={<Layout><Users lang={lang}/></Layout>}/>
         <Route path="/users/detail/:userId" element={<Layout><UserDetailHolder lang={lang}/></Layout>}/>
-
+        <Route path="/crm" element={<Layout><CRM lang={lang}/></Layout>}/>
+        <Route path="/crmlist" element={<Layout><CrmList lang={lang}/></Layout>}/>
+        <Route path="/crmlist/detail/:crmId" element={<Layout><CRMAdd lang={lang}/></Layout>}/>
+        <Route path="/access" element={<Layout><AccessHolder lang={lang}/></Layout>}/>
+        <Route path="/access/detail/:profileId" element={<Layout><ProfileAdd lang={lang}/></Layout>}/>
+        
         <Route path="/orders" element={<Layout><Orders lang={lang}/></Layout>}/>
         <Route path="/orders/detail/:orderId" element={<Layout><OrderDetailHolder lang={lang}/></Layout>}/>
 
