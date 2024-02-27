@@ -199,7 +199,7 @@ router.post('/transactions',jsonParser,async (req,res)=>{
                 var orderData = await orders.aggregate([
                     {$match:{orderNo:logList[i].orderNo}},
                     {$addFields: { "user_Id": { $toObjectId: "$userId" }}},
-                    {$lookup:{from : "users", 
+                    {$lookup:{from : "customers", 
                     localField: "user_Id", foreignField: "_id", as : "userDetail"}}
                 ])
                     logList[i].orderData = orderData

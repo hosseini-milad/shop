@@ -6,6 +6,7 @@ const PayLogSchema = new mongoose.Schema({
   payStatus: {type: String},
   orderPrice: {type: String},
   saleReferenceId:{type: String},
+  amount:{type: String},
   errorMessage:{type: String},
   errorCode:{type: String},
   query:{type: Object},
