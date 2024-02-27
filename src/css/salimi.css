@@ -1321,6 +1321,11 @@
     background-color: rgb(211, 211, 211);
   }
   /* table style */
+
+  .user-list > * {
+    min-width: 0;
+  }
+
   .user-list {
     display: flex;
     flex-direction: column;
@@ -1351,31 +1356,7 @@
     background-color: rgb(244, 246, 248);
     width: 48px;
   }
-  .user-list th:nth-child(2) {
-    padding: 16px;
-    background-color: rgb(244, 246, 248);
-  }
-  .user-list th:nth-child(5),
-  .user-list th:nth-child(3) {
-    padding: 16px;
-    background-color: rgb(244, 246, 248);
-    width: 180px;
-  }
-  
-  .user-list th:nth-child(4) {
-    padding: 16px;
-    background-color: rgb(244, 246, 248);
-    width: 220px;
-  }
-  .user-list th:nth-child(3) {
-    width: unset;
-  }
-  .user-list th:nth-child(6) {
-    width: 100px;
-  }
-  .user-list th:nth-child(7) {
-    width: 88px;
-  }
+
   .user-list th p {
     padding: 0px;
     user-select: none;
@@ -1405,7 +1386,7 @@
   .user-list td:nth-child(4),
   .user-list td:nth-child(5),
   .user-list td:nth-child(6){
-    padding: 16px;
+    padding: 16px 5px;
   }
   
   .user-list td:nth-child(7) {
