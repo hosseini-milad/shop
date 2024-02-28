@@ -1,7 +1,7 @@
 import StyleInput from "../../../components/Button/Input"
 import StyleSelect from "../../../components/Button/AutoComplete"
 
-function UserAvatar(props){
+function CustomerAvatar(props){
     return(
       <div className="avatar-box">
       <div className="customer-photo">
@@ -24,4 +24,4 @@ function UserAvatar(props){
     </div>
     )
 }
-export default UserAvatar
+export default CustomerAvatar

@@ -2,10 +2,10 @@ import { useState } from "react"
 import StyleInput from "../../../components/Button/Input"
 import env from "../../../env"
 import formtrans from "../../../translate/forms"
-import UserAvatar from "../UserComponent/UserAvatar"
+import CustomerAvatar from "../CustomerComponent/CustomerAvatar"
 import ErrorShow from "../../../components/Button/ErrorShow"
 
-function UserGeneral(props){
+function CustomerGeneral(props){
   const userData = props.userData
   const [formData, setFormData] = useState()
   const [error,setError] = useState({errorText:'',errorColor:"brown"})
@@ -19,7 +19,7 @@ function UserGeneral(props){
         })
       }
       console.log(postOptions)
-  fetch(env.siteApi + "/panel/user/update-user",postOptions)
+  fetch(env.siteApi + "/panel/user/update-customer",postOptions)
   .then(res => res.json())
   .then(
     (result) => {
@@ -41,7 +41,7 @@ function UserGeneral(props){
     return(<div className="general-page">{env.loader}</div> )
   else return(
         <div className="general-page">
-          <UserAvatar />
+          <CustomerAvatar />
           <div className="info-box">
             <div className="info-wrapper">
               <StyleInput title={formtrans.name[props.lang]} direction={props.direction} 
@@ -122,4 +122,4 @@ function UserGeneral(props){
         </div>
     )
 }
-export default UserGeneral
+export default CustomerGeneral

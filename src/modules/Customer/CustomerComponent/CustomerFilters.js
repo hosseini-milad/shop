@@ -1,7 +1,7 @@
 import StyleInput from "../../../components/Button/Input"
 import StyleSelect from "../../../components/Button/AutoComplete"
 
-function UserFilters(props){
+function CustomerFilters(props){
     console.log(props.options)
     return(
         <div className="user-filter">
@@ -36,4 +36,4 @@ function UserFilters(props){
         </div>
     )
 }
-export default UserFilters
+export default CustomerFilters

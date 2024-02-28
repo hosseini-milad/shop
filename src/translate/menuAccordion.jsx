@@ -44,8 +44,8 @@ menu:[
                 persian: "مدیریت مشتریان",
                 index:0,
                 icon:"fa-users",
-                href:"/users",
-                url:"users"
+                href:"/customers",
+                url:"customers"
             },
             ]
     },

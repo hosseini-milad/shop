@@ -1,6 +1,6 @@
 import tabletrans from "../../../translate/tables";
 
-function UserTabs(props){
+function CustomerTabs(props){
     const color = props.lang.color
     const index = props.tabIndex
     const activeTab = {
@@ -49,4 +49,4 @@ function UserTabs(props){
       </div>
     )
 }
-export default UserTabs
+export default CustomerTabs

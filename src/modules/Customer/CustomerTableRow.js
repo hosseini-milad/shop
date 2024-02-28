@@ -1,6 +1,6 @@
 import { useState } from "react"
 
-function UserTableRow(props){ 
+function CustomerTableRow(props){ 
   const [openOption,setOpenOption] = useState(0)
   const [checkState,setCheckState] = useState(false)
   const activeAcc = props.index===props.detail
@@ -43,7 +43,7 @@ function UserTableRow(props){
             <td>
               <div className="more-btn">
                 <i className="tableIcon fas fa-edit" onClick={()=>
-                  window.location.href="/users/detail/"+user._id}></i>
+                  window.location.href="/customers/detail/"+user._id}></i>
                 <i className="tableIcon fas fa-ellipsis-v" 
                   onClick={()=>setOpenOption(openOption?0:1)}></i>
               </div>
@@ -61,4 +61,4 @@ function UserTableRow(props){
           </tr>
     )
 }
-export default UserTableRow
+export default CustomerTableRow
