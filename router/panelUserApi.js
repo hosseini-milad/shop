@@ -6,7 +6,8 @@ const auth = require("../middleware/auth");
 var ObjectID = require('mongodb').ObjectID;
 const multer = require('multer');
 const fs = require('fs');
-const user = require('../models/auth/customers');
+const user = require('../models/auth/users');
+const customer = require('../models/auth/customers');
 const payLog = require('../models/orders/payLog');
 const tasks = require('../models/crm/tasks');
 const ProfileAccess = require('../models/auth/ProfileAccess');
@@ -53,6 +54,69 @@ router.post('/list',jsonParser,async (req,res)=>{
 router.post('/update-user',jsonParser,async (req,res)=>{
     var userId = req.body.userId
     const data={
+        username:req.body.username,
+        cName:req.body.cName,
+        sName:req.body.sName,
+        email:req.body.email,
+        phone:req.body.phone,
+        meli:req.body.meli,
+        cCode:req.body.cCode,
+        address:req.body.address,
+        classess:req.body.classes,
+        profile:req.body.profile,
+        access:req.body.access,
+    }
+    try{
+        const userData = await user.updateOne({_id: ObjectID(userId)},
+        {$set:data})
+       res.json({data:userData,success:"تغییرات اعمال شدند"})
+    }
+    catch(error){
+        res.status(500).json({message: error.message})
+    } 
+})
+
+/*Customers*/
+router.post('/fetch-customer',jsonParser,async (req,res)=>{
+    var pageSize = req.body.pageSize?req.body.pageSize:"10";
+    var userId = req.body.userId
+    try{
+        const userData = await customer.findOne({_id: ObjectID(userId)})
+       res.json({data:userData})
+    }
+    catch(error){
+        res.status(500).json({message: error.message})
+    } 
+})
+router.post('/list-customers',jsonParser,async (req,res)=>{
+    var pageSize = req.body.pageSize?req.body.pageSize:"10";
+    var offset = req.body.offset?(parseInt(req.body.offset)*parseInt(pageSize)):0;
+    try{const data={
+        orderNo:req.body.orderNo,
+        status:req.body.status,
+        customer:req.body.customer,
+        access:req.body.access,
+        offset:req.body.offset,
+        brand:req.body.brand
+    }
+        const reportList = await customer.aggregate([
+            { $match:data.access?{access:data.access}:{}},
+        ])
+        const filter1Report = data.customer?
+        reportList.filter(item=>item&&item.cName&&
+            item.cName.includes(data.customer)):reportList;
+        const orderList = filter1Report.slice(offset,
+            (parseInt(offset)+parseInt(pageSize)))  
+        const accessUnique = [...new Set(filter1Report.map((item) => item.access))];
+       res.json({filter:orderList,size:filter1Report.length,access:accessUnique})
+    }
+    catch(error){
+        res.status(500).json({message: error.message})
+    } 
+})
+router.post('/update-customer',jsonParser,async (req,res)=>{
+    var userId = req.body.userId
+    const data={
         cName:req.body.cName,
         email:req.body.email,
         mobile:req.body.mobile,
@@ -65,7 +129,7 @@ router.post('/update-user',jsonParser,async (req,res)=>{
         about:req.body.about,
     }
     try{
-        const userData = await user.updateOne({_id: ObjectID(userId)},
+        const userData = await customer.updateOne({_id: ObjectID(userId)},
         {$set:data})
        res.json({data:userData,success:"تغییرات اعمال شدند"})
     }

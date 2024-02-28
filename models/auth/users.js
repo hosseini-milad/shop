@@ -6,30 +6,21 @@ const userSchema = new mongoose.Schema({
   sName:{ type: String, required : true},
   phone: { type: String , required : true},
   password: { type: String },
-  bitrixCode:{type: String },
-  email: { type: String , unique: true},
+  email: { type: String},
   oldEmail: { type: String},
   access:{
-    type:String,
-    enum:["manager","agent","agency","customer","request"]
+    type:Array
   },
   group: { type:String },
   credit: { type: String },
   token: { type: String },
   otp:{ type: String , default: null },
-  nif: { type: String },
-  agent:{ type: String },
-  active:{ type: String },
-  status:{ type: String },
-  Code:{ type: String },
+  mobile: { type: String },
+  classes:{ type: Array },
+  profile:{ type: String },
+  address:{ type: String },
+  meli:{ type: String },
 
-  nameCompany:{ type: String },
-  firma:{ type: String },
-  morada:{ type: String },
-  nifCompany:{ type: String },
-  phoneCompany:{ type: String },
-  emailCompany:{ type: String },
-  IBANCompany:{ type: String },
 
   date:{type:Date}
 });
