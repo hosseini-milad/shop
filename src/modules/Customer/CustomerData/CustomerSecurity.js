@@ -1,4 +1,4 @@
-function UserSecurity(){
+function CustomerSecurity(){
     return(
         <div className="sec-page">
           <div className="password-wrapper">
@@ -18,4 +18,4 @@ function UserSecurity(){
         </div>
     )
 }
-export default UserSecurity
+export default CustomerSecurity

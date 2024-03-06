@@ -17,14 +17,12 @@ import reportWebVitals from './reportWebVitals';
 import Dashboard from './pages/Dashboard'
 import Layout from './components/Layout'
 import Login from './pages/Login';
-import Users from './pages/Users';
 import Cookies from 'universal-cookie';
 import errortrans from './translate/error';
 import LayoutLogin from './components/LayoutLogin';
 import env from './env';
 import AccessHolder from './modules/AccessControl/AccessHolder';
 import ProfileAdd from './modules/AccessControl/ProfileAdd';
-import UserDetailHolder from './modules/Users/UserData/UserDetailHolder';
 import Orders from './pages/Orders';
 import OrderDetailHolder from './modules/Orders/OrderData/OrderDetailHolder';
 import Profile from './pages/Profile';
@@ -43,6 +41,8 @@ import Transactions from './pages/Transactions';
 import CRM from './pages/Crm';
 import CrmList from './modules/Crm/CRMList/crmList';
 import CRMAdd from './modules/Crm/CRMList/crmAdd';
+import Customers from './pages/Customers';
+import CustomerDetailHolder from './modules/Customer/CustomerData/CustomerDetailHolder';
 
 const cookies = new Cookies();
 const style = document.getElementById('style-direction');
@@ -66,8 +66,8 @@ root.render(
         <Route path="/" element={<Layout><Dashboard lang={lang}/></Layout>}/>
         <Route path="/login" element={<Layout><Profile lang={lang}/></Layout>}/>
         <Route path="/dashboard" element={<Layout><Dashboard lang={lang}/></Layout>}/>
-        <Route path="/users" element={<Layout><Users lang={lang}/></Layout>}/>
-        <Route path="/users/detail/:userId" element={<Layout><UserDetailHolder lang={lang}/></Layout>}/>
+        <Route path="/customers" element={<Layout><Customers lang={lang}/></Layout>}/>
+        <Route path="/customers/detail/:userId" element={<Layout><CustomerDetailHolder lang={lang}/></Layout>}/>
         <Route path="/crm" element={<Layout><CRM lang={lang}/></Layout>}/>
         <Route path="/crmlist" element={<Layout><CrmList lang={lang}/></Layout>}/>
         <Route path="/crmlist/detail/:crmId" element={<Layout><CRMAdd lang={lang}/></Layout>}/>

@@ -1,14 +1,15 @@
 import {useEffect,useState} from 'react'
 import Cookies from 'universal-cookie';
-import UserTable from '../modules/Users/UserTable';
 import StatusBar from '../modules/Components/StatusBar';
 import Paging from '../modules/Components/Paging';
 import errortrans from "../translate/error";
-import UserFilters from '../modules/Users/UserComponent/UserFilters';
+
 import env from '../env'
+import CustomerFilters from '../modules/Customer/CustomerComponent/CustomerFilters';
+import CustomerTable from '../modules/Customer/CustomerTable';
 const cookies = new Cookies();
 
-function Users(props){
+function Customers(props){
   const direction = props.lang?props.lang.dir:errortrans.defaultDir;
     const lang = props.lang?props.lang.lang:errortrans.defaultLang;
     const [content,setContent] = useState("")
@@ -35,7 +36,7 @@ function Users(props){
           body:JSON.stringify(body)
         }
         console.log(postOptions)
-    fetch(env.siteApi + "/panel/user/list",postOptions)
+    fetch(env.siteApi + "/panel/user/list-customers",postOptions)
     .then(res => res.json())
     .then(
       (result) => {
@@ -55,10 +56,10 @@ function Users(props){
       <h4>List</h4>
       <div className="list-container">
         <StatusBar />
-        <UserFilters lang={props.lang} setFilters={setFilters} 
+        <CustomerFilters lang={props.lang} setFilters={setFilters} 
           options={content.access}/>
         <div className="user-list">
-          <UserTable userList={content} lang={props.lang} />
+          <CustomerTable userList={content} lang={props.lang} />
         </div>
         <Paging content={content} setFilters={setFilters} filters={filters}
           lang={props.lang}/>
@@ -66,4 +67,4 @@ function Users(props){
     </div>
     )
 }
-export default Users
+export default Customers

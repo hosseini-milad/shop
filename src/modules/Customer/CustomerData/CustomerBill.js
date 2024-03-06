@@ -1,4 +1,4 @@
-function UserBill(){
+function CustomerBill(){
     return(
         <div className="bill-page">
           <div className="plan-col-1">
@@ -356,4 +356,4 @@ function UserBill(){
         </div>
     )
 }
-export default UserBill
+export default CustomerBill

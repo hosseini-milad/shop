@@ -1,8 +1,8 @@
 import { useState } from "react";
 import tabletrans from "../../translate/tables"
-import UserTableRow from "./UserTableRow"
+import CustomerTableRow from "./CustomerTableRow";
 
-function UserTable(props){
+function CustomerTable(props){
   const userList = props.userList
   const lang=props.lang.lang;
   const [detail,showDetail] = useState(-1)
@@ -36,7 +36,7 @@ function UserTable(props){
         </thead>
         <tbody>
           {(userList&&userList.filter)?userList.filter.map((user,i)=>(
-            <UserTableRow detail={detail} showDetail={showDetail} 
+            <CustomerTableRow detail={detail} showDetail={showDetail} 
               user={user} index={i} key={i} lang={lang}/>
           )):''}
           
@@ -45,4 +45,4 @@ function UserTable(props){
 
     )
 }
-export default UserTable
+export default CustomerTable

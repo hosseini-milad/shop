@@ -1,4 +1,4 @@
-function UserNotif(){
+function CustomerNotif(){
     return(
         <div className="notif-page">
           <div className="notif-col">
@@ -65,4 +65,4 @@ function UserNotif(){
         </div>
     )
 }
-export default UserNotif
+export default CustomerNotif

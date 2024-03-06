@@ -1,4 +1,4 @@
-function UserSocial(){
+function CustomerSocial(){
     return(
         <div className="social-page">
           <div className="social-wrapper">
@@ -20,4 +20,4 @@ function UserSocial(){
         </div>
     )
 }
-export default UserSocial
+export default CustomerSocial
