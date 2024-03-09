@@ -436,3 +436,51 @@
   width: 300px;
   margin-bottom: 20px;
 }
+
+.f-customer{
+  position: relative;
+  padding-left: 50px !important;
+  padding-top: 8px;
+}
+.f-customer .MuiFormControl-root label{
+  background: transparent;
+}
+.f-customer fieldset{
+  border: transparent;
+}
+.view-btn-wrapper label{
+  font-size: inherit;
+  margin: auto;
+}
+
+.product-title p{
+  overflow: hidden;
+  white-space: nowrap; 
+  text-overflow: ellipsis;
+  max-width: 95%;
+  margin: auto;
+  font-weight: 400;
+}
+
+.product-img img{
+  height: 120px;
+  object-fit: contain;
+}
+
+.f-company{
+  width: 100%;
+  padding: 0.35rem .3rem;
+  border-radius: 8px;
+  border: 1px solid #d2d2d2;
+  background: var(--light-grey);
+  box-shadow: 0px 0px 7px 0px rgba(0, 0, 0, 0.07);
+  color: black;
+  outline: none;
+  border: none;
+}
+.f-company .MuiFormControl-root label{
+  background: transparent;
+}
+.f-company fieldset{
+  border: transparent;
+}

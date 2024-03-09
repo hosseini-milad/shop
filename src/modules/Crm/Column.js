@@ -13,6 +13,7 @@ function Column(props){
             "x-access-token":token&&token.token,"userId":token&&token.userId},
             body:JSON.stringify({...data,crmId:props.crm?props.crm._id:''})
           }
+          console.log(postOptions)
       fetch(env.siteApi + "/panel/crm/update-tasks",postOptions)
       .then(res => res.json())
       .then(
@@ -47,6 +48,10 @@ function Column(props){
                     {props.tasks.map((task,i)=>(
                         <Task key={task._id} 
                             taskList={task}
+                            token={token}
+                            direction={props.direction}
+                            crm={props.crm}
+                            setBoardArray={props.setBoardArray}
                             action={action} 
                             index={i}/>
                     ))}
@@ -55,8 +60,9 @@ function Column(props){
                 )}
             </Droppable>
             {taskPop?<TaskPopUp title={"Create New Task"}
-            btnText={"Create"} action={action}
-            taskStep={props.column.enTitle}
+            btnText={"Create"} crm={props.crm}
+            setBoardArray={props.setBoardArray}
+            taskStep={props.column.enTitle} token={token}
             close={()=>setTaskPop(0)}/>:<></>}
         </div>
     )

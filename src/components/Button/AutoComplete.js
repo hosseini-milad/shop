@@ -23,19 +23,23 @@ function StyleSelect(props){
       });
     return(
         //<CacheProvider value={props.direction==="rtl"?cacheRtl:cacheltR}>
+        <div className={props.class}>
             <Autocomplete
             getOptionLabel={(option) => (option&&option[props.label])?
                 option[props.label]:option}
             //className={stylisRTLPlugin}
             options={testOptions||[]}
-            className={props.class}
-            style={{minWidth:"200px"}}
+            style={{minWidth:"176px"}}
             onChange={(e,value)=>props.action(value)}
             renderInput={(params) => (
             <TextField {...params} label={props.title}
                 onChange={(e)=>props.textChange?props.textChange(e.target.value):''}
             />)}
+            
             />
+            {props.icon?<div className={props.direction==="rtl"?"showPassRTL":"showPass"}>
+                {props.icon}</div>:<></>}
+            </div>
         //</CacheProvider>
     )
 }

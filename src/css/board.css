@@ -5,6 +5,7 @@
 }
 .crm ul {
   padding-left: 0rem;
+  padding-right: 0rem;
 }
 .board-title{
   position: relative;
@@ -60,7 +61,7 @@ margin-left: auto;
     height: 10px;
     border-radius: 50%;
     background-color: #999;
-    margin-right: 10px;
+    margin-left: 10px;
   }
   .board-list {
     display: flex;
@@ -110,7 +111,6 @@ margin-left: auto;
     cursor: pointer;
     position: relative;
     font-weight: 200;
-    padding-bottom: 50px;
   }
   .task-title {
     font-size: 14px;
@@ -192,6 +192,10 @@ margin-left: auto;
     text-align: left;
     white-space: nowrap;
   }
+  .right-handler{
+    left: auto;
+    right:10px
+  }
 
   .status-active {
     border: 1px solid #80b780;
@@ -245,7 +249,7 @@ margin-left: auto;
 }
 .note-input-task {
   margin-bottom: 1.5em;
-  margin-left: 5%;
+  margin-right: 5%;
 }
 .note-input-task label {
   width: 90%;
@@ -272,7 +276,6 @@ margin-left: auto;
   font: 1em;
   font-weight: 400;
   text-transform: uppercase;
-  text-align: left;
   color: #4e566d;
   width: 90%;
   margin-bottom: 1em;
@@ -437,7 +440,6 @@ margin-left: auto;
   align-items: center;
   width: 90%;
   align-self: center;
-  margin-bottom: 1.5em;
 }
 .file-input input{
   display: none;
@@ -448,6 +450,7 @@ margin-left: auto;
   justify-content: center;
   gap: 10px;
   padding: 0.5em;
+  width: 100%;
   background-color: rgba(128, 128, 128, 0.2);
   border-radius: 8px;
   cursor: pointer;
@@ -544,10 +547,12 @@ margin-left: auto;
   align-items: center;
   justify-content: center;
   text-align: center;
+  padding: 10px;
+  margin-bottom: 5px;
 }
 .addTask{
   position: absolute;
-  right:10px;
+  left:10px;
   top: 10px;
   cursor: pointer;
   padding: 5px;
@@ -784,7 +789,7 @@ margin-left: auto;
   padding: 0.8em;
   border: 1px solid #e6eaf0;
   border-radius: 4px;
-  margin-left:5%;
+  margin-right:5%;
 }
 .title-input .MuiTextField-root{
   width: 100%;
@@ -819,4 +824,46 @@ margin-left: auto;
   height: auto;
   background-color: rgb(221, 69, 49);
   gap: 10px;
+}
+
+.checkInput{
+  width: 82%;
+  max-height: 100px;
+  min-height: auto;
+}
+.prob-wrapper .DatePicker input {
+  width: 100%;
+}
+.task-title{
+  padding-right: 5px;
+  border-right: 2px solid transparent;
+}
+.hightask{
+  border-right:5px solid orangered;
+}
+.lowtask{
+  border-right:5px solid green;
+}
+.midtask{
+  border-right:5px solid silver;
+}
+.image-wrapper{
+
+}
+.fa-status-check{
+  color: green;
+  margin: 2px;
+  line-height: 1;
+}
+.fa-white-check{
+  color: #fff;
+  margin: 1px 2.5px;
+  line-height: 1;
+}
+.check-circle{
+  background-color: green;
+}
+.doneTask{
+  color:silver;
+  text-decoration: line-through
 }

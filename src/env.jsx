@@ -13,6 +13,8 @@ const env={
     //cookieLang:'panel-lang',
     //cookieLang:'mehr-lang',
 
+    shopExpert:'shop-experience',
+
     loader:<img className="imgLoader" src="/img/loaderPanel.gif"/>,
     defaultUser:"/img/avatar/avatar_1.jpg",
     defaultProduct:"/img/avatar/defaultProduct.png",
@@ -123,5 +125,12 @@ function formatAMPM(date) {
   var strTime = hours + ':' + minutes + ' ' + ampm;
   return strTime;
 }
-  
+export const findPriority=(priority)=>{
+  if(!priority) return("mid")
+  if(priority=="کم") return("low")
+  if(priority=="متوسط") return("mid")
+  if(priority=="بالا") return("high")
+  return("mid")
+}
+
 export default env

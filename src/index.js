@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom/client';
 
 import './css/App.css';
 import './css/board.css';
+import './css/order.css';
 import './css/fontAwesome.css';
 import './css/salimi.css';
 import './css/reyham.css';
@@ -43,6 +44,7 @@ import CrmList from './modules/Crm/CRMList/crmList';
 import CRMAdd from './modules/Crm/CRMList/crmAdd';
 import Customers from './pages/Customers';
 import CustomerDetailHolder from './modules/Customer/CustomerData/CustomerDetailHolder';
+import OrderHolder from './Order/OrderHolder';
 
 const cookies = new Cookies();
 const style = document.getElementById('style-direction');
@@ -76,6 +78,7 @@ root.render(
         
         <Route path="/orders" element={<Layout><Orders lang={lang}/></Layout>}/>
         <Route path="/orders/detail/:orderId" element={<Layout><OrderDetailHolder lang={lang}/></Layout>}/>
+        <Route path="/orders/business" element={<OrderHolder lang={"fa"}/>}/>
 
         <Route path="/services" element={<Layout><Services lang={lang}/></Layout>}/>
         <Route path="/services/detail/:orderId" element={<Layout><ServiceDetailHolder lang={lang}/></Layout>}/>
