@@ -17,7 +17,7 @@ const orders = require('../models/orders/orders');
 router.post('/fetch-user',jsonParser,async (req,res)=>{
     var pageSize = req.body.pageSize?req.body.pageSize:"10";
     var userId = req.body.userId
-    try{
+    try{ 
         const userData = await user.findOne({_id: ObjectID(userId)})
        res.json({data:userData})
     }
@@ -188,6 +188,217 @@ router.post('/update-profile',jsonParser,async (req,res)=>{
     } 
 })
 
+router.post('/fetch-class',jsonParser,async (req,res)=>{
+    var classId = req.body.classId
+    if(classId==="new")classId=''
+    try{ 
+        const classData = classId&&await classes.findOne({_id: ObjectID(classId)})
+        const userClass = classData&&await user.find(
+            {class: {$elemMatch: {_id:String(classData._id)}}})
+        const policyClass = classData&&await Policy.find(
+                {classId:String(classData._id)})
+       res.json({filter:classData,userClass:userClass,policyClass:policyClass})
+    }
+    catch(error){
+        res.status(500).json({message: error.message})
+    } 
+}) 
+router.post('/list-classes',jsonParser,async (req,res)=>{
+    try{
+        //const classList = await classes.find()
+        const allClasses =await classSeprate(req.body.userId)
+        res.json(allClasses)
+    }
+    catch(error){
+        res.status(500).json({message: error.message})
+    } 
+})
+router.post('/update-class',jsonParser,async (req,res)=>{
+    var classId = req.body.classId
+    if(classId==="new")classId=''
+    const data={
+        className: req.body.className,
+        classEn: req.body.classEn,
+        classCat: req.body.classCat,
+        manId: req.body.manId,
+    }
+    try{
+        //const profile = await ProfileAccess.find({_id: ObjectID(profileId)})
+        var profileData = ''
+        if(classId)
+           classData = await classes.updateOne({_id: ObjectID(classId)},{$set:data})
+        else
+        classData = await classes.create(data)
+        
+        const allClasses =await classSeprate(req.body.userId)
+       res.json(allClasses)
+    }
+    catch(error){
+        res.status(500).json({message: error.message})
+    } 
+})
+router.post('/update-user-class',jsonParser,async (req,res)=>{
+    var userId = req.body.userId 
+    const data={
+        class:req.body.class
+    } 
+    try{
+        const userData = await user.findOne({_id: ObjectID(userId)})
+        var userClass = userData.class?userData.class:[]
+        var found = 0
+        for(var i=0;i<userClass.length;i++){
+            if(userClass[i]._id == data.class._id){
+                userClass.splice(i, 1)
+                found =1
+            } 
+        }
+        !found&&userClass.push(data.class)
+
+        const newClassUser = await user.updateOne({_id: ObjectID(userId)},
+        {$set:{class:userClass}})
+        //const allClasses =await classSeprate(req.body.userId)
+       res.json({data:newClassUser,status:"23"})
+    }
+    catch(error){
+        res.status(500).json({message: error.message})
+    } 
+})
+const classSeprate=async(userId)=>{
+    const allClass = await classes.find()
+    
+    const userData = await user.findOne({_id: ObjectID(userId)})
+    const assignClass = userData&&userData.class
+    
+    var availableClass = []
+    if(assignClass)
+        for(var i=0;i<allClass.length;i++){
+            var found = 0
+            for(var j=0;j<assignClass.length;j++){
+                if(allClass[i]._id==assignClass[j]._id){
+                    found = 1; break;
+                }
+            }
+            !found&&availableClass.push(allClass[i])
+        } 
+    else availableClass=allClass
+    return({availableClass:availableClass,
+        assignClass:assignClass,filter:allClass})
+
+}
+
+router.post('/fetch-policy',jsonParser,async (req,res)=>{
+    var policyId = req.body.policyId
+    try{
+        const policyData = policyId!=="new"&&await Policy.aggregate([
+            {$match:{_id: ObjectID(policyId)}},
+            {$addFields: { "user_Id": { $toObjectId: "$userId" }}},
+            {$lookup:{from : "users", 
+            localField: "user_Id", foreignField: "_id", as : "userInfo"}},
+        ]) 
+        const classData = await classes.find()
+        const catData = await category.find()
+        const brandData = await brand.find()
+        const filterData = await Filters.find()
+       res.json({filter:policyData&&policyData[0],classes:classData,
+        brands:brandData,filters:filterData,category:catData})
+    }
+    catch(error){
+        res.status(500).json({message: error.message})
+    } 
+}) 
+
+router.post('/option-policy',jsonParser,async (req,res)=>{
+    const category = req.body.category
+    const factoryInfo = req.body.factory
+    const catId = String(category._id)
+    try{
+        const brandData = category.brands//await brand.find()
+        //console.log(brandData)
+        const factoryData = await factory.find()
+        const filterData = await Filters.find()
+        const resultBrand = []
+        const resultFilter = []
+        for(var i =0;i<filterData.length;i++){
+            if(filterData[i].category._id===catId)
+               resultFilter.push(filterData[i])
+        }
+        if(factoryInfo&&brandData)
+        for(var i =0;i<brandData.length;i++){
+            const brandFact = brandData[i].factory
+            if(brandFact)
+            for(var j=0;j<brandFact.length;j++){
+            if(brandFact[j]._id===factoryInfo._id)
+                resultBrand.push(brandData[i])
+            }
+        }
+       res.json({factory:factoryData,filters:resultFilter,
+        brands:factoryInfo?resultBrand:brandData})
+    }
+    catch(error){
+        res.status(500).json({message: error.message})
+    } 
+}) 
+router.post('/list-policy',jsonParser,async (req,res)=>{
+    try{
+        const policyList = await Policy.aggregate([
+            {$addFields: { "user_Id": { $toObjectId: "$userId" }}},
+            {$lookup:{from : "users", 
+            localField: "user_Id", foreignField: "_id", as : "userInfo"}},
+        ])
+        //const allClasses =await classSeprate(req.body.userId)
+        res.json({filter:policyList,message:"List"})
+    }
+    catch(error){
+        res.status(500).json({message: error.message})
+    } 
+})
+router.post('/update-policy',jsonParser,async (req,res)=>{
+    var policyId = req.body.policyId
+    if(policyId==="new")policyId= ''
+    const data=req.body
+    try{
+        //const profile = await ProfileAccess.find({_id: ObjectID(profileId)})
+        var policyData = ''
+        if(policyId)
+        policyData = await Policy.updateOne({_id: ObjectID(policyId)},{$set:data})
+        else
+        policyData = await Policy.create(data)
+        
+        //const allPolicy =await classSeprate(req.body.userId)
+       res.json({data:policyData,status:"Done"})
+    }
+    catch(error){
+        res.status(500).json({message: error.message})
+    } 
+})
+router.post('/update-user-class',jsonParser,async (req,res)=>{
+    var userId = req.body.userId
+    const data={
+        class:req.body.class
+    }
+    try{
+        const userData = await user.findOne({_id: ObjectID(userId)})
+        var userClass = userData.class?userData.class:[]
+        var found = 0
+        for(var i=0;i<userClass.length;i++){
+            if(userClass[i]._id == data.class._id){
+                userClass.splice(i, 1)
+                found =1
+            } 
+        }
+        !found&&userClass.push(data.class)
+        const newClassUser = await user.updateOne({_id: ObjectID(userId)},
+        {$set:{class:userClass}})
+        //const allClasses =await classSeprate(req.body.userId)
+       res.json({data:newClassUser,status:"23"})
+    }
+    catch(error){
+        res.status(500).json({message: error.message})
+    } 
+})
+
+
+
 router.get('/allow-menu',auth,jsonParser,async (req,res)=>{
     var userId = req.headers["userid"]
     if(!userId){
@@ -285,12 +496,16 @@ router.post('/taskData', async (req,res)=>{
         const currentProfile = taskDetail&&taskDetail.profile&&
             await ProfileAccess.findOne({_id:taskDetail.profile})
         const profileList= await ProfileAccess.find()
-        const userDetails= await user.find({profile:{$exists:true}})
-        res.json({user:userDetails,currentAssign:currentUser?currentUser:currentProfile,
+        const userDetails= await user.find({profile:{$exists:true},
+            cName:{$nin:[""]},access:{$nin:["customer"]}})
+        res.json({user:userDetails,
+            currentUser:currentUser?currentUser:'',
+            currentAssign:currentProfile?currentProfile:'',
             profileList:profileList,message:"list users"})
     }
     catch(error){
         res.status(500).json({message: error.message})
     }
 })
+
 module.exports = router;

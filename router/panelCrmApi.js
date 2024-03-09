@@ -60,11 +60,32 @@ const calcTasks=async(userId)=>{
         var taskStep = taskList[c].taskStep
         columns[taskStep].push(taskList[c]._id) 
         //columnOrder.find(item=>item.enTitle===taskStep)
-    }
+    } 
     return({crmData:crmData,tasks:taskList, crm:crmData,
         columnOrder:columnOrder,columns:columns})
 }
 router.post('/update-tasks',auth,jsonParser,async (req,res)=>{
+    const taskId = req.body._id?req.body._id:""
+    var body = req.body
+    delete body['checkList']
+    try{
+        if(taskId)
+            await tasks.updateOne({_id:taskId},{$set:body})
+        else{
+            const crmData = await crmlist.findOne()
+            const crmStep = crmData.crmSteps.find(item=>item.index==1)
+            await tasks.create({...body,taskStep:crmStep.enTitle})
+ 
+        }
+        const userId=req.headers["userid"]
+        const tasksList = await calcTasks(userId)
+       res.json({taskData:tasksList,message:taskId?"Task Updated":"Task Created"})
+    }
+    catch(error){
+        res.status(500).json({message: error.message})
+    } 
+})
+router.post('/update-checkList',auth,jsonParser,async (req,res)=>{
     const taskId = req.body._id?req.body._id:""
     const body = req.body
     try{
@@ -86,7 +107,7 @@ router.post('/update-tasks',auth,jsonParser,async (req,res)=>{
 })
 router.post('/list-crm',jsonParser,async (req,res)=>{
     var pageSize = req.body.pageSize?req.body.pageSize:"10";
-    var offset = req.body.offset?(parseInt(req.body.offset)*parseInt(pageSize)):0;
+    var offset = req.body.offset?(parseInt(req.body.offset)):0;
     try{const data=req.body
 
         const reportList = await crmlist.find()
@@ -165,7 +186,7 @@ router.post('/upload',uploadImg.single('upload'), async(req, res, next)=>{
     let type = decodedImg.type;
     let extension = mime.extension(type);
     
-    let fileName = `MGM-${Date.now().toString()+"-"+req.body.imgName+"."+extension}`;
+    let fileName = `Sharif-${Date.now().toString()+"-"+req.body.imgName+"."+extension}`;
    var upUrl = `/uploads/${folderName}/${fileName}`
     fs.writeFileSync("."+upUrl, imageBuffer, 'utf8');
     return res.send({"status":"success",url:upUrl});

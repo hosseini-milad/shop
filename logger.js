@@ -3,9 +3,11 @@ require("dotenv").config();
 require("./middleware/database").connect();
 var expressWinston = require('express-winston');
 var winston = require('winston'); // for transports.Console
+const bodyParser = require('body-parser');
 var app = module.exports = express();
 const path = require('path');
-
+const CustomTransport = require('./middleware/winstonTransport');
+const customTransport = new CustomTransport();
 const cors = require("cors");
 app.use(cors());
  
@@ -21,11 +23,38 @@ eventsEmitter.on('tqi9z2oj5x1gu3iuqtv1d9pyc1gtfkef', () => {
   console.log('Test Event Successful!');
 
 });
+const logger = winston.createLogger({
+  transports: [customTransport],
+});
+expressWinston.requestWhitelist.push('body')
+
+app.use(
+  expressWinston.logger({
+    winstonInstance: logger,
+    // Other configuration options for express-winston
+  
+  dynamicMeta: (req, res) => {
+    const httpRequest = {}
+    const meta = {}
+    if (req) { 
+        meta.httpRequest = httpRequest
+        httpRequest.remoteIp = req.ip&& 
+        req.ip.indexOf(':') >= 0 ? req.ip.substring(req.ip.lastIndexOf(':') + 1) : req.ip   // just ipv4
+        httpRequest.requestSize = req.socket.bytesRead
+    }
+    return meta
+}})
+);
+var router = express.Router();
+router.use(bodyParser.urlencoded({
+  extended: true
+}))
+router.use(bodyParser.json())
+
 app.get('/hook-lead', (req, res) => {    //Subscribing to an event
   console.log("req")
   eventsEmitter.emit('tqi9z2oj5x1gu3iuqtv1d9pyc1gtfkef');});
 
-const bodyParser = require('body-parser');
 //app.use(express.methodOverride());
 // Let's make our express `Router` first.
 var router = express.Router();
