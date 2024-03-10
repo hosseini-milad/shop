@@ -132,5 +132,12 @@ export const findPriority=(priority)=>{
   if(priority=="بالا") return("high")
   return("mid")
 }
-
+export const payValue=(priceSet,payValue,count,off)=>{
+  var price = 0
+  if(!priceSet) return(0)
+  var price = priceSet.find(item=>item.saleType===payValue).price
+  var rawPrice = Number(price)*1.09
+  rawPrice = Math.round(rawPrice/1000)*1000
+  return(normalPriceCount(rawPrice,count))
+}
 export default env

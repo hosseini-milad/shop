@@ -436,12 +436,14 @@
   width: 300px;
   margin-bottom: 20px;
 }
-
-.f-customer{
+.f-customer input{
+  font-size: 15px;
+}
+/*.f-customer{
   position: relative;
   padding-left: 50px !important;
   padding-top: 8px;
-}
+}*/
 .f-customer .MuiFormControl-root label{
   background: transparent;
 }
@@ -483,4 +485,24 @@
 }
 .f-company fieldset{
   border: transparent;
+}
+
+.active-star{
+  color: rgb(158, 0, 0) !important;
+}
+.roader img{
+  width: 60px;
+  height: 60px;
+  object-fit: contain;
+}
+
+.user-item{
+  display: grid;
+  color: #111;
+}
+.user-item small{
+  font-size: 13px;
+}
+.user-item b{
+  font-size: 14px;
 }

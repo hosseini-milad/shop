@@ -1,9 +1,14 @@
-function ProductSingle(){
+import { useState } from "react"
+
+function ProductSingle(props){
+  const [starStatus,setStarStatus] = useState(0)
+  console.log(starStatus)
     return(
         <div className="product-wrapper">
         <div className="product-tile">
             <div className="product-side-btn-wrapper">
-              <i className="fa-regular fa-star"></i>
+              <i className={starStatus?"fa-regular fa-star active-star":"fa-regular fa-star"}
+                onClick={()=>setStarStatus(starStatus?0:1)}></i>
               <i className="fa-solid fa-search"></i>
             </div>
             <div className="product-img">
@@ -13,8 +18,9 @@ function ProductSingle(){
             </div>
             <form className="product-option-num">
               <div className="inputGroup">
-                <input id="radio1" name="radio" type="radio" style={{display: "none"}} checked />
-                <label for="radio1">
+                <input id={"radio"+props.id} name="radio" type="radio" 
+                  style={{display: "none"}} checked />
+                <label htmlFor={"radio"+props.id}>
                   <p>کارتن</p>
                   <span>max:20X5</span>
                   <div className="input-wrapper">
@@ -26,8 +32,8 @@ function ProductSingle(){
 
               </div>
               <div className="inputGroup">
-                <input id="radio2" name="radio" type="radio" style={{display: "none"}} />
-                <label for="radio2">
+                <input id={"radios"+props.id} name="radio" type="radio" style={{display: "none"}} />
+                <label htmlFor={"radios"+props.id}>
                   <p>تکی</p>
                   <span>max:112</span>
                   <div className="input-wrapper">

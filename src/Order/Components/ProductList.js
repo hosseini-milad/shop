@@ -3,10 +3,10 @@ import ProductSingle from "./ProductSingle"
 function ProductList(){
     return(
         <section className="product-sec">
-        <ProductSingle />
-          <ProductSingle />
-          <ProductSingle />
-          <ProductSingle />
+        <ProductSingle id={5}/>
+          <ProductSingle id={7}/>
+          <ProductSingle id={8}/>
+          <ProductSingle id={9}/>
       </section>
     )
 }

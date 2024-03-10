@@ -1,6 +1,9 @@
 import { useState } from "react"
+import { normalPriceCount } from "../../env"
 
-function PreOrderItem(){
+function PreOrderItem(props){
+    const data = props.data
+    const total=props.total&&props.total[props.index]
     const [showDetail,setDetail] = useState(0)
     return(
         <div className="order-wrapper">
@@ -8,20 +11,23 @@ function PreOrderItem(){
             onClick={()=>showDetail?setDetail(0):setDetail(1)}>
             <div className="bu-name">
               <p>نام مشتری:</p>
-              <p>علی صفدری</p>
-              <span>(پاسداران)</span>
+              <p>-</p>
+              <span>(-)</span>
             </div>
             <div className="border-num">
-              <p>شماره سفارش:</p>
-              <p>2158</p>
+              <p>مبلغ:</p>
+              <p>{normalPriceCount(total.totalPrice,1)}</p>
             </div>
             <div className="border-date">
               <p>تاریخ و ساعت ثبت:</p>
-              <p>1402/02/11 11:25 AM</p>
+              <p>{new Date(data.progressDate)
+                  .toLocaleDateString('fa')}</p>
+              <span>({new Date(data.progressDate)
+                  .toLocaleTimeString('fa')})</span>
             </div>
             <div className="border-num">
               <p>تعداد:</p>
-              <p>2</p>
+              <p>{total?total.totalCount:1}</p>
             </div>
             <i className={showDetail?"fa-solid fa-angle-up":
                 "fa-solid fa-angle-down"}></i>
@@ -37,12 +43,12 @@ function PreOrderItem(){
                   <th data-cell="شرح کالا">
                     <p>شرح کالا</p>
                   </th>
-                  <th data-cell="کد کالا">
+                  {/*<th data-cell="کد کالا">
                     <p>کد کالا</p>
-                  </th>
-                  <th data-cell="کارتن">
+          </th>*/}
+                  {/*<th data-cell="کارتن">
                     <p>کارتن</p>
-                  </th>
+        </th>*/}
                   <th data-cell="واحد اصلی">
                     <p>واحد اصلی</p>
                   </th>
@@ -59,43 +65,44 @@ function PreOrderItem(){
                 </tr>
               </thead>
               <tbody>
-                <tr>
+                {data.cartItems&&data.cartItems.map((item,i)=>(
+                <tr key={i}>
                   <td data-cell="ردیف">
-                    <p>1</p>
+                    <p>{i+1}</p>
                   </td>
                   <td data-cell="شرح کالا">
                     <div className="product-title">
                       <img src="/img/business/oil1.png" alt="avatar"/>
                       <div className="product-name">
-                        <p className="name">روغن موتور ایرانول</p>
-                        <p className="email">10W_40 12000</p>
+                        <p className="name">{item.title}</p>
+                        <p className="email">{item.sku}</p>
                       </div>
                     </div>
                   </td>
-                  <td data-cell="کد کالا">
-                    <p>FS7758</p>
-                  </td>
+                  {/*<td data-cell="کد کالا">
+                    <p>{item.sku}</p>
+                </td>
                   <td data-cell="کارتن">
                     <p>0</p>
-                  </td>
+                  </td>*/}
                   <td data-cell="واحد اصلی">
-                    <p>2</p>
+                    <p>{item.count}</p>
                   </td>
                   <td data-cell="مبلغ واحد">
-                    <p>12.5000</p>
+                    <p>{normalPriceCount(item.price,1)}</p>
                   </td>
                   <td data-cell="تخفیف">
                     <p></p>
                   </td>
                   <td data-cell="مبلغ کل">
-                    <p>25.0000</p>
+                    <p>{normalPriceCount(item.price,item.count)}</p>
                   </td>
                   <td>
                     <div className="more-btn">
                       <i className="fa-solid fa-trash" style={{color: "red"}}></i>
                     </div>
                   </td>
-                </tr>
+                </tr>))}
               </tbody>
             </table>
 

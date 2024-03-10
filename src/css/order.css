@@ -74,7 +74,6 @@
     width: 300px;
     top: 80px;
     right: 60px;
-    display: none;
     flex-direction: column;
     align-items: flex-start;
     justify-content: flex-start;
@@ -89,17 +88,20 @@
       .bu-name {
         width: 100%;
         color: black;
-        font-size: 1.3rem;
+        font-size: 15px;
+        margin-bottom: 2px;
       }
   
-      .cu-address {
+      .bu-address {
         width: 100%;
-        font-size: 1rem;
+        font-size: 14px;
+        margin-bottom: 0;
         color: rgb(87, 85, 85);
       }
     }
     .menu-item:hover {
       background-color: white;
+      margin-bottom: 0;
       cursor: pointer;
     }
   }
@@ -365,6 +367,7 @@
       z-index: 2;
       transition: color 200ms ease-in;
       overflow: hidden;
+      margin-bottom: 0;
   
       &:before {
         width: 10px;

@@ -1,7 +1,10 @@
+import { useState } from "react"
 import QuickNew from "./QuickNew"
 import QuickRow from "./QuickRow"
 
-function QuickTable(){
+function QuickTable(props){
+  const qCart= props.cart&&props.cart.quickCart
+  //console.log(qCart)
     return(
     <table>
           <thead>
@@ -31,8 +34,14 @@ function QuickTable(){
             </tr>
           </thead>
           <tbody>
-            <QuickNew />
-            <QuickRow />
+            <QuickNew data={props.data} token={props.token}
+              payValue="4" setCart={props.setCart}
+              user={props.user}
+              search={props.search} setSearch={props.setSearch}/>
+            {qCart&&qCart.cartItems&&qCart.cartItems.map((item,i)=>(
+              <QuickRow data={item} key={i} index={i+1} payValue="4"
+              token={props.token} user={props.user} setCart={props.setCart}/>
+            ))}
           </tbody>
         </table>
     )
