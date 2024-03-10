@@ -178,6 +178,7 @@ const findCartFunction=async(userId,managerId)=>{
     try{
         const cartData = await cart.find({manageId:managerId}).sort({"initDate":-1})
     const qCartData = await qCart.findOne({userId:userId})
+    const userData = await customerSchema.findOne({userId:userId})
     var cartDetail = []
     var qCartDetail = ''
     var description = ''
@@ -186,7 +187,7 @@ const findCartFunction=async(userId,managerId)=>{
             cartDetail.push(findCartSum(cartData[c].cartItems))
         if(qCartData) qCartDetail =findQuickCartSum(qCartData.cartItems,qCartData.payValue)
     }catch{}
-    return({cart:cartData,cartDetail:cartDetail,
+    return({cart:cartData,cartDetail:cartDetail,userData:userData,
         quickCart:qCartData,qCartDetail:qCartDetail})
         }
     catch{
