@@ -178,7 +178,7 @@ const findCartFunction=async(userId,managerId)=>{
     try{
         const cartData = await cart.find({manageId:managerId}).sort({"initDate":-1})
     const qCartData = await qCart.findOne({userId:userId})
-    const userData = await customerSchema.findOne({userId:userId})
+    const userData = await customerSchema.findOne({userId:ObjectID(userId)})
     var cartDetail = []
     var qCartDetail = ''
     var description = ''
