@@ -166,17 +166,17 @@ router.post('/update-category',jsonParser,auth, async (req,res)=>{
 router.post('/cart', async (req,res)=>{
     const userId =req.body.userId?req.body.userId:req.headers['userid'];
     try{
-        const cartDetails = await findCartFunction(userId)
+        const cartDetails = await findCartFunction(userId,req.headers['userid'])
         res.json(cartDetails)
     }
     catch(error){
         res.status(500).json({message: error.message})
     }
 })
-const findCartFunction=async(userId)=>{
+const findCartFunction=async(userId,managerId)=>{
     
     try{
-        const cartData = await cart.find({manageId:req.headers['userid']}).sort({"initDate":-1})
+        const cartData = await cart.find({manageId:managerId}).sort({"initDate":-1})
     const qCartData = await qCart.findOne({userId:userId})
     var cartDetail = []
     var qCartDetail = ''
@@ -383,7 +383,7 @@ router.post('/update-cart',jsonParser, async (req,res)=>{
                 {userId:userId},{$set:data})
             status = "update cart"
         }
-        const cartDetails = await findCartFunction(userId)
+        const cartDetails = await findCartFunction(userId,req.headers['userid'])
         res.json(cartDetails)
     }
     catch(error){
@@ -412,7 +412,7 @@ router.post('/edit-cart',jsonParser, async (req,res)=>{
         data.cartItems =(cartItems)
         await quickCart.updateOne({userId:userId},{$set:data})
         status = "update cart"
-        const cartDetails = await findCartFunction(userId)
+        const cartDetails = await findCartFunction(userId,req.headers['userid'])
         res.json(cartDetails)
     try{}
     catch(error){
@@ -430,7 +430,7 @@ router.post('/edit-payValue',jsonParser, async (req,res)=>{
         var status = "";
         await quickCart.updateOne({userId:data.userId},{$set:data})
         status = "update cart"
-        const cartDetails = await findCartFunction(data.userId)
+        const cartDetails = await findCartFunction(data.userId,req.headers['userid'])
         res.json(cartDetails)
     }
     catch(error){
@@ -539,7 +539,7 @@ router.post('/remove-cart',jsonParser, async (req,res)=>{
             await quickCart.updateOne(
                 {userId:data.userId},{$set:data})
             status = "update cart"
-        const cartDetails = await findCartFunction(data.userId)
+        const cartDetails = await findCartFunction(data.userId,req.headers['userid'])
         res.json(cartDetails)
     }
     catch(error){
@@ -563,7 +563,7 @@ router.post('/return-cart',jsonParser, async (req,res)=>{
             await cart.updateOne(
                 {_id:req.body.cartID},{$set:data})
             status = "Return "
-        const cartDetails = await findCartFunction(userId)
+        const cartDetails = await findCartFunction(userId,req.headers['userid'])
         res.json(cartDetails)
     }
     catch(error){
@@ -602,7 +602,7 @@ router.post('/quick-to-cart',jsonParser, async (req,res)=>{
         await cart.create(data)
             status = "create cart"
         await quickCart.deleteOne({userId:data.userId})
-        const cartDetails = await findCartFunction(userId)
+        const cartDetails = await findCartFunction(userId,req.headers['userid'])
         res.json(cartDetails)
     }
     catch(error){
