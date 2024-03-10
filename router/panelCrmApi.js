@@ -41,13 +41,15 @@ const calcTasks=async(userId)=>{
     if(userData&&userData.access!=="manager") limitTask= userData.profile
     const crmData = await crmlist.findOne()
     const crmId = (crmData._id).toString()
-    const taskList = await tasks.aggregate([
+    taskList = await tasks.aggregate([
         {$match:limitTask?{profile:limitTask}:{}},
         {$match:{crmId:crmId}},
-        {$addFields: { "user_Id": { $toObjectId: "$assign" }}},
+        {$addFields: { "user_Id": { $convert: {input:"$assign" ,
+    to:'objectId', onError:'',onNull:''}}}},
         {$lookup:{from : "users", 
             localField: "user_Id", foreignField: "_id", as : "userInfo"}},
-        {$addFields: { "profile_Id": { $toObjectId: "$profile" }}},
+        {$addFields: { "profile_Id": { $convert: {input:"$profile" ,
+        to:'objectId', onError:'',onNull:''}}}},
         {$lookup:{from : "profiles", 
             localField: "profile_Id", foreignField: "_id", as : "profileInfo"}},
     ])
