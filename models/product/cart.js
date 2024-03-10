@@ -9,7 +9,7 @@ const CartSchema = new Schema({
     userId:{ type: String },
     manageId:{ type: String },
     payValue:{ type: String },
-
+    stockId:{type:String},
     totalPrice:{ type: String }
 })
 module.exports = mongoose.model('cart',CartSchema);
