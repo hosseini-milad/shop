@@ -176,7 +176,7 @@ router.post('/cart', async (req,res)=>{
 const findCartFunction=async(userId)=>{
     
     try{
-        const cartData = await cart.find({userId:userId}).sort({"initDate":-1})
+        const cartData = await cart.find({manageId:req.headers['userid']}).sort({"initDate":-1})
     const qCartData = await qCart.findOne({userId:userId})
     var cartDetail = []
     var qCartDetail = ''
