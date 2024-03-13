@@ -52,6 +52,14 @@ const calcTasks=async(userId)=>{
         to:'objectId', onError:'',onNull:''}}}},
         {$lookup:{from : "profiles", 
             localField: "profile_Id", foreignField: "_id", as : "profileInfo"}},
+        {$addFields: { "creator_Id": { $convert: {input:"$creator" ,
+        to:'objectId', onError:'',onNull:''}}}},
+        {$lookup:{from : "users", 
+            localField: "creator_Id", foreignField: "_id", as : "creatorInfo"}},
+        {$addFields: { "customer_Id": { $convert: {input:"$customer" ,
+        to:'objectId', onError:'',onNull:''}}}},
+        {$lookup:{from : "customers", 
+            localField: "customer_Id", foreignField: "_id", as : "customerInfo"}}
     ])
     //const taskList = await tasks.find({crmCode:crmData._id})
     const columnOrder =crmData&&crmData.crmSteps

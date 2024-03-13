@@ -20,6 +20,9 @@ const quickCart = require('../models/product/quickCart');
 const bankAccounts = require('../models/product/bankAccounts');
 const sepidarFetch = require('../middleware/Sepidar');
 const products = require('../models/product/products');
+const tasks = require('../models/crm/tasks');
+const CreateTask = require('../middleware/CreateTask');
+const NewCode = require('../middleware/NewCode');
 
 router.post('/products', async (req,res)=>{
     try{
@@ -178,7 +181,7 @@ const findCartFunction=async(userId,managerId)=>{
     try{
         const cartData = await cart.find({manageId:managerId}).sort({"initDate":-1})
     const qCartData = await qCart.findOne({userId:userId})
-    const userData = await customerSchema.findOne({userId:ObjectID(userId)})
+    //const userData = await customerSchema.findOne({userId:ObjectID(userId)})
     var cartDetail = []
     var qCartDetail = ''
     var description = ''
@@ -187,12 +190,27 @@ const findCartFunction=async(userId,managerId)=>{
             cartDetail.push(findCartSum(cartData[c].cartItems))
         if(qCartData) qCartDetail =findQuickCartSum(qCartData.cartItems,qCartData.payValue)
     }catch{}
-    return({cart:cartData,cartDetail:cartDetail,userData:userData,
+    return({cart:cartData,cartDetail:cartDetail,//userData:userData,
         quickCart:qCartData,qCartDetail:qCartDetail})
         }
     catch{
         return({cart:[],cartDetail:[],
             quickCart:'',qCartDetail:''})
+    }
+}
+const findCartData=async(cartNo)=>{
+    
+    try{
+        const cartData = await cart.findOne({cartNo:cartNo})
+        var cartDetail = ''
+    
+        cartDetail=findCartSum(cartData.cartItems)
+        //if(qCartData) qCartDetail =findQuickCartSum(qCartData.cartItems,qCartData.payValue)
+   
+    return({cart:cartData,cartDetail:cartDetail})
+        }
+    catch{
+        return({cart:[],cartDetail:[]})
     }
 }
 const findQuickCartSum=(cartItems,payValue)=>{
@@ -333,6 +351,52 @@ router.post('/cart-fetch', async (req,res)=>{
         orderData.cartPrice=cartPrice
         
         res.json({cart:cartList,orderData:orderData})
+    }
+    catch(error){
+        res.status(500).json({message: error.message})
+    }
+})
+router.post('/cartData', async (req,res)=>{
+    const userId =req.body.userId?req.body.userId:req.headers['userid'];
+    const cartNo=req.body.cartNo
+    try{
+        const cartList = await cart.aggregate
+        ([
+          {$match:{cartNo:cartNo}},
+        { $addFields: { "manageId": { "$toObjectId": "$manageId" }}},
+        { $addFields: { "userId": { "$toObjectId": "$userId" }}},
+        {$lookup:{
+            from : "customers", 
+            localField: "userId", 
+            foreignField: "_id", 
+            as : "userData"
+        }},
+        {$lookup:{
+            from : "users", 
+            localField: "userId", 
+            foreignField: "_id", 
+            as : "adminData"
+        }},
+        {$lookup:{
+            from : "users", 
+            localField: "manageId", 
+            foreignField: "_id", 
+            as : "managerData"
+        }}])
+        var orderData={totalPrice:0,totalCount:0}
+        var cartPrice = 0
+        var cartItem = 0
+        var cartItems = (cartList&&cartList[0].cartItems)?
+            cartList[0].cartItems:[]
+        for(var i = 0;i<cartItems.length;i++){
+            cartPrice +=parseInt(cartItems[i].price)*
+                cartItems[i].count
+            cartItem+=Number(cartItems[i].count)
+        }
+        orderData.totalPrice=cartPrice
+        orderData.totalCount=cartItem
+        res.json({cart:cartList&&cartList[0],
+            cartDetail:orderData})
     }
     catch(error){
         res.status(500).json({message: error.message})
@@ -598,11 +662,13 @@ router.post('/quick-to-cart',jsonParser, async (req,res)=>{
         data.payValue=qCartData&&qCartData.payValue
         const quickCartItems = qCartData&&qCartData.cartItems
         data.cartItems =pureCartPrice(quickCartItems,qCartData.payValue)
+        data.cartNo = await NewCode("c")
         data.stockId = qCartData&&qCartData.stockId
         cartLog.create({...data,ItemID:req.body.cartID,action:"quick to cart"})
         await cart.create(data)
             status = "create cart"
         await quickCart.deleteOne({userId:data.userId})
+        await CreateTask("border",data)
         const cartDetails = await findCartFunction(userId,req.headers['userid'])
         res.json(cartDetails)
     }
@@ -989,4 +1055,142 @@ router.post('/bankCustomer', async (req,res)=>{
     }
 })
 
+router.post('/edit-addCart', async (req,res)=>{
+    const cartNo=req.body.cartNo
+    const data=req.body.data
+    try{
+        //const userData = await users.findOne({_id:req.headers['userid']})
+        //const stockId = userData.StockId?userData.StockId:"13"
+        var status = "";
+        //const cartData = await cart.find({userId:userId})
+        const CartData = await cart.findOne({cartNo:cartNo})
+        
+        const availItems = await checkAvailable(data,CartData.stockId)
+        if(!availItems){
+            res.status(400).json({error:"موجودی کافی نیست"}) 
+            return
+        }
+        const cartItems = createCart(CartData?CartData.cartItems:[],
+            data)
+            CartData.cartItems =(cartItems)
+        if(!CartData){
+            
+        }
+        else{
+            cartLog.create({...CartData,ItemID:data,action:"edit cart"})
+            await cart.updateOne(
+                {cartNo:cartNo},{$set:CartData})
+            status = "edit cart"
+        }
+        const cartDetails = await findCartData(cartNo)
+        res.json(cartDetails)
+    }
+    catch(error){
+        res.status(500).json({message: error.message})
+    }
+})
+router.post('/edit-removeCart',jsonParser, async (req,res)=>{
+    const cartNo=req.body.cartNo
+    const cartID=req.body.cartID
+    
+    try{
+        var status = "";
+        const cartData = await cart.findOne({cartNo:cartNo})
+        const cartItems = removeCart(cartData,cartID)
+        //cartData.cartItems =(cartItems)
+        await cart.updateOne({cartNo:cartNo},
+            {$set:{cartItems:cartItems}})
+        //console.log(req.body.cartItem)
+        cartLog.create({...cartData,ItemID:cartID,action:"edit delete"})
+            
+        const cartDetails = await findCartData(cartNo)
+        res.json(cartDetails)
+    }
+    catch(error){
+        res.status(500).json({message: error.message})
+    }
+})
+router.post('/edit-updateFaktor',jsonParser, async (req,res)=>{
+    
+    const cartNo=req.body.cartNo
+    try{
+        const adminUser = await users.findOne({_id:ObjectID(req.headers["userid"])})
+        
+        if(!adminUser.access||
+            !adminUser.access.find(item=>item == "manager")) {
+            res.status(400).json({error:"no access"})
+            return
+        }
+        const cartList = await cart.aggregate
+        ([{$match:{cartNo:cartNo}},
+            { $addFields: { "manageId": { "$toObjectId": "$manageId" }}},
+            { $addFields: { "userId": { "$toObjectId": "$userId" }}},
+            
+        {$lookup:{
+            from : "customers", 
+            localField: "userId", 
+            foreignField: "_id", 
+            as : "userData"
+        }},
+        {$lookup:{
+            from : "users", 
+            localField: "manageId", 
+            foreignField: "_id", 
+            as : "adminData"
+        }}])
+        const faktorSeprate = totalCart(cartList)
+        const faktorDetail = await IntegrateCarts(faktorSeprate)
+        
+        var sepidarQuery=[]
+        var addFaktorResult=[]
+        var faktorNo=0
+        for(var i=0;i<faktorDetail.length;i++){
+            faktorNo= await createfaktorNo("F","02","21")
+            sepidarQuery[i] = await SepidarFunc(faktorDetail[i],faktorNo)
+            
+            addFaktorResult[i] = await sepidarPOST(sepidarQuery[i],"/api/invoices",req.headers['userid'])
+            //console.log(addFaktorResult[i])
+            if(!addFaktorResult[i]||addFaktorResult[0].Message||!addFaktorResult[i].Number){
+                res.status(400).json({error:addFaktorResult[0].Message?addFaktorResult[0].Message:"error occure",
+                    query:sepidarQuery[i],status:"faktor"})
+                return
+            }
+            else{
+                const cartDetail =findCartSum(faktorDetail[i].cartItems)
+                await FaktorSchema.create(
+                    {...data,faktorItems:faktorDetail[i].cartItems,
+                        userId:faktorDetail[i].userTemp,
+                        customerID:faktorDetail[i].userId,
+                        faktorNo:faktorNo,
+                        totalPrice:cartDetail.totalPrice,
+                        totalCount:cartDetail.totalCount,
+                        InvoiceNumber:addFaktorResult[i].Number,
+                        InvoiceID:addFaktorResult[i].InvoiceID})
+                
+            }
+        }
+        
+        await cart.deleteOne({cartNo:cartNo})
+        
+
+        const recieptQuery = 1//await RecieptFunc(req.body.receiptInfo,addFaktorResult[0],faktorNo)
+        const recieptResult = 1//await sepidarPOST(recieptQuery,"/api/Receipts/BasedOnInvoice")
+        //const SepidarFaktor = await SepidarFunc(faktorDetail)
+        if(!recieptQuery||recieptResult.Message){
+            res.json({error:recieptResult.Message,query:recieptQuery,status:"reciept"})
+                return
+        }
+        else{
+            res.json({recieptInfo:faktorDetail,
+                users:users,
+                faktorInfo:addFaktorResult,
+                faktorData:sepidarQuery,
+                status:"done"})
+            }
+        
+    }
+    catch(error){
+        res.status(500).json({message: error.message})
+    }
+})
 module.exports = router;
