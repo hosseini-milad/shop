@@ -10,6 +10,8 @@ const customerSchema = new mongoose.Schema({
   mobile:{type: String },
   email: { type: String},
   oldEmail: { type: String},
+  profile:{type:String},
+  class: {type:Array,default:[]},
   access:{type:String},
   group: { type:String },
   credit: { type: String },
@@ -21,14 +23,6 @@ const customerSchema = new mongoose.Schema({
   status:{ type: String },
   cCode:{ type: String },
   CustomerID:{ type: String },
-
-  nameCompany:{ type: String },
-  firma:{ type: String },
-  morada:{ type: String },
-  nifCompany:{ type: String },
-  phoneCompany:{ type: String },
-  emailCompany:{ type: String },
-  IBANCompany:{ type: String },
 
   date:{type:Date} 
 });

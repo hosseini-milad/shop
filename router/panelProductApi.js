@@ -22,6 +22,8 @@ const productCount = require('../models/product/productCount');
 const productPrice = require('../models/product/productPrice');
 const NormalTax = require('../middleware/NormalTax');
 const openOrders = require('../models/orders/openOrders');
+const Filters = require('../models/product/Filters');
+const factory = require('../models/product/factory');
 
 router.post('/fetch-service',jsonParser,async (req,res)=>{
     var serviceId = req.body.serviceId?req.body.serviceId:''
@@ -450,6 +452,133 @@ router.post('/editCats',jsonParser,async(req,res)=>{
         catResult= await category.create(data)
         
         res.json({result:catResult,success:catId?"Updated":"Created"})
+    }
+    catch(error){
+        res.status(500).json({message: error.message})
+    }
+})
+/*Filters*/
+router.post('/fetch-filter',jsonParser,async (req,res)=>{
+    var filterId = req.body.filterId?req.body.filterId:''
+    try{
+        if(!filterId){
+            res.json({filter:{}})
+            return 
+        }
+        const categoryData = await category.find()
+        const filterData = await Filters.findOne({_id: ObjectID(filterId)})
+       res.json({filter:filterData,category:categoryData})
+    }
+    catch(error){
+        res.status(500).json({message: error.message})
+    } 
+})
+router.post('/list-filter',jsonParser,async (req,res)=>{
+    var pageSize = req.body.pageSize?req.body.pageSize:"10";
+    var offset = req.body.offset?(parseInt(req.body.offset)):0;
+    try{const data={
+        category:req.body.category,
+        title:req.body.title,
+        enTitle:req.body.enTitle,
+        type:req.body.type,
+    }
+        const filterList = await Filters.aggregate([
+            { $match:data.title?{title:new RegExp('.*' + data.title + '.*')}:{}},
+            { $match:data.category?{category:data.category}:{}},
+            { $match:data.type?{type:data.type}:{}},
+            ])
+            const filters = filterList.slice(offset,
+                (parseInt(offset)+parseInt(pageSize)))  
+            const typeUnique = [...new Set(filterList.map((item) => item.category))];
+            
+           res.json({filter:filters,type:typeUnique,
+            size:filterList.length})
+    }
+    catch(error){
+        res.status(500).json({message: error.message})
+    } 
+})
+router.post('/edit-filter',jsonParser,async(req,res)=>{
+    var filterId= req.body.filterId?req.body.filterId:''
+    if(filterId === "new")filterId=''
+    try{ 
+        const data = {
+            category:req.body.category,
+            title:req.body.title,
+            enTitle:req.body.enTitle,
+            type:req.body.type,
+            optionsP:req.body.optionsP,
+            optionsN:req.body.optionsN,
+            sort:req.body.sort
+        }
+        var filterResult = ''
+        if(filterId) filterResult=await Filters.updateOne({_id:filterId},
+            {$set:data})
+        else
+        filterResult= await Filters.create(data)
+        
+        res.json({result:filterResult,success:filterId?"Updated":"Created"})
+    }
+    catch(error){
+        res.status(500).json({message: error.message})
+    }
+})
+
+/*Factory*/
+router.post('/fetch-factory',jsonParser,async (req,res)=>{
+    var factoryId = req.body.factoryId?req.body.factoryId:''
+    try{
+        if(!factoryId){
+            res.json({filter:{}})
+            return
+        }
+        const filterData = await factory.findOne({_id: ObjectID(factoryId)})
+       res.json({filter:filterData})
+    }
+    catch(error){
+        res.status(500).json({message: error.message})
+    } 
+})
+router.post('/list-factory',jsonParser,async (req,res)=>{
+    var pageSize = req.body.pageSize?req.body.pageSize:"10";
+    var offset = req.body.offset?(parseInt(req.body.offset)):0;
+    try{const data={
+        category:req.body.category,
+        title:req.body.title,
+        enTitle:req.body.enTitle,
+        type:req.body.type,
+    }
+        const filterList = await factory.aggregate([
+            { $match:data.title?{title:new RegExp('.*' + data.title + '.*')}:{}},
+            { $match:data.category?{category:data.category}:{}},
+            { $match:data.type?{type:data.type}:{}},
+            ])
+            const filters = filterList.slice(offset,
+                (parseInt(offset)+parseInt(pageSize)))  
+            const typeUnique = [...new Set(filterList.map((item) => item.category))];
+              
+           res.json({filter:filters,type:typeUnique,
+            size:filterList.length})
+    }
+    catch(error){
+        res.status(500).json({message: error.message})
+    } 
+})
+router.post('/edit-factory',jsonParser,async(req,res)=>{
+    var factoryId= req.body.factoryId?req.body.factoryId:''
+    if(factoryId === "new")factoryId=''
+    try{ 
+        const data = {
+            title:req.body.title,
+            enTitle:req.body.enTitle
+        }
+        var filterResult = ''
+        if(factoryId) filterResult=await factory.updateOne({_id:factoryId},
+            {$set:data})
+        else
+        filterResult= await factory.create(data)
+        
+        res.json({result:filterResult,success:factoryId?"Updated":"Created"})
     }
     catch(error){
         res.status(500).json({message: error.message})

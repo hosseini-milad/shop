@@ -12,6 +12,12 @@ const payLog = require('../models/orders/payLog');
 const tasks = require('../models/crm/tasks');
 const ProfileAccess = require('../models/auth/ProfileAccess');
 const orders = require('../models/orders/orders');
+const classes = require('../models/auth/classes');
+const Policy = require('../models/auth/Policy');
+const category = require('../models/product/category');
+const brand = require('../models/product/brand');
+const Filters = require('../models/product/Filters');
+const factory = require('../models/product/factory');
 
 
 router.post('/fetch-user',jsonParser,async (req,res)=>{
@@ -195,9 +201,12 @@ router.post('/fetch-class',jsonParser,async (req,res)=>{
         const classData = classId&&await classes.findOne({_id: ObjectID(classId)})
         const userClass = classData&&await user.find(
             {class: {$elemMatch: {_id:String(classData._id)}}})
+        const customerClass = classData&&await customer.find(
+            {class: {$elemMatch: {_id:String(classData._id)}}})
         const policyClass = classData&&await Policy.find(
                 {classId:String(classData._id)})
-       res.json({filter:classData,userClass:userClass,policyClass:policyClass})
+       res.json({filter:classData,userClass:userClass,
+        policyClass:policyClass,customerClass:customerClass})
     }
     catch(error){
         res.status(500).json({message: error.message})
@@ -263,10 +272,37 @@ router.post('/update-user-class',jsonParser,async (req,res)=>{
         res.status(500).json({message: error.message})
     } 
 })
+router.post('/update-customer-class',jsonParser,async (req,res)=>{
+    var userId = req.body.userId 
+    const data={
+        class:req.body.class
+    } 
+    try{
+        const userData = await customer.findOne({_id: ObjectID(userId)})
+        var userClass = userData.class?userData.class:[]
+        var found = 0
+        for(var i=0;i<userClass.length;i++){
+            if(userClass[i]._id == data.class._id){
+                userClass.splice(i, 1)
+                found =1
+            } 
+        }
+        !found&&userClass.push(data.class)
+
+        const newClassUser = await customer.updateOne({_id: ObjectID(userId)},
+        {$set:{class:userClass}})
+        //const allClasses =await classSeprate(req.body.userId)
+       res.json({data:newClassUser,status:"23"})
+    }
+    catch(error){
+        res.status(500).json({message: error.message})
+    } 
+})
 const classSeprate=async(userId)=>{
     const allClass = await classes.find()
     
-    const userData = await user.findOne({_id: ObjectID(userId)})
+    var userData = await user.findOne({_id: ObjectID(userId)})
+    if(!userData) userData = await customer.findOne({_id: ObjectID(userId)})
     const assignClass = userData&&userData.class
     
     var availableClass = []
@@ -397,6 +433,25 @@ router.post('/update-user-class',jsonParser,async (req,res)=>{
     } 
 })
 
+
+router.post('/sendSMS',jsonParser,async (req,res)=>{
+    var userId = req.body.userId
+    const data={
+        users:req.body.users,
+        message:req.body.message
+    }
+    try{
+        var messageStatus=[]
+        for(var i=0;i<data.users.length;i++){
+            const result = await sendMessageUser(data.users[i],data.message)
+            messageStatus.push({status:result,userId:data.users[i]})
+        }
+       res.json({data:messageStatus,sentStatus:messageStatus.length+" sent"})
+    }
+    catch(error){
+        res.status(500).json({message: error.message})
+    } 
+})
 
 
 router.get('/allow-menu',auth,jsonParser,async (req,res)=>{

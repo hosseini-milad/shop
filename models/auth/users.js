@@ -9,7 +9,7 @@ const userSchema = new mongoose.Schema({
   email: { type: String},
   oldEmail: { type: String},
   access:{
-    type:Array
+    type:String
   },
   group: { type:String },
   credit: { type: String },
