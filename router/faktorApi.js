@@ -449,7 +449,7 @@ router.post('/update-cart',jsonParser, async (req,res)=>{
             status = "update cart"
         }
         const cartDetails = await findCartFunction(userId,req.headers['userid'])
-        res.json(cartDetails)
+        res.json({...cartDetails,message:"آیتم اضافه شد"})
     }
     catch(error){
         res.status(500).json({message: error.message})
@@ -478,7 +478,7 @@ router.post('/edit-cart',jsonParser, async (req,res)=>{
         await quickCart.updateOne({userId:userId},{$set:data})
         status = "update cart"
         const cartDetails = await findCartFunction(userId,req.headers['userid'])
-        res.json(cartDetails)
+        res.json({...cartDetails,message:"آیتم ها بروز شدند"})
     try{}
     catch(error){
         res.status(500).json({message: error.message})
@@ -605,7 +605,7 @@ router.post('/remove-cart',jsonParser, async (req,res)=>{
                 {userId:data.userId},{$set:data})
             status = "update cart"
         const cartDetails = await findCartFunction(data.userId,req.headers['userid'])
-        res.json(cartDetails)
+        res.json({...cartDetails,message:"آیتم حذف شد."})
     }
     catch(error){
         res.status(500).json({message: error.message})
@@ -1083,7 +1083,7 @@ router.post('/edit-addCart', async (req,res)=>{
             status = "edit cart"
         }
         const cartDetails = await findCartData(cartNo)
-        res.json(cartDetails)
+        res.json({...cartDetails,message:"آیتم اضافه شد"})
     }
     catch(error){
         res.status(500).json({message: error.message})
@@ -1104,7 +1104,7 @@ router.post('/edit-removeCart',jsonParser, async (req,res)=>{
         cartLog.create({...cartData,ItemID:cartID,action:"edit delete"})
             
         const cartDetails = await findCartData(cartNo)
-        res.json(cartDetails)
+        res.json({...cartDetails,message:"آیتم حذف شد"})
     }
     catch(error){
         res.status(500).json({message: error.message})
