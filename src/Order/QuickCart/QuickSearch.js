@@ -19,7 +19,7 @@ function QuickSearch(props){
                 <div className="menu-item" key={i}
                 onClick={()=>props.setSelectedItem(item)}>
                     <div className="item-img">
-                        <img src="/img/business/oil1.png" alt=""/>
+                        <img src={env.siteApiUrl+item.thumbUrl} alt=""/>
                     </div>
                     <div className="item-info">
                         <div className="item-p">

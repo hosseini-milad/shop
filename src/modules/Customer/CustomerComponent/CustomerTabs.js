@@ -45,6 +45,13 @@ function CustomerTabs(props){
             <p>{tabletrans.security[props.lang]}</p>
           </div>
         </label>
+        <label className="label-page-5" htmlFor="page-5">
+          <div className="nav-btn"  style={index===5?activeTab:{}}
+            onClick={()=>props.setTabIndex(5)}>
+            <i className="tabIcon fas fa-users"></i>
+            <p>{tabletrans.classes[props.lang]}</p>
+          </div>
+        </label>
 
       </div>
     )

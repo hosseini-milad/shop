@@ -45,6 +45,12 @@ import CRMAdd from './modules/Crm/CRMList/crmAdd';
 import Customers from './pages/Customers';
 import CustomerDetailHolder from './modules/Customer/CustomerData/CustomerDetailHolder';
 import OrderHolder from './Order/OrderHolder';
+import FilterAdd from './modules/Filters/FilterAdd';
+import FilterHolder from './modules/Filters/FilterHolder';
+import Classes from './pages/Classes';
+import ClassDetailHolder from './modules/Classes/ClassData/ClassDetailHolder';
+import PolicyDetailHolder from './modules/Policy/PolicyData/PolicyDetailHolder';
+import Policy from './pages/Policy';
 
 const cookies = new Cookies();
 const style = document.getElementById('style-direction');
@@ -75,7 +81,9 @@ root.render(
         <Route path="/crmlist/detail/:crmId" element={<Layout><CRMAdd lang={lang}/></Layout>}/>
         <Route path="/access" element={<Layout><AccessHolder lang={lang}/></Layout>}/>
         <Route path="/access/detail/:profileId" element={<Layout><ProfileAdd lang={lang}/></Layout>}/>
-        
+        <Route path="/filter" element={<Layout><FilterHolder lang={lang}/></Layout>}/>
+        <Route path="/filter/detail/:filtereId" element={<Layout><FilterAdd lang={lang}/></Layout>}/>
+
         <Route path="/orders" element={<Layout><Orders lang={lang}/></Layout>}/>
         <Route path="/orders/detail/:orderId" element={<Layout><OrderDetailHolder lang={lang}/></Layout>}/>
         <Route path="/orders/business" element={<OrderHolder lang={"fa"}/>}/>
@@ -90,7 +98,12 @@ root.render(
         <Route path="/category" element={<Layout><Category lang={lang}/></Layout>}/>
         <Route path="/category/detail/:orderId" element={<Layout><CatDetailHolder lang={lang}/></Layout>}/>
         <Route path="/transactions" element={<Layout><Transactions lang={lang}/></Layout>}/>
-
+        
+        <Route path="/class" element={<Layout><Classes lang={lang}/></Layout>}/>
+        <Route path="/class/detail/:orderId" element={<Layout><ClassDetailHolder lang={lang}/></Layout>}/>
+        <Route path="/policy" element={<Layout><Policy lang={lang}/></Layout>}/>
+        <Route path="/policy/detail/:orderId" element={<Layout><PolicyDetailHolder lang={lang}/></Layout>}/>
+        
         <Route path="/config/sepidar" element={<Layout><Sepidar lang={lang}/></Layout>}/>
         <Route path="/sliders" element={<Layout><Sliders lang={lang}/></Layout>}/>
         <Route path="/sliders/detail/:orderId" element={<Layout><SliderDetailHolder lang={lang}/></Layout>}/>

@@ -1,5 +1,5 @@
 import { useState } from "react"
-import { normalPriceCount } from "../../env"
+import { normalPriceCount, normalPriceRound } from "../../env"
 
 function PreOrderItem(props){
     const data = props.data
@@ -89,13 +89,13 @@ function PreOrderItem(props){
                     <p>{item.count}</p>
                   </td>
                   <td data-cell="مبلغ واحد">
-                    <p>{normalPriceCount(item.price,1)}</p>
+                    <p>{normalPriceRound(item.price,1.09)}</p>
                   </td>
                   <td data-cell="تخفیف">
                     <p></p>
                   </td>
                   <td data-cell="مبلغ کل">
-                    <p>{normalPriceCount(item.price,item.count)}</p>
+                    <p>{normalPriceRound(item.price,item.count,1.09)}</p>
                   </td>
                   <td>
                     <div className="more-btn">

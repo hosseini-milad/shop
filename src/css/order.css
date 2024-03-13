@@ -9,6 +9,7 @@
   .sharif {
     padding: 48px 90px;
     background: var(--dark-blue-main);
+    max-height: 100%;
   }
   .sharif-order-main {
     display: flex;
@@ -504,6 +505,7 @@
     display: flex;
     justify-content: center;
     flex-direction: column;
+    max-width: 150px;
   }
   .sharif-order-main .admin-table-sec .product-name p {
     line-height: 1.57143;
@@ -511,6 +513,10 @@
     font-weight: 400;
     text-align: left;
     color: rgb(33, 43, 54);
+    white-space: break-spaces;
+  }
+ .product-name p{
+    text-align: right;
   }
   .sharif-order-main .admin-table-sec .product-name p:nth-child(2) {
     color: rgb(76, 77, 79);

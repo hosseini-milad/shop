@@ -54,6 +54,18 @@ export function normalPriceCount(priceText,count){
         (rawPrice.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",").replace( /^\D+/g, ''))
     )
 }
+export function normalPriceRound(priceText,count,tax){
+    if(!priceText||priceText === null||priceText === undefined) return("")
+
+    try{priceText =priceText.split(' ')[0];}catch{}
+    if(priceText === "0"||priceText === 0)return("رایگان");
+    var rawPrice = parseInt(priceText.toString().replace(/\D/g,''))*
+      (count?count:1)*(tax?tax:1)
+    rawPrice = parseInt(Math.round(rawPrice/1000))*1000
+    return(
+        (rawPrice.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",").replace( /^\D+/g, ''))
+    )
+}
 export function rxFindCount(order){
     var count = 0;
     if(!order) return(0)
@@ -135,9 +147,13 @@ export const findPriority=(priority)=>{
 export const payValue=(priceSet,payValue,count,off)=>{
   var price = 0
   if(!priceSet) return(0)
-  var price = priceSet.find(item=>item.saleType===payValue).price
-  var rawPrice = Number(price)*1.09
-  rawPrice = Math.round(rawPrice/1000)*1000
+  var price = ''
+  if(priceSet.constructor === Array)
+    price=priceSet.find(item=>item.saleType===payValue).price
+  else
+    price =priceSet 
+  var rawPrice = parseInt(price)*1.09
+  rawPrice = parseInt(Math.round(rawPrice/1000))*1000
   return(normalPriceCount(rawPrice,count))
 }
 export default env

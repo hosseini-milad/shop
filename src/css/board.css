@@ -196,7 +196,18 @@ margin-left: auto;
     left: auto;
     right:10px
   }
-
+  .customerInfo{
+    top:40px;
+    bottom: auto;
+    left:5px; 
+    right: auto;
+  }
+  .creatorInfo{
+    top:20px;
+    bottom: auto;
+    left:5px; 
+    right: auto;
+  }
   .status-active {
     border: 1px solid #80b780;
     color: #80b780;
@@ -218,8 +229,7 @@ margin-left: auto;
   display: flex;
   flex-direction: column;
   border-radius: 8px;
-  overflow: hidden;
-  margin-top: 50px;
+  max-height: calc(100% - 100px);
 }
 .task-popup p{
   margin:0;
@@ -598,7 +608,7 @@ margin-left: auto;
 }
 .delete-modal .modal-backdrop {
   position: fixed;
-  z-index: 99;
+  z-index: 10000;
   top: 0;
   left: 0;
   width: 100%;
@@ -866,4 +876,26 @@ margin-left: auto;
 .doneTask{
   color:silver;
   text-decoration: line-through
+}
+.fullPopUp {
+  width: calc(100% - 100px);
+  position: relative;
+}
+.fullPopUp .sharif-order-main{
+  height: 100%;
+  overflow-y: auto;
+}
+.closeModal{
+  position: absolute;
+  top:10px;
+  left:20px;
+  font-size: 25px;
+  color: #fff;
+  width: 40px;
+  padding: 0 10px;
+  border-radius: 50%;
+  text-align: center;
+}
+.closeModal:hover{
+  color: red;
 }

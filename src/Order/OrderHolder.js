@@ -6,6 +6,7 @@ import QuickCartHolder from "./QuickCart/QuickCartHolder"
 import PreOrderHolder from "./PreOrder/PreOrderList"
 import env from "../env"
 import Cookies from 'universal-cookie';
+import ShowError from "../components/Modal/ShowError"
 const cookies = new Cookies();
 var shopVar = JSON.parse(localStorage.getItem(env.shopExpert));
 
@@ -57,10 +58,14 @@ function OrderHolder(props){
       {(filters&&(filters.brand||filters.category))?
       <ProductList filters={filters}/>:<></>}
       <QuickCartHolder token={token} user={user}
-        cart={cart} setCart={setCart}/>
+        cart={cart&&cart.quickCart} setCart={setCart} setError={setError}
+        cartDetail={cart&&cart.qCartDetail}/>
       <PreOrderHolder token={token} user={user}
         cart={cart}/>
     </main>
+    {error&&error.message?
+    <ShowError color={error.color} status={"سفارشات"} 
+      text={error.message} />:<></>}
   </div>
   )
 }

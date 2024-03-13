@@ -45,12 +45,13 @@ function QuickCartHolder(props){
     <section className="admin-table-sec ">
         <QuickTable data={content} token={token}
           cart={props.cart} setCart={props.setCart}
-          user={props.user}
+          user={props.user} action={props.addToCart}
+          delete={props.deleteFromCart} setError={props.setError}
           search={search} setSearch={setSearch}/>
         <div className="product-table-btn-wrapper">
           <QuickActions />
-          <QuickTotal data={props.cart} token={token}
-          setCart={props.setCart}
+          <QuickTotal data={props.cartDetail} token={token}
+          setCart={props.setCart} action={props.regCart}
             user={props.user} setError={props.setError}/>
 
         </div>

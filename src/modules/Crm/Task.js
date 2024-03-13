@@ -2,10 +2,14 @@ import {Draggable} from 'react-beautiful-dnd'
 import { dayFromNow ,findPriority} from '../../env'
 import { useState } from 'react'
 import TaskPopUp from './TaskPopUp'
+import OrderPopUp from './orderPopUp'
 function Task(props){
     const [taskPop,setTaskPop] = useState(0)
+    const [orderPop,setOrderPop] = useState(0)
     const taskData = props.taskList
     const taskProfile = taskData.profileInfo
+    const creator = taskData.creatorInfo
+    const customer = taskData.customerInfo
     const taskUser = taskData.userInfo
     return(<Draggable key={taskData._id}
         draggableId ={taskData._id} index={props.index}>
@@ -29,6 +33,10 @@ function Task(props){
                     onClick={()=>setTaskPop(1)}>
                         ویرایش
                     </div>
+                    <div className='editTask'
+                    onClick={()=>setOrderPop(1)}>
+                        ویرایش سفارش
+                    </div>
                     <span className="task-date">
                         <span className="icon-calendar"></span>
                         {dayFromNow(taskData.date)}</span>
@@ -51,6 +59,14 @@ function Task(props){
                     <div className='task-handler'>
                         <small>{taskProfile[0].profileName}</small>
                     </div>:<></>}
+                    {customer&&customer.length?
+                    <div className='task-handler customerInfo'>
+                        <small>{customer[0].username}</small>
+                    </div>:<></>}
+                    {creator&&creator.length?
+                    <div className='task-handler creatorInfo'>
+                        <small>{creator[0].username}</small>
+                    </div>:<></>}
                     {taskUser&&taskUser.length?
                     <div className='task-handler right-handler'>
                         <small>{taskUser[0].cName}</small>
@@ -61,6 +77,13 @@ function Task(props){
                     direction={props.direction}
                     setBoardArray={props.setBoardArray}
                     data={taskData} close={()=>setTaskPop(0)}
+                    />:<></>}
+                    {orderPop?<OrderPopUp title={"ویرایش سفارش"}
+                    btnText={"بروزرسانی"} action={props.action}
+                    token={props.token} crm={props.crm}
+                    direction={props.direction}
+                    setBoardArray={props.setBoardArray}
+                    data={taskData} close={()=>setOrderPop(0)}
                     />:<></>}
                     
                 </li>

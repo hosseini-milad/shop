@@ -1,10 +1,10 @@
-import env, { normalPriceCount } from "../../env"
+import env, { normalPriceCount, normalPriceRound } from "../../env"
 
 function QuickTotal(props){
   const token = props.token
-  const qCart = props.data&&props.data.qCartDetail
+  const qCart = props.data
   const user = props.user
-  console.log(qCart)
+  //console.log(qCart)
   const SetOrder=()=>{
       const postOptions={
           method:'post',
@@ -31,7 +31,9 @@ function QuickTotal(props){
               console.log(error)
           })
   }
-  
+  const defAction=()=>{
+    props.action({message:"acting"})
+  }
   if(!qCart){
     return(<></>)
   }
@@ -43,23 +45,23 @@ function QuickTotal(props){
       </div>
       <div className="t-wrapper">
         <p>مجموع فاکتور</p>
-        <p>{normalPriceCount(qCart.totalPrice,1)}</p>
+        <p>{normalPriceRound(qCart.totalPrice,1)}</p>
       </div>
       <div className="t-wrapper">
         <p>تخفیف</p>
-        <p>{normalPriceCount(qCart.totalOff,1)||"-"}</p>
+        <p>{normalPriceRound(qCart.totalOff,1)||"-"}</p>
       </div>
       <div className="t-wrapper">
         <p>مالیات</p>
-        <p>-</p>
+        <p>{normalPriceRound(qCart.totalPrice,0.09)}</p>
       </div>
       <div className="t-wrapper">
         <p>مبلغ کل </p>
-        <p>{normalPriceCount(qCart.totalPrice,1)}</p>
+        <p>{normalPriceRound(qCart.totalPrice,1.09)}</p>
       </div>
       <button type="button" className="product-table-btn temp-btn"
-      onClick={SetOrder}>
-        <p>ثبت سفارش</p>
+      onClick={props.action?defAction:SetOrder}>
+        <p>{props.action?"ثبت سپیدار":"ثبت سفارش"}</p>
       </button>
     </div>
     )

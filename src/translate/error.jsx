@@ -132,6 +132,14 @@ setting:{
         english:"Orders",
         persian:"سفارشات"
     },
+    filterName:{
+        english:"Filter Name",
+        persian:"نام فیلتر"
+    },
+    filterCode:{
+        english:"Filter Code",
+        persian:"کد فیلتر"
+    },
 
 }
 export default errortrans

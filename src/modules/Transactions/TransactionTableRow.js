@@ -21,7 +21,7 @@ function TransactionTableRow(props){
       "x-access-token":token&&token.token,"userId":token&&token.userId},
       body:JSON.stringify({orderNo:orderNo,status:"cancel"})
     }
-console.log(postOptions)
+    console.log(postOptions)
 fetch(env.siteApi + "/panel/order/editOrder",postOptions)
 .then(res => res.json())
 .then(
@@ -52,7 +52,7 @@ fetch(env.siteApi + "/panel/order/editOrder",postOptions)
               <div className="cu-avatar">
                   <img src="/img/avatar/avatar_1.jpg" alt="avatar"/>
                   <div className="cu-name">
-                  <p className="name">{orderData.userDetail[0]?
+                    <p className="name">{orderData.userDetail[0]?
                       orderData.userDetail[0].cName:orderData.userId}</p>
                     <p className="email">{orderData.userDetail[0]?
                       orderData.userDetail[0].phone:''}</p>
@@ -70,8 +70,16 @@ fetch(env.siteApi + "/panel/order/editOrder",postOptions)
                 </div>
               </td>
               <td>
-              <p>{normalPriceCount(orderData&&
-                      orderData.orderPrice)}</p>
+                <div className="order-price">
+                  <p>{normalPriceCount(orderData&&
+                      orderData.stockOrderPrice)}</p>
+                </div>
+              </td>
+              <td>
+                <div className="order-price">
+                  <p>{content&&content.saleReferenceId!="NaN"?
+                      content.saleReferenceId:''}</p>
+                </div>
               </td>
               <td>
                 <Status status={content.payStatus} class={"order-status"} 
@@ -97,9 +105,9 @@ fetch(env.siteApi + "/panel/order/editOrder",postOptions)
               </div>:<></>}
             </td>
           </tr>
-          
           {activeAcc?<tr className="sub-order">
-        <td colSpan="9"><TransactionQuickDetail query={query}/></td></tr>
+        <td colSpan="9"><TransactionQuickDetail 
+          query={query} data={content}/></td></tr>
           :<React.Fragment></React.Fragment>}
           </React.Fragment>
     )

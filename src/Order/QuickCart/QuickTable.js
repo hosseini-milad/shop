@@ -3,7 +3,7 @@ import QuickNew from "./QuickNew"
 import QuickRow from "./QuickRow"
 
 function QuickTable(props){
-  const qCart= props.cart&&props.cart.quickCart
+  const qCart= props.cart
   //console.log(qCart)
     return(
     <table>
@@ -36,10 +36,11 @@ function QuickTable(props){
           <tbody>
             <QuickNew data={props.data} token={props.token}
               payValue="4" setCart={props.setCart}
-              user={props.user}
+              user={props.user} action={props.action} setError={props.setError}
               search={props.search} setSearch={props.setSearch}/>
             {qCart&&qCart.cartItems&&qCart.cartItems.map((item,i)=>(
               <QuickRow data={item} key={i} index={i+1} payValue="4"
+              action={props.delete} setError={props.setError}
               token={props.token} user={props.user} setCart={props.setCart}/>
             ))}
           </tbody>

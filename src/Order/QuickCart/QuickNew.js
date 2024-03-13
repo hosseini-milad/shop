@@ -9,8 +9,9 @@ function QuickNew(props){
     const [count,setCount] = useState(1)
     const token = props.token
     const user=props.user
-    const [error,setError] = useState({message:'',color:"brown"})
+    //const [error,setError] = useState({message:'',color:"brown"})
     const addItem=()=>{
+        if(!selectedItem)return
         const postOptions={
             method:'post',
             headers: { 'Content-Type': 'application/json' ,
@@ -33,12 +34,15 @@ function QuickNew(props){
         .then(
             (result) => {
                 if(result.error){
-                    setError({message:result.error,color:"brown"})
-                    setTimeout(()=>setError({message:'',
+                    props.setError({message:result.error,color:"brown"})
+                    setTimeout(()=>props.setError({message:'',
                         color:"brown"}),3000)
                 }
                 else{
                     props.setCart(result)
+                    props.setError({message:result.message,color:"green"})
+                    setTimeout(()=>props.setError({message:'',
+                        color:"brown"}),3000)
                     //setItem('')
                     //setItemPrice('')
                     setCount("1")
@@ -48,6 +52,16 @@ function QuickNew(props){
                 console.log(error)
             })
     
+    }
+    const defAction=()=>{
+        if(!selectedItem)return
+        props.action({
+                id:selectedItem.ItemID,
+                sku:selectedItem.sku,
+                title:selectedItem.title,
+                count:count?count:1,
+                price:selectedItem.priceData.find(item=>item.saleType==props.payValue).price,
+                description:"description"})
     }
     return(
         <tr className="input-tr">
@@ -80,7 +94,8 @@ function QuickNew(props){
             <div className="more-btn">
                 <i className="fa-solid fa-comment"></i>
                 <i className="fa-solid fa-plus"
-                onClick={addItem}></i>
+                onClick={props.action?
+                defAction:addItem}></i>
             </div>
             </td>
         </tr>

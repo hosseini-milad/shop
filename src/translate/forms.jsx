@@ -103,6 +103,74 @@ const formtrans ={
         english: "Description",
         persian: "توضیحات"
     },
+    customercode:{
+        english: "Customer Code",
+        persian: "کد مشتری"
+    },
+    customer:{
+        english: "Customer",
+        persian: "مشتری"
+    },
+    class:{
+        english: "Class",
+        persian: "کلاس"
+    },
+    classcode:{
+        english: "Class Code",
+        persian: "کد کلاس"
+    },
+    brand:{
+        english: "Brand",
+        persian: "برند"
+    },
+    brandManage:{
+        english: "Brand Manage",
+        persian: "مدیریت برند"
+    },
+    value:{
+        english: "Value",
+        persian: "مقدار"
+    },
+    discount:{
+        english: "Discount",
+        persian: "تخفیف"
+    },
+    category:{
+        english: "Category",
+        persian: "دسته بندی"
+    },
+    type:{
+        english: "Type",
+        persian: "نوع"
+    },
+    options:{
+        english: "options",
+        persian: "انتخاب ها"
+    },
+    optionsN:{
+        english: "Negative Options",
+        persian: "انتخاب های منفی"
+    },
+    filter:{
+        english: "Filter",
+        persian: "فیلتر"
+    },
+    filters:{
+        english: "Filters",
+        persian: "فیلترها"
+    },
+    factoryManage:{
+        english: "Factory Manage",
+        persian: "مدیریت تولیدکننده"
+    },
+    factory:{
+        english: "Factory",
+        persian: "تولیدکننده"
+    },
+    message:{
+        english: "Message",
+        persian: "پیام"
+    },
 
 }
 export default formtrans

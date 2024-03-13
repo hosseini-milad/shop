@@ -1,10 +1,13 @@
+import { useState } from "react"
+import ErrorAction from "../../components/Modal/ErrorAction"
 import env, { payValue } from "../../env"
 
 function QuickRow(props){
     const data = props.data
-    console.log(data)
     const token = props.token
     const user = props.user
+    
+  const [showRemove,setShowRemove] = useState()
     const removeItem=()=>{
         const postOptions={
             method:'post',
@@ -20,14 +23,27 @@ function QuickRow(props){
         .then(res => res.json())
         .then(
             (result) => {
-                if(result)
+                if(result.error){
+                    props.setError({message:result.error,color:"brown"})
+                    setTimeout(()=>props.setError({message:'',
+                        color:"brown"}),3000)
+                }
+                else{
                     props.setCart(result) 
+                    props.setError({message:result.message,color:"orange"})
+                    setTimeout(()=>props.setError({message:'',
+                        color:"brown"}),3000)
+
+                }
             },
             (error) => {
                 console.log(error)
             })
     }
-    return(
+    const defAction=()=>{
+        props.action({cartID:data.id})
+    }
+    return(<>
         <tr className="product-tr">
             <td data-cell="ردیف">
             <p>{props.index}</p>
@@ -62,10 +78,17 @@ function QuickRow(props){
                 <i className="fa-solid fa-pen"></i>
                 <i className="fa-solid fa-comment"></i>
                 <i className="fa-solid fa-trash" style={{color: "red"}}
-                onClick={removeItem}></i>
+                onClick={()=>setShowRemove(1)}></i>
             </div>
             </td>
         </tr>
+        {showRemove?
+          <ErrorAction status={"DELETE"} title={"حذف آیتم"} 
+            text={"آیتم انتخاب شده حذف خواهد شد. آیا مطمئن هستید؟"} linkText={""} style={{direction:"rtl"}}
+            buttonText="حذف" close={()=>setShowRemove()}
+            color="red" action={()=>props.action?defAction():removeItem()}/>:
+          <></>}
+        </>
     )
 }
 export default QuickRow
