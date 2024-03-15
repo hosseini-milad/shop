@@ -224,6 +224,7 @@ const findQuickCartSum=(cartItems,payValue)=>{
     var cartSum=0;
     var cartCount=0;
     var cartDescription = ''
+    var cartDiscount = 0;
     for (var i=0;i<cartItems.length;i++){
         //console.log(payValue)
         var cartItemPrice = ''
@@ -232,20 +233,34 @@ const findQuickCartSum=(cartItems,payValue)=>{
         catch{cartItemPrice =cartItems[i].price&&cartItems[i].price
             .replace( /,/g, '').replace( /^\D+/g, '')}
         //console.log(cartItemPrice)
+        var newCount = parseInt(cartItems[i].count.toString().replace( /,/g, '').replace( /^\D+/g, ''))
         if(cartItems[i].price) 
-            cartSum+= parseInt(cartItemPrice)*
-            parseInt(cartItems[i].count.toString().replace( /,/g, '').replace( /^\D+/g, ''))
+            cartSum+= parseInt(cartItemPrice)*newCount
+        
         if(cartItems[i].count)
-            cartCount+=parseInt(cartItems[i].count.toString().replace( /,/g, '').replace( /^\D+/g, ''))
-            cartDescription += cartItems[i].description?cartItems[i].description:''
+            cartCount+=newCount
+        cartDescription += cartItems[i].description?cartItems[i].description:''
+        if(cartItems[i].discount){
+            var off = parseInt(cartItems[i].discount.toString().replace( /,/g, '').replace( /^\D+/g, ''))
+            if(off>100)
+                cartDiscount += off 
+            else
+                cartDiscount += parseInt(cartItemPrice)*1.09*newCount*(off)/100
+            //console.log(off+": "+cartDiscount)
+        }
     }
-    return({totalPrice:cartSum,
-        totalCount:cartCount,cartDescription:cartDescription})
+    return({totalFee:cartSum,
+        totalCount:cartCount,
+        totalDiscount:cartDiscount,
+        totalTax:(cartSum*0.09),
+        totalPrice:(cartSum*1.09-cartDiscount),
+        cartDescription:cartDescription})
 }
 const findCartSum=(cartItems,payValue)=>{
     if(!cartItems)return({totalPrice:0,totalCount:0})
     var cartSum=0;
     var cartCount=0;
+    var cartDiscount = 0;
     var cartDescription = ''
     for (var i=0;i<cartItems.length;i++){
         //console.log(payValue)
@@ -257,11 +272,23 @@ const findCartSum=(cartItems,payValue)=>{
             parseInt(cartItems[i].count.toString().replace( /,/g, '').replace( /^\D+/g, ''))
         if(cartItems[i].count)
             cartCount+=parseInt(cartItems[i].count.toString().replace( /,/g, '').replace( /^\D+/g, ''))
-            cartDescription += cartItems[i].description?cartItems[i].description:''
+        cartDescription += cartItems[i].description?cartItems[i].description:''
+        if(cartItems[i].discount){
+            var off = parseInt(cartItems[i].discount.toString().replace( /,/g, '').replace( /^\D+/g, ''))
+            if(off>100)
+                cartDiscount += off 
+            else
+                cartDiscount += parseInt(cartItems[i].price)
+                *Number(cartItems[i].count)*1.09*(off)/100
+        }
         }catch{}
     }
-    return({totalPrice:cartSum,
-        totalCount:cartCount,cartDescription:cartDescription})
+    return({totalFee:cartSum,
+        totalCount:cartCount,
+        totalDiscount:cartDiscount,
+        totalTax:(cartSum*0.09),
+        totalPrice:(cartSum*1.09-cartDiscount),
+        cartDescription:cartDescription})
 }
 router.post('/cartlist', async (req,res)=>{
     const userId =req.body.userId?req.body.userId:req.headers['userid'];
@@ -392,15 +419,27 @@ router.post('/cartData', async (req,res)=>{
         var orderData={totalPrice:0,totalCount:0}
         var cartPrice = 0
         var cartItem = 0
+        var cartDiscount=0
         var cartItems = (cartList&&cartList[0].cartItems)?
             cartList[0].cartItems:[]
         for(var i = 0;i<cartItems.length;i++){
             cartPrice +=parseInt(cartItems[i].price)*
                 cartItems[i].count
             cartItem+=Number(cartItems[i].count)
+            if(cartItems[i].discount){
+                var off = parseInt(cartItems[i].discount.toString().replace( /,/g, '').replace( /^\D+/g, ''))
+                if(off>100)
+                    cartDiscount += off 
+                else
+                    cartDiscount += parseInt(cartItems[i].price)
+                    *Number(cartItems[i].count)*1.09*off/100
+            }
         }
-        orderData.totalPrice=cartPrice
+        orderData.totalFee=cartPrice
         orderData.totalCount=cartItem
+        orderData.totalDiscount=cartDiscount
+        orderData.totalTax=cartPrice*0.09
+        orderData.totalPrice=cartPrice*1.09-cartDiscount
         res.json({cart:cartList&&cartList[0],
             cartDetail:orderData})
     }
@@ -628,6 +667,52 @@ router.post('/update-Item',jsonParser, async (req,res)=>{
                 {userId:data.userId},{$set:{cartItems:oldCartItems}})
             status = "update cart"
         const cartDetails = await findCartFunction(data.userId,req.headers['userid'])
+        res.json({...cartDetails,message:"آیتم بروز شد."})
+    }
+    catch(error){
+        res.status(500).json({message: error.message})
+    }
+})
+router.post('/update-Item-cart',jsonParser, async (req,res)=>{
+    const data={
+        cartID:req.body.cartID,
+        changes:req.body.changes,
+        cartNo:req.body.cartNo,
+        progressDate:Date.now()
+    }
+    try{
+        var status = "";
+        console.log(data.cartNo)
+        //const cartData = await cart.find({userId:data.userId})
+        const CartData = await cart.findOne({cartNo:data.cartNo})
+        var oldCartItems = CartData.cartItems
+        for(var i=0;i<oldCartItems.length;i++){
+            if(!data.changes)break
+            if(oldCartItems[i].id==data.cartID){
+                if(data.changes.description)
+                    oldCartItems[i].description = data.changes.description
+                if(data.changes.count)
+                    oldCartItems[i].count = data.changes.count
+                if(data.changes.discount)
+                    oldCartItems[i].discount = data.changes.discount
+
+                const availItems = await checkAvailable(oldCartItems[i])
+                if(!availItems){
+                    res.status(400).json({error:"موجودی کافی نیست"}) 
+                    return
+                }
+            }
+        }
+        
+        
+        //const cartItems = removeCart(qCartData,req.body.cartID)
+        //data.cartItems =(cartItems)
+        
+        cartLog.create({...data,ItemID:req.body.cartID,action:"update"})
+            await cart.updateOne(
+                {cartNo:data.cartNo},{$set:{cartItems:oldCartItems}})
+            status = "update cart"
+        const cartDetails = await findCartData(data.cartNo)
         res.json({...cartDetails,message:"آیتم بروز شد."})
     }
     catch(error){
@@ -969,7 +1054,6 @@ const SepidarFunc=async(data,faktorNo)=>{
         "CurrencyRef":1,
         "SaleTypeRef": data.payValue?toInt(data.payValue):4,
         "Duty":0.0000,
-        "Discount": 0.0000,
         "Items": 
         notNullCartItem.map((item,i)=>(
             {
@@ -980,7 +1064,7 @@ const SepidarFunc=async(data,faktorNo)=>{
             "Quantity": toInt(item.count),
             "Fee": toInt(item.price),
             "Price": normalPriceCount(item.price,item.count,1),
-            "Discount": 0.0000,
+            "Discount": findDiscount(item),
             "Tax": normalPriceCount(item.price,item.count,"0.09"),
             "Duty": 0.0000,
             "Addition": 0.0000
@@ -1046,9 +1130,16 @@ const normalPriceCount=(priceText,count,tax)=>{
       (rawPrice.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",").replace( /^\D+/g, ''))
     )
   }
+const findDiscount=(item)=>{
+    var off = Number(item.discount)
+    var discount = off
+    if(off<100){
+        discount = Number(item.price) * Number(item.count) * discount/100
+    }
+    return(roundNumber(discount))
+}
 const roundNumber = (number)=>{
-    var rawNumber = parseInt(number.toString().replace( /,/g, '')
-    .replace(/\D/g,''))
+    var rawNumber = parseInt(number.toString().replace( /,/g, ''))
     return(parseInt(Math.round(rawNumber/1000))*1000)
 
 }
@@ -1165,8 +1256,7 @@ router.post('/edit-updateFaktor',jsonParser, async (req,res)=>{
     try{
         const adminUser = await users.findOne({_id:ObjectID(req.headers["userid"])})
         
-        if(!adminUser.access||
-            !adminUser.access.find(item=>item == "manager")) {
+        if(!adminUser.access== "manager") {
             res.status(400).json({error:"no access"})
             return
         }
