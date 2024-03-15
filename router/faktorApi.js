@@ -167,7 +167,7 @@ router.post('/update-category',jsonParser,auth, async (req,res)=>{
     }
 })
 
-router.post('/cart', async (req,res)=>{
+router.post('/cart',auth, async (req,res)=>{
     const userId =req.body.userId?req.body.userId:req.headers['userid'];
     try{
         const cartDetails = await findCartFunction(userId,req.headers['userid'])
