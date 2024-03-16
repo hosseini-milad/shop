@@ -471,7 +471,7 @@
     padding: 0px;
     user-select: none;
     vertical-align: middle;
-    display: inline-flex;
+    /*display: inline-flex;*/
     align-items: center;
     line-height: 1.5rem;
     text-align: center;
@@ -602,12 +602,15 @@
     background-color: var(--gold);
     color: white;
     border-radius: 0.5rem;
-    padding: 0.1rem 0.6rem;
+    padding: 0.1rem;
+  width: 60px;
+  white-space: nowrap;
   }
   .sharif-order-main .admin-table-sec .code-drop-menu .item-amount p:first-child {
     background-color: var(--light-grey);
     color: #000000;
-    padding-inline: 1rem;
+    width: 85px;
+    text-align: center;
   }
   .sharif-order-main .admin-table-sec .input-tr input {
     outline: none;

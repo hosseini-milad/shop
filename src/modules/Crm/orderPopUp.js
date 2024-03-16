@@ -68,10 +68,10 @@ function OrderPopUp(props){
                     color:"brown"}),3000)
             }
             else{
+                setContent(result)
                 setError({message:result.message,color:"green"})
                 setTimeout(()=>setError({message:'',
                     color:"brown"}),3000)
-                setContent(result)
             }
         },
         (error) => {
@@ -139,11 +139,13 @@ function OrderPopUp(props){
                     onClick={props.close}></i>
                 <div className="sharif" style={{padding: "48px 10px"}}>
                     <main className="sharif-order-main">
-                        {content?<QuickCartHolder token={token} user={"user"}
+                        {content?<QuickCartHolder token={token} 
+                        user={content.cart&&content.cart.userId}
+                        cartNo={data?data.orderNo:''}
                         addToCart={(e)=>addToCart(e)}
                         deleteFromCart={(e)=>removeItem(e)}
                         regCart={(e)=>regSepidar(e)}
-                        cart={content.cart} setCart={()=>console.log("update")}
+                        cart={content.cart} setCart={(e)=>setContent(e)}
                         cartDetail={content.cartDetail} 
                         setError={setError}/>:
                         <div>{env.loader}</div>}

@@ -12,9 +12,6 @@ var shopVar = JSON.parse(localStorage.getItem(env.shopExpert));
 
 function OrderHolder(props){
   const token=cookies.get(env.cookieName)
-  const [customer,setCustomers] = useState([
-    {cName:"علی صفدری"},
-    {cName:"صادق حمیدی"}])
   const [grid,setGrid] = useState(shopVar?shopVar.grid:0)
   const [filters,setFilters] = useState()
   const [user,setUser] = useState()
@@ -35,7 +32,17 @@ function OrderHolder(props){
     .then(
         (result) => {
             if(result)
+              if(result.error){
+                if (result.error === "Invalid Token Error")
+                {
+                    const cookies = new Cookies();
+                    cookies.remove(env.cookieName,{ path: '/' });
+                    setTimeout(()=>(window.location.reload(),1000))
+                }
+              }
+              else{
                 setCart(result)
+              }
             else
                 setCart('') 
         },

@@ -55,6 +55,10 @@ const tabletrans ={
         english: "Order",
         persian: "سفارش"
     },
+    orderReg:{
+        english: "Order Reg",
+        persian: "ثبت سفارش"
+    },
     orderNumber: {
         english: "Order Number",
         persian: "شماره سفارش",

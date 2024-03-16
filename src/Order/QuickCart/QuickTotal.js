@@ -45,19 +45,19 @@ function QuickTotal(props){
       </div>
       <div className="t-wrapper">
         <p>مجموع فاکتور</p>
-        <p>{normalPriceRound(qCart.totalPrice,1)}</p>
+        <p>{normalPriceRound(qCart.totalFee,1)}</p>
       </div>
       <div className="t-wrapper">
         <p>تخفیف</p>
-        <p>{normalPriceRound(qCart.totalOff,1)||"-"}</p>
+        <p>{normalPriceRound(qCart.totalDiscount,1)||"-"}</p>
       </div>
       <div className="t-wrapper">
         <p>مالیات</p>
-        <p>{normalPriceRound(qCart.totalPrice,0.09)}</p>
+        <p>{normalPriceRound(qCart.totalTax)}</p>
       </div>
       <div className="t-wrapper">
         <p>مبلغ کل </p>
-        <p>{normalPriceRound(qCart.totalPrice,1.09)}</p>
+        <p>{normalPriceRound(qCart.totalPrice)}</p>
       </div>
       <button type="button" className="product-table-btn temp-btn"
       onClick={props.action?defAction:SetOrder}>

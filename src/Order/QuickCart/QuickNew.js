@@ -3,12 +3,17 @@ import QuickCounter from "./QuickCounter"
 import QuickOff from "./QuickOff"
 import QuickSearch from "./QuickSearch"
 import env, { payValue } from "../../env"
+import DataModal from "../../components/Modal/dataModal"
 
 function QuickNew(props){
     const [selectedItem,setSelectedItem] = useState()
     const [count,setCount] = useState(1)
+    const [discount,setDiscount] = useState(0)
+    const [showDesc,setShowDesc] = useState(0)
+    const [description,setDescription] = useState()
     const token = props.token
     const user=props.user
+    //console.log(description)
     //const [error,setError] = useState({message:'',color:"brown"})
     const addItem=()=>{
         if(!selectedItem)return
@@ -25,8 +30,9 @@ function QuickNew(props){
                     sku:selectedItem.sku,
                     title:selectedItem.title,
                     count:count?count:1,
+                    discount:discount?discount:0,
                     price:selectedItem.priceData,
-                    description:"description"},
+                    description:description},
                     payValue:props.payValue})
           }
         fetch(env.siteApi + "/panel/faktor/update-cart",postOptions)
@@ -76,7 +82,7 @@ function QuickNew(props){
                 <small>{selectedItem?selectedItem.sku:''}</small>
             </td>
             <td data-cell="تعداد">
-            <QuickCounter unit = {12} 
+            <QuickCounter unit = {(selectedItem&&selectedItem.perBox)?selectedItem.perBox:10} 
                 count={count} setCount={setCount}/>
             </td>
             <td data-cell="مبلغ واحد">
@@ -84,7 +90,8 @@ function QuickNew(props){
                 payValue(selectedItem.priceData,props.payValue,1):''}
             </td>
             <td data-cell="تخفیف">
-                <QuickOff />
+                <QuickOff change={(e)=>setDiscount(e)
+                    } discount={discount?discount:0}/>
             </td>
             <td data-cell="مبلغ کل">
                 {selectedItem?
@@ -92,11 +99,16 @@ function QuickNew(props){
             </td>
             <td>
             <div className="more-btn">
-                <i className="fa-solid fa-comment"></i>
+                <i className="fa-solid fa-comment"
+                onClick={()=>setShowDesc(1)}></i>
                 <i className="fa-solid fa-plus"
                 onClick={props.action?
                 defAction:addItem}></i>
             </div>
+            {showDesc?<DataModal action={(e)=>setDescription(e)}
+            close={()=>setShowDesc(0)} color="darkblue"
+            buttonText="ثبت توضیحات" def={description} title={"افزودن توضیحات"}/>:
+            <></>}
             </td>
         </tr>
     )

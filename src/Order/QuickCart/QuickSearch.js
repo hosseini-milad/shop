@@ -1,5 +1,5 @@
 import { useState } from "react"
-import env from "../../env"
+import env,{findBox} from "../../env"
 
 function QuickSearch(props){
     const data = props.data
@@ -9,7 +9,7 @@ function QuickSearch(props){
             <input className="dp-input" type="text" name="" id=""
                 onChange={(e)=>props.setSearch(e.target.value)}
             onFocus={()=>setShowDrop(1)}
-            onBlur={()=>setTimeout(()=>setShowDrop(0),200)}
+            //onBlur={()=>setTimeout(()=>setShowDrop(0),200)}
             />
             <i className="fa-solid fa-angle-down"></i>
         </div>
@@ -27,8 +27,8 @@ function QuickSearch(props){
                         </div>
                         <div className="item-amount">
                         <p>{item.sku}</p>
-                        <p>کارتن: 5</p>
-                        <p>تکی: 20</p>
+                        <p>کارتن: {findBox(item)}</p>
+                        <p>تکی: {item.count&&item.count.quantity}</p>
                         </div>
 
                     </div>

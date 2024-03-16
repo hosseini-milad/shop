@@ -11,12 +11,13 @@ function PreOrderItem(props){
             onClick={()=>showDetail?setDetail(0):setDetail(1)}>
             <div className="bu-name">
               <p>نام مشتری:</p>
-              <p>-</p>
+              <p>{data.userData?data.userData.username:'-'}</p>
               <span>(-)</span>
             </div>
             <div className="border-num">
-              <p>مبلغ:</p>
-              <p>{normalPriceCount(total.totalPrice,1)}</p>
+              <p>شماره سفارش:</p>
+              <p>{data.cartNo}</p>
+              {/*<p>{normalPriceCount(total.totalPrice,1)}</p>*/}
             </div>
             <div className="border-date">
               <p>تاریخ و ساعت ثبت:</p>
@@ -92,16 +93,18 @@ function PreOrderItem(props){
                     <p>{normalPriceRound(item.price,1.09)}</p>
                   </td>
                   <td data-cell="تخفیف">
-                    <p></p>
+                    <p>{item.discount?item.discount.length<3?
+                    item.discount+"%":
+                    normalPriceRound(item.discount):'-'}</p>
                   </td>
                   <td data-cell="مبلغ کل">
                     <p>{normalPriceRound(item.price,item.count,1.09)}</p>
                   </td>
-                  <td>
+                  {/*<td>
                     <div className="more-btn">
                       <i className="fa-solid fa-trash" style={{color: "red"}}></i>
                     </div>
-                  </td>
+                    </td>*/}
                 </tr>))}
               </tbody>
             </table>

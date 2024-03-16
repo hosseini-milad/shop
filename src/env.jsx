@@ -47,7 +47,7 @@ export function normalPriceCount(priceText,count){
     if(!priceText||priceText === null||priceText === undefined) return("")
 
     try{priceText =priceText.split(' ')[0];}catch{}
-    if(priceText === "0"||priceText === 0)return("رایگان");
+    if(priceText === "0"||priceText === 0)return("-");
     var rawPrice = parseInt(priceText.toString().replace(/\D/g,''))*(count?count:1)
     //console.log(rawPrice,priceText)
     return(
@@ -59,6 +59,7 @@ export function normalPriceRound(priceText,count,tax){
 
     try{priceText =priceText.split(' ')[0];}catch{}
     if(priceText === "0"||priceText === 0)return("رایگان");
+    priceText = priceText.toString().split('.')[0]
     var rawPrice = parseInt(priceText.toString().replace(/\D/g,''))*
       (count?count:1)*(tax?tax:1)
     rawPrice = parseInt(Math.round(rawPrice/1000))*1000
@@ -154,6 +155,22 @@ export const payValue=(priceSet,payValue,count,off)=>{
     price =priceSet 
   var rawPrice = parseInt(price)*1.09
   rawPrice = parseInt(Math.round(rawPrice/1000))*1000
-  return(normalPriceCount(rawPrice,count))
+  var rawPriceCount = parseInt(rawPrice)*parseInt(count?count:1)
+  if(off){
+    var offInt = parseInt(off)
+    if(offInt>100)
+      rawPriceCount -= parseInt(off) 
+    else
+      rawPriceCount = rawPriceCount*(100-parseInt(off))/100
+  }
+  return(normalPriceCount(rawPriceCount,1))
+}
+
+export const findBox=(item)=>{
+  const count = item.count&&item.count.quantity
+  const perBox = item.perBox
+  if(!count || !perBox) return("-")
+  var boxCount = (count/perBox)
+  return(parseInt(boxCount))
 }
 export default env

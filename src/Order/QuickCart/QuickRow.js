@@ -1,11 +1,53 @@
 import { useState } from "react"
 import ErrorAction from "../../components/Modal/ErrorAction"
-import env, { payValue } from "../../env"
+import env, { normalPriceCount, payValue } from "../../env"
+import DataModal from "../../components/Modal/dataModal"
+import QuickOff from "./QuickOff"
+import QuickCounter from "./QuickCounter"
 
 function QuickRow(props){
     const data = props.data
     const token = props.token
     const user = props.user
+    //console.log(user)
+    const [showDesc,setShowDesc] = useState(0)
+    const [editMode,setEditMode] = useState(0)
+    const [changes,setChanges]= useState()
+    const updateField=(changes)=>{
+        if(!changes) return
+        const postOptions={
+            method:'post',
+            headers: { 'Content-Type': 'application/json' ,
+            "x-access-token": token&&token.token,
+            "userId":token&&token.userId},
+            body:JSON.stringify({userId:user?user.Code?user.Code:
+                user._id:(token&&token.userId),
+                cartNo:props.cartNo,
+                cartID:data.id,changes})
+          }
+          console.log(postOptions)
+        fetch(env.siteApi + (props.cartNo?"/panel/faktor/update-Item-cart":
+            "/panel/faktor/update-Item") ,postOptions)
+        .then(res => res.json())
+        .then(
+            (result) => {
+                if(result.error){
+                    props.setError({message:result.error,color:"brown"})
+                    setTimeout(()=>props.setError({message:'',
+                        color:"brown"}),3000)
+                }
+                else{
+                    props.setCart(result) 
+                    props.setError({message:result.message,color:"orange"})
+                    setTimeout(()=>props.setError({message:'',
+                        color:"brown"}),3000)
+
+                }
+            },
+            (error) => {
+                console.log(error)
+            })
+    }
     
   const [showRemove,setShowRemove] = useState()
     const removeItem=()=>{
@@ -43,6 +85,10 @@ function QuickRow(props){
     const defAction=()=>{
         props.action({cartID:data.id})
     }
+    const saveChanges=()=>{
+        updateField(changes)
+        setEditMode(0)
+    }
     return(<>
         <tr className="product-tr">
             <td data-cell="ردیف">
@@ -62,24 +108,45 @@ function QuickRow(props){
             </div>
             </td>
             <td data-cell="تعداد">
-            <p>{data.count}</p>
+            {editMode?<div className="input-tr">
+                <QuickCounter setCount={(e)=>setChanges(prevState => ({
+                    ...prevState,
+                    count:e
+                    }))} unit = {(data&&data.perBox)?data.perBox:10}
+                    count={changes?changes.count:data.count}/></div>:
+                <p>{data.count}</p>}
             </td>
             <td data-cell="مبلغ واحد">
             <p>{payValue(data.price,props.payValue,1)}</p>
             </td>
             <td data-cell="تخفیف">
-            <p>-</p>
+                {editMode?<div className="input-tr">
+                    <QuickOff change={(e)=>setChanges(prevState => ({
+                    ...prevState,
+                    discount:e
+                    }))} discount={changes?changes.discount:data.discount}
+                    def={data.discount}/></div>:
+                <p>{normalPriceCount(data.discount)}
+                {parseInt(data.discount)<100?"%":""}</p>}
             </td>
             <td data-cell="مبلغ کل">
-            <p>{payValue(data.price,props.payValue,data.count)}</p>
+            <p>{payValue(data.price,props.payValue,data.count,data.discount)}</p>
             </td>
             <td>
-            <div className="more-btn">
-                <i className="fa-solid fa-pen"></i>
-                <i className="fa-solid fa-comment"></i>
+            {editMode?<div className="more-btn">
+                <i className="fa-solid fa-save"
+                onClick={saveChanges}></i>
+                <i className="fa-solid fa-remove"
+                onClick={()=>setEditMode(0)}></i>
+                </div>:
+                <div className="more-btn">
+                <i className="fa-solid fa-pen"
+                onClick={()=>setEditMode(1)}></i>
+                <i className="fa-solid fa-comment"
+                onClick={()=>setShowDesc(1)}></i>
                 <i className="fa-solid fa-trash" style={{color: "red"}}
                 onClick={()=>setShowRemove(1)}></i>
-            </div>
+            </div>}
             </td>
         </tr>
         {showRemove?
@@ -88,6 +155,12 @@ function QuickRow(props){
             buttonText="حذف" close={()=>setShowRemove()}
             color="red" action={()=>props.action?defAction():removeItem()}/>:
           <></>}
+          {showDesc?<DataModal action={
+            (e)=>updateField({description:e})}
+            close={()=>setShowDesc(0)} color="darkblue"
+            buttonText="تغییر توضیحات" def={data.description} 
+            title={"تغییر توضیحات"}/>:
+            <></>}
         </>
     )
 }

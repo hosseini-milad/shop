@@ -1,15 +1,16 @@
 import { useEffect, useState } from "react"
 
-function QuickOff(){
+function QuickOff(props){
     const [offPer,setOffPer] = useState(0)
-    const [offValue , setOffValue] = useState('')
+    //const [discount , setDiscount] = useState(props.discount)
     useEffect(()=>{
-        setOffValue('')
+        offPer&&
+        props.change('')
     },[offPer])
     return(
     <div className="off-input-wrapper">
-        <input type="number" name="" id="" value={offValue}
-        onChange={(e)=>setOffValue(e.target.value)}/>
+        <input type="number" name="" id="" value={props.discount}
+        onChange={(e)=>props.change(e.target.value)}/>
         {offPer?<i className="off-unit fa-solid fa-percent percent-unit"
             onClick={()=>setOffPer(0)}></i>:
         <i className="price-unit"

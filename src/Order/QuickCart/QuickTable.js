@@ -41,7 +41,8 @@ function QuickTable(props){
             {qCart&&qCart.cartItems&&qCart.cartItems.map((item,i)=>(
               <QuickRow data={item} key={i} index={i+1} payValue="4"
               action={props.delete} setError={props.setError}
-              token={props.token} user={props.user} setCart={props.setCart}/>
+              token={props.token} user={props.user} setCart={props.setCart}
+              cartNo={props.cartNo}/>
             ))}
           </tbody>
         </table>
