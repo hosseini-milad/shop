@@ -864,7 +864,7 @@ router.post('/faktor-find', async (req,res)=>{
         //logger.warn("main done")
         var userId=faktorData&&faktorData.manageId
         
-        const OnlineFaktor = await sepidarFetch("data","/api/invoices/"+faktorId,userId)
+        const OnlineFaktor = await sepidarFetch(data,"/api/invoices/"+faktorId,userId)
         const userDetail = await customerSchema.findOne({CustomerID:OnlineFaktor.CustomerRef})
         const invoice = OnlineFaktor.InvoiceItems
         if(!invoice)
@@ -971,7 +971,7 @@ router.post('/update-faktor',jsonParser, async (req,res)=>{
         for(var i=0;i<faktorDetail.length;i++){
             faktorNo= await createfaktorNo("F","02","21")
             sepidarQuery[i] = await SepidarFunc(faktorDetail[i],faktorNo)
-            
+            console.log(sepidarQuery[i])
             addFaktorResult[i] = await sepidarPOST(sepidarQuery[i],"/api/invoices",req.headers['userid'])
             //console.log(addFaktorResult[i])
             if(!addFaktorResult[i]||addFaktorResult[0].Message||!addFaktorResult[i].Number){
@@ -1251,7 +1251,12 @@ router.post('/edit-removeCart',jsonParser, async (req,res)=>{
     }
 })
 router.post('/edit-updateFaktor',jsonParser, async (req,res)=>{
-    
+    const data={
+        //
+        manageId:req.headers['userid'],
+        date:req.body.date,
+        progressDate:Date.now() 
+    }
     const cartNo=req.body.cartNo
     try{
         const adminUser = await users.findOne({_id:ObjectID(req.headers["userid"])})
@@ -1283,11 +1288,13 @@ router.post('/edit-updateFaktor',jsonParser, async (req,res)=>{
         var sepidarQuery=[]
         var addFaktorResult=[]
         var faktorNo=0
+        
         for(var i=0;i<faktorDetail.length;i++){
             faktorNo= await createfaktorNo("F","02","21")
             sepidarQuery[i] = await SepidarFunc(faktorDetail[i],faktorNo)
             
             addFaktorResult[i] = await sepidarPOST(sepidarQuery[i],"/api/invoices",req.headers['userid'])
+            
             //console.log(addFaktorResult[i])
             if(!addFaktorResult[i]||addFaktorResult[0].Message||!addFaktorResult[i].Number){
                 res.status(400).json({error:addFaktorResult[0].Message?addFaktorResult[0].Message:"error occure",
@@ -1295,6 +1302,7 @@ router.post('/edit-updateFaktor',jsonParser, async (req,res)=>{
                 return
             }
             else{
+                console.log(addFaktorResult[i].Number)
                 const cartDetail =findCartSum(faktorDetail[i].cartItems)
                 await FaktorSchema.create(
                     {...data,faktorItems:faktorDetail[i].cartItems,

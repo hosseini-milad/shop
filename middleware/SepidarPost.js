@@ -6,12 +6,12 @@ const { SEPIDAR_URL,SEPIDAR_HEADER,
 const sepidarPOST=async(data,action,user)=>{
     var header = SEPIDAR_HEADER
     const userDetail = await users.findOne({_id:user})
+    
     if(userDetail.group === "bazaryab")
         header = SEPIDAR_HEADER_Bazaryab
     else if(userDetail.StockId==="6")
         header = SEPIDAR_HEADER_HESARAK
     var response = ''; 
-    
     try{    response = await fetch(SEPIDAR_URL+action,
             {method: 'POST' ,headers:JSON.parse(header),
         body:JSON.stringify(data)});
