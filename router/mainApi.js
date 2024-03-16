@@ -110,11 +110,35 @@ router.get('/sepidar-customer', async (req,res)=>{
                 data:sepidarResult,message:"خطا در بروزرسانی"})
             return
         }
-        await customers.deleteMany({})
-        var successItem=[];
-        var failure = 0;
-        for(var i = 0;i<sepidarResult.length;i++){
-            const createResult = await customers.create({
+        var newCustomer = 0;
+        var updateCustomer = 0
+        var notUpdateCustomer = 0
+        
+    for(var i = 0;i<sepidarResult.length;i++){
+        const custResult = await customers.updateOne({
+            phone:sepidarResult[i].PhoneNumber
+        },{$set:{
+            username: sepidarResult[i].Title,
+            cName: sepidarResult[i].Name,
+            sName: sepidarResult[i].LastName,
+            meliCode: sepidarResult[i].NationalID,
+            email: sepidarResult[i].Code+"@sharifoilco.com",
+            access:"customer",
+            cCode:sepidarResult[i].Code,
+            CustomerID:sepidarResult[i].CustomerID,
+            AddressID:(sepidarResult[i].Addresses&&sepidarResult[i].Addresses[0])?
+                sepidarResult[i].Addresses[0].CustomerAddressID:'',
+            Address:(sepidarResult[i].Addresses&&sepidarResult[i].Addresses[0])?
+                sepidarResult[i].Addresses[0].Address:'',
+            PostalCode:(sepidarResult[i].Addresses&&sepidarResult[i].Addresses[0])?
+            sepidarResult[i].Addresses[0].ZipCode:''
+        }})
+        var modified = custResult.modifiedCount
+        var matched = custResult.matchedCount
+        if(matched){ notUpdateCustomer++}
+        if(modified){updateCustomer++}
+        if(!matched){
+            await customers.create({
                 username: sepidarResult[i].Title,
                 cName: sepidarResult[i].Name,
                 sName: sepidarResult[i].LastName,
@@ -124,16 +148,27 @@ router.get('/sepidar-customer', async (req,res)=>{
                 access:"customer",
                 cCode:sepidarResult[i].Code,
                 CustomerID:sepidarResult[i].CustomerID,
+                AddressID:(sepidarResult[i].Addresses&&sepidarResult[i].Addresses[0])?
+                    sepidarResult[i].Addresses[0].CustomerAddressID:'',
+                Address:(sepidarResult[i].Addresses&&sepidarResult[i].Addresses[0])?
+                    sepidarResult[i].Addresses[0].Address:'',
+                PostalCode:(sepidarResult[i].Addresses&&sepidarResult[i].Addresses[0])?
+                sepidarResult[i].Addresses[0].ZipCode:'',
                 date:new Date()})
-                if(createResult)
-                successItem.push(createResult)
+            newCustomer++
+
         }
+    }
         
         await updateLog.create({
             updateQuery: "sepidar-customer" ,
             date:Date.now()
         })
-        res.json({sepidar:sepidarResult.length,message:"کاربران بروز شدند"})
+        res.json({sepidar:{
+            newCustomer:newCustomer,
+            updateCustomer:updateCustomer,
+            notUpdateCustomer:notUpdateCustomer
+        },message:"کاربران بروز شدند"})
     }
     catch(error){
         res.status(500).json({message: error.message})
@@ -216,14 +251,29 @@ router.get('/sepidar-quantity', async (req,res)=>{
         //var failure = 0;
         await productCount.deleteMany({})
         for(var i = 0;i<sepidarQuantityResult.length;i++){
-            sepidarQuantityResult[i].UnitRef!==3&&
+            if(sepidarQuantityResult[i].UnitRef!==3)
             await productCount.create({
                 quantity:sepidarQuantityResult[i].Qunatity,
                 UnitRef:sepidarQuantityResult[i].UnitRef,
                 Stock:sepidarQuantityResult[i].StockeRef,
                 ItemID:sepidarQuantityResult[i].ItemRef,
             date:new Date()})
+            else{
+                if(sepidarQuantityResult[i].StockeRef!==5)continue
+                var perBox = 1
+                var singleItem = await sepidarQuantityResult.find
+                    (item=>(item.ItemRef===sepidarQuantityResult[i].ItemRef&&
+                        item.UnitRef==1&&item.StockeRef==5))
+                if(sepidarQuantityResult[i].Qunatity)
+                    perBox =(singleItem&&singleItem.Qunatity)/
+                        sepidarQuantityResult[i].Qunatity
                 
+                var intBox =0
+                try{intBox=(parseInt(Math.round(perBox)))} catch{}
+                if(perBox!==1&&intBox!==0)await products.updateOne({
+                    ItemID:sepidarQuantityResult[i].ItemRef,
+                },{$set:{perBox:intBox}})
+            }
         }
         
         await updateLog.create({

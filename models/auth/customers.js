@@ -23,6 +23,9 @@ const customerSchema = new mongoose.Schema({
   status:{ type: String },
   cCode:{ type: String },
   CustomerID:{ type: String },
+  Address:{ type: String },
+  AddressID:{ type: String },
+  PostalCode:{ type: String },
 
   date:{type:Date} 
 });
