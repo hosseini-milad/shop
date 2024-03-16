@@ -1131,6 +1131,7 @@ const normalPriceCount=(priceText,count,tax)=>{
     )
   }
 const findDiscount=(item)=>{
+    if(!item) return(0.00)
     var off = Number(item.discount)
     var discount = off
     if(off<100){
