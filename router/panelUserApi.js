@@ -124,20 +124,52 @@ router.post('/update-customer',jsonParser,async (req,res)=>{
     var userId = req.body.userId
     const data={
         cName:req.body.cName,
+        sName:req.body.sName,
         email:req.body.email,
+        phone:req.body.phone,
         mobile:req.body.mobile,
-        meli:req.body.meli,
+        meliCode:req.body.meliCode,
         cCode:req.body.cCode,
-        address:req.body.address,
+        Address:req.body.Address,
+        postalCode:req.body.postalCode,
         city:req.body.city,
         state:req.body.state,
         country:req.body.country,
         about:req.body.about,
+
+        nif:req.body.nif,
+        active:req.body.active,
+        official:req.body.official,
     }
+    if(req.body.imageUrl1) data.imageUrl1 = req.body.imageUrl1
+    if(req.body.imageUrl2) data.imageUrl2 = req.body.imageUrl2
+    if(req.body.kasbUrl) data.kasbUrl = req.body.kasbUrl
     try{
         const userData = await customer.updateOne({_id: ObjectID(userId)},
         {$set:data})
        res.json({data:userData,success:"تغییرات اعمال شدند"})
+    }
+    catch(error){
+        res.status(500).json({message: error.message})
+    } 
+})
+router.post('/create-customer',jsonParser,async (req,res)=>{
+    var agent = req.headers['userid']
+    const data=req.body
+    data.agent = agent
+    try{
+        const userData = await customer.create(data)
+       res.json({data:userData,success:"مشتری اضافه شد"})
+    }
+    catch(error){
+        res.status(500).json({message: error.message})
+    } 
+})
+router.get('/my-customer',auth,jsonParser,async (req,res)=>{
+    var agent = req.headers['userid']
+    try{
+        const userData = await customer.find({agent:agent})
+       res.json({data:userData,success:"مشتری پیدا شد"})
     }
     catch(error){
         res.status(500).json({message: error.message})

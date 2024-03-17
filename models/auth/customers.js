@@ -26,7 +26,7 @@ const customerSchema = new mongoose.Schema({
   Address:{ type: String },
   AddressID:{ type: String },
   meliCode:{ type: String },
-  PostalCode:{ type: String },
+  postalCode:{ type: String },
 
   active:{ type: String },
   official:{ type: String },

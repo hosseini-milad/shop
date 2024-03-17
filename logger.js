@@ -136,7 +136,7 @@ app.use(expressWinston.errorLogger({
     winston.format.json()
   )
 }));
-
+app.use('/uploads', express.static('uploads'));
 // Optionally you can include your custom error handler after the logging.
 
 app.listen(port, function(){
