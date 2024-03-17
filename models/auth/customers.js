@@ -25,7 +25,19 @@ const customerSchema = new mongoose.Schema({
   CustomerID:{ type: String },
   Address:{ type: String },
   AddressID:{ type: String },
+  meliCode:{ type: String },
   PostalCode:{ type: String },
+
+  active:{ type: String },
+  official:{ type: String },
+  status:{ type: String },
+  Code:{ type: String },
+  StockId:{ type: String },
+  
+  imageUrl1:{ type: String },
+  imageUrl2:{ type: String },
+  kasbUrl:{ type: String },
+
 
   date:{type:Date} 
 });

@@ -21,7 +21,7 @@ const userSchema = new mongoose.Schema({
   address:{ type: String },
   meli:{ type: String },
 
-
+  StockId:{type:String},
   date:{type:Date}
 });
 
