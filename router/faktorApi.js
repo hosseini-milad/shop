@@ -194,7 +194,8 @@ const findCartFunction=async(userId,managerId)=>{
             cartDetail.push(findCartSum(cartData[c].cartItems))
 
         }
-        if(qCartData) qCartDetail =findQuickCartSum(qCartData.cartItems,qCartData.payValue)
+        if(qCartData) qCartDetail =findQuickCartSum(qCartData.cartItems,
+            qCartData.payValue,qCartData.discount)
     }catch{}
     return({cart:cartData,cartDetail:cartDetail,//userData:userData,
         quickCart:qCartData,qCartDetail:qCartDetail})
@@ -219,7 +220,7 @@ const findCartData=async(cartNo)=>{
         return({cart:[],cartDetail:[]})
     }
 }
-const findQuickCartSum=(cartItems,payValue)=>{
+const findQuickCartSum=(cartItems,payValue,discount)=>{
     if(!cartItems)return({totalPrice:0,totalCount:0})
     var cartSum=0;
     var cartCount=0;
@@ -248,7 +249,12 @@ const findQuickCartSum=(cartItems,payValue)=>{
                 cartDiscount += parseInt(cartItemPrice)*1.09*newCount*(off)/100
             //console.log(off+": "+cartDiscount)
         }
+
     }
+    if(discount>100)
+        cartDiscount += discount
+    else
+        cartDiscount += parseInt(cartSum)*1.09*(discount)/100
     return({totalFee:cartSum,
         totalCount:cartCount,
         totalDiscount:cartDiscount,
@@ -500,6 +506,25 @@ router.post('/update-cart',jsonParser, async (req,res)=>{
         res.status(500).json({message: error.message})
     }
 })
+router.post('/update-desc',jsonParser, async (req,res)=>{
+    const userId=req.body.userId?req.body.userId:req.headers['userid']
+    const data={
+        description:req.body.description,
+        discount:req.body.discount
+    }
+    try{
+        
+        //const cartData = await cart.find({userId:userId})
+        const qCartData = await quickCart.updateOne({userId:userId},
+            {...data})
+        
+        const cartDetails = await findCartFunction(userId,req.headers['userid'])
+        res.json({...cartDetails,message:"سبد بروز شد"})
+    }
+    catch(error){
+        res.status(500).json({message: error.message})
+    }
+})
 router.post('/edit-cart',jsonParser, async (req,res)=>{
     const userId =req.body.userId?req.body.userId:req.headers['userid']
     const data={
@@ -550,6 +575,7 @@ router.post('/edit-payValue',jsonParser, async (req,res)=>{
 const checkAvailable= async(items,stockId)=>{
     if(!stockId) stockId="13"
     const existItem = await productcounts.findOne({ItemID:items.id,Stock:stockId})
+    if(!existItem) return('')
     return(compareCount(existItem&&existItem.quantity,items.count))
 }
 const createCart=(cartData,cartItem)=>{
@@ -643,6 +669,7 @@ router.post('/update-Item',jsonParser, async (req,res)=>{
         for(var i=0;i<oldCartItems.length;i++){
             if(!data.changes)break
             if(oldCartItems[i].id==data.cartID){
+                
                 if(data.changes.description)
                     oldCartItems[i].description = data.changes.description
                 if(data.changes.count)
@@ -650,7 +677,8 @@ router.post('/update-Item',jsonParser, async (req,res)=>{
                 if(data.changes.discount)
                     oldCartItems[i].discount = data.changes.discount
 
-                const availItems = await checkAvailable(oldCartItems[i])
+                const availItems = await checkAvailable(oldCartItems[i],"5")
+                
                 if(!availItems){
                     res.status(400).json({error:"موجودی کافی نیست"}) 
                     return
@@ -661,7 +689,6 @@ router.post('/update-Item',jsonParser, async (req,res)=>{
         
         //const cartItems = removeCart(qCartData,req.body.cartID)
         //data.cartItems =(cartItems)
-        
         cartLog.create({...data,ItemID:req.body.cartID,action:"delete"})
             await quickCart.updateOne(
                 {userId:data.userId},{$set:{cartItems:oldCartItems}})

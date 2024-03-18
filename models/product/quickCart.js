@@ -10,6 +10,8 @@ const QCartSchema = new Schema({
     manageId:{ type: String },
     payValue:{ type: String },
     stockId:{type:String},
+    description:{type:String},
+    discount:{type:String},
 
     totalPrice:{ type: String }
 })
