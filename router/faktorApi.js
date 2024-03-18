@@ -254,7 +254,8 @@ const findQuickCartSum=(cartItems,payValue,discount)=>{
     if(discount>100)
         cartDiscount += discount
     else
-        cartDiscount += parseInt(cartSum)*1.09*(discount)/100
+        cartDiscount += discount&&
+            (parseInt(cartSum)*1.09*(discount)/100)
     return({totalFee:cartSum,
         totalCount:cartCount,
         totalDiscount:cartDiscount,
