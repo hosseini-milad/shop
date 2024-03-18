@@ -4,12 +4,13 @@ import env,{findBox} from "../../env"
 function QuickSearch(props){
     const data = props.data
     const [showDrop,setShowDrop] = useState(0)
+    const [showCustomers,setShowCustomers] = useState(0)
     return(<>
         <div className="code-input-wrapper">
             <input className="dp-input" type="text" name="" id=""
                 onChange={(e)=>props.setSearch(e.target.value)}
             onFocus={()=>setShowDrop(1)}
-            //onBlur={()=>setTimeout(()=>setShowDrop(0),200)}
+            onBlur={()=>setTimeout(()=>setShowDrop(0),200)}
             />
             <i className="fa-solid fa-angle-down"></i>
         </div>

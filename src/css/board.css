@@ -229,6 +229,8 @@ margin-left: auto;
   display: flex;
   flex-direction: column;
   border-radius: 8px;
+}
+.fullPopUp .task-popup{
   max-height: calc(100% - 100px);
 }
 .task-popup p{
@@ -898,4 +900,27 @@ margin-left: auto;
 }
 .closeModal:hover{
   color: red;
+}
+.taskData{
+  padding-bottom: 30px;
+}
+.footerTask{
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  right: 0;
+  padding: 10px 5px 0px;
+  min-height: 38px;
+}
+.footerIcons{
+  display: flex;
+  list-style: none;
+}
+.footerIcons li{
+  direction: rtl;
+}
+.footerIcons i{
+  font-size: 16px;
+  padding: 5px 2px 5px 17px;
+
 }

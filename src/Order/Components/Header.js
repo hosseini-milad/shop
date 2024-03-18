@@ -1,10 +1,11 @@
 import { useState } from "react";
-import StyleSelect from "../../components/Button/AutoComplete"
 import env from "../../env";
+import ManageUser from "./ManageUser";
 
 function OrderHeader(props){
   const token = props.token
   const [showDrop,setShowDrop] = useState(0)
+  const [showUsers,setShowUsers] = useState(0)
   const updateGrid=(value)=>{
     props.setGrid(value);
     var shopVar = JSON.parse(localStorage.getItem(env.shopExpert));
@@ -49,19 +50,10 @@ function OrderHeader(props){
             console.log(error)
         })
   }
-  console.log(customers)
+  console.log(showUsers)
     return(
 <div className="nav-bar">
       <p>سفارشات</p>
-        {/*<StyleSelect title={"مشتری"} direction={"rtl"} 
-              options={props.customer||[]} label="cName"
-              class="f-customer" 
-              action={(e)=>props.setFilters(prevState => ({
-                ...prevState,
-                customer:e
-              }))}
-              icon={<i className="fa-solid fa-plus" style={{margin: "0", color: "#000"}}></i>}
-        />*/}
         {props.user?
         <div className="f-customer">
           <div className="user-item">
@@ -77,7 +69,8 @@ function OrderHeader(props){
             onChange={(e)=>findCustomer(e.target.value)}
             onFocus={()=>setShowDrop(1)}
             onBlur={()=>setTimeout(()=>setShowDrop(0),200)}/>
-          <i className="fa-solid fa-plus" style={{margin: "0", color: "#000"}}></i>
+          <i className="fa-solid fa-plus" style={{margin: "0", color: "#000"}}
+          onClick={()=>setShowUsers(1)}></i>
         </div>}
       <div className="view-btn-wrapper">
         <label htmlFor="list-view"
@@ -101,6 +94,9 @@ function OrderHeader(props){
           </div>
         ))}
         </div>:<></>}
+        
+        <ManageUser show ={showUsers} close={()=>setShowUsers(0)} />
+        
     </div>
     )
 }

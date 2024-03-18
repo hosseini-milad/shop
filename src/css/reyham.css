@@ -506,3 +506,61 @@
 .user-item b{
   font-size: 14px;
 }
+.reyhamCard .card-header{
+  display: flex;
+  justify-content: space-between;
+}
+.reyhamCard .card-header .btn{
+  margin-bottom: 0;
+}
+.reyhamCard .card .sharif-order-main table{
+  color:#111 !important;
+}
+.p450{
+  width: 450px !important;
+}
+.add-card-btn{
+  min-width: 68%;
+  width: auto;
+}
+.cancel-card-btn{
+  width: 30%;
+}
+.card-btn-holder{
+  display: flex;
+  justify-content: space-between;
+}
+
+.card-input{
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+.userInput{
+  width: 48%;
+  margin-bottom: 15px !important;
+}
+.userInput label{
+  background-color: transparent;
+}
+.imageUser{
+  width: 100%;
+}
+.imageUserField{
+  display: flex;
+  justify-content: space-between;
+}
+.form-field-image{
+  width: 30%;
+}
+.media-input{
+  display: grid;
+}
+.media-input img{
+  width: 100%;
+  height: 100px;
+  object-fit: contain;
+}
+.media-input input{
+  display: none;
+}
