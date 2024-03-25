@@ -28,6 +28,7 @@ function StyleSelect(props){
             getOptionLabel={(option) => (option&&option[props.label])?
                 option[props.label]:option}
             //className={stylisRTLPlugin}
+            defaultValue={props.defaultValue?props.defaultValue:''}
             options={testOptions||[]}
             style={{minWidth:"176px"}}
             onChange={(e,value)=>props.action(value)}

@@ -9,6 +9,7 @@ function QuickCartHolder(props){
   const token = props.token
   const [search,setSearch] = useState()
   const [content,setContent] = useState()
+  
   useEffect(() => {
     if(!search||search.length<4) {setContent(''); return}
     const postOptions={
@@ -50,7 +51,8 @@ function QuickCartHolder(props){
           search={search} setSearch={setSearch}
           cartNo={props.cartNo}/>
         <div className="product-table-btn-wrapper">
-          <QuickActions />
+          <QuickActions cart={props.cart} setCart={props.setCart}
+          token={token} setError={props.setError}/>
           <QuickTotal data={props.cartDetail} token={token}
           setCart={props.setCart} action={props.regCart}
             user={props.user} setError={props.setError}/>

@@ -13,7 +13,6 @@ function QuickNew(props){
     const [description,setDescription] = useState()
     const token = props.token
     const user=props.user
-    //console.log(description)
     //const [error,setError] = useState({message:'',color:"brown"})
     const addItem=()=>{
         if(!selectedItem)return

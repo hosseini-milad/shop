@@ -4,7 +4,7 @@ const env={
     
     //siteApiUrl:'http://localhost:6090',
     siteApiUrl:'https://shopadmin.sharifoilco.com',
-
+    tax:"0.1",
     cookieName:'shop-login',
     //cookieName:'panel-login',
     //cookieName:'mehr-login',
@@ -173,4 +173,35 @@ export const findBox=(item)=>{
   var boxCount = (count/perBox)
   return(parseInt(boxCount))
 }
+
+export const parseDesc=(desc)=>{
+  var brand = findElement(desc,"برند",1)
+  var vs = findElement(desc,"ویسکوزیته",2)
+  if(!vs)
+    vs = findElement(desc,"ویسکوزیته",1)
+  var suitable = findElement(desc,"مناسب برای",3)
+  if(!suitable)
+    suitable = findElement(desc,"مناسب برای",1)
+  var volume = findElement(desc,"حجم",1)
+  var pack = findElement(desc,"نوع بسته",1)
+  
+  return({brand:brand, vs:vs, suitable:suitable,
+    volume:volume,pack:pack})
+
+
+}
+const findElement=(desc,field,index)=>{
+  var value = desc.split(field)
+  if(value.length>1){
+    value = value[1].split('>')
+    if(value.length>1) value = value[index]&&value[index].split('<')[0]
+  }
+  var pureValue = value
+  if(value&&value.includes(':'))
+    pureValue = value.replace(':','')
+  if(pureValue&&pureValue[0]===' ')
+    pureValue = pureValue.replace(' ','')
+  return(pureValue)
+}
+
 export default env

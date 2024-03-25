@@ -48,8 +48,8 @@ function ManageAddUser(props){
                 </button>
             </div>
             <hr className="horizontal dark my-1"/>
-            <main class="sharif-order-main">
-                <section class="admin-table-sec ">
+            <main className="sharif-order-main">
+                <section className="admin-table-sec ">
                     <UserForm setData={setData}
                     imageUrl={imageUrl} setImageUrl={setImageUrl}
                     imageUrl2={imageUrl2} setImageUrl2={setImageUrl2}

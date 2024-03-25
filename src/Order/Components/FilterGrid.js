@@ -1,4 +1,5 @@
 import { useState } from "react"
+import env from "../../env"
 
 function FilterGrid(props){
     const cat=props.cat
@@ -15,14 +16,44 @@ function FilterGrid(props){
               ...prevState,
               brand:''
             }))
+            
+            props.setAppFilter(prevState => ({
+              ...prevState,
+              brand:''
+            }))
         }
         else {
             setBrandIndex(index)
+            setCatIndex(-1)
+            setSubIndex(-1)
             props.setFilters(prevState => ({
               ...prevState,
               brand:brand
             }))
+            props.setAppFilter(prevState => ({
+              ...prevState,
+              brand:brand?brand.brandCode:''
+            }))
         }
+        
+        props.setFilters(prevState => ({
+          ...prevState,
+          category:''
+        }))
+        
+        props.setFilters(prevState => ({
+          ...prevState,
+          subCategory:''
+        }))
+        props.setAppFilter(prevState => ({
+          ...prevState,
+          category:''
+        }))
+        
+        props.setAppFilter(prevState => ({
+          ...prevState,
+          subCategory:''
+        }))
     }
     const updateCategory=(category,index)=>{
         if(catIndex === index){
@@ -30,6 +61,11 @@ function FilterGrid(props){
             setCatIndex(-1)
             setSubCat('')
             props.setFilters(prevState => ({
+              ...prevState,
+              category:''
+            }))
+            
+            props.setAppFilter(prevState => ({
               ...prevState,
               category:''
             }))
@@ -41,7 +77,22 @@ function FilterGrid(props){
               ...prevState,
               category:category
             }))
+            
+            props.setAppFilter(prevState => ({
+              ...prevState,
+              category:category?category.catCode:''
+            }))
+            
         }
+        
+        props.setFilters(prevState => ({
+          ...prevState,
+          subCategory:''
+        }))
+        props.setAppFilter(prevState => ({
+          ...prevState,
+          subCategory:''
+        }))
     }
     const updateSubCategory=(subCategory,index)=>{
         if(subIndex === index){
@@ -50,12 +101,21 @@ function FilterGrid(props){
               ...prevState,
               subCategory:subCategory
             }))
+            props.setAppFilter(prevState => ({
+              ...prevState,
+              subCategory:''
+            }))
         }
         else {
             setSubIndex(index)
             props.setFilters(prevState => ({
               ...prevState,
               subCategory:subCategory
+            }))
+            
+            props.setAppFilter(prevState => ({
+              ...prevState,
+              subCategory:subCategory?subCategory.catCode:''
             }))
         }
     }
@@ -67,7 +127,7 @@ function FilterGrid(props){
             "filter-tile main-filter-btn oil-btn tile-active":
             "filter-tile main-filter-btn oil-btn"} key={i}
           onClick={()=>updateBrand(brand,i)}>
-            <img src={brand.imageUrl} alt={brand.enTitle}/>
+            <img src={env.siteApiUrl+brand.brandUrl} alt={brand.enTitle}/>
             <p>{brand.title}</p>
           </div>))}
         </div>
@@ -77,16 +137,16 @@ function FilterGrid(props){
             "filter-tile main-filter-btn oil-btn tile-active":
             "filter-tile main-filter-btn oil-btn"} key={i}
           onClick={()=>updateCategory(category,i)}>
-            <img src={category.imageUrl} alt={category.enTitle}/>
+            <img src={env.siteApiUrl+category.iconUrl} alt={category.link}/>
             <p>{category.title}</p>
           </div>))}
         </div>
         <div className="product-filter-tile-wrapper">
-          {subCat&&subCat.subCats&&subCat.subCats.map((subCat,i)=>(
+          {subCat&&subCat.children&&subCat.children.map((subCat,i)=>(
             <div className={subIndex===i?
                 "filter-tile acc-filter tile-active":"filter-tile acc-filter"} key={i}
             onClick={()=>updateSubCategory(subCat,i)}>
-            <img src={subCat.imageUrl} alt={subCat.enTitle}/>
+            <img src={env.siteApiUrl+subCat.iconUrl} alt={subCat.link}/>
             <p>{subCat.title}</p>
           </div>
           ))}

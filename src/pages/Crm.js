@@ -194,7 +194,8 @@ function CRM(props){
             onDragStart={DragStart}
             onDragUpdate={DragUpdate}
             onDragEnd={DragEnd}>
-                {boardArray.columnOrder.map((columnId,i)=>{
+                {boardArray.columnOrder&&
+                    boardArray.columnOrder.map((columnId,i)=>{
                     const column = boardArray.columnOrder.find
                         (item=>item.enTitle===columnId.enTitle);
                     const tasks = boardArray.columns[columnId.enTitle];

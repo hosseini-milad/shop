@@ -16,6 +16,8 @@ function OrderHolder(props){
   const [filters,setFilters] = useState()
   const [user,setUser] = useState()
   const [cart,setCart] = useState()
+  const [appFilter,setAppFilter] = useState()
+  const [products , setProduct] = useState()
   const [error,setError] = useState({message:'',color:"brown"})
   
   useEffect(()=>{
@@ -49,8 +51,57 @@ function OrderHolder(props){
         (error) => {
             console.log(error)
         })
-},[user])
-  console.log(cart)
+  },[user])
+  useEffect(()=>{
+    const postOptions={
+        method:'get',
+        headers: { 'Content-Type': 'application/json'}
+    }
+    fetch(env.siteApi + "/panel/faktor/list-filters",postOptions)
+    .then(res => res.json())
+    .then(
+        (result) => {
+            if(result)
+              if(result.error){
+                
+              }
+              else{
+                setFilters(result)
+              }
+            else
+            setFilters('') 
+        },
+        (error) => {
+            console.log(error)
+        })
+  },[])
+  useEffect(()=>{
+    if(!appFilter)return
+    const postOptions={
+        method:'post',
+        headers: { 'Content-Type': 'application/json'},
+        body:JSON.stringify({filters:appFilter})
+    }
+    console.log(postOptions)
+    fetch(env.siteApi + "/panel/faktor/list-products",postOptions)
+    .then(res => res.json())
+    .then(
+        (result) => {
+            if(result)
+              if(result.error){
+                
+              }
+              else{
+                setProduct(result.products)
+              }
+            else
+            setProduct('') 
+        },
+        (error) => {
+            console.log(error)
+        })
+  },[appFilter])
+  
   return(
         
   <div className="sharif" style={{direction:"rtl"}}>
@@ -59,11 +110,12 @@ function OrderHolder(props){
         token={props.token} setError={setError}
         user={user} setUser={setUser} 
         setFilters={setFilters}/>
-      <OrderFilters grid={grid} setFilters={setFilters} filters={filters}/>
+      <OrderFilters grid={grid} setFilters={setFilters} 
+        filters={filters} setAppFilter={setAppFilter}/>
     </header>
     <main className="sharif-order-main">
       {(filters&&(filters.brand||filters.category))?
-      <ProductList filters={filters}/>:<></>}
+      <ProductList filters={filters} products={products}/>:<></>}
       <QuickCartHolder token={token} user={user}
         cart={cart&&cart.quickCart} setCart={setCart} setError={setError}
         cartDetail={cart&&cart.qCartDetail}/>

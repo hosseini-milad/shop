@@ -459,7 +459,7 @@
   overflow: hidden;
   white-space: nowrap; 
   text-overflow: ellipsis;
-  max-width: 95%;
+  max-width: 210px;
   margin: auto;
   font-weight: 400;
 }
@@ -563,4 +563,33 @@
 }
 .media-input input{
   display: none;
+}
+
+.card .sharif-order-main .admin-table-sec tr td{
+  display: table-cell;
+  grid-area:inherit;
+}
+.card .sharif-order-main .admin-table-sec tr{
+  grid-template-rows:repeat(3,1fr)
+}
+.card .sharif-order-main .admin-table-sec p{
+  width: auto;
+}
+.product-table-btn input{
+  width: 80px;
+}
+
+.sub-quick-container{
+  display: flex;
+}
+
+.sub-quick-container img{
+  max-width: 400px;
+}
+.sub-quick-container .sub-info{
+  padding: 15px;
+}
+
+.autoFilter{
+  margin: auto;
 }

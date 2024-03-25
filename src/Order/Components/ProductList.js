@@ -1,12 +1,12 @@
 import ProductSingle from "./ProductSingle"
 
-function ProductList(){
+function ProductList(props){
+    const products = props.products
     return(
         <section className="product-sec">
-        <ProductSingle id={5}/>
-          <ProductSingle id={7}/>
-          <ProductSingle id={8}/>
-          <ProductSingle id={9}/>
+          {products&&products.map((product,i)=>(
+            <ProductSingle data={product} id={i} key={i}/>
+          ))}
       </section>
     )
 }

@@ -41,9 +41,9 @@ function ManageListUser(props){
                 </button>
             </div>
             <hr className="horizontal dark my-1"/>
-            <main class="sharif-order-main">
+            <main className="sharif-order-main">
             
-            <section class="admin-table-sec ">
+            <section className="admin-table-sec ">
                 <table>
                 <thead>
                     <tr>
@@ -54,7 +54,7 @@ function ManageListUser(props){
                     </tr>
                 </thead>
                 <tbody>
-                    {myUsers&&myUsers.map((user,i)=>(
+                    {myUsers?myUsers.map((user,i)=>(
                         <tr key={i}>
                             <td>{user.username}</td>
                             <td>{user.Address}</td>
@@ -62,7 +62,7 @@ function ManageListUser(props){
                             <td><b className='fa fa-edit'
                             onClick={()=>props.setTab(user._id)}></b></td>
                         </tr>
-                    ))}
+                    )):<></>}
                     
                 </tbody>
                 </table>

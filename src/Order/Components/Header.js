@@ -50,7 +50,6 @@ function OrderHeader(props){
             console.log(error)
         })
   }
-  console.log(showUsers)
     return(
 <div className="nav-bar">
       <p>سفارشات</p>

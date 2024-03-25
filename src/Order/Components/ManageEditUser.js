@@ -78,8 +78,8 @@ function ManageEditUser(props){
                 </button>
             </div>
             <hr className="horizontal dark my-1"/>
-            <main class="sharif-order-main">
-                <section class="admin-table-sec ">
+            <main className="sharif-order-main">
+                <section className="admin-table-sec ">
                     {def?<UserForm setData={setData} def={def}
                     imageUrl={imageUrl} setImageUrl={setImageUrl}
                     imageUrl2={imageUrl2} setImageUrl2={setImageUrl2}

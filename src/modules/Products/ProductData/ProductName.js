@@ -7,7 +7,7 @@ import RichTextEditor from '../../../components/Button/RichTextEditor';
 import ProductImportButton from './ProductImport';
 
 function ProductName(props){
-    const content =props.content
+    const content =props.content?props.content.filter:''
     
     const [image,setImage]= useState();
     const [thumb,setThumb]= useState();
@@ -22,7 +22,7 @@ function ProductName(props){
                               imgName:image&&image.fileName,
                             folderName:"product"})
       }//URL.createObjectURL(image)
-      console.log(postOptions)
+      //console.log(postOptions)
       image&&fetch(env.siteApi+"/panel/user/upload",postOptions)
           .then(res => res.json())
           .then(
@@ -116,7 +116,7 @@ function ProductName(props){
                    productMeta:e
                  }))}/>
               </div>
-              <div className="contentTextEditor">
+              {/*<div className="contentTextEditor">
                 <label for="name">{tabletrans.description[props.lang]}</label>
                 <RichTextEditor content={content} value={"description"}
                   setProductChange={props.setProductChange} 
@@ -133,7 +133,7 @@ function ProductName(props){
                     ...prevState,
                     fullDesc:e
                     }))}/>
-              </div>
+                  </div>*/}
               <hr/>
               <div className="images">
                 <h5>{tabletrans.images[props.lang]}</h5>

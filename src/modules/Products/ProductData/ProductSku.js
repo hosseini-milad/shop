@@ -1,11 +1,19 @@
 import StyleSelect from "../../../components/Button/AutoComplete"
 import StyleInput from "../../../components/Button/Input"
+import { parseDesc } from "../../../env"
 import tabletrans from "../../../translate/tables"
 
 function ProductSKU(props){
     const content = props.content
-    const brand=props.brand
-    const category = props.category
+    const def = content?content.filter:''
+    const brand=content&&content.brandList
+    const category = content&&content.categoryList
+    const filterList = content&&content.filterList
+    const autoFetch=(e)=>{
+      var result = parseDesc(def.description)
+      console.log(result)
+      props.setFilters(result)
+    }
     return(
         <div className="pd-row">
           <div className="row-title">
@@ -15,45 +23,50 @@ function ProductSKU(props){
           <div className="row-box">
             <div className="probs-wrapper">
               <div className="input-wrapper">
-                <StyleInput title={tabletrans.productCode[props.lang]} direction={props.direction}
-                 class={"formInput"} defaultValue={content?content.productCode:''} 
+                {/*<StyleInput title={tabletrans.productCode[props.lang]} direction={props.direction}
+                 class={"formInput"} defaultValue={def?def.productCode:''} 
                  action={(e)=>props.setProductChange(prevState => ({
                     ...prevState,
                     productCode:e
-                  }))}/>
+                  }))}/>*/}
                 <StyleInput title={tabletrans.productSku[props.lang]} direction={props.direction}
-                 class={"formInput"} defaultValue={content?content.sku:''} 
+                 class={"formInput"} defaultValue={def?def.sku:''} 
                  action={(e)=>props.setProductChange(prevState => ({
                     ...prevState,
                     sku:e
                   }))}/>
-                <StyleInput title={tabletrans.quantity[props.lang]} direction={props.direction}
+                  <div className="edit-btn autoFilter" onClick={autoFetch}>
+                      Auto Filter</div>
+                {/*<StyleInput title={tabletrans.quantity[props.lang]} direction={props.direction}
                  class={"formInput"} defaultValue={content?content.quantity:''} 
                  action={(e)=>props.setProductChange(prevState => ({
                     ...prevState,
                     quantity:e
-                  }))}/>
+                  }))}/>*/}
                 <StyleSelect title={tabletrans.brand[props.lang]} direction={props.direction}
-                 class={"formInput halfWidth"} defaultValue={content?content.brand:''} 
+                 class={"formInput halfWidth"} defaultValue={content?content.brandData:''} 
                  options={brand?brand:[]} label={"title"}
                  action={(e)=>props.setProductChange(prevState => ({
                     ...prevState,
-                    brand:e
+                    brandId:e?e.brandCode:''
                   }))}/>
                   <StyleSelect title={tabletrans.category[props.lang]} direction={props.direction}
-                 class={"formInput halfWidth"} defaultValue={content?content.category:''} 
+                 class={"formInput halfWidth"} defaultValue={content?content.catData:''} 
                  options={category?category:[]} label="title"
                  action={(e)=>props.setProductChange(prevState => ({
                     ...prevState,
-                    category:e
+                    catId:e?e.catCode:''
                   }))}/>
-                <div className="pd-color"><div>Color</div></div>
-                <div className="pd-size"><div>Size</div></div>
-                <div className="pd-tags info-input">
-                  <label htmlFor="pd-tag">Tags</label>
-                  <input type="text" name="" id="pd-tag"/>
-                </div>
-
+                {filterList&&filterList.map((filter,i)=>(
+                  <StyleSelect title={filter.title} direction={"rtl"}
+                  class={"formInput halfWidth"} key={i}
+                  defaultValue={(def&&def.filters)?def.filters[filter.enTitle]:''} 
+                  options={filter?filter.optionsP:[]} label="title"
+                  action={(e)=>props.setFilters(data=>({
+                    ...data,
+                    [filter.enTitle]:e})
+                  )}/>
+                ))}
               </div>
               {/*<div className="gender-wrapper">
                 <h5>Gender</h5>
