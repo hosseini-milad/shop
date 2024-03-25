@@ -7,6 +7,7 @@ const CategorySchema = new mongoose.Schema({
     body:   String,
     description:String,
     color: String,
+    children:Array,
     imageUrl: String,
     date: { type: Date, default: Date.now }
     

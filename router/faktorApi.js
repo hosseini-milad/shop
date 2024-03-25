@@ -24,6 +24,7 @@ const tasks = require('../models/crm/tasks');
 const CreateTask = require('../middleware/CreateTask');
 const NewCode = require('../middleware/NewCode');
 const customers = require('../models/auth/customers');
+const brand = require('../models/product/brand');
 
 router.post('/products', async (req,res)=>{
     try{
@@ -31,6 +32,58 @@ router.post('/products', async (req,res)=>{
 
         //logger.warn("main done")
         res.json({products:allProducts})
+    }
+    catch(error){
+        res.status(500).json({message: error.message})
+    }
+})
+router.post('/list-products', async (req,res)=>{
+    const filter = req.body.filters
+    const brandId= filter?filter.brand:''
+    const catId= filter?filter.category:''
+    const subId = filter?filter.subCategory:''
+    
+    //const categoryData = await category.findOne({catCode:catId})
+    const subChild = subId?[]:await category.find({"parent.catCode":catId})
+    const subChildId = subChild.map(item=>item.catCode)
+    
+    var searchCat = ''
+    if(subId)
+        searchCat = {catId:subId}
+    else{
+        if(catId)
+            if(subChildId&&subChildId.length)
+                searchCat = {catId:{$in:subChildId}}
+            else 
+                searchCat = {catId:catId}
+        else
+            searchCat = {}
+    }
+    try{
+        const products = await productSchema.aggregate([
+            {$match:brandId?{brandId:brandId}:{}},
+            {$match:searchCat},
+            {$limit:6}
+        ])
+
+        //logger.warn("main done")
+        res.json({products:products})
+    }
+    catch(error){
+        res.status(500).json({message: error.message})
+    }
+})
+router.get('/list-filters', async (req,res)=>{
+    try{
+        const brandData = await brand.find()
+        const catData = await category.find({parent:{$exists:false}})
+        for(var i =0;i<catData.length;i++){
+            var subCat = await category.find(
+                {"parent._id":(catData[i]._id).toString()})
+            catData[i].children = subCat
+        } 
+        //logger.warn("main done")
+        res.json({brands:brandData,cats:catData})
     }
     catch(error){
         res.status(500).json({message: error.message})
@@ -511,7 +564,8 @@ router.post('/update-desc',jsonParser, async (req,res)=>{
     const userId=req.body.userId?req.body.userId:req.headers['userid']
     const data={
         description:req.body.description,
-        discount:req.body.discount
+        discount:req.body.discount,
+        payValue:req.body.payValue
     }
     try{
         
@@ -1364,6 +1418,25 @@ router.post('/edit-updateFaktor',jsonParser, async (req,res)=>{
                 status:"done"})
             }
         
+    }
+    catch(error){
+        res.status(500).json({message: error.message})
+    }
+})
+
+router.post('/edit-payValue',jsonParser, async (req,res)=>{
+    const data={
+        userId:req.body.userId?req.body.userId:req.headers['userid'],
+        payValue:req.body.payValue,
+        date:req.body.date,
+        progressDate:Date.now()
+    }
+    try{
+        var status = "";
+        await quickCart.updateOne({userId:data.userId},{$set:data})
+        status = "update cart"
+        const cartDetails = await findCartFunction(data.userId)
+        res.json(cartDetails)
     }
     catch(error){
         res.status(500).json({message: error.message})

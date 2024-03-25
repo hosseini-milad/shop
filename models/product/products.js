@@ -8,8 +8,10 @@ const ProductSchema = new Schema({
     enTitle:String,
     description:String,
     ItemID:{ type: String , unique: true},
-    
+    brandId:String,
+    catId:String,
     config:String,
+    filters:{type:Object,default:{}},
     uploadImage:String,
     imageUrl: {
         type:String

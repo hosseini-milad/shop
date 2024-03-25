@@ -158,7 +158,12 @@ router.post('/fetch-product',jsonParser,async (req,res)=>{
         const productData = await ProductSchema.findOne({_id: ObjectID(productId)})
         const brandList = await BrandSchema.find({})
         const categoryList = await category.find({})
-       res.json({filter:productData,brandList:brandList,categoryList:categoryList})
+        const brandData = brandList.find(item=>item.brandCode==productData.brandId)
+        const catData = categoryList.find(item=>item.catCode==productData.catId)
+        const filterList = await Filters.find({"category._id":catData._id.toString()})
+       
+        res.json({filter:productData,brandList:brandList,categoryList:categoryList,
+        brandData:brandData,catData:catData,filterList:filterList})
     }
     catch(error){
         res.status(500).json({message: error.message})
@@ -220,6 +225,7 @@ router.post('/editProduct',jsonParser,async(req,res)=>{
             brandId: req.body.brandId,
             sharifId: req.body.sharifId,
             type:req.body.type,
+            filters:req.body.filters,
             value:req.body.value,
             enTitle:req.body.enTitle,
             description:req.body.description,
