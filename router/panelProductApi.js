@@ -434,7 +434,6 @@ router.post('/list-category',jsonParser,async (req,res)=>{
 router.post('/editCats',jsonParser,async(req,res)=>{
     var catId= req.body.catId?req.body.catId:''
     if(catId === "new")catId=''
-    try{
         const data = {
             title:  req.body.title,
             link: req.body.link,
@@ -456,6 +455,7 @@ router.post('/editCats',jsonParser,async(req,res)=>{
             {$set:data})
         else
         catResult= await category.create(data)
+        try{
         
         res.json({result:catResult,success:catId?"Updated":"Created"})
     }
