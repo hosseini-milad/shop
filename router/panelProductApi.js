@@ -452,7 +452,7 @@ router.post('/editCats',jsonParser,async(req,res)=>{
             thumbUrl:  req.body.thumbUrl
         }
         var catResult = ''
-        if(catId) catResult=await category.updateOne({_id:catId},
+        if(catId) catResult=await category.updateOne({_id:ObjectID(catId)},
             {$set:data})
         else
         catResult= await category.create(data)
