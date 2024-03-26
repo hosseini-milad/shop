@@ -25,6 +25,7 @@ const CreateTask = require('../middleware/CreateTask');
 const NewCode = require('../middleware/NewCode');
 const customers = require('../models/auth/customers');
 const brand = require('../models/product/brand');
+const {TaxRate} = process.env
 
 router.post('/products', async (req,res)=>{
     try{
@@ -294,26 +295,33 @@ const findQuickCartSum=(cartItems,payValue,discount)=>{
         if(cartItems[i].count)
             cartCount+=newCount
         cartDescription += cartItems[i].description?cartItems[i].description:''
+        
         if(cartItems[i].discount){
             var off = parseInt(cartItems[i].discount.toString().replace( /,/g, '').replace( /^\D+/g, ''))
+            
             if(off>100)
                 cartDiscount += off 
             else
-                cartDiscount += parseInt(cartItemPrice)*1.09*newCount*(off)/100
+                cartDiscount += parseInt(cartItemPrice)*
+                (1+TaxRate)*newCount*(off)/100
             //console.log(off+": "+cartDiscount)
         }
 
     }
+    if(discount){
     if(discount>100)
-        cartDiscount += discount
+        cartDiscount += parseInt(discount)
     else
         cartDiscount += discount&&
-            (parseInt(cartSum)*1.09*(discount)/100)
+            (parseInt(cartSum)*
+            (1+TaxRate)*parseInt(discount)/100)
+    }
     return({totalFee:cartSum,
         totalCount:cartCount,
         totalDiscount:cartDiscount,
-        totalTax:(cartSum*0.09),
-        totalPrice:(cartSum*1.09-cartDiscount),
+        totalTax:(cartSum*TaxRate),
+        totalPrice:(cartSum*(1+TaxRate)-
+            (cartDiscount?cartDiscount:0)),
         cartDescription:cartDescription})
 }
 const findCartSum=(cartItems,payValue)=>{
@@ -339,15 +347,16 @@ const findCartSum=(cartItems,payValue)=>{
                 cartDiscount += off 
             else
                 cartDiscount += parseInt(cartItems[i].price)
-                *Number(cartItems[i].count)*1.09*(off)/100
+                *Number(cartItems[i].count)*
+                (1+TaxRate)*(off)/100
         }
         }catch{}
     }
     return({totalFee:cartSum,
         totalCount:cartCount,
         totalDiscount:cartDiscount,
-        totalTax:(cartSum*0.09),
-        totalPrice:(cartSum*1.09-cartDiscount),
+        totalTax:(cartSum*TaxRate),
+        totalPrice:(cartSum*(1+TaxRate)-cartDiscount),
         cartDescription:cartDescription})
 }
 router.post('/cartlist', async (req,res)=>{
@@ -492,14 +501,14 @@ router.post('/cartData', async (req,res)=>{
                     cartDiscount += off 
                 else
                     cartDiscount += parseInt(cartItems[i].price)
-                    *Number(cartItems[i].count)*1.09*off/100
+                    *Number(cartItems[i].count)*(1+TaxRate)*off/100
             }
         }
         orderData.totalFee=cartPrice
         orderData.totalCount=cartItem
         orderData.totalDiscount=cartDiscount
-        orderData.totalTax=cartPrice*0.09
-        orderData.totalPrice=cartPrice*1.09-cartDiscount
+        orderData.totalTax=cartPrice*TaxRate
+        orderData.totalPrice=cartPrice*(1+TaxRate)-cartDiscount
         res.json({cart:cartList&&cartList[0],
             cartDetail:orderData})
     }
@@ -1147,7 +1156,7 @@ const SepidarFunc=async(data,faktorNo)=>{
             "Fee": toInt(item.price),
             "Price": normalPriceCount(item.price,item.count,1),
             "Discount": findDiscount(item),
-            "Tax": normalPriceCount(item.price,item.count,"0.09"),
+            "Tax": normalPriceCount(item.price,item.count,TaxRate),
             "Duty": 0.0000,
             "Addition": 0.0000
           }))
@@ -1435,7 +1444,7 @@ router.post('/edit-payValue',jsonParser, async (req,res)=>{
         var status = "";
         await quickCart.updateOne({userId:data.userId},{$set:data})
         status = "update cart"
-        const cartDetails = await findCartFunction(data.userId)
+        const cartDetails = await findCartFunction(data.userId,req.headers['userid'])
         res.json(cartDetails)
     }
     catch(error){
