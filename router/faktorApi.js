@@ -64,6 +64,19 @@ router.post('/list-products', async (req,res)=>{
         const products = await productSchema.aggregate([
             {$match:brandId?{brandId:brandId}:{}},
             {$match:searchCat},
+            
+            {$lookup:{
+                from : "productprices", 
+                localField: "ItemID", 
+                foreignField: "ItemID", 
+                as : "priceData"
+            }},
+            {$lookup:{
+                from : "productcounts", 
+                localField: "ItemID", 
+                foreignField: "ItemID", 
+                as : "countData"
+            }},
             {$limit:6}
         ])
 
