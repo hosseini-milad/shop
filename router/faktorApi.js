@@ -77,7 +77,7 @@ router.post('/list-products', async (req,res)=>{
                 foreignField: "ItemID", 
                 as : "countData"
             }},
-            {$limit:6}
+            {$limit:16}
         ])
 
         //logger.warn("main done")
