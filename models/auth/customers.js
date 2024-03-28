@@ -19,6 +19,7 @@ const customerSchema = new mongoose.Schema({
   otp:{ type: String , default: null },
   nif: { type: String },
   agent:{ type: String },
+  roleId:{ type: String },
   active:{ type: String },
   status:{ type: String },
   cCode:{ type: String },
@@ -37,6 +38,9 @@ const customerSchema = new mongoose.Schema({
   imageUrl1:{ type: String },
   imageUrl2:{ type: String },
   kasbUrl:{ type: String },
+  shopUrl1:{ type: String },
+  shopUrl2:{ type: String },
+  shopUrl3:{ type: String },
 
 
   date:{type:Date} 

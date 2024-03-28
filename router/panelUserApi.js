@@ -136,7 +136,7 @@ router.post('/update-customer',jsonParser,async (req,res)=>{
         state:req.body.state,
         country:req.body.country,
         about:req.body.about,
-
+        roleId:req.body.roleId,
         nif:req.body.nif,
         active:req.body.active,
         official:req.body.official,
@@ -144,6 +144,9 @@ router.post('/update-customer',jsonParser,async (req,res)=>{
     if(req.body.imageUrl1) data.imageUrl1 = req.body.imageUrl1
     if(req.body.imageUrl2) data.imageUrl2 = req.body.imageUrl2
     if(req.body.kasbUrl) data.kasbUrl = req.body.kasbUrl
+    if(req.body.shopUrl1) data.shopUrl1 = req.body.shopUrl1
+    if(req.body.shopUrl2) data.shopUrl2 = req.body.shopUrl2
+    if(req.body.shopUrl3) data.shopUrl3 = req.body.shopUrl3
     try{
         const userData = await customer.updateOne({_id: ObjectID(userId)},
         {$set:data})
