@@ -316,7 +316,7 @@ const findQuickCartSum=(cartItems,payValue,discount)=>{
                 cartDiscount += off 
             else
                 cartDiscount += parseInt(cartItemPrice)*
-                (1+TaxRate)*newCount*(off)/100
+                newCount*(off)/100
             //console.log(off+": "+cartDiscount)
         }
 
@@ -327,14 +327,14 @@ const findQuickCartSum=(cartItems,payValue,discount)=>{
     else
         cartDiscount += discount&&
             (parseInt(cartSum)*
-            (1+TaxRate)*parseInt(discount)/100)
+            parseInt(discount)/100)
     }
+    const totalPriceNoTax = cartSum - cartDiscount
     return({totalFee:cartSum,
         totalCount:cartCount,
         totalDiscount:cartDiscount,
-        totalTax:(cartSum*TaxRate),
-        totalPrice:(cartSum*(1+TaxRate)-
-            (cartDiscount?cartDiscount:0)),
+        totalTax:(totalPriceNoTax*TaxRate),
+        totalPrice:(totalPriceNoTax*(1+TaxRate)),
         cartDescription:cartDescription})
 }
 const findCartSum=(cartItems,payValue)=>{
