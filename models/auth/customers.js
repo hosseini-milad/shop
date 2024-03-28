@@ -42,7 +42,6 @@ const customerSchema = new mongoose.Schema({
   shopUrl2:{ type: String },
   shopUrl3:{ type: String },
 
-
   date:{type:Date} 
 });
 
