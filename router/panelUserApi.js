@@ -18,6 +18,7 @@ const category = require('../models/product/category');
 const brand = require('../models/product/brand');
 const Filters = require('../models/product/Filters');
 const factory = require('../models/product/factory');
+const crmlist = require('../models/crm/crmlist');
 
 
 router.post('/fetch-user',jsonParser,async (req,res)=>{
@@ -184,7 +185,8 @@ router.post('/fetch-profile',jsonParser,async (req,res)=>{
     var profileId = req.body.profileId
     try{
         const profileData = await ProfileAccess.findOne({_id: ObjectID(profileId)})
-       res.json({data:profileData})
+        const crmData = await crmlist.findOne({})
+       res.json({data:profileData,crmData:crmData})
     }
     catch(error){
         res.status(500).json({message: error.message})
