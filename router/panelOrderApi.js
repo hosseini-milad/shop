@@ -18,7 +18,7 @@ router.post('/sku/find',jsonParser,async (req,res)=>{
 }) 
 router.post('/list',jsonParser,async (req,res)=>{
     var pageSize = req.body.pageSize?req.body.pageSize:"10";
-    var offset = req.body.offset?(parseInt(req.body.offset)*parseInt(pageSize)):0;
+    var offset = req.body.offset?(parseInt(req.body.offset)):0;
     var nowDate = new Date();
     try{const data={
         orderNo:req.body.orderNo,

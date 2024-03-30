@@ -24,7 +24,7 @@ const openOrders = require('../models/orders/openOrders');
 
 router.post('/getlist', async (req,res)=>{
     var pageSize = req.body.pageSize?req.body.pageSize:"12";
-    var offset = req.body.offset?(parseInt(req.body.offset)*parseInt(pageSize)):0;
+    var offset = req.body.offset?(parseInt(req.body.offset)):0;
 
     const filter = req.body
     try{

@@ -42,7 +42,7 @@ router.post('/fetch-service',jsonParser,async (req,res)=>{
 })
 router.post('/list',jsonParser,async (req,res)=>{
     var pageSize = req.body.pageSize?req.body.pageSize:"10";
-    var offset = req.body.offset?(parseInt(req.body.offset)*parseInt(pageSize)):0;
+    var offset = req.body.offset?(parseInt(req.body.offset)):0;
     try{const data={
         category:req.body.category,
         title:req.body.title,
@@ -171,7 +171,7 @@ router.post('/fetch-product',jsonParser,async (req,res)=>{
 })
 router.post('/list-product',jsonParser,async (req,res)=>{
     var pageSize = req.body.pageSize?req.body.pageSize:"10";
-    var offset = req.body.offset?(parseInt(req.body.offset)*parseInt(pageSize)):0;
+    var offset = req.body.offset?(parseInt(req.body.offset)):0;
     try{const data={
         category:req.body.category,
         title:req.body.title,
@@ -334,7 +334,7 @@ router.post('/fetch-brand',jsonParser,async (req,res)=>{
 })
 router.post('/list-brands',jsonParser,async (req,res)=>{
     var pageSize = req.body.pageSize?req.body.pageSize:"10";
-    var offset = req.body.offset?(parseInt(req.body.offset)*parseInt(pageSize)):0;
+    var offset = req.body.offset?(parseInt(req.body.offset)):0;
     try{const data={
         category:req.body.category,
         title:req.body.title,
@@ -407,7 +407,7 @@ router.post('/fetch-category',jsonParser,async (req,res)=>{
 })
 router.post('/list-category',jsonParser,async (req,res)=>{
     var pageSize = req.body.pageSize?req.body.pageSize:"10";
-    var offset = req.body.offset?(parseInt(req.body.offset)*parseInt(pageSize)):0;
+    var offset = req.body.offset?(parseInt(req.body.offset)):0;
     try{const data={
         category:req.body.category,
         title:req.body.title,

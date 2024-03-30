@@ -33,7 +33,7 @@ router.post('/fetch-user',jsonParser,async (req,res)=>{
 })
 router.post('/list',jsonParser,async (req,res)=>{
     var pageSize = req.body.pageSize?req.body.pageSize:"10";
-    var offset = req.body.offset?(parseInt(req.body.offset)*parseInt(pageSize)):0;
+    var offset = req.body.offset?(parseInt(req.body.offset)):0;
     try{const data={
         orderNo:req.body.orderNo,
         status:req.body.status,
@@ -96,7 +96,7 @@ router.post('/fetch-customer',jsonParser,async (req,res)=>{
 })
 router.post('/list-customers',jsonParser,async (req,res)=>{
     var pageSize = req.body.pageSize?req.body.pageSize:"10";
-    var offset = req.body.offset?(parseInt(req.body.offset)*parseInt(pageSize)):0;
+    var offset = req.body.offset?(parseInt(req.body.offset)):0;
     try{const data={
         orderNo:req.body.orderNo,
         status:req.body.status,
@@ -192,7 +192,7 @@ router.post('/fetch-profile',jsonParser,async (req,res)=>{
 }) 
 router.post('/list-profiles',jsonParser,async (req,res)=>{
     var pageSize = req.body.pageSize?req.body.pageSize:"10";
-    var offset = req.body.offset?(parseInt(req.body.offset)*parseInt(pageSize)):0;
+    var offset = req.body.offset?(parseInt(req.body.offset)):0;
     try{
         const data={
             rderNo:req.body.orderNo,
@@ -542,7 +542,7 @@ router.post('/upload',uploadImg.single('upload'), async(req, res, next)=>{
 
 router.post('/transactions',jsonParser,async (req,res)=>{
     var pageSize = req.body.pageSize?req.body.pageSize:"10";
-    var offset = req.body.offset?(parseInt(req.body.offset)*parseInt(pageSize)):0;
+    var offset = req.body.offset?(parseInt(req.body.offset)):0;
     try{const data={
         orderNo:req.body.orderNo,
         status:req.body.status,
