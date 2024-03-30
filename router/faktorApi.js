@@ -43,7 +43,7 @@ router.post('/list-products', async (req,res)=>{
     const brandId= filter?filter.brand:''
     const catId= filter?filter.category:''
     const subId = filter?filter.subCategory:''
-    
+    const stockId = req.body.stockId
     //const categoryData = await category.findOne({catCode:catId})
     const subChild = subId?[]:await category.find({"parent.catCode":catId})
     const subChildId = subChild.map(item=>item.catCode)
@@ -76,12 +76,20 @@ router.post('/list-products', async (req,res)=>{
                 localField: "ItemID", 
                 foreignField: "ItemID", 
                 as : "countData"
-            }},
-            {$limit:16}
+            }}
         ])
-
+        var showProduct=[]
+        for(var i=0;i<products.length;i++){
+            var count=products[i].countData&&
+            products[i].countData.find(item=>item.Stock==stockId)
+            if(count) count = count.quantity
+            products[i].countData = count
+            if(count)
+                showProduct.push(products[i])
+        }
+        //console.log(showProduct)
         //logger.warn("main done")
-        res.json({products:products})
+        res.json({products:showProduct})
     }
     catch(error){
         res.status(500).json({message: error.message})
