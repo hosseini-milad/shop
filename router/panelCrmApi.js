@@ -10,6 +10,8 @@ const user = require('../models/auth/users');
 const mime = require('mime');
 const crmlist = require('../models/crm/crmlist');
 const tasks = require('../models/crm/tasks');
+const ProfileAccess = require('../models/auth/ProfileAccess');
+const FindAccess = require('../middleware/FindAccess');
 
 router.post('/fetch-crm',jsonParser,async (req,res)=>{
     const userId=req.body.userId?req.body.userId:req.headers['userid']
@@ -37,12 +39,15 @@ router.post('/fetch-tasks',auth,jsonParser,async (req,res)=>{
 })
 const calcTasks=async(userId)=>{
     const userData = await user.findOne({_id:ObjectID(userId)})
-    var limitTask='' 
-    if(userData&&userData.access!=="manager") limitTask= userData.profile
+    const userAccess = await FindAccess(userData.profile)
+    const allow = userAccess.find(item=>item.title==="Tasks")
+    if(!allow)return
+
+    //if(userData&&userData.access!=="manager") limitTask= userData.profile
     const crmData = await crmlist.findOne()
     const crmId = (crmData._id).toString()
     taskList = await tasks.aggregate([
-        {$match:limitTask?{profile:limitTask}:{}},
+        //{$match:limitTask?{profile:limitTask}:{}},
         {$match:{crmId:crmId}},
         {$addFields: { "user_Id": { $convert: {input:"$assign" ,
     to:'objectId', onError:'',onNull:''}}}},
@@ -63,16 +68,27 @@ const calcTasks=async(userId)=>{
     ])
     //const taskList = await tasks.find({crmCode:crmData._id})
     const columnOrder =crmData&&crmData.crmSteps
+    var showColumn =[]
     var columns={}
-    for(var i=0;i<columnOrder.length;i++)
-        columns[columnOrder[i].enTitle]=[]
-    for(var c=0;c<taskList.length;c++){
+    for(var i=0;i<columnOrder.length;i++){
+        const access =(userAccess.find(item=>item.title ===columnOrder[i].enTitle))
+        //console.log(access)
+        if(access){
+            columnOrder[i].access = access.state
+            showColumn.push(columnOrder[i])
+            columns[columnOrder[i].enTitle]=[]
+        }
+        
+    }
+    //console.log(columns)
+    for(var c=0;c<taskList.length;c++){ 
         var taskStep = taskList[c].taskStep
-        columns[taskStep].push(taskList[c]._id) 
+        try{columns[taskStep].push(taskList[c]._id) }
+        catch{}
         //columnOrder.find(item=>item.enTitle===taskStep)
     } 
     return({crmData:crmData,tasks:taskList, crm:crmData,
-        columnOrder:columnOrder,columns:columns})
+        columnOrder:showColumn,columns:columns})
 }
 router.post('/update-tasks',auth,jsonParser,async (req,res)=>{
     const taskId = req.body._id?req.body._id:""
@@ -95,6 +111,40 @@ router.post('/update-tasks',auth,jsonParser,async (req,res)=>{
         res.status(500).json({message: error.message})
     } 
 })
+router.post('/update-tasks-status',auth,jsonParser,async (req,res)=>{
+    const taskId = req.body._id?req.body._id:""
+    var status = req.body.status
+    const crmData = await crmlist.findOne({})
+    const taskData = await tasks.findOne({_id:ObjectID(taskId)})
+    const crmSteps = crmData.crmSteps
+    const taskStatus = taskData.taskStep
+    var newStatus = ''
+    var index = crmSteps.findIndex(item=>item.enTitle===taskStatus)
+    var nextStep = findNext(index,status)
+    newStatus = crmSteps[nextStep]
+    //console.log(newStatus)
+    try{
+        await tasks.updateOne({_id:ObjectID(taskId)},
+        {$set:{taskStep:newStatus.enTitle}})
+        
+        const userId=req.headers["userid"]
+        const tasksList = await calcTasks(userId)
+       res.json({taskData:tasksList,message:taskId?"Task Updated":"Task Created"})
+    }
+    catch(error){
+        res.status(500).json({message: error.message})
+    } 
+})
+const findNext=(index,status)=>{
+    if(status=="accept"){
+        if(index===0) return(2)
+        else
+            return(index+1)
+    }
+    if(status=="edit"){
+        return(1)
+    }
+}
 router.post('/update-checkList',auth,jsonParser,async (req,res)=>{
     const taskId = req.body._id?req.body._id:""
     const body = req.body
