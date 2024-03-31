@@ -76,7 +76,7 @@ const calcTasks=async(userId)=>{
         const access =(userAccess.find(item=>item.title ===columnOrder[i].enTitle))
         //console.log(access)
         if(access||admin){
-            columnOrder[i].access = access.state
+            columnOrder[i].access = admin?"edit":access.state
             showColumn.push(columnOrder[i])
             columns[columnOrder[i].enTitle]=[]
         }
