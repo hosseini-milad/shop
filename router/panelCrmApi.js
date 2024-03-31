@@ -39,9 +39,11 @@ router.post('/fetch-tasks',auth,jsonParser,async (req,res)=>{
 })
 const calcTasks=async(userId)=>{
     const userData = await user.findOne({_id:ObjectID(userId)})
+    var admin = 0
+    if(userData.access==="manager") admin = 1
     const userAccess = await FindAccess(userData.profile)
     const allow = userAccess.find(item=>item.title==="Tasks")
-    if(!allow)return
+    if(!allow&&!admin)return
 
     //if(userData&&userData.access!=="manager") limitTask= userData.profile
     const crmData = await crmlist.findOne()
@@ -73,7 +75,7 @@ const calcTasks=async(userId)=>{
     for(var i=0;i<columnOrder.length;i++){
         const access =(userAccess.find(item=>item.title ===columnOrder[i].enTitle))
         //console.log(access)
-        if(access){
+        if(access||admin){
             columnOrder[i].access = access.state
             showColumn.push(columnOrder[i])
             columns[columnOrder[i].enTitle]=[]
