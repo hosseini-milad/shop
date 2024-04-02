@@ -265,8 +265,8 @@ const findCartFunction=async(userId,managerId)=>{
     try{
         for(var c=0;c<cartData.length;c++){
             for(var j=0;j<cartData[c].cartItems.length;j++){
-                var cartDetail = cartData[c].cartItems[j]
-                const cartItemDetail = findCartItemDetail(cartDetail)
+                var cartTemp = cartData[c].cartItems[j]
+                const cartItemDetail = findCartItemDetail(cartTemp)
                 cartData[c].cartItems[j].total = cartItemDetail
             }
             const userData = await customers.findOne({_id:ObjectID(cartData[c].userId)})
