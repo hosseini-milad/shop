@@ -508,10 +508,10 @@ router.post('/cart-fetch', async (req,res)=>{
     }
 })
 router.post('/cart-find', async (req,res)=>{
-    const cartID=req.body.cartID
+    const cartNo=req.body.cartNo
     try{
         const cartList = await cart.aggregate
-        ([{$match:{_id:ObjectID(cartID)}},
+        ([{$match:{cartNo:ObjectID(cartNo)}},
         { $addFields: { "manageId": { "$toObjectId": "$manageId" }}},
         {$lookup:{
             from : "customers", 
