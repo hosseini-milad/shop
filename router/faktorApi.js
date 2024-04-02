@@ -287,7 +287,8 @@ const findCartFunction=async(userId,managerId)=>{
 }
 
 const findCartItemDetail=(cartItem)=>{
-    var cartItemPrice=cartItem.price.replace(/,/g,'')
+    var cartItemPrice=cartItem.price&&
+        cartItem.price.replace(/,/g,'')
     var tax = 0
     var discount = 0
     var totalPrice = 0
