@@ -17,7 +17,8 @@ const taskSchema = new mongoose.Schema({
   priority:{type:String},
   attach:{type:String},
   type:{type:String},
-  
+  query:{type:Object},
+  result:{type:Object},
   date: { type: Date, default:Date.now()},
 });
 

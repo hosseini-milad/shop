@@ -13,6 +13,10 @@ const tasks = require('../models/crm/tasks');
 const ProfileAccess = require('../models/auth/ProfileAccess');
 const FindAccess = require('../middleware/FindAccess');
 
+const cart = require('../models/product/cart');
+const sepidarPOST = require('../middleware/SepidarPost');
+const customers = require('../models/auth/customers');
+
 router.post('/fetch-crm',jsonParser,async (req,res)=>{
     const userId=req.body.userId?req.body.userId:req.headers['userid']
     const crmId = req.body.crmId
@@ -124,14 +128,33 @@ router.post('/update-tasks-status',auth,jsonParser,async (req,res)=>{
     var index = crmSteps.findIndex(item=>item.enTitle===taskStatus)
     var nextStep = findNext(index,status)
     newStatus = crmSteps[nextStep]
-    //console.log(newStatus)
     try{
-        await tasks.updateOne({_id:ObjectID(taskId)},
-        {$set:{taskStep:newStatus.enTitle}})
-        
+        var sepidarAccept = 1
+        var sepidarQuery = ''
+        var sepidarResult = ''
+        if(status==="sepidar"){
+            const faktorNo= "F123"+taskData.orderNo
+            const cartData = await cart.findOne({cartNo:taskData.orderNo})
+            const userData = await customers.findOne({_id:ObjectID(cartData.userId)})
+            sepidarQuery = await SepidarFunc(cartData,faktorNo,userData.CustomerID)
+            sepidarResult = await sepidarPOST(sepidarQuery,"/api/invoices")
+            
+            if(sepidarResult.Message)
+                sepidarAccept =0
+            
+        }
+        //console.log(sepidarResult)
+        //console.log(sepidarQuery)
+        if(sepidarAccept){
+            await tasks.updateOne({_id:ObjectID(taskId)},
+            {$set:{taskStep:newStatus.enTitle,query:sepidarQuery,result:sepidarResult}})
+        }
+
+         
         const userId=req.headers["userid"]
         const tasksList = await calcTasks(userId)
-       res.json({taskData:tasksList,message:taskId?"Task Updated":"Task Created"})
+       res.json({taskData:tasksList,message:taskId?"Task Updated":"Task Created",
+        error:sepidarResult?'':sepidarResult})
     }
     catch(error){
         res.status(500).json({message: error.message})
@@ -143,6 +166,8 @@ const findNext=(index,status)=>{
         else
             return(index+1)
     }
+    if(status=="sepidar")
+        return(6)
     if(status=="edit"){
         return(1)
     }
@@ -257,5 +282,53 @@ router.post('/upload',uploadImg.single('upload'), async(req, res, next)=>{
     }
 })
 
+const SepidarFunc=async(data,faktorNo,user)=>{
+    const notNullCartItem = []
+    for(var i=0;i<data.cartItems.length;i++)
+        data.cartItems[i].count?
+        notNullCartItem.push(data.cartItems[i]):''
+    var query ={
+        "GUID": "124ab075-fc79-417f-b8cf-2a"+faktorNo,
+        "CustomerRef": toInt(user),
+        "CurrencyRef":1,
+        "SaleTypeRef": data.payValue?toInt(data.payValue):4,
+        "Duty":0.0000,
+        "Discount": 0.0000,
+        "Items": 
+        notNullCartItem.map((item,i)=>(
+            {
+            "ItemRef": toInt(item.id),
+            "TracingRef": null,
+            "Description":item.title+"|"+item.sku,
+            "StockRef":13,
+            "Quantity": toInt(item.count),
+            "Fee": toInt(item.price),
+            "Price": normalPriceCount(item.price,item.count,1),
+            "Discount": 0.0000,
+            "Tax": normalPriceCount(item.price,item.count,"0.09"),
+            "Duty": 0.0000,
+            "Addition": 0.0000
+          }))
+        
+      }
+    return(query)
+}
+const toInt=(strNum,count,align)=>{
+    if(!strNum)return(0)
+    
+    return(parseInt(parseInt((align?"-":'')+strNum.toString().replace( /,/g, ''))*
+    (count?parseFloat(count):1)))
+}
+const normalPriceCount=(priceText,count,tax)=>{
+    if(!priceText||priceText === null||priceText === undefined) return("")
+    var rawCount = parseFloat(count.toString())
+    var rawTax = parseFloat(tax.toString())
+    var rawPrice = Math.round(parseInt(priceText.toString().replace( /,/g, '')
+        .replace(/\D/g,''))*rawCount*rawTax/1000)
+    rawPrice = parseInt(rawPrice)*1000
+    return(
+      (rawPrice.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",").replace( /^\D+/g, ''))
+    )
+  }
 
 module.exports = router;

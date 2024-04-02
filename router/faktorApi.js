@@ -255,7 +255,8 @@ router.post('/cart',auth, async (req,res)=>{
 const findCartFunction=async(userId,managerId)=>{
     
     try{
-        const cartData = await cart.find({manageId:managerId})
+        const cartData = await cart.find({manageId:managerId,
+        result:{$exists:false}})
         .sort({"initDate":-1}).lean()
     const qCartData = await qCart.findOne({userId:userId})
     //const userData = await customerSchema.findOne({userId:ObjectID(userId)})
@@ -663,6 +664,7 @@ router.post('/update-cart',jsonParser, async (req,res)=>{
 })
 router.post('/update-desc',jsonParser, async (req,res)=>{
     const userId=req.body.userId?req.body.userId:req.headers['userid']
+    const cartNo = req.body.cartNo
     const data={
         description:req.body.description,
         discount:req.body.discount,
@@ -671,7 +673,11 @@ router.post('/update-desc',jsonParser, async (req,res)=>{
     try{
         
         //const cartData = await cart.find({userId:userId})
-        const qCartData = await quickCart.updateOne({userId:userId},
+        if(cartNo)
+            await cart.updateOne({cartNo:cartNo},
+            {...data})
+        else
+            await quickCart.updateOne({userId:userId},
             {...data})
         
         const cartDetails = await findCartFunction(userId,req.headers['userid'])
