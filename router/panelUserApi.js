@@ -172,7 +172,7 @@ router.post('/create-customer',jsonParser,async (req,res)=>{
 router.get('/my-customer',auth,jsonParser,async (req,res)=>{
     var agent = req.headers['userid']
     try{
-        const userData = await customer.find({agent:agent})
+        const userData = await customer.find({agent:{$exists:true}})
        res.json({data:userData,success:"مشتری پیدا شد"})
     }
     catch(error){
