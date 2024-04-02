@@ -537,6 +537,8 @@ router.post('/cart-find', async (req,res)=>{
         var cartItems = (cartList&&cartList[0].cartItems)?
             cartList[0].cartItems:[]
         for(var i = 0;i<cartItems.length;i++){
+            const cartTemp = findCartItemDetail(cartItems[i])
+            cartItems[i].total=cartTemp
             cartPrice +=parseInt(cartItems[i].price)*
                 cartItems[i].count
         }
