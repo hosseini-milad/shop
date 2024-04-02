@@ -71,7 +71,7 @@ const calcTasks=async(userId)=>{
     //const taskList = await tasks.find({crmCode:crmData._id})
     const columnOrder =crmData&&crmData.crmSteps
     var showColumn =[]
-    var columns={}
+    var columns={} 
     for(var i=0;i<columnOrder.length;i++){
         const access =(userAccess.find(item=>item.title ===columnOrder[i].enTitle))
         //console.log(access)

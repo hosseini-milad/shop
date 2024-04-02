@@ -479,6 +479,47 @@ router.post('/cart-fetch', async (req,res)=>{
         res.status(500).json({message: error.message})
     }
 })
+router.post('/cart-find', async (req,res)=>{
+    const cartID=req.body.cartID
+    try{
+        const cartList = await cart.aggregate
+        ([{$match:{_id:ObjectID(cartID)}},
+        { $addFields: { "manageId": { "$toObjectId": "$manageId" }}},
+        {$lookup:{
+            from : "customers", 
+            localField: "userId", 
+            foreignField: "Code", 
+            as : "userData"
+        }},
+        {$lookup:{
+            from : "users", 
+            localField: "userId", 
+            foreignField: "_id", 
+            as : "adminData"
+        }},
+        {$lookup:{
+            from : "users", 
+            localField: "manageId", 
+            foreignField: "_id", 
+            as : "managerData"
+        }}])
+        console.log(cartList)
+        var orderData={cartPrice:0,cartCount:0}
+        var cartPrice = 0
+        var cartItems = (cartList&&cartList[0].cartItems)?
+            cartList[0].cartItems:[]
+        for(var i = 0;i<cartItems.length;i++){
+            cartPrice +=parseInt(cartItems[i].price)*
+                cartItems[i].count
+        }
+        orderData.cartPrice=cartPrice
+        
+        res.json({cart:cartList,orderData:orderData})
+    }
+    catch(error){
+        res.status(500).json({message: error.message})
+    }
+})
 router.post('/cartData', async (req,res)=>{
     const userId =req.body.userId?req.body.userId:req.headers['userid'];
     const cartNo=req.body.cartNo
@@ -513,7 +554,7 @@ router.post('/cartData', async (req,res)=>{
         var cartItems = (cartList&&cartList[0].cartItems)?
             cartList[0].cartItems:[]
         for(var i = 0;i<cartItems.length;i++){
-            cartPrice +=parseInt(cartItems[i].price)*
+            cartPrice +=parseInt(cartItems[i].price.replace( /,/g, ''))*
                 cartItems[i].count
             cartItem+=Number(cartItems[i].count)
             if(cartItems[i].discount){
