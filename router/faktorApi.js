@@ -1316,8 +1316,7 @@ router.post('/customer-find', async (req,res)=>{
                 {username:{$regex: search, $options : 'i'}},
                 {Code:{$regex: search, $options : 'i'}}
             ]}
-        },
-        {$limit:6}])
+        }])
         //if(!searchCustomer.length){
         
         const searchUser = await customerSchema.
