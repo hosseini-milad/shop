@@ -264,6 +264,11 @@ const findCartFunction=async(userId,managerId)=>{
     var description = ''
     try{
         for(var c=0;c<cartData.length;c++){
+            for(var j=0;j<cartData[c].cartItems.length;j++){
+                var cartDetail = cartData[c].cartItems[j]
+                const cartItemDetail = findCartItemDetail(cartDetail)
+                cartData[c].cartItems[j].total = cartItemDetail
+            }
             const userData = await customers.findOne({_id:ObjectID(cartData[c].userId)})
             cartData[c] = {...cartData[c],userData:userData}
             cartDetail.push(findCartSum(cartData[c].cartItems))
@@ -279,6 +284,28 @@ const findCartFunction=async(userId,managerId)=>{
         return({cart:[],cartDetail:[],
             quickCart:'',qCartDetail:''})
     }
+}
+
+const findCartItemDetail=(cartItem)=>{
+    var cartItemPrice=cartItem.price
+    var tax = 0
+    var discount = 0
+    var totalPrice = 0
+    var count = cartItem.count
+
+    if(cartItem.discount){
+        var off = parseInt(cartItem.discount.toString().replace( /,/g, '').replace( /^\D+/g, ''))
+        
+        if(off>100)
+            discount += off 
+        else
+            discount += parseInt(cartItemPrice)*
+            count*(off)/100
+        //console.log(off+": "+cartDiscount)
+    }
+    tax = (cartItemPrice*count - discount)*TaxRate
+    totalPrice = (cartItemPrice*count - discount)*(1+TaxRate)
+    return({tax:tax,total:totalPrice,discount:discount})
 }
 const findCartData=async(cartNo)=>{
     
