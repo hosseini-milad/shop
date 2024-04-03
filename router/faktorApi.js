@@ -514,17 +514,12 @@ router.post('/cart-find', async (req,res)=>{
         const cartList = await cart.aggregate
         ([{$match:{cartNo:cartNo}},
         { $addFields: { "manageId": { "$toObjectId": "$manageId" }}},
+        { $addFields: { "userId": { "$toObjectId": "$userId" }}},
         {$lookup:{
             from : "customers", 
             localField: "userId", 
-            foreignField: "Code", 
-            as : "userData"
-        }},
-        {$lookup:{
-            from : "users", 
-            localField: "userId", 
             foreignField: "_id", 
-            as : "adminData"
+            as : "userData"
         }},
         {$lookup:{
             from : "users", 
@@ -532,18 +527,10 @@ router.post('/cart-find', async (req,res)=>{
             foreignField: "_id", 
             as : "managerData"
         }}])
-        console.log(cartList)
-        var orderData={cartPrice:0,cartCount:0}
-        var cartPrice = 0
-        var cartItems = (cartList&&cartList[0].cartItems)?
-            cartList[0].cartItems:[]
-        for(var i = 0;i<cartItems.length;i++){
-            const cartTemp = findCartItemDetail(cartItems[i])
-            cartItems[i].total=cartTemp
-            cartPrice +=parseInt(cartItems[i].price)*
-                cartItems[i].count
-        }
-        orderData.cartPrice=cartPrice
+        var cartItems = cartList&&cartList[0].cartItems
+        for(var i=0;i<cartItems.length;i++)
+            cartList[0].cartItems[i].total =findCartItemDetail(cartItems[i])
+        var orderData=findQuickCartSum(cartItems,"3")
         
         res.json({cart:cartList,orderData:orderData})
     }
