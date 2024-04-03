@@ -133,11 +133,12 @@ router.post('/update-tasks-status',auth,jsonParser,async (req,res)=>{
         var sepidarQuery = ''
         var sepidarResult = ''
         var userData = ''
+        var adminData = ''
         if(status==="sepidar"){
             const faktorNo= "F123"+taskData.orderNo
             const cartData = await cart.findOne({cartNo:taskData.orderNo})
             userData = await customers.findOne({_id:ObjectID(cartData.userId)})
-            const adminData = await user.findOne({_id:ObjectID(cartData.manageId)})
+            adminData = await user.findOne({_id:ObjectID(cartData.manageId)})
             sepidarQuery = await SepidarFunc(cartData,faktorNo,
                 userData.CustomerID?userData.CustomerID:adminData.CustomerID,adminData.StockId)
             sepidarResult = await sepidarPOST(sepidarQuery,"/api/invoices",adminData._id)
@@ -150,14 +151,15 @@ router.post('/update-tasks-status',auth,jsonParser,async (req,res)=>{
         //console.log(sepidarQuery)
         if(sepidarAccept){
             await tasks.updateOne({_id:ObjectID(taskId)},
-            {$set:{taskStep:newStatus.enTitle,query:sepidarQuery,result:sepidarResult}})
+            {$set:{taskStep:newStatus.enTitle,query:sepidarQuery,
+                result:sepidarResult}})
         }
 
          
         const userId=req.headers["userid"]
         const tasksList = await calcTasks(userId)
        res.json({taskData:tasksList,message:taskId?"Task Updated":"Task Created",
-        result:sepidarResult,sepidarQuery:sepidarQuery,userData:userData})
+        result:sepidarResult,sepidarQuery:sepidarQuery,userData:adminData})
     }
     catch(error){
         res.status(500).json({message: error.message})
