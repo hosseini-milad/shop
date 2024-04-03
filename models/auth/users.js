@@ -22,6 +22,7 @@ const userSchema = new mongoose.Schema({
   meli:{ type: String },
 
   StockId:{type:String},
+  CustomerID:{type:String},
   date:{type:Date}
 });
 

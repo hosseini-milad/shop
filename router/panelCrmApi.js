@@ -140,7 +140,7 @@ router.post('/update-tasks-status',auth,jsonParser,async (req,res)=>{
             userData = await customers.findOne({_id:ObjectID(cartData.userId)})
             adminData = await user.findOne({_id:ObjectID(cartData.manageId)})
             sepidarQuery = await SepidarFunc(cartData,faktorNo,
-                adminData.CustomerID,adminData.StockId)
+                userData.CustomerID?userData.CustomerID:adminData.CustomerID,adminData.StockId)
             sepidarResult = await sepidarPOST(sepidarQuery,"/api/invoices",adminData._id)
             
             if(sepidarResult.Message)
