@@ -190,7 +190,7 @@ router.get('/sepidar-price', async (req,res)=>{
             await productPrice.create({
                 pID:sepidarPriceResult[i].Code,
                 saleType:sepidarPriceResult[i].SaleTypeRef,
-                price:sepidarPriceResult[i].Fee?(parseInt(sepidarPriceResult[i].Fee)/10):0,
+                price:sepidarPriceResult[i].Fee?(parseInt(sepidarPriceResult[i].Fee)):0,
                 ItemID:sepidarPriceResult[i].ItemRef,
                 date:new Date()})
                 
