@@ -155,7 +155,7 @@ router.post('/update-tasks-status',auth,jsonParser,async (req,res)=>{
         const userId=req.headers["userid"]
         const tasksList = await calcTasks(userId)
        res.json({taskData:tasksList,message:taskId?"Task Updated":"Task Created",
-        error:sepidarResult?'':sepidarResult,sepidarQuery:sepidarQuery})
+        result:sepidarResult,sepidarQuery:sepidarQuery})
     }
     catch(error){
         res.status(500).json({message: error.message})
