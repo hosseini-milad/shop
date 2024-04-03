@@ -12,7 +12,7 @@ const crmlist = require('../models/crm/crmlist');
 const tasks = require('../models/crm/tasks');
 const ProfileAccess = require('../models/auth/ProfileAccess');
 const FindAccess = require('../middleware/FindAccess');
-
+const {TaxRate} = process.env
 const cart = require('../models/product/cart');
 const sepidarPOST = require('../middleware/SepidarPost');
 const customers = require('../models/auth/customers');
@@ -136,7 +136,8 @@ router.post('/update-tasks-status',auth,jsonParser,async (req,res)=>{
             const faktorNo= "F123"+taskData.orderNo
             const cartData = await cart.findOne({cartNo:taskData.orderNo})
             const userData = await customers.findOne({_id:ObjectID(cartData.userId)})
-            sepidarQuery = await SepidarFunc(cartData,faktorNo,userData.CustomerID)
+            const adminData = await user.findOne({_id:ObjectID(cartData.manageId)})
+            sepidarQuery = await SepidarFunc(cartData,faktorNo,userData.CustomerID,adminData.StockId)
             sepidarResult = await sepidarPOST(sepidarQuery,"/api/invoices")
             
             if(sepidarResult.Message)
@@ -282,7 +283,7 @@ router.post('/upload',uploadImg.single('upload'), async(req, res, next)=>{
     }
 })
 
-const SepidarFunc=async(data,faktorNo,user)=>{
+const SepidarFunc=async(data,faktorNo,user,stock)=>{
     const notNullCartItem = []
     for(var i=0;i<data.cartItems.length;i++)
         data.cartItems[i].count?
@@ -293,19 +294,19 @@ const SepidarFunc=async(data,faktorNo,user)=>{
         "CurrencyRef":1,
         "SaleTypeRef": data.payValue?toInt(data.payValue):4,
         "Duty":0.0000,
-        "Discount": 0.0000,
+        "Discount": data.discount>100?toInt(data.discount):0.00,
         "Items": 
         notNullCartItem.map((item,i)=>(
             {
             "ItemRef": toInt(item.id),
             "TracingRef": null,
             "Description":item.title+"|"+item.sku,
-            "StockRef":13,
+            "StockRef":stock,
             "Quantity": toInt(item.count),
             "Fee": toInt(item.price),
             "Price": normalPriceCount(item.price,item.count,1),
-            "Discount": 0.0000,
-            "Tax": normalPriceCount(item.price,item.count,"0.09"),
+            "Discount": normalPriceDiscount(item.price,item.discount,item.count),
+            "Tax": normalPriceCount(item.price,item.count,TaxRate),
             "Duty": 0.0000,
             "Addition": 0.0000
           }))
@@ -330,5 +331,15 @@ const normalPriceCount=(priceText,count,tax)=>{
       (rawPrice.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",").replace( /^\D+/g, ''))
     )
   }
-
+const normalPriceDiscount=(priceText,discount,count)=>{
+    if(!priceText||priceText === null||priceText === undefined) return(0)
+    if(!discount) return(0)
+    var rawCount = parseFloat(count.toString())
+    var discount = parseInt(discount.toString())
+    var newDiscount = discount
+    if(discount<100)
+        newDiscount = discount * rawCount * priceText /100
+    rawPrice = parseInt(Math.round(newDiscount/1000))*1000
+    return(rawPrice)
+}
 module.exports = router;
