@@ -132,10 +132,11 @@ router.post('/update-tasks-status',auth,jsonParser,async (req,res)=>{
         var sepidarAccept = 1
         var sepidarQuery = ''
         var sepidarResult = ''
+        var userData = ''
         if(status==="sepidar"){
             const faktorNo= "F123"+taskData.orderNo
             const cartData = await cart.findOne({cartNo:taskData.orderNo})
-            const userData = await customers.findOne({_id:ObjectID(cartData.userId)})
+            userData = await customers.findOne({_id:ObjectID(cartData.userId)})
             const adminData = await user.findOne({_id:ObjectID(cartData.manageId)})
             sepidarQuery = await SepidarFunc(cartData,faktorNo,
                 userData.CustomerID?userData.CustomerID:adminData.CustomerID,adminData.StockId)
