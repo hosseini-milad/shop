@@ -1527,7 +1527,8 @@ router.post('/edit-payValue',jsonParser, async (req,res)=>{
         cartNo?await cart.updateOne({cartNo:cartNo},{$set:{payValue:req.body.payValue}}):
             await quickCart.updateOne({userId:data.userId},{$set:data})
         status = "update cart"
-        const cartDetails = await findCartFunction(data.userId,req.headers['userid'])
+        const cartDetails = cartNo?await findCartData(cartNo)
+            :await findCartFunction(data.userId,req.headers['userid'])
         res.json({...cartDetails,message:"تغییرات ذخیره شد"})
     }
     catch(error){
