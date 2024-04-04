@@ -324,7 +324,7 @@ const findCartData=async(cartNo)=>{
         const cartData = await cart.findOne({cartNo:cartNo})
         var cartDetail = ''
     
-        cartDetail=findQuickCartSum(cartData.cartItems,cartData.payValue)
+        cartDetail=findQuickCartSum(cartData.cartItems,cartData.payValue,cart.discount)
         //if(qCartData) qCartDetail =findQuickCartSum(qCartData.cartItems,qCartData.payValue)
    
     return({cart:[cartData],cartDetail:cartDetail})
