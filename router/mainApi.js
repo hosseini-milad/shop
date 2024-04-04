@@ -77,24 +77,40 @@ router.get('/sepidar-product', async (req,res)=>{
                 data:sepidarResult,message:"خطا در بروزرسانی"})
             return
         }
-        await products.deleteMany({})
-        var successItem=[];
-        var failure = 0;
+        //await products.deleteMany({})
+        
+        var newProduct = [];
+        var updateProduct = 0
+        var notUpdateProduct = 0
+        
         for(var i = 0;i<sepidarResult.length;i++){
+            const productResult = await products.updateOne({
+                ItemID:sepidarResult[i].ItemID
+            },{$set:{
+                sku:sepidarResult[i].Code,
+                title:sepidarResult[i].Title,
+                date:new Date()}})
+            var modified = productResult.modifiedCount
+            var matched = productResult.matchedCount
+            if(matched){ notUpdateProduct++}
+            if(modified){updateProduct++}
+            if(!matched){
+                console.log(sepidarResult[i].Code)
             const createResult = await products.create({
                 sku:sepidarResult[i].Code,
                 title:sepidarResult[i].Title,
                 ItemID:sepidarResult[i].ItemID,
                 date:new Date()})
-                if(createResult)
-                successItem.push(createResult)
+                newProduct.push(sepidarResult[i].Code)
+            }
         }
         
         await updateLog.create({
             updateQuery: "sepidar-product" ,
             date:Date.now()
         })
-        res.json({sepidar:sepidarResult.length,message:"محصولات بروز شدند"})
+        res.json({sepidar:{new:newProduct,update:updateProduct,notUpdate:notUpdateProduct},
+            message:"محصولات بروز شدند"})
     }
     catch(error){
         res.status(500).json({message: error.message})
