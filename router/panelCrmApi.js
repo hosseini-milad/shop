@@ -289,6 +289,7 @@ router.post('/upload',uploadImg.single('upload'), async(req, res, next)=>{
 
 const SepidarFunc=async(data,faktorNo,user,stock)=>{
     const notNullCartItem = []
+
     for(var i=0;i<data.cartItems.length;i++)
         data.cartItems[i].count?
         notNullCartItem.push(data.cartItems[i]):''
@@ -296,24 +297,25 @@ const SepidarFunc=async(data,faktorNo,user,stock)=>{
         "GUID": "124ab075-fc79-417f-b8cf-2a"+faktorNo,
         "CustomerRef": toInt(user),
         "CurrencyRef":1,
-        "SaleTypeRef": data.payValue?toInt(data.payValue):4,
+        "SaleTypeRef": data.payValue?toInt(data.payValue):3,
         "Duty":0.0000,
         "Discount": data.discount>100?toInt(data.discount):0.00,
         "Items": 
-        notNullCartItem.map((item,i)=>(
-            {
+        notNullCartItem.map((item,i)=>{
+            const price = findPayValuePrice(item.price,data.payValue)
+            return({
             "ItemRef": toInt(item.id),
             "TracingRef": null,
             "Description":item.title+"|"+item.sku,
             "StockRef":stock,
             "Quantity": toInt(item.count),
-            "Fee": toInt(item.price),
-            "Price": normalPriceCount(item.price,item.count,1),
-            "Discount": normalPriceDiscount(item.price,item.discount,item.count),
-            "Tax": normalPriceCount(item.price,item.count,TaxRate),
+            "Fee": toInt(price),
+            "Price": normalPriceCount(price,item.count,1),
+            "Discount": normalPriceDiscount(price,item.discount,item.count),
+            "Tax": normalPriceCount(price,item.count,TaxRate),
             "Duty": 0.0000,
             "Addition": 0.0000
-          }))
+          })})
         
       }
     return(query)
@@ -345,5 +347,15 @@ const normalPriceDiscount=(priceText,discount,count)=>{
         newDiscount = discount * rawCount * priceText /100
     rawPrice = parseInt(Math.round(newDiscount/1000))*1000
     return(rawPrice)
+}
+const findPayValuePrice=(priceArray,payValue)=>{
+    if(!priceArray)return(0)
+    if(!payValue)payValue = 3
+    var price = priceArray
+    if(priceArray.length&&priceArray.constructor === Array)
+        price=priceArray.find(item=>item.saleType==payValue).price
+   
+    return(price)
+
 }
 module.exports = router;
