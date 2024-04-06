@@ -175,9 +175,18 @@ router.post('/create-customer',jsonParser,async (req,res)=>{
     } 
 })
 router.get('/my-customer',auth,jsonParser,async (req,res)=>{
-    var agent = req.headers['userid']
+    var search = req.body.search
     try{
-        const userData = await customer.find({agent:{$exists:true}})
+        const userData = await customer.aggregate([
+            {$match:{agent:{$exists:true}}},
+            {$match:search?{$or:[
+                {meli:new RegExp('.*' + search + '.*')},
+                {phone:new RegExp('.*' + search + '.*')},
+                {cName:new RegExp('.*' + search + '.*')},
+                {username:new RegExp('.*' + search + '.*')},
+                {mobile:new RegExp('.*' + search + '.*')}
+            ]}:{}}
+    ])
        res.json({data:userData,success:"مشتری پیدا شد"})
     }
     catch(error){
