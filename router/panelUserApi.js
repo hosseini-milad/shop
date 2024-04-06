@@ -108,10 +108,15 @@ router.post('/list-customers',jsonParser,async (req,res)=>{
     }
         const reportList = await customer.aggregate([
             { $match:data.access?{access:data.access}:{}},
+            { $match:data.customer?{$or:[
+                {meli:new RegExp('.*' + data.customer + '.*')},
+                {phone:new RegExp('.*' + data.customer + '.*')},
+                {cName:new RegExp('.*' + data.customer + '.*')},
+                {username:new RegExp('.*' + data.customer + '.*')},
+                {mobile:new RegExp('.*' + data.customer + '.*')}
+            ]}:{}}
         ])
-        const filter1Report = data.customer?
-        reportList.filter(item=>item&&item.cName&&
-            item.cName.includes(data.customer)):reportList;
+        const filter1Report =reportList;
         const orderList = filter1Report.slice(offset,
             (parseInt(offset)+parseInt(pageSize)))  
         const accessUnique = [...new Set(filter1Report.map((item) => item.access))];
