@@ -174,7 +174,7 @@ router.post('/create-customer',jsonParser,async (req,res)=>{
         res.status(500).json({message: error.message})
     } 
 })
-router.get('/my-customer',auth,jsonParser,async (req,res)=>{
+router.post('/my-customer',auth,jsonParser,async (req,res)=>{
     var search = req.body.search
     try{
         const userData = await customer.aggregate([
