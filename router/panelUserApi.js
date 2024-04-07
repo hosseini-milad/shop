@@ -628,10 +628,10 @@ router.post('/formal-customer', async (req,res)=>{
     //console.log(userInfo)
     if(sepidarResult.CustomerID){
         await customer.updateOne({_id:userInfo._id},{$set:{
-            agent:"",CustomerID:sepidarResult.CustomerID,
+            CustomerID:sepidarResult.CustomerID,
             creator:userInfo.agent
 
-        }})
+        }},{$unset:{agent:1}})
     }
     res.json({query:customerQuery,result:sepidarResult,
     message:"مشتری در سپیدار ثبت شد"})

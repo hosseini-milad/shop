@@ -186,7 +186,8 @@ router.post('/list-product',jsonParser,async (req,res)=>{
             { $match:data.sku?{sku:new RegExp('.*' + data.sku + '.*')}:{}},
             { $match:data.category?{category:data.category}:{}},
             { $match:data.active?{enTitle:{ $exists: true}}:{}},
-            
+            {$lookup:{from : "brands", 
+            localField: "brandId", foreignField: "brandCode", as : "brandInfo"}},
             ])
             const products = productList.slice(offset,
                 (parseInt(offset)+parseInt(pageSize)))  
