@@ -89,7 +89,11 @@ const calcTasks=async(userId)=>{
     //console.log(columns)
     for(var c=0;c<taskList.length;c++){ 
         var taskStep = taskList[c].taskStep
-        if(taskStep=="archive"&&taskList[c].progressDate)
+        var yesterday = new Date(Date.now() - 86400000); // that is: 24 * 60 * 60 * 1000
+        var taskDate = taskList[c].progressDate?taskList[c].progressDate:taskList[c].date
+        console.log(yesterday)
+        console.log(taskDate)
+        if(taskStep=="archive"&&(new Date(taskDate)<new Date(yesterday)))
         console.log("Noe")
         try{columns[taskStep].push(taskList[c]._id) }
         catch{}
@@ -154,7 +158,7 @@ router.post('/update-tasks-status',auth,jsonParser,async (req,res)=>{
         if(sepidarAccept){
             await tasks.updateOne({_id:ObjectID(taskId)},
             {$set:{taskStep:newStatus.enTitle,query:sepidarQuery,
-                result:sepidarResult}})
+                result:sepidarResult,progressDate:Date.now()}})
         }
 
          

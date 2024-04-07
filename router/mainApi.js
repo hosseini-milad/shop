@@ -132,7 +132,8 @@ router.get('/sepidar-customer', async (req,res)=>{
         
     for(var i = 0;i<sepidarResult.length;i++){
         const custResult = await customers.updateOne({
-            phone:sepidarResult[i].PhoneNumber
+            phone:sepidarResult[i].PhoneNumber,
+            meliCode:sepidarResult[i].NationalID
         },{$set:{
             username: sepidarResult[i].Title,
             cName: sepidarResult[i].Name,
