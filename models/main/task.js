@@ -7,7 +7,8 @@ const TaskSchema = new Schema({
     state:   String, 
     prior:   Number,
     priority:   String,
-    date:    Date
+    date:    Date,
+    progressDate:Date
 })
 autoIncrement.initialize(mongoose.connection); // 3. initialize autoIncrement 
 

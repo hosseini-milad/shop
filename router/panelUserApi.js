@@ -19,6 +19,7 @@ const brand = require('../models/product/brand');
 const Filters = require('../models/product/Filters');
 const factory = require('../models/product/factory');
 const crmlist = require('../models/crm/crmlist');
+const sepidarPOST = require('../middleware/SepidarPost');
 
 
 router.post('/fetch-user',jsonParser,async (req,res)=>{
@@ -613,5 +614,57 @@ router.post('/taskData', async (req,res)=>{
         res.status(500).json({message: error.message})
     }
 })
+router.post('/formal-customer', async (req,res)=>{
+    
+    const customerQuery = SepidarUser(req.body.userData)
+    const sepidarResult = await sepidarPOST(customerQuery,"/api/Customers")
+    res.json({query:customerQuery,result:sepidarResult})
+    //
+    return
+    const taskId=req.body.taskId
+    try{
+        const taskDetail =taskId&&await tasks.findOne({_id:taskId})
+        const currentUser = taskDetail&&taskDetail.assign&&
+            await user.findOne({_id:taskDetail.assign})
+        const currentProfile = taskDetail&&taskDetail.profile&&
+            await ProfileAccess.findOne({_id:taskDetail.profile})
+        const profileList= await ProfileAccess.find()
+        const userDetails= await user.find({profile:{$exists:true},
+            cName:{$nin:[""]},access:{$nin:["customer"]}})
+        res.json({user:userDetails,
+            currentUser:currentUser?currentUser:'',
+            currentAssign:currentProfile?currentProfile:'',
+            profileList:profileList,message:"list users"})
+    }
+    catch(error){
+        res.status(500).json({message: error.message})
+    }
+})
+
+const SepidarUser=(data)=>{
+    if(!data)return('')
+    var query ={
+        "GUID": "124ab075-fc79-417f-b8cf-2a"+data.meliCode,
+        "PhoneNumber": data.phone,
+        "CustomerType": 1,
+        "Name": data.cName,
+        "LastName": data.sName,
+        "NationalID": data.meliCode,
+        "EconomicCode": data.roleId,
+        "Addresses": [
+            {
+            "Title": data.Address?data.Address.split(' ')[0]:"شریف اویل",
+            "IsMain": true,
+            "CityRef": 1,
+            "Address": data.Address,
+            "ZipCode": data.postalCode,
+            "Latitude": data.nif?data.nif.split(',')[0]:"",
+            "Longitude": data.nif?data.nif.split(',')[0]:"",
+            "GUID": "3fa85f64-5717-4562-b3fc-2c"+data.postalCode
+                }
+            ]
+        }
+    return(query)
+}
 
 module.exports = router;

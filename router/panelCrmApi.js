@@ -89,6 +89,8 @@ const calcTasks=async(userId)=>{
     //console.log(columns)
     for(var c=0;c<taskList.length;c++){ 
         var taskStep = taskList[c].taskStep
+        if(taskStep=="archive"&&taskList[c].progressDate)
+        console.log("Noe")
         try{columns[taskStep].push(taskList[c]._id) }
         catch{}
         //columnOrder.find(item=>item.enTitle===taskStep)
@@ -216,7 +218,8 @@ router.post('/change-state',jsonParser,async (req,res)=>{
         const taskId=req.body.taskId
         const body = {
             taskStep:req.body.state,
-            prior:req.body.prior
+            prior:req.body.prior,
+            progressDate:Date.now()
         }
         const task = await tasks.findOne({_id:taskId})
         const taskUpdate = await tasks.updateOne({_id:taskId},

@@ -20,6 +20,7 @@ const taskSchema = new mongoose.Schema({
   query:{type:Object},
   result:{type:Object},
   date: { type: Date, default:Date.now()},
+  progressDate: { type: Date},
 });
 
 module.exports = mongoose.model("task", taskSchema);
