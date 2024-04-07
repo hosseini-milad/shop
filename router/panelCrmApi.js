@@ -91,10 +91,10 @@ const calcTasks=async(userId)=>{
         var taskStep = taskList[c].taskStep
         var yesterday = new Date(Date.now() - 86400000); // that is: 24 * 60 * 60 * 1000
         var taskDate = taskList[c].progressDate?taskList[c].progressDate:taskList[c].date
-        console.log(yesterday)
-        console.log(taskDate)
-        if(taskStep=="archive"&&(new Date(taskDate)<new Date(yesterday)))
-        console.log("Noe")
+        const dateDef = taskDate - yesterday
+        if(taskStep=="archive")
+            if( taskDate < yesterday)
+                continue
         try{columns[taskStep].push(taskList[c]._id) }
         catch{}
         //columnOrder.find(item=>item.enTitle===taskStep)
