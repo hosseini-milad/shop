@@ -615,10 +615,26 @@ router.post('/taskData', async (req,res)=>{
     }
 })
 router.post('/formal-customer', async (req,res)=>{
-    
-    const customerQuery = SepidarUser(req.body.userData)
-    const sepidarResult = await sepidarPOST(customerQuery,"/api/Customers")
-    res.json({query:customerQuery,result:sepidarResult})
+    const userInfo = req.body.userData
+    const customerQuery = SepidarUser(userInfo)
+    //console.log(customerQuery)
+    const sepidarResult = await sepidarPOST(customerQuery,"/api/Customers",'',"admin")
+    //console.log(sepidarResult)
+    if(!sepidarResult||sepidarResult.Message){
+        res.status(400).json({message:sepidarResult?sepidarResult.Message:"Error",
+            error: "error occure"})
+        return
+    }
+    //console.log(userInfo)
+    if(sepidarResult.CustomerID){
+        await customer.updateOne({_id:userInfo._id},{$set:{
+            agent:"",CustomerID:sepidarResult.CustomerID,
+            creator:userInfo.agent
+
+        }})
+    }
+    res.json({query:customerQuery,result:sepidarResult,
+    message:"مشتری در سپیدار ثبت شد"})
     //
     return
     const taskId=req.body.taskId
@@ -643,8 +659,11 @@ router.post('/formal-customer', async (req,res)=>{
 
 const SepidarUser=(data)=>{
     if(!data)return('')
+    var max = 999999999999
+    var min = 100000000000
     var query ={
-        "GUID": "124ab075-fc79-417f-b8cf-2a"+data.meliCode,
+        "GUID": "124ab075-fc79-417f-b8cf-"+
+            Math.ceil(Math.random() * ( max- min) + min),
         "PhoneNumber": data.phone,
         "CustomerType": 1,
         "Name": data.cName,

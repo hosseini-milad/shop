@@ -18,6 +18,7 @@ const customerSchema = new mongoose.Schema({
   otp:{ type: String , default: null },
   nif: { type: String },
   agent:{ type: String },
+  creator:{ type: String },
   roleId:{ type: String },
   active:{ type: String },
   status:{ type: String },
@@ -28,7 +29,6 @@ const customerSchema = new mongoose.Schema({
   meliCode:{ type: String },
   postalCode:{ type: String },
 
-  active:{ type: String },
   official:{ type: String },
   status:{ type: String },
   Code:{ type: String },
