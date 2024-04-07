@@ -90,8 +90,11 @@ const calcTasks=async(userId)=>{
     for(var c=0;c<taskList.length;c++){ 
         var taskStep = taskList[c].taskStep
         var yesterday = new Date(Date.now() - 86400000); // that is: 24 * 60 * 60 * 1000
-        var taskDate = taskList[c].progressDate?taskList[c].progressDate:taskList[c].date
-        const dateDef = taskDate - yesterday
+        var taskDate = taskList[c].progressDate?taskList[c].progressDate:
+            taskList[c].date
+        if(!taskList[c].progressDate){
+            yesterday = new Date(Date.now() - 166400000)
+        }
         if(taskStep=="archive")
             if( taskDate < yesterday)
                 continue
