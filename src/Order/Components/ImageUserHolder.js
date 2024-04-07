@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import ImageNewUser from "./ImageNewUser"
 import env from "../../env";
 function ImageUserHolder(props){
-  console.log(props.imageUrl)
+  //console.log(props.imageUrl)
   const [image,setImage]= useState();
   const [image2,setImage2]= useState();
   const [kasb,setKasb]= useState();
@@ -92,31 +92,31 @@ function ImageUserHolder(props){
       <div className="imageUserField">
         <div className="form-field-image">
           <div className="media-input">
-              <p className="uppic">تصویر جواز کسب</p>
+              <p className="uppic">{props.titles[2]}</p>
               {props.kasbUrl?<img className='TarashImage' src={props.kasbUrl} />:
                   kasb?env.loader:<img className='TarashImage' src={"/img/avatar/defaultProduct.png"}/>}
                   <ImageNewUser cardName="Input Image" 
-                      setImage={setKasb} setImageUrl={props.setKasbUrl} part={0}/>
+                      setImage={setKasb} setImageUrl={props.setKasbUrl} part={0+props.init}/>
                   
             </div>
         </div>
         <div className="form-field-image">
           <div className="media-input">
-              <p className="uppic">تصویر1<sup>*</sup></p>
+              <p className="uppic">{props.titles[0]}</p>
               {props.imageUrl?<img className='TarashImage' src={props.imageUrl} />:
                   image?env.loader:<img className='TarashImage' src={"/img/avatar/defaultProduct.png"}/>}
                   <ImageNewUser cardName="Input Image" 
-                      setImage={setImage} setImageUrl={props.setImageUrl} part={1}/>
+                      setImage={setImage} setImageUrl={props.setImageUrl} part={1+props.init}/>
                   
             </div>
         </div>
         <div className="form-field-image">
           <div className="media-input">
-              <p className="uppic">تصویر2</p>
+              <p className="uppic">{props.titles[1]}</p>
               {props.imageUrl2?<img className='TarashImage' src={props.imageUrl2} />:
                   image2?env.loader:<img className='TarashImage' src={"/img/avatar/defaultProduct.png"}/>}
                   <ImageNewUser cardName="Input Image" 
-                      setImage={setImage2} setImageUrl={props.setImageUrl2} part={2}/>
+                      setImage={setImage2} setImageUrl={props.setImageUrl2} part={2+props.init}/>
                   
             </div>
         </div>

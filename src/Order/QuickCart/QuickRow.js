@@ -9,7 +9,7 @@ function QuickRow(props){
     const data = props.data
     const token = props.token
     const user = props.user
-    //console.log(user)
+    
     const [showDesc,setShowDesc] = useState(0)
     const [editMode,setEditMode] = useState(0)
     const [changes,setChanges]= useState()

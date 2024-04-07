@@ -56,7 +56,7 @@ function CheckList(props){
         <div className="list-input center">
         <h6>چک لیست</h6>
         {props.checkList&&props.checkList.map((check,i)=>(
-            <div className="list-wrapper">
+            <div className="list-wrapper" key={i}>
                 <CheckItem data={check} setData={props.setCheckList} 
                 key={i} id={i} removeItem={removeItem}
                 updateValue={updateValue}

@@ -4,12 +4,15 @@ import env from "../../env"
 function ManageListUser(props){
     const token = props.token
     const [myUsers,setMyUsers] = useState('')
+    const [search,setSearch] = useState('')
     useEffect(()=>{
+        if(search.length>0 && search.length<4) return
         const getOptions={
-            method:'get',
+            method:'post',
             headers: { 'Content-Type': 'application/json' ,
             "x-access-token": token&&token.token,
-            "userId":token&&token.userId}
+            "userId":token&&token.userId},
+            body:JSON.stringify({search:search})
           }
         fetch(env.siteApi + "/panel/user/my-customer",getOptions)
       .then(res => res.json())
@@ -30,11 +33,14 @@ function ManageListUser(props){
         (error) => {
             console.log(error)
         })
-    },[])
+    },[search])
     return(
         <div className="card shadow-lg p450">
             <div className="card-header pb-0 pt-3">
                 <h5 className="mt-3 mb-0">مشتریان من</h5>
+                <input type="text" placeholder="جستجو" 
+                className="myCustomer" value={search}
+                onChange={(e)=>setSearch(e.target.value)} />
                 <button className="btn btn-link text-dark p-0 fixed-plugin-close-button"
                 onClick={()=>props.close()}>
                 <i className="blackIcon fas fa-close"></i>

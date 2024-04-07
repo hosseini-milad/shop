@@ -2,7 +2,6 @@ import StyleInput from "../../../components/Button/Input"
 import StyleSelect from "../../../components/Button/AutoComplete"
 
 function CustomerFilters(props){
-    console.log(props.options)
     return(
         <div className="user-filter">
             <StyleSelect title={"Role"} class="filterComponent" direction={props.lang.dir}

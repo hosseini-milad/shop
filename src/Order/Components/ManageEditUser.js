@@ -9,6 +9,11 @@ function ManageEditUser(props){
     const [imageUrl,setImageUrl] = useState('')
     const [imageUrl2,setImageUrl2] = useState('')
     const [kasbUrl,setKasbUrl] = useState('')
+    
+    const [shopUrl1,setShopUrl1] = useState('')
+    const [shopUrl2,setShopUrl2] = useState('')
+    const [shopUrl3,setShopUrl3] = useState('')
+
     useEffect(()=>{
         const postOptions={
             method:'post',
@@ -45,7 +50,8 @@ function ManageEditUser(props){
             "x-access-token": token&&token.token,
             "userId":token&&token.userId},
             body:JSON.stringify({...data,userId:props.tab,
-            imageUrl1:imageUrl,imageUrl2:imageUrl2,kasbUrl:kasbUrl})
+                shopUrl1:shopUrl1,shopUrl2:shopUrl2,shopUrl3:shopUrl3,
+                imageUrl1:imageUrl,imageUrl2:imageUrl2,kasbUrl:kasbUrl})
           }
           console.log(postOptions)
         fetch(env.siteApi + "/panel/user/update-customer",postOptions)
@@ -83,7 +89,10 @@ function ManageEditUser(props){
                     {def?<UserForm setData={setData} def={def}
                     imageUrl={imageUrl} setImageUrl={setImageUrl}
                     imageUrl2={imageUrl2} setImageUrl2={setImageUrl2}
-                    kasbUrl={kasbUrl} setKasbUrl={setKasbUrl}/>:<></>}
+                    kasbUrl={kasbUrl} setKasbUrl={setKasbUrl}
+                    shopUrl1={shopUrl1} setShopUrl1={setShopUrl1}
+                    shopUrl2={shopUrl2} setShopUrl2={setShopUrl2}
+                    shopUrl3={shopUrl3} setShopUrl3={setShopUrl3}/>:<></>}
                 </section>
             </main>
             <div className="card-btn-holder">

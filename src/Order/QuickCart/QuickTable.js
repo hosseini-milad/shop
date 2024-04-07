@@ -4,7 +4,7 @@ import QuickRow from "./QuickRow"
 
 function QuickTable(props){
   const qCart= props.cart
-  //console.log(qCart)
+  const [reload,setReload] = useState(1)
     return(
     <table>
           <thead>
@@ -34,12 +34,16 @@ function QuickTable(props){
             </tr>
           </thead>
           <tbody>
-            <QuickNew data={props.data} token={props.token}
-              payValue="4" setCart={props.setCart}
+            {reload?<QuickNew data={props.data} token={props.token}
+              payValue={props.payValue?props.payValue:"4"} setCart={props.setCart}
               user={props.user} action={props.action} setError={props.setError}
-              search={props.search} setSearch={props.setSearch}/>
+              search={props.search} setSearch={props.setSearch}
+              setReload={setReload}/>:
+              <tr className="input-tr">
+              <td colSpan={5}><p>در حال ثبت</p></td>
+            </tr>}
             {qCart&&qCart.cartItems&&qCart.cartItems.map((item,i)=>(
-              <QuickRow data={item} key={i} index={i+1} payValue="4"
+              <QuickRow data={item} key={i} index={i+1} payValue={props.payValue?props.payValue:"4"}
               action={props.delete} setError={props.setError}
               token={props.token} user={props.user} setCart={props.setCart}
               cartNo={props.cartNo}/>

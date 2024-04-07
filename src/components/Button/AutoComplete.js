@@ -8,7 +8,7 @@ import { useState } from 'react';
 
 function StyleSelect(props){
     const testOptions=props.options
-    const [filterItems,setFilterItems] = useState(testOptions)
+    //const [filterItems,setFilterItems] = useState(testOptions)
     
     const [loading,setLoading] = useState("1")
     const [search,setSearch] = useState('')
@@ -22,7 +22,7 @@ function StyleSelect(props){
         stylisPlugins: []
       });
     return(
-        //<CacheProvider value={props.direction==="rtl"?cacheRtl:cacheltR}>
+        <CacheProvider value={props.direction==="rtl"?cacheRtl:cacheltR}>
         <div className={props.class}>
             <Autocomplete
             getOptionLabel={(option) => (option&&option[props.label])?
@@ -41,7 +41,7 @@ function StyleSelect(props){
             {props.icon?<div className={props.direction==="rtl"?"showPassRTL":"showPass"}>
                 {props.icon}</div>:<></>}
             </div>
-        //</CacheProvider>
+        </CacheProvider>
     )
 }
 export default StyleSelect

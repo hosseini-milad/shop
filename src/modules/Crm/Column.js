@@ -48,7 +48,7 @@ function Column(props){
                     {props.tasks.map((task,i)=>(
                         <Task key={task._id} 
                             taskList={task}
-                            token={token}
+                            token={token} access={props.access}
                             direction={props.direction}
                             crm={props.crm}
                             setBoardArray={props.setBoardArray}

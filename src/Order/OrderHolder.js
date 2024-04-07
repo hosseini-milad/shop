@@ -4,7 +4,7 @@ import OrderHeader from "./Components/Header"
 import ProductList from "./Components/ProductList"
 import QuickCartHolder from "./QuickCart/QuickCartHolder"
 import PreOrderHolder from "./PreOrder/PreOrderList"
-import env from "../env"
+import env, { defPay } from "../env"
 import Cookies from 'universal-cookie';
 import ShowError from "../components/Modal/ShowError"
 const cookies = new Cookies();
@@ -18,6 +18,7 @@ function OrderHolder(props){
   const [cart,setCart] = useState()
   const [appFilter,setAppFilter] = useState()
   const [products , setProduct] = useState()
+  const [payValue,setPayValue] = useState(defPay)
   const [error,setError] = useState({message:'',color:"brown"})
   
   useEffect(()=>{
@@ -80,9 +81,9 @@ function OrderHolder(props){
     const postOptions={
         method:'post',
         headers: { 'Content-Type': 'application/json'},
-        body:JSON.stringify({filters:appFilter})
+        body:JSON.stringify({filters:appFilter,
+        stockId:token.stockId?token.stockId:"5"})
     }
-    console.log(postOptions)
     fetch(env.siteApi + "/panel/faktor/list-products",postOptions)
     .then(res => res.json())
     .then(
@@ -111,14 +112,18 @@ function OrderHolder(props){
         user={user} setUser={setUser} 
         setFilters={setFilters}/>
       <OrderFilters grid={grid} setFilters={setFilters} 
-        filters={filters} setAppFilter={setAppFilter}/>
+        filters={filters} setAppFilter={setAppFilter}
+        appFilter={appFilter}/>
     </header>
     <main className="sharif-order-main">
       {(filters&&(filters.brand||filters.category))?
-      <ProductList filters={filters} products={products}/>:<></>}
-      <QuickCartHolder token={token} user={user}
+      <ProductList filters={filters} products={products}
+        setCart={setCart} user={user} setError={setError}
+        payValue={payValue} token={token} />:<></>}
+      {user?<QuickCartHolder token={token} user={user}
+        payValue={payValue} setPayValue={setPayValue}
         cart={cart&&cart.quickCart} setCart={setCart} setError={setError}
-        cartDetail={cart&&cart.qCartDetail}/>
+        cartDetail={cart&&cart.qCartDetail}/>:<></>}
       <PreOrderHolder token={token} user={user}
         cart={cart}/>
     </main>

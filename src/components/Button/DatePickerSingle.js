@@ -4,7 +4,6 @@ import 'react-modern-calendar-datepicker/lib/DatePicker.css';
 import { jalali_to_gregorian} from "../../env";
 
 function StyleDatePickerSingle(props){
-    console.log(props.defaultValue)
     const [selectedDate, setSelectedDate] = useState(props.defaultValue?
         props.defaultValue:'');
       const changeDate=()=>{

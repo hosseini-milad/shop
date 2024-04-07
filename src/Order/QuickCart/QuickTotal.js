@@ -34,7 +34,7 @@ function QuickTotal(props){
   const defAction=()=>{
     props.action({message:"acting"})
   }
-  if(!qCart){
+  if(!qCart||!qCart.totalCount){
     return(<></>)
   }
   else return(
@@ -45,7 +45,7 @@ function QuickTotal(props){
       </div>
       <div className="t-wrapper">
         <p>مجموع فاکتور</p>
-        <p>{normalPriceRound(qCart.totalFee,1)}</p>
+        <p>{normalPriceCount(qCart.totalFee,1)}</p>
       </div>
       <div className="t-wrapper">
         <p>تخفیف</p>
@@ -59,10 +59,11 @@ function QuickTotal(props){
         <p>مبلغ کل </p>
         <p>{normalPriceRound(qCart.totalPrice)}</p>
       </div>
+      {props.action?<></>:
       <button type="button" className="product-table-btn temp-btn"
-      onClick={props.action?defAction:SetOrder}>
-        <p>{props.action?"ثبت سپیدار":"ثبت سفارش"}</p>
-      </button>
+      onClick={SetOrder}>
+        <p>ثبت سفارش</p>
+      </button>}
     </div>
     )
 }

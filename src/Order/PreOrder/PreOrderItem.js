@@ -1,34 +1,57 @@
 import { useState } from "react"
-import { normalPriceCount, normalPriceRound } from "../../env"
+import { PriceDiscountTax, TAX, normalPriceCount, normalPriceRound } from "../../env"
 
 function PreOrderItem(props){
     const data = props.data
     const total=props.total&&props.total[props.index]
     const [showDetail,setDetail] = useState(0)
+    //console.log(data.userData)
     return(
         <div className="order-wrapper">
           <div className="border-title" 
             onClick={()=>showDetail?setDetail(0):setDetail(1)}>
             <div className="bu-name">
-              <p>نام مشتری:</p>
-              <p>{data.userData?data.userData.username:'-'}</p>
-              <span>(-)</span>
+              {data.userData?<div className="col">
+                <p>{data.userData?data.userData.username:'-'}</p>
+                <span>{data.userData.meliCode?data.userData.meliCode:"----------"}
+                  <i className="fa-solid fa-credit-card no-font" aria-hidden="true"></i>
+                </span>
+                <span>{data.userData.phone?data.userData.phone:"----------"}
+                  <i className="fa-solid fa-phone no-font" aria-hidden="true"></i>
+                </span>
+                <span>{data.userData.roleId?data.userData.roleId:"----------"}
+                  <i className="fa-solid fa-certificate no-font" aria-hidden="true"></i>
+                </span>
+              </div>:<></>}
+              {data.userData?<div className="col">
+                <small >{data.userData?data.userData.Address:'-'}</small>
+                
+                
+                <span>{data.userData.PostalCode?data.userData.PostalCode:"----------"}
+                  <i className="fa-solid fa-location-arrow no-font" aria-hidden="true"></i>
+                </span>
+              </div>:<></>}
             </div>
-            <div className="border-num">
-              <p>شماره سفارش:</p>
-              <p>{data.cartNo}</p>
+            <div className="newCol">
+              <p>شماره سفارش: {data.cartNo}</p>
+              <a className="orderNoCol" href={"/orders/print/"+data.cartNo}>
+                چاپ سفارش</a>
               {/*<p>{normalPriceCount(total.totalPrice,1)}</p>*/}
             </div>
-            <div className="border-date">
-              <p>تاریخ و ساعت ثبت:</p>
-              <p>{new Date(data.progressDate)
-                  .toLocaleDateString('fa')}</p>
-              <span>({new Date(data.progressDate)
-                  .toLocaleTimeString('fa')})</span>
+            <div className="newCol">
+              <small>مبلغ کل:  <strong>{total?
+                normalPriceRound(total.totalPrice):'-'}</strong></small>
+              <div className="col"><p>تعداد: {total?total.totalCount:1}</p></div>
             </div>
-            <div className="border-num">
-              <p>تعداد:</p>
-              <p>{total?total.totalCount:1}</p>
+            <div className="newCol">
+            <small>تاریخ: {new Date(data.progressDate)
+                  .toLocaleDateString('fa')}</small>
+            <small>ساعت: {new Date(data.progressDate)
+                  .toLocaleTimeString('fa')}</small>
+            </div>
+            <div className="newCol">
+              {data.description?<small>توضیحات: </small>:<></>}
+              <small>{data.description}</small>
             </div>
             <i className={showDetail?"fa-solid fa-angle-up":
                 "fa-solid fa-angle-down"}></i>
@@ -58,6 +81,9 @@ function PreOrderItem(props){
                   </th>
                   <th data-cell="تخفیف">
                     <p>تخفیف</p>
+                  </th>
+                  <th data-cell="مالیات">
+                    <p>مالیات</p>
                   </th>
                   <th data-cell="مبلغ کل">
                     <p>مبلغ کل</p>
@@ -90,15 +116,17 @@ function PreOrderItem(props){
                     <p>{item.count}</p>
                   </td>
                   <td data-cell="مبلغ واحد">
-                    <p>{normalPriceRound(item.price,1.09)}</p>
+                    <p>{normalPriceRound(item.total&&item.total.price)}</p>
                   </td>
                   <td data-cell="تخفیف">
-                    <p>{item.discount?item.discount.length<3?
-                    item.discount+"%":
-                    normalPriceRound(item.discount):'-'}</p>
+                    <p>{normalPriceRound(item.total&&item.total.discount)}
+                    <sub>{item.discount<100?"("+item.discount+"%)":''}</sub></p>
+                  </td>
+                  <td data-cell="مالیات">
+                    <p>{normalPriceRound(item.total&&item.total.tax)}</p>
                   </td>
                   <td data-cell="مبلغ کل">
-                    <p>{normalPriceRound(item.price,item.count,1.09)}</p>
+                    <p>{normalPriceRound(item.total&&item.total.total)}</p>
                   </td>
                   {/*<td>
                     <div className="more-btn">

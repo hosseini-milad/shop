@@ -8,6 +8,11 @@ function ManageAddUser(props){
     const [imageUrl,setImageUrl] = useState('')
     const [imageUrl2,setImageUrl2] = useState('')
     const [kasbUrl,setKasbUrl] = useState('')
+    
+    const [shopUrl1,setShopUrl1] = useState('')
+    const [shopUrl2,setShopUrl2] = useState('')
+    const [shopUrl3,setShopUrl3] = useState('')
+
     const regCustomer=()=>{
         const postOptions={
             method:'post',
@@ -53,7 +58,10 @@ function ManageAddUser(props){
                     <UserForm setData={setData}
                     imageUrl={imageUrl} setImageUrl={setImageUrl}
                     imageUrl2={imageUrl2} setImageUrl2={setImageUrl2}
-                    kasbUrl={kasbUrl} setKasbUrl={setKasbUrl}/>
+                    kasbUrl={kasbUrl} setKasbUrl={setKasbUrl}
+                    shopUrl1={shopUrl1} setShopUrl1={setShopUrl1}
+                    shopUrl2={shopUrl2} setShopUrl2={setShopUrl2}
+                    shopUrl3={shopUrl3} setShopUrl3={setShopUrl3}/>
                 </section>
             </main>
             <div className="card-btn-holder">

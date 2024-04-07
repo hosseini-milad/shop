@@ -37,7 +37,7 @@ function OrderHeader(props){
     .then(
         (result) => {
             if(result.customers)
-                console.log("setShowPop(1)")
+            
             if(result.error){
                 props.setError({message:result.error,color:"brown"})
                 
@@ -56,9 +56,13 @@ function OrderHeader(props){
         {props.user?
         <div className="f-customer">
           <div className="user-item">
-            <b>{props.user.username}</b>
-            <small>{props.user.address?
-              props.user.address:props.user.phone}</small>
+            <b>{props.user.username}
+            {props.user.agent?<></>:
+            <i className="fa-solid fa-check-circle" aria-hidden="true"></i>}
+
+            <small>({props.user.phone?props.user.phone:'-'})</small></b>
+            <small>{props.user.Address?
+              props.user.Address:'-'}</small>
           </div>
         <i className="fa-solid fa-remove" style={{margin: "0", color: "#000"}}
           onClick={()=>props.setUser('')}></i>
@@ -67,7 +71,8 @@ function OrderHeader(props){
           <input type="search" name="" id="f-search" placeholder="مشتری"
             onChange={(e)=>findCustomer(e.target.value)}
             onFocus={()=>setShowDrop(1)}
-            onBlur={()=>setTimeout(()=>setShowDrop(0),200)}/>
+            onBlur={()=>setTimeout(()=>setShowDrop(0),200)}
+            />
           <i className="fa-solid fa-plus" style={{margin: "0", color: "#000"}}
           onClick={()=>setShowUsers(1)}></i>
         </div>}
@@ -87,9 +92,12 @@ function OrderHeader(props){
         {customers&&customers.map((customer,i)=>(
           <div className="menu-item" key={i} 
             onClick={()=>props.setUser(customer)}>
-            <p className="bu-name">{customer.username}</p>
-            <p className="bu-address">{customer.address?
-              customer.address:customer.phone}</p>
+            <p className="bu-name">{customer.username}
+            ({customer.phone})
+            {customer.agent?<></>:
+            <i className="fa-solid fa-check-circle" aria-hidden="true"></i>}</p>
+            <p className="bu-address">{customer.Address?
+              customer.Address:'-'}</p>
           </div>
         ))}
         </div>:<></>}

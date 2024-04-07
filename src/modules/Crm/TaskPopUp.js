@@ -5,6 +5,7 @@ import StyleSelect from "../../components/Button/AutoComplete"
 import StyleDatePicker from "../../components/Button/DatePicker"
 import StyleDatePickerSingle from "../../components/Button/DatePickerSingle"
 import TaskUpload from "./Tasks/TaskUpload"
+import { Autocomplete, TextField } from "@mui/material"
 
 function TaskPopUp(props){
     const [data,setData] = useState(props.data)
@@ -33,7 +34,6 @@ function TaskPopUp(props){
             "x-access-token":token&&token.token,"userId":token&&token.userId},
             body:JSON.stringify({...data,crmId:props.crm?props.crm._id:''})
           }
-          console.log(postOptions)
       fetch(env.siteApi + "/panel/crm/update-tasks",postOptions)
       .then(res => res.json())
       .then(
@@ -48,7 +48,6 @@ function TaskPopUp(props){
         }
       )
     }
-    console.log(data)
     return(
     <section className="delete-modal">
         <div className="modal-backdrop show-modal">
@@ -78,6 +77,7 @@ function TaskPopUp(props){
                     <div className="prob-wrapper">
                     <i className="fa-solid fa-sort" style={{color: "#c0c0c0"}}></i>
                     <div className="prob-title">
+
                         <StyleSelect title={"اولویت"}
                             options={["بالا","متوسط", "کم"]} 
                             direction={props.direction}

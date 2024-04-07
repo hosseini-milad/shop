@@ -7,7 +7,7 @@ function TaskData(props){
     const taskUser=props.taskUser
     const creator=props.creator
     return(
-        <div className="taskData">
+        <div className={taskData.result?"taskData doneTitle":"taskData"}>
             <div className='titles'
                 onClick={()=>props.setOrderPop(1)}>
                 <h3 className={"task-title "+ 

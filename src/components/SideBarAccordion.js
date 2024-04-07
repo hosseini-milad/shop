@@ -3,6 +3,7 @@ import errortrans from "../translate/error";
 import menutrans from "../translate/menuAccordion"
 import Cookies from 'universal-cookie';
 import React from "react";
+
 import tabletrans from "../translate/tables";
 import { Scrollbars } from 'react-custom-scrollbars';
 
@@ -11,8 +12,9 @@ import MenuItems from "./MenuItems";
 function SideBarAccordion(props){
     const url = window.location.pathname.split('/')[1]
     const menuList = menutrans
+    const cookies = new Cookies();
+    const token=cookies.get(env.cookieName)
     const logOff=()=>{
-        const cookies = new Cookies();
         cookies.remove(env.cookieName,{ path: '/' });
        setTimeout(()=>(window.location.reload(),1000))
     }
@@ -61,7 +63,8 @@ function SideBarAccordion(props){
             
                 {menuList?menuList.menu.map((menu,i)=>(
                     <MenuItems menu={menu} key={i} domain={url}
-                    lang={props.lang}/>
+                    lang={props.lang} profile={token.profile}
+                    access={token.access}/>
                 )):''}
             
             </ul>

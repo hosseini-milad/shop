@@ -882,6 +882,8 @@ margin-left: auto;
 .fullPopUp {
   width: calc(100% - 100px);
   position: relative;
+  height: 100%;
+  background: transparent;
 }
 .fullPopUp .sharif-order-main{
   height: 100%;
@@ -900,6 +902,14 @@ margin-left: auto;
 }
 .closeModal:hover{
   color: red;
+}
+.orderModalTitle{
+  position: absolute;
+  top:15px;
+  right:20px;
+  font-size: 15px;
+  color: #fff;
+  padding: 0 10px;
 }
 .taskData{
   padding-bottom: 30px;
@@ -923,4 +933,26 @@ margin-left: auto;
   font-size: 16px;
   padding: 5px 2px 5px 17px;
 
+}
+
+.btn-wrappper{
+  display: flex;
+
+}
+.btn-wrappper .del-btn{
+  width: 45%;
+  text-align: center;
+  margin: 0 auto;
+  border-radius: 4px;
+  font-size: 20px;
+  color: #fff;
+  font-weight: bold;
+  line-height: 2;
+}
+.d-m-icon .icon-wrapper{
+  border-radius: 100%;
+  width: 20px;
+  height: 20px;
+  margin: auto 7px;
+  text-align: center;
 }

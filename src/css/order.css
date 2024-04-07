@@ -10,10 +10,12 @@
     padding: 48px 90px;
     background: var(--dark-blue-main);
     max-height: 100%;
+    max-height: 92%;
   }
   .sharif-order-main {
     display: flex;
     flex-direction: column;
+    overflow-y: auto;
   }
   
   /* Header */
@@ -74,6 +76,8 @@
     border-radius: 0.3rem;
     width: 300px;
     top: 80px;
+    max-height: 300px;
+    overflow-y: auto;
     right: 60px;
     flex-direction: column;
     align-items: flex-start;
@@ -555,6 +559,8 @@
     width: 300px;
     border-radius: 0.3rem;
     top: 105px;
+    max-height: 350px;
+    overflow-y: auto;
   }
   .sharif-order-main .admin-table-sec .code-drop-menu .menu-item {
     width: 100%;
@@ -793,12 +799,21 @@
     border-radius: 0.3rem;
     padding: 0.5rem;
     cursor: pointer;
+    position: relative;
+  }
+  .myCustomer{
+    background: #fff !important;
+    border: #111 !important;
+    outline: auto !important;
+    width: 50% !important;
+    padding-block: auto !important;
+    font-size: 14px;
+    border-radius: 4px;
   }
   .border-title p{
     margin-bottom: 0;
     color: #111;
   }
-  .sharif-order-main .order-wrapper .bu-name,
   .sharif-order-main .order-wrapper .border-num,
   .sharif-order-main .order-wrapper .border-date {
     display: flex;
@@ -995,7 +1010,7 @@
     align-items: center;
     justify-content: flex-start;
     min-width: 250px;
-    min-height: 200px;
+    min-height: 170px;
     overflow: hidden;
     margin-right: auto;
     margin-bottom: 2rem;
@@ -1049,9 +1064,10 @@
   }
   .sharif-order-main .product-table-btn-wrapper .temp-btn,
   .sharif-order-main .product-table-btn-wrapper .final-btn {
-    position: absolute;
+    /*position: absolute;*/
     bottom: 0;
     left: 0px;
+    margin-top: 5px;
     width: 250px;
     max-width: unset;
   }

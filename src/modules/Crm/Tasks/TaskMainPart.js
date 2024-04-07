@@ -9,7 +9,7 @@ function TaskMainPart(props){
     const data = props.data
     const content = props.content
     const [checkList ,setCheckList ] = useState(data?data.checkList:[])
-    //console.log(content)
+    console.log(content)
     return( 
     <div className="nt-col-1">
         <div className="title-input center">
@@ -46,7 +46,7 @@ function TaskMainPart(props){
                 profile:e?e._id:''
             }))}/>
             <StyleSelect title={"Assigned To"}
-            options={content?content.user:[]} label="cName" 
+            options={content?content.user:[]} label="username" 
             defaultValue={(content&&content.currentUser)?
                 content.currentUser:''}
             direction={props.direction}

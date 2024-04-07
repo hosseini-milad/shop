@@ -5,6 +5,7 @@ import formtrans from '../../translate/forms';
 import menutrans from '../../translate/menuAccordion';
 import ModulePart from './ModulePart';
 import AccessHeader from './AccessHeader';
+import CRMSubPart from './CRMSubPart';
 
 function ProfileAdd(props){
   const url = window.location.pathname.split('/')[3]
@@ -15,6 +16,7 @@ function ProfileAdd(props){
   const [profileChange,setProfileChange] = useState('')
   const modulesList = menutrans.menu
   const [accessChange,setAccessChange] = useState([])
+  const [crm,setCrm] = useState('')
 
   useEffect(()=>{
     if(url==="new")return
@@ -39,6 +41,7 @@ fetch(env.siteApi + "/panel/user/fetch-profile",postOptions)
         setError({errorText:"سرویس پیدا شد",
           errorColor:"green"})
           setContent(result.data)
+          setCrm(result.crmData)
           setAccessChange(result.data?result.data.access:'')
         setTimeout(()=>setError({errorText:'',errorColor:"brown"}),2000)
       }
@@ -49,6 +52,7 @@ fetch(env.siteApi + "/panel/user/fetch-profile",postOptions)
   }
 )
   },[])
+
   const saveProfile=()=>{
     //if(newCustomer) {
       var postOptions={
@@ -95,7 +99,39 @@ return(
             setProfileChange={setProfileChange} profileChange={profileChange}
             accessChange={accessChange} setAccessChange={setAccessChange}/>
         ))}
-        
+        {crm?
+        <div className="ps-section">
+        <div className="section-header">
+          <i className="fa-solid fa-sliders" style={{color: "#c0c0c0"}}></i>
+          <div className="section-title">
+            <p>وظایف و پیگیری <span><i className="fa-solid fa-sort-down fa-sm"></i></span></p>
+            <p>{module.description}</p>
+          </div>
+        </div>
+        <div className="section-wrapper slideBarTitle">
+          <div className="section-member">
+              <div className="">
+                  
+              </div>
+              <div className="slideBar">
+                  <div className="dense-btn">{errortrans.read[lang]}
+                  </div>
+                  <div className="dense-btn">{errortrans.edit[lang]}
+                  </div>
+                  <div className="dense-btn">{errortrans.full[lang]}
+                  </div>
+              </div>
+          </div>
+        </div>
+        <div className="section-wrapper">
+          {crm&&crm.crmSteps.map((crmSteps,i)=>(
+              <CRMSubPart crmData={crmSteps} key={i} lang={props.lang} 
+              content={content&&content.access.find(item=>item.title===crmSteps.enTitle)}
+          accessChange={accessChange} setAccessChange={setAccessChange}/>
+          ))}
+        </div>
+      </div>
+        :<></>}
 
       </div>
     </div>

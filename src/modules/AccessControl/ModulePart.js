@@ -1,10 +1,12 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import errortrans from "../../translate/error"
 import ModuleSubPart from "./ModuleSubPart"
+import env from "../../env"
 
 function ModulePart(props){
     const module = props.module
     const content = props.content&&props.content.access
+    
     return(
         <div className="ps-section">
           <div className="section-header">

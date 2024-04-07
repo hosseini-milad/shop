@@ -9,16 +9,14 @@ function QuickCartHolder(props){
   const token = props.token
   const [search,setSearch] = useState()
   const [content,setContent] = useState()
-  
   useEffect(() => {
-    if(!search||search.length<4) {setContent(''); return}
+    if(!search||search.length<3) {setContent(''); return}
     const postOptions={
         method:'post',
         headers: {'Content-Type': 'application/json',
         "x-access-token":token&&token.token,"userId":token&&token.userId},
         body:JSON.stringify({search:search})
       }
-      console.log(postOptions)
   fetch(env.siteApi + "/panel/faktor/find-products",postOptions)
   .then(res => res.json())
   .then(
@@ -41,7 +39,6 @@ function QuickCartHolder(props){
     }
     
 )},[search])
-//console.log(content)
     return(
     <section className="admin-table-sec ">
         <QuickTable data={content} token={token}
@@ -49,13 +46,17 @@ function QuickCartHolder(props){
           user={props.user} action={props.addToCart}
           delete={props.deleteFromCart} setError={props.setError}
           search={search} setSearch={setSearch}
-          cartNo={props.cartNo}/>
-        <div className="product-table-btn-wrapper">
+          cartNo={props.cartNo} payValue={props.payValue}/>
+        <div className="product-table-btn-wrapper"> 
           <QuickActions cart={props.cart} setCart={props.setCart}
-          token={token} setError={props.setError}/>
+          action={props.addToCart} cartNo={props.cartNo}
+          token={token} setError={props.setError} user={props.user}
+          setPayValue={props.setPayValue} payValue={props.payValue}
+          />
           <QuickTotal data={props.cartDetail} token={token}
           setCart={props.setCart} action={props.regCart}
-            user={props.user} setError={props.setError}/>
+            user={props.user} setError={props.setError}
+            access={props.access}/>
 
         </div>
 

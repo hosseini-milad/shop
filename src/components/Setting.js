@@ -16,7 +16,6 @@ const Setting = (props)=>{
     }
     
     const checkAllow=(access)=>{
-      console.log(access,token.access)
       if(token.access==="manager")return(1)
       
       return(0)

@@ -13,10 +13,10 @@ function TaskUpload(props){
                   "content-type": "application/json"
                 },
               body:JSON.stringify({base64image:image&&image.base64,
-                                   imgName:image&&image.fileName})
+                                   imgName:image&&image.fileName,folderName:"task"})
             }//URL.createObjectURL(image)
             //console.log(postOptions)
-            image&&fetch(env.siteApi+"/image",postOptions)
+            image&&fetch(env.siteApi+"/panel/crm/upload",postOptions)
               .then(res => res.json())
               .then(
                 (result) => {

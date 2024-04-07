@@ -16,6 +16,7 @@ function QuickNew(props){
     //const [error,setError] = useState({message:'',color:"brown"})
     const addItem=()=>{
         if(!selectedItem)return
+        props.setReload(0)
         const postOptions={
             method:'post',
             headers: { 'Content-Type': 'application/json' ,
@@ -44,10 +45,13 @@ function QuickNew(props){
                         color:"brown"}),3000)
                 }
                 else{
+                    setTimeout(()=>props.setReload(1),500)
+                    
                     props.setCart(result)
                     props.setError({message:result.message,color:"green"})
                     setTimeout(()=>props.setError({message:'',
                         color:"brown"}),3000)
+                        
                     //setItem('')
                     //setItemPrice('')
                     setCount("1")
@@ -65,8 +69,8 @@ function QuickNew(props){
                 sku:selectedItem.sku,
                 title:selectedItem.title,
                 count:count?count:1,
-                price:selectedItem.priceData.find(item=>item.saleType==props.payValue).price,
-                description:"description"})
+                price:selectedItem.priceData,
+                description:"ویرایش شده"})
     }
     return(
         <tr className="input-tr">
@@ -85,7 +89,7 @@ function QuickNew(props){
                 count={count} setCount={setCount}/>
             </td>
             <td data-cell="مبلغ واحد">
-                {selectedItem?
+                {selectedItem? 
                 payValue(selectedItem.priceData,props.payValue,1):''}
             </td>
             <td data-cell="تخفیف">

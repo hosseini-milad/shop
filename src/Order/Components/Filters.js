@@ -8,15 +8,17 @@ function OrderFilters(props){
   const brands = filters&&filters.brands
   const cat=filters&&filters.cats
   const updateFilter=(kind,value)=>{
-    console.log(kind ,value)
+    //console.log(kind ,value)
     props.setFilters(prevState => ({
       ...prevState,
       [prevState[kind]]:value
     }))
+    props.appFilter?
     props.setAppFilter(prevState => ({
-      ...prevState,
+      ...prevState, 
       [prevState[kind]]:value
-    }))
+    })):props.setAppFilter
+    ({[kind]:value})
   }
     return(
     <div className="filter-sec">
@@ -25,16 +27,22 @@ function OrderFilters(props){
           <StyleSelect title={"برند"} direction={"rtl"} 
                 options={brands||[]} label="title"
                 class="f-company" 
-                action={(e)=>updateFilter("brand",e)}
+                action={(e)=>props.setAppFilter(prevState => ({
+                  ...prevState,
+                  brand:e?e.brandCode:''
+                }))}
                 
           />
           <StyleSelect title={"دسته بندی"} direction={"rtl"} 
                 options={cat||[]} label="title"
                 class="f-company" 
-                action={(e)=>props.setFilters(prevState => ({
+                action={(e)=>{props.setAppFilter(prevState => ({
                   ...prevState,
-                  category:e
-                }))}
+                  category:e?e.catCode:''
+                }));props.setFilters(prevState => ({
+                  ...prevState,
+                  category:e?e.catCode:''
+                }))}}
                 
           />
           <StyleSelect title={"زیر دسته بندی"} direction={"rtl"} 

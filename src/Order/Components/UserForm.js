@@ -5,7 +5,7 @@ import ImageUserHolder from "./ImageUserHolder";
 
 function UserForm(props){
     const def = props.def
-    console.log(def)
+    //console.log(def)
     return(
         <div className="card-form">
             <div className="card-input">
@@ -45,17 +45,25 @@ function UserForm(props){
                   ...prevState,
                   postalCode:e
                 }))}/>
-                <StyleInput title={"آدرس"} direction={"rtl"} 
-                class="userInput"  defaultValue={def?def.Address:''}
+                
+                <StyleInput title={"کد نقش"} direction={"rtl"} 
+                class="userInput"  defaultValue={def?def.roleId:''}
                 action={(e)=>props.setData(prevState => ({
                   ...prevState,
-                  Address:e
+                  roleId:e
                 }))}/>
                 <StyleInput title={"موقعیت مکانی"} direction={"rtl"} 
                 class="userInput"  defaultValue={def?def.nif:''}
                 action={(e)=>props.setData(prevState => ({
                   ...prevState,
                   nif:e
+                }))}/>
+                
+                <StyleInput title={"آدرس"} direction={"rtl"} 
+                class="userInput fullRow"  defaultValue={def?def.Address:''}
+                action={(e)=>props.setData(prevState => ({
+                  ...prevState,
+                  Address:e
                 }))}/>
                 {/*<div className="official">
                     <label htmlFor="active">رسمی</label>
@@ -71,8 +79,17 @@ function UserForm(props){
                     imageUrl2={props.imageUrl2?props.imageUrl2:def?def.imageUrl2:''} 
                     setImageUrl2={props.setImageUrl2}
                     kasbUrl={props.kasbUrl?props.kasbUrl:def?def.kasbUrl:''} 
-                    setKasbUrl={props.setKasbUrl}
-                    def={def}/>
+                    setKasbUrl={props.setKasbUrl} init={0}
+                    def={def} titles={["تصویر کارت ملی*","تصویر کد نقش","تصویر جواز کسب"]}/>
+                </div>
+                <div className="imageUser">
+                    <ImageUserHolder imageUrl={props.shopUrl1?props.shopUrl1:def?def.shopUrl1:''} 
+                    setImageUrl={props.setShopUrl1} 
+                    imageUrl2={props.shopUrl2?props.shopUrl2:def?def.shopUrl2:''} 
+                    setImageUrl2={props.setShopUrl2}
+                    kasbUrl={props.shopUrl3?props.shopUrl3:def?def.shopUrl3:''} 
+                    setKasbUrl={props.setShopUrl3} init={10}
+                    def={def} titles={["تصویر محل کسب 2","تصویر محل کسب 3","تصویر محل کسب 1*"]}/>
                 </div>
             </div>
         </div>

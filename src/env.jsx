@@ -1,10 +1,10 @@
+
 const env={
     //siteApi:'http://localhost:6090/api',
     siteApi:'https://shopadmin.sharifoilco.com/api',
     
     //siteApiUrl:'http://localhost:6090',
     siteApiUrl:'https://shopadmin.sharifoilco.com',
-    tax:"0.1",
     cookieName:'shop-login',
     //cookieName:'panel-login',
     //cookieName:'mehr-login',
@@ -14,13 +14,15 @@ const env={
     //cookieLang:'mehr-lang',
 
     shopExpert:'shop-experience',
-
+    tax: .1,
     loader:<img className="imgLoader" src="/img/loaderPanel.gif"/>,
     defaultUser:"/img/avatar/avatar_1.jpg",
     defaultProduct:"/img/avatar/defaultProduct.png",
 
     editorApi:'qosmvwu6wq395cpq7ay8ud8j9d21cf4cdgkxwmpz317vpy2i'
 }
+export const TAX=0.1
+export const defPay=3
 export function jalali_to_gregorian(jy, jm, jd) {
     var sal_a, gy, gm, gd, days;
     jy += 1595;
@@ -82,11 +84,22 @@ export function rxFindCountSeprate(order){
   return([right,left])
 }
 export function PriceDiscount(priceText,count,discountText){
+  if(!discountText) discountText = "0"
     if(priceText === null||priceText === undefined) return(priceText)
     var rawPrice = priceText.toString().replaceAll(',', '')
     var rawDiscount = discountText.toString().replace('%', '')
     var priceTemp = normalPriceCount(rawPrice*parseInt(count)*(100-rawDiscount)/100)
     return((priceTemp?priceTemp.toString().split('.')[0]:""))
+  }
+export function PriceDiscountTax(priceText,count,discountText,tax){
+  if(!discountText) discountText = "0"
+    if(priceText === null||priceText === undefined) return(priceText)
+    var rawPrice = priceText.toString().replaceAll(',', '')
+    var rawDiscount = discountText.toString().replace('%', '')
+    var priceTemp = normalPriceCount(rawPrice*parseInt(count)*(100-rawDiscount)/100,tax)
+    var priceNoTax = (priceTemp?priceTemp.toString().split('.')[0]:0)
+    console.log(priceTemp)
+    return(normalPriceRound(priceTemp))
   }
 export function PageInfoFunction(orderInfo,filters){
   var totalPage =orderInfo.size?parseInt(parseInt(orderInfo.size)/
@@ -96,6 +109,7 @@ export function PageInfoFunction(orderInfo,filters){
   return({
     show:true,
     totalPage:totalPage,
+    totalItem:orderInfo.size,
     currentPage:currentPage,
     allowNext:currentPage>0?true:false,
     allowPre:currentPage==totalPage?false:true
@@ -149,11 +163,11 @@ export const payValue=(priceSet,payValue,count,off)=>{
   var price = 0
   if(!priceSet) return(0)
   var price = ''
-  if(priceSet.constructor === Array)
-    price=priceSet.find(item=>item.saleType===payValue).price
+  if(priceSet.length&&priceSet.constructor === Array)
+    price=priceSet.find(item=>item.saleType==payValue).price
   else
     price =priceSet 
-  var rawPrice = parseInt(price)*1.09
+  var rawPrice = parseInt(price)*(1+env.tax)
   rawPrice = parseInt(Math.round(rawPrice/1000))*1000
   var rawPriceCount = parseInt(rawPrice)*parseInt(count?count:1)
   if(off){
@@ -165,7 +179,20 @@ export const payValue=(priceSet,payValue,count,off)=>{
   }
   return(normalPriceCount(rawPriceCount,1))
 }
-
+export const stockValue=(stockSet,stockId)=>{
+  
+  var count = 0
+  if(!stockSet) return(0)
+  var price = ''
+  if(stockSet.length&&stockSet.constructor === Array){
+    count=stockSet.find(item=>item.Stock==stockId)
+    if(count) count = count.quantity
+  }
+  else
+    count =stockSet 
+  
+  return(count)
+}
 export const findBox=(item)=>{
   const count = item.count&&item.count.quantity
   const perBox = item.perBox
@@ -202,6 +229,17 @@ const findElement=(desc,field,index)=>{
   if(pureValue&&pureValue[0]===' ')
     pureValue = pureValue.replace(' ','')
   return(pureValue)
+}
+
+export const findFPage=(user)=>{
+  const userData = user.get(env.cookieName)
+  if(userData){
+    if(userData.profileClass === "660409167887fe34af0d0c77")
+      return("market")
+    else
+      return("dashboard")
+  }
+  return("login")
 }
 
 export default env

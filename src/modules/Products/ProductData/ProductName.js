@@ -116,7 +116,7 @@ function ProductName(props){
                    productMeta:e
                  }))}/>
               </div>
-              {/*<div className="contentTextEditor">
+              <div className="contentTextEditor">
                 <label for="name">{tabletrans.description[props.lang]}</label>
                 <RichTextEditor content={content} value={"description"}
                   setProductChange={props.setProductChange} 
@@ -133,7 +133,7 @@ function ProductName(props){
                     ...prevState,
                     fullDesc:e
                     }))}/>
-                  </div>*/}
+                  </div>
               <hr/>
               <div className="images">
                 <h5>{tabletrans.images[props.lang]}</h5>

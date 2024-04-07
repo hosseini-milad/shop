@@ -4,22 +4,28 @@ import env from "../../env"
 
 function QuickActions(props){
     const token = props.token
+    const cart = props.cart
+    //console.log(cart.discount)
     const [showDesc,setShowDesc] = useState(0)
-    const [description,setDescription] = useState()
+    const [description,setDescription] = useState(cart&&cart.description)
     const [showDisc,setShowDisc] = useState(0)
     const [discount,setDiscount] = useState()
-    const [disText,setDisText] = useState()
-    const [payValue,setPayValue] = useState(4)
-     
-    useEffect(()=>{
-        if(!description&&!discount)return
+    const [disText,setDisText] = useState(cart&&cart.discount)
+    
+    
+    useEffect(()=>{    
+        //if(!description&&!discount)return
+        if(!cart) return
+        if(cart.discount ==disText&&
+            cart.description == description) return
         const postOptions={
             method:'post',
             headers: { 'Content-Type': 'application/json' ,
             "x-access-token": token&&token.token,
             "userId":token&&token.userId},
             body:JSON.stringify({description:description,
-            discount:discount})
+            discount:discount,userId:props.user?props.user._id:'',
+            cartNo:props.cartNo})
           }
         console.log(postOptions)
         fetch(env.siteApi + "/panel/faktor/update-desc",postOptions)
@@ -32,7 +38,8 @@ function QuickActions(props){
                         color:"brown"}),3000)
                 }
                 else{
-                    props.setCart(result)
+                    //if(!props.action)
+                        props.setCart(result)
                     props.setError({message:result.message,color:"green"})
                     setTimeout(()=>props.setError({message:'',
                         color:"brown"}),3000)
@@ -44,14 +51,18 @@ function QuickActions(props){
     
     },[description,discount])
     useEffect(()=>{
+        if(!cart)return
+        if(cart.payValue == props.payValue) return
         const postOptions={
             method:'post',
             headers: { 'Content-Type': 'application/json' ,
             "x-access-token": token&&token.token,
             "userId":token&&token.userId},
-            body:JSON.stringify({payValue:payValue})
+            body:JSON.stringify({userId:props.user?props.user._id:''
+                ,payValue:props.payValue,
+            cartNo:props.cartNo})
           }
-        console.log(postOptions)
+        //console.log(postOptions)
         fetch(env.siteApi + "/panel/faktor/edit-payValue",postOptions)
         .then(res => res.json())
         .then(
@@ -62,7 +73,8 @@ function QuickActions(props){
                         color:"brown"}),3000)
                 }
                 else{
-                    props.setCart(result)
+                    //if(!props.action)
+                        props.setCart(result)
                     props.setError({message:result.message,color:"green"})
                     setTimeout(()=>props.setError({message:'',
                         color:"brown"}),3000)
@@ -72,24 +84,24 @@ function QuickActions(props){
                 console.log(error)
             })
     
-    },[payValue])
+    },[props.payValue])
     return(
     <div className="btn-wrapper">
         <button type="button" className="product-table-btn pay-metod-btn">
-            <div className={payValue===4?"cash-pay display-on":"cash-pay"}
-                onClick={()=>setPayValue(3)}>
+            <div className={props.payValue==3?"cash-pay display-on":"cash-pay"}
+                onClick={()=>props.setPayValue(4)}>
             <p>نقدی</p>
-            <i className="fa-solid fa-wallet"></i>
+            <i className="fa-solid fa-money"></i>
             </div>
-            <div className={payValue===3?"check-pay display-on":"check-pay"}
-                onClick={()=>setPayValue(4)}>
+            <div className={props.payValue==4?"check-pay display-on":"check-pay"}
+                onClick={()=>props.setPayValue(3)}>
             <p>غیرنقدی</p>
-            <i className="fa-solid fa-file-invoice-dollar"></i>
+            <i className="fa-solid fa-credit-card"></i>
             </div>
         </button>
         <button type="button" className="product-table-btn"
         onClick={()=>setShowDesc(1)}>
-            <p>توضیحات</p><i className="fa-solid fa-comment-medical"></i>
+            <p>توضیحات</p><i className="fa-solid fa-comment"></i>
         </button>
         {showDisc?<button type="button" className="product-table-btn">
             <input type="input" placeholder="تخفیف" value={disText}

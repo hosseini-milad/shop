@@ -198,15 +198,16 @@ function CRM(props){
                     boardArray.columnOrder.map((columnId,i)=>{
                     const column = boardArray.columnOrder.find
                         (item=>item.enTitle===columnId.enTitle);
+                    const access = column.access
                     const tasks = boardArray.columns[columnId.enTitle];
-                    //console.log(tasks) 
+                    
                     var rawTasks = boardArray.tasks
                     var newTasks =[]
                     rawTasks.find(item=>item._id===tasks[item._id])
                     for(var i=0;i<tasks.length;i++){
                         newTasks.push(rawTasks.find(item=>item._id===tasks[i]))
                     }
-                    return(column?<Column key={column.id} column={column} 
+                    return(column?<Column key={column.id} column={column} access={access}
                         tasks={newTasks} token={token} direction={direction}
                         setBoardArray={setBoardArray} crm={boardArray.crm}/>:<></>)
                 })}

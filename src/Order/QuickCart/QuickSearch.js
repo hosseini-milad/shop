@@ -10,6 +10,7 @@ function QuickSearch(props){
             <input className="dp-input" type="text" name="" id=""
                 onChange={(e)=>props.setSearch(e.target.value)}
             onFocus={()=>setShowDrop(1)}
+            onClick={()=>setShowDrop(1)}
             onBlur={()=>setTimeout(()=>setShowDrop(0),200)}
             />
             <i className="fa-solid fa-angle-down"></i>
@@ -18,7 +19,8 @@ function QuickSearch(props){
         <div className="code-drop-menu">
             {data?data.products&&data.products.map((item,i)=>(
                 <div className="menu-item" key={i}
-                onClick={()=>props.setSelectedItem(item)}>
+                onClick={()=>(props.setSelectedItem(item),
+                    setShowDrop(0))}>
                     <div className="item-img">
                         <img src={env.siteApiUrl+item.thumbUrl} alt=""/>
                     </div>

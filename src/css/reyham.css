@@ -1,4 +1,8 @@
-
+:root{
+	--main-color:#002A54;
+	--main-dark:rgb(48, 127, 226);
+    
+}
 .main-pad{
     padding-bottom: 50px;
     width: 100%;
@@ -26,6 +30,9 @@
 .MuiInputBase-root input{
     padding:8px 14px !important;
     font-family: vazir !important;
+}
+.MuiAutocomplete-popper{
+  z-index: 200000 !important;
 }
 .MuiAutocomplete-popper div{
   font-family: vazir !important;
@@ -454,7 +461,9 @@
   font-size: inherit;
   margin: auto;
 }
-
+.imageHandler{
+  width: 50%;
+}
 .product-title p{
   overflow: hidden;
   white-space: nowrap; 
@@ -540,6 +549,9 @@
   width: 48%;
   margin-bottom: 15px !important;
 }
+.fullRow{
+  width: 100%;
+}
 .userInput label{
   background-color: transparent;
 }
@@ -549,12 +561,24 @@
 .imageUserField{
   display: flex;
   justify-content: space-between;
+  margin-bottom: 30px;
 }
 .form-field-image{
   width: 30%;
 }
 .media-input{
   display: grid;
+  text-align: center;
+}
+.media-input label{
+  cursor: pointer;
+  border: 2px solid gray;
+  border-radius: 4px;
+  background-color: rgba(100,100,100,.5);
+  padding: 3px;
+  margin: 3px 0;
+  text-align: center;
+  color: #fff;
 }
 .media-input img{
   width: 100%;
@@ -574,6 +598,9 @@
 }
 .card .sharif-order-main .admin-table-sec p{
   width: auto;
+  font-size: 13px;
+  order: inherit;
+  margin-bottom: 5px;
 }
 .product-table-btn input{
   width: 80px;
@@ -593,3 +620,342 @@
 .autoFilter{
   margin: auto;
 }
+.input-wrapper i{
+  padding: 5px 10px;
+}
+.selectedGroup{
+  background-color: #b78428;
+}
+.selectedGroup label{
+  color: #fff;
+}
+
+.selectedGroup .product-num-input{
+  visibility: visible;
+}
+.userDetail{
+  display: grid;
+}
+
+.menu-item i ,.user-item i{
+  color: rgb(47, 47, 255) !important;
+  margin-top: 6px;
+  margin-right: 0.5rem;
+  font-size: 0.8rem;
+}
+.order-wrapper .bu-name{
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  gap: 6px;
+}
+.order-wrapper .col {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 6px;
+  max-width: 450px;
+}
+.col span {
+    padding: 0.2rem 0.8rem;
+    background-color: var(--gold);
+    border-radius: 9999px;
+    font-size: 0.75rem;
+    text-align: center;
+    padding-right: 20px;
+    position: relative;
+    color:#111;
+    width: 100px;
+  }
+  .col i{
+    position: absolute;
+    right: 2px;
+    top:2px;
+  }
+.col small{
+  overflow: hidden;
+  width: 330px;
+  white-space: nowrap; /* Don't forget this one */
+  text-overflow: ellipsis;
+  color: #333;
+}
+.col p{
+  width: 120px;
+  overflow: hidden;
+  
+  white-space: nowrap; /* Don't forget this one */
+  text-overflow: ellipsis;
+}
+.newCol{
+  display: flex;
+  flex-direction: column;
+  color: #111;
+}
+.orderNoCol{
+  padding: 0.2rem 0.8rem;
+    border: 2px solid var(--gold);
+    border-radius: 0.5rem;
+    font-size: 0.9rem;
+    text-align: center;
+}
+.crmAction{
+  color: #fff;
+  background-color: var(--dark-blue-main);
+  padding: 0 10px 50px;
+}
+.taskAction{
+  display: flex;
+  gap:10px;
+}
+.btn-crm{
+  border-radius: 4px;
+  padding: 3px 15px;
+  border: none;
+}
+.btn-crm-accept{
+  background-color: lightgreen;
+}
+.btn-crm-cancel{
+  background-color: lightsalmon;
+}
+.doneTitle{
+  border-left: 5px solid greenyellow;
+}
+
+
+/* Print */
+.userInfo {
+  display: flex;
+  min-height: 100px;
+}
+.printArea{
+  direction: rtl;
+  color:#212529;
+}
+.hesabfaTable{
+  font-family: vazir;
+  direction: rtl;
+  border:2px solid #333;
+  border-radius: 8px;
+  width: 90%;
+  margin: auto;
+  min-height: 100px;
+}
+.hesabfaTable tbody{
+  margin: auto;
+  padding: 0;
+}
+.hesabfaPrint{
+
+}
+.hesabfaRow{
+  width: 95%;
+  margin: auto;
+}
+.verticalRow{
+  position: relative;
+  width: 50px;
+}
+.hesabfaColor{
+  background-color: #B9B9B9;
+  border-radius: 0 8px 8px 0;
+}
+.hesabfaMainTable{
+  font-family: vazir;
+  border: 2px solid #333;
+  width: 90%;
+  margin: 6px auto;
+  border-collapse: collapse;
+}
+.hesabfaMainTable td{
+  border: 1px solid #333;
+  padding: 2px 7px;
+}
+.hesabfaMainTable tbody{
+  width: 100%;
+
+}
+.hesabfaMainTable th{
+  border: 2px solid #333;
+  background-color: #B9B9B9;
+  padding: 5px 10px;
+  font-size: 13px;
+}
+.centerCell{
+  text-align: center;
+}
+.verticalRow h3{
+  position: absolute;
+  transform: rotate(-90deg);
+  top: 30px;
+  left: -10px;
+}
+.hesabfaFooter{
+  font-family: vazir;
+  width: 90%;
+  margin: 10px auto;
+}
+.priceSeprate{
+  display: flex;
+  justify-content: space-between;
+}
+.hesabfaPrice{
+  display: grid;
+}
+.hesabfaPrice h3{
+  padding-bottom: 6px;
+  border-bottom: 3px solid #333;
+  line-height: 1;
+  margin-bottom: 10px;
+}
+.hesabfaRight{
+  display: grid;
+  border-bottom: 2px solid #333;
+}
+.hesabfaSection{
+  display: grid;
+  margin:auto;
+  width: 25%;
+  text-align: center;
+}
+.hesabfaSection h4{
+  margin:0 auto;
+}
+.hesabfaSection h1{
+  margin-bottom:10px;
+  white-space: nowrap;
+}
+.hesabfaSection small{
+  margin:3px 5px;
+  display: flex;
+  justify-content: flex-end;
+}
+.hesabfaSection b{
+  border:1px solid var(--main-color);
+  padding: 0 10px;
+  border-radius: 6px;
+  width: 120px;
+  margin: 0 10px;
+}
+.footerRows{
+  display: flex;
+  justify-content: space-between;
+}
+.footerHesabfa{
+  display: flex;
+  width: 70%;
+  margin: 10px auto 20px 0;
+  text-align: center;
+  justify-content: space-around;
+}
+.hesabSection{
+  display: grid;
+  width: 90%;
+  margin: auto;
+}
+.hesabBorder{
+  border:1px solid #222;
+  display: flex;
+  border-radius: 7px;
+  padding: 5px 10px;
+  margin:5px 0 0;
+  justify-content: space-between;
+}
+.verticalRow small{
+  position: absolute;
+  transform: rotate(-90deg);
+  top: 17px;
+  left: -5px;
+}
+.hesabPrintTable{
+  padding: 0;
+  width: 90%;
+  margin: 5px auto 0;
+}
+.hesabPrintTable .verticalRow{
+  width: 30px;
+}
+.hesabSection .hesabfaSection{
+  width: calc(100% - 0px);
+}
+.priceCell{
+  width: 105px;
+  max-width: 105px;
+  font-size: 15px;
+  text-align: center;
+}
+.sumTable{
+  font-size: 12px;
+}
+.priceSwitcher{
+  float:left;
+  margin-left: 30px !important;
+}
+.priceSwitcher span{
+  font-size: 11px;
+}
+.fishPrint .orderDataHolder{
+  padding: 0;
+  width: 100%;
+}
+.fishPrint .orderTable{
+  padding: 0px;
+  margin: 2px auto;
+  border-collapse: collapse;
+  width: 100%;
+  border: 1px solid #111;
+  border-radius: 5px;
+}
+.fishPrint .orderTable{
+  
+}
+.fishPrintArea{
+  max-width: 300px;
+  margin: auto;
+}
+
+/* End Print */
+
+.formal-btn{
+  position: absolute;
+  left:170px;
+  color: darkslateblue;
+  background-color: skyblue;
+  cursor: pointer;
+  border-radius: 2px;
+  padding: 7px 20px !important;
+  bottom: 14px;
+}
+
+
+@media screen and (max-width: 650px){
+  .order-wrapper .col {
+    display: flex;
+    flex-wrap: wrap;
+  }
+  .order-wrapper .col p{
+    width: 100%;
+  }
+  .bu-name span {
+    margin-left: 1%;
+    min-width: 110px !important;
+    display: initial;
+    font-size: 15px !important;
+    padding-right: 30px;
+    width: 31%;
+  }
+  .border-title i {
+      font-size: inherit !important;
+    }
+  .orderNoCol{
+    position: absolute;
+    bottom: 40px;
+    left: 20px;
+  }
+  .newCol {
+    flex-direction: initial;
+    gap:10px;
+    margin: 5px 0;
+  }
+}
+

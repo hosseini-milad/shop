@@ -21,7 +21,7 @@ import Login from './pages/Login';
 import Cookies from 'universal-cookie';
 import errortrans from './translate/error';
 import LayoutLogin from './components/LayoutLogin';
-import env from './env';
+import env, { findFPage } from './env';
 import AccessHolder from './modules/AccessControl/AccessHolder';
 import ProfileAdd from './modules/AccessControl/ProfileAdd';
 import Orders from './pages/Orders';
@@ -51,6 +51,7 @@ import Classes from './pages/Classes';
 import ClassDetailHolder from './modules/Classes/ClassData/ClassDetailHolder';
 import PolicyDetailHolder from './modules/Policy/PolicyData/PolicyDetailHolder';
 import Policy from './pages/Policy';
+import FaktorSitePrint from './modules/Print/PrintSiteHolder';
 
 const cookies = new Cookies();
 const style = document.getElementById('style-direction');
@@ -71,7 +72,8 @@ root.render(
     <Router>
     {cookies.get(env.cookieName)?
       <Routes>
-        <Route path="/" element={<Layout><Dashboard lang={lang}/></Layout>}/>
+        <Route path="/" element={findFPage(cookies)==="market"?
+        <OrderHolder lang={lang}/>:<Layout><Dashboard lang={lang}/></Layout>}/>
         <Route path="/login" element={<Layout><Profile lang={lang}/></Layout>}/>
         <Route path="/dashboard" element={<Layout><Dashboard lang={lang}/></Layout>}/>
         <Route path="/customers" element={<Layout><Customers lang={lang}/></Layout>}/>
@@ -86,7 +88,10 @@ root.render(
 
         <Route path="/orders" element={<Layout><Orders lang={lang}/></Layout>}/>
         <Route path="/orders/detail/:orderId" element={<Layout><OrderDetailHolder lang={lang}/></Layout>}/>
+        
         <Route path="/orders/business" element={<OrderHolder lang={"fa"}/>}/>
+        <Route path="/orders/print/:orderId" element={<FaktorSitePrint lang={"fa"}/>}/>
+        <Route path="/orders/invoice/:orderId" element={<FaktorSitePrint lang={"fa"}/>}/>
 
         <Route path="/services" element={<Layout><Services lang={lang}/></Layout>}/>
         <Route path="/services/detail/:orderId" element={<Layout><ServiceDetailHolder lang={lang}/></Layout>}/>
