@@ -664,7 +664,7 @@ const SepidarUser=(data)=>{
     var query ={
         "GUID": "124ab075-fc79-417f-b8cf-"+
             Math.ceil(Math.random() * ( max- min) + min),
-        "PhoneNumber": data.phone,
+        "PhoneNumber": data.mobile?data.mobile:data.phone,
         "CustomerType": 1,
         "Name": data.cName,
         "LastName": data.sName,
