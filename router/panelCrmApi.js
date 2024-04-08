@@ -153,8 +153,7 @@ router.post('/update-tasks-status',auth,jsonParser,async (req,res)=>{
             sepidarResult = await sepidarPOST(sepidarQuery,"/api/invoices",adminData._id)
             
             if(sepidarResult.Message)
-                sepidarAccept =0
-            
+                sepidarAccept =1
         }
         //console.log(sepidarResult)
         //console.log(sepidarQuery)
