@@ -25,6 +25,7 @@ const CreateTask = require('../middleware/CreateTask');
 const NewCode = require('../middleware/NewCode');
 const customers = require('../models/auth/customers');
 const brand = require('../models/product/brand');
+const FindCurrentCart = require('../middleware/CurrentCart');
 const {TaxRate} = process.env
 
 router.post('/products', async (req,res)=>{
@@ -139,7 +140,8 @@ router.post('/find-products',auth, async (req,res)=>{
             as : "countData"
         }}])
         var searchProductResult=[]
-        const cartList = await cart.find(stockId?{stockId:stockId}:{})
+        const cartList = await cart.find(stockId?{stockId:stockId,}:{})
+        var currentCart = await FindCurrentCart(cartList)
         const qCartList = await qCart.find(stockId?{stockId:stockId}:{})
         var index = 0
         for(var i=0;i<searchProducts.length;i++){

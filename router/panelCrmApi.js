@@ -157,7 +157,7 @@ router.post('/update-tasks-status',auth,jsonParser,async (req,res)=>{
         }
         //console.log(sepidarResult)
         //console.log(sepidarQuery)
-        if(sepidarAccept){
+        if(sepidarAccept){ 
             await tasks.updateOne({_id:ObjectID(taskId)},
             {$set:{taskStep:newStatus.enTitle,query:sepidarQuery,
                 result:sepidarResult,progressDate:Date.now()}})
