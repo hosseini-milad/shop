@@ -147,7 +147,7 @@ router.post('/find-products',auth, async (req,res)=>{
         for(var i=0;i<searchProducts.length;i++){
             var count = (searchProducts[i].countData.find(item=>item.Stock==stockId))
             var desc = ''
-            var cartCount = findCartCount(searchProducts[i].sku,cartList.concat(qCartList),stockId)
+            var cartCount = findCartCount(searchProducts[i].sku,currentCart.concat(qCartList),stockId)
             if(count)count.quantity = parseInt(count.quantity)-parseInt(cartCount)
             if(count&&count.quantity){
                 index++
