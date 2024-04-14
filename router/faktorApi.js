@@ -518,6 +518,24 @@ router.post('/cart-fetch', async (req,res)=>{
         res.status(500).json({message: error.message})
     }
 })
+router.post('/cart-delete',auth, async (req,res)=>{
+    const userId =req.headers['userid'];
+    const cartID=req.body.cartID
+    const adminData = await users.findOne({_id:ObjectID(userId)})
+    try{
+        if(adminData.access !== "manager"){
+            res.status(500).json({message: "دسترسی ندارید",error:"deny"})
+        }
+        await cart.deleteOne({cartNo:cartID})
+        await tasks.updateOne({orderNo:cartID},{$set:{taskStep:"cancel"}})
+        
+        
+        res.json({message:"سفارش حذف شد"})
+    }
+    catch(error){
+        res.status(500).json({message: error.message})
+    }
+})
 router.post('/cart-find', async (req,res)=>{
     const cartNo=req.body.cartNo
     try{
@@ -538,10 +556,9 @@ router.post('/cart-find', async (req,res)=>{
             as : "managerData"
         }}])
         const cartData =cartList&&cartList[0] 
-        //console.log(cartData)
         if(!cartData) return
         var cartItems = cartData.cartItems
-        for(var i=0;i<cartItems.length;i++)
+        for(var i=0;i<cartItems&&cartItems.length;i++)
             cartList[0].cartItems[i].total =findCartItemDetail(cartItems[i])
         var orderData=findQuickCartSum(cartItems,cartData.payValue,
             cartData.discount)
@@ -552,6 +569,7 @@ router.post('/cart-find', async (req,res)=>{
         res.status(500).json({message: error.message})
     }
 })
+
 router.post('/cartData', async (req,res)=>{
     const userId =req.body.userId?req.body.userId:req.headers['userid'];
     const cartNo=req.body.cartNo
@@ -980,7 +998,8 @@ router.post('/quick-to-cart',jsonParser, async (req,res)=>{
         await quickCart.deleteOne({userId:data.userId})
         await CreateTask("border",data)
         const cartDetails = await findCartFunction(userId,req.headers['userid'])
-        res.json(cartDetails)
+        setTimeout(()=>res.json(cartDetails),3000)
+        
     }
     catch(error){
         res.status(500).json({message: error.message})
