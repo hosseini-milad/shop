@@ -559,7 +559,7 @@ router.post('/cart-find', async (req,res)=>{
         if(!cartData) return
         var cartItems = cartData.cartItems
         for(var i=0;i<cartItems&&cartItems.length;i++)
-            cartList[0].cartItems[i].total =findCartItemDetail(cartItems[i])
+            cartList[0].cartItems[i].total =findCartItemDetail(cartItems[i],cartData.payValue)
         var orderData=findQuickCartSum(cartItems,cartData.payValue,
             cartData.discount)
         
