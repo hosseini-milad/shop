@@ -304,7 +304,6 @@ const findCartItemDetail=(cartItem,payValue)=>{
     var discount = 0
     var totalPrice = 0
     var count = cartItem.count
-
     if(cartItem.discount){
         var off = parseInt(cartItem.discount.toString().replace( /,/g, '').replace( /^\D+/g, ''))
         
@@ -558,8 +557,12 @@ router.post('/cart-find', async (req,res)=>{
         const cartData =cartList&&cartList[0] 
         if(!cartData) return
         var cartItems = cartData.cartItems
-        for(var i=0;i<cartItems&&cartItems.length;i++)
+        if(cartItems)
+            for(var i=0;i<cartItems.length;i++){
+            console.log(cartItems.length)
             cartList[0].cartItems[i].total =findCartItemDetail(cartItems[i],cartData.payValue)
+            console.log(cartList[0].cartItems[i])
+        }
         var orderData=findQuickCartSum(cartItems,cartData.payValue,
             cartData.discount)
         
