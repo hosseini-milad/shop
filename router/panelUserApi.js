@@ -656,7 +656,9 @@ router.post('/formal-customer', async (req,res)=>{
         res.status(500).json({message: error.message})
     }
 })
-
+function normalNumber(number){
+    return(number.replace(/[۰-۹]/g, d => '۰۱۲۳۴۵۶۷۸۹'.indexOf(d)))
+  }
 const SepidarUser=(data)=>{
     if(!data)return('')
     var max = 999999999999
@@ -664,7 +666,7 @@ const SepidarUser=(data)=>{
     var query ={
         "GUID": "124ab075-fc79-417f-b8cf-"+
             Math.ceil(Math.random() * ( max- min) + min),
-        "PhoneNumber": data.mobile?data.mobile:data.phone,
+        "PhoneNumber": normalNumber(data.mobile?data.mobile:data.phone),
         "CustomerType": 1,
         "Name": data.cName,
         "LastName": data.sName,
