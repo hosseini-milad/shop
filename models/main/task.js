@@ -1,5 +1,4 @@
 const mongoose = require('mongoose');
-var autoIncrement = require('mongoose-auto-increment')
 var Schema = mongoose.Schema;
 
 const TaskSchema = new Schema({
@@ -7,10 +6,7 @@ const TaskSchema = new Schema({
     state:   String, 
     prior:   Number,
     priority:   String,
-    date:    Date,
+    date:{ type: Date ,default:Date.now()},
     progressDate:Date
 })
-autoIncrement.initialize(mongoose.connection); // 3. initialize autoIncrement 
-
-TaskSchema.plugin(autoIncrement.plugin,{ model: 'Task', field: 'priority' });
 module.exports = mongoose.model('Task',TaskSchema);
