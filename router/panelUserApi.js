@@ -629,8 +629,8 @@ router.post('/formal-customer', async (req,res)=>{
     if(sepidarResult.CustomerID){
         await customer.updateOne({_id:userInfo._id},{$set:{
             CustomerID:sepidarResult.CustomerID,
-            creator:userInfo.agent
-
+            creator:userInfo.agent, 
+            agent:""
         }},{$unset:{agent:1}})
     }
     res.json({query:customerQuery,result:sepidarResult,
