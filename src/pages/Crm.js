@@ -53,6 +53,14 @@ function CRM(props){
       .then(res => res.json())
       .then(
         (result) => {
+            if(result.error){
+                if (result.error === "Invalid Token Error")
+                {
+                    const cookies = new Cookies();
+                    cookies.remove(env.cookieName,{ path: '/' });
+                    setTimeout(()=>(window.location.reload(),1000))
+                }
+            }
             setBoardArray(result)
         },
         (error) => {
@@ -180,25 +188,27 @@ function CRM(props){
         document.body.style.backgroundColor=`rgba(153,141,217,${opacity})`*/
     }
     return(
-    <div className="crm">
+    <div className="crm" style={{direction:direction}}>
         <div className='reyham-board board-list'>
             {boardArray?<DragDropContext
             onDragStart={DragStart}
             onDragUpdate={DragUpdate}
             onDragEnd={DragEnd}>
-                {boardArray.columnOrder.map((columnId)=>{
+                {boardArray.columnOrder&&
+                    boardArray.columnOrder.map((columnId,i)=>{
                     const column = boardArray.columnOrder.find
                         (item=>item.enTitle===columnId.enTitle);
+                    const access = column.access
                     const tasks = boardArray.columns[columnId.enTitle];
-                    //console.log(tasks) 
+                    
                     var rawTasks = boardArray.tasks
                     var newTasks =[]
                     rawTasks.find(item=>item._id===tasks[item._id])
                     for(var i=0;i<tasks.length;i++){
                         newTasks.push(rawTasks.find(item=>item._id===tasks[i]))
                     }
-                    return(column?<Column key={column.id} column={column} 
-                        tasks={newTasks} token={token}
+                    return(column?<Column key={column.id} column={column} access={access}
+                        tasks={newTasks} token={token} direction={direction}
                         setBoardArray={setBoardArray} crm={boardArray.crm}/>:<></>)
                 })}
             </DragDropContext>:<div>Updating</div>}

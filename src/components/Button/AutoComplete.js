@@ -8,7 +8,7 @@ import { useState } from 'react';
 
 function StyleSelect(props){
     const testOptions=props.options
-    const [filterItems,setFilterItems] = useState(testOptions)
+    //const [filterItems,setFilterItems] = useState(testOptions)
     
     const [loading,setLoading] = useState("1")
     const [search,setSearch] = useState('')
@@ -22,21 +22,26 @@ function StyleSelect(props){
         stylisPlugins: []
       });
     return(
-        //<CacheProvider value={props.direction==="rtl"?cacheRtl:cacheltR}>
+        <CacheProvider value={props.direction==="rtl"?cacheRtl:cacheltR}>
+        <div className={props.class}>
             <Autocomplete
             getOptionLabel={(option) => (option&&option[props.label])?
                 option[props.label]:option}
             //className={stylisRTLPlugin}
+            defaultValue={props.defaultValue?props.defaultValue:''}
             options={testOptions||[]}
-            className={props.class}
-            style={{minWidth:"200px"}}
+            style={{minWidth:"176px"}}
             onChange={(e,value)=>props.action(value)}
             renderInput={(params) => (
             <TextField {...params} label={props.title}
                 onChange={(e)=>props.textChange?props.textChange(e.target.value):''}
             />)}
+            
             />
-        //</CacheProvider>
+            {props.icon?<div className={props.direction==="rtl"?"showPassRTL":"showPass"}>
+                {props.icon}</div>:<></>}
+            </div>
+        </CacheProvider>
     )
 }
 export default StyleSelect

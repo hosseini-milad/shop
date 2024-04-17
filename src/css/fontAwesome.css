@@ -94,7 +94,7 @@
   }
   .blackIcon{
     font-size: 20px;
-    color: #111;
+    color: #111 !important;
   }
   
   .tableIcon{

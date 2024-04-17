@@ -5,6 +5,7 @@
 }
 .crm ul {
   padding-left: 0rem;
+  padding-right: 0rem;
 }
 .board-title{
   position: relative;
@@ -60,7 +61,7 @@ margin-left: auto;
     height: 10px;
     border-radius: 50%;
     background-color: #999;
-    margin-right: 10px;
+    margin-left: 10px;
   }
   .board-list {
     display: flex;
@@ -110,7 +111,6 @@ margin-left: auto;
     cursor: pointer;
     position: relative;
     font-weight: 200;
-    padding-bottom: 50px;
   }
   .task-title {
     font-size: 14px;
@@ -192,7 +192,22 @@ margin-left: auto;
     text-align: left;
     white-space: nowrap;
   }
-
+  .right-handler{
+    left: auto;
+    right:10px
+  }
+  .customerInfo{
+    top:40px;
+    bottom: auto;
+    left:5px; 
+    right: auto;
+  }
+  .creatorInfo{
+    top:20px;
+    bottom: auto;
+    left:5px; 
+    right: auto;
+  }
   .status-active {
     border: 1px solid #80b780;
     color: #80b780;
@@ -214,8 +229,9 @@ margin-left: auto;
   display: flex;
   flex-direction: column;
   border-radius: 8px;
-  overflow: hidden;
-  margin-top: 50px;
+}
+.fullPopUp .task-popup{
+  max-height: calc(100% - 100px);
 }
 .task-popup p{
   margin:0;
@@ -245,7 +261,7 @@ margin-left: auto;
 }
 .note-input-task {
   margin-bottom: 1.5em;
-  margin-left: 5%;
+  margin-right: 5%;
 }
 .note-input-task label {
   width: 90%;
@@ -272,7 +288,6 @@ margin-left: auto;
   font: 1em;
   font-weight: 400;
   text-transform: uppercase;
-  text-align: left;
   color: #4e566d;
   width: 90%;
   margin-bottom: 1em;
@@ -437,7 +452,6 @@ margin-left: auto;
   align-items: center;
   width: 90%;
   align-self: center;
-  margin-bottom: 1.5em;
 }
 .file-input input{
   display: none;
@@ -448,6 +462,7 @@ margin-left: auto;
   justify-content: center;
   gap: 10px;
   padding: 0.5em;
+  width: 100%;
   background-color: rgba(128, 128, 128, 0.2);
   border-radius: 8px;
   cursor: pointer;
@@ -544,10 +559,12 @@ margin-left: auto;
   align-items: center;
   justify-content: center;
   text-align: center;
+  padding: 10px;
+  margin-bottom: 5px;
 }
 .addTask{
   position: absolute;
-  right:10px;
+  left:10px;
   top: 10px;
   cursor: pointer;
   padding: 5px;
@@ -593,7 +610,7 @@ margin-left: auto;
 }
 .delete-modal .modal-backdrop {
   position: fixed;
-  z-index: 99;
+  z-index: 10000;
   top: 0;
   left: 0;
   width: 100%;
@@ -784,7 +801,7 @@ margin-left: auto;
   padding: 0.8em;
   border: 1px solid #e6eaf0;
   border-radius: 4px;
-  margin-left:5%;
+  margin-right:5%;
 }
 .title-input .MuiTextField-root{
   width: 100%;
@@ -819,4 +836,123 @@ margin-left: auto;
   height: auto;
   background-color: rgb(221, 69, 49);
   gap: 10px;
+}
+
+.checkInput{
+  width: 82%;
+  max-height: 100px;
+  min-height: auto;
+}
+.prob-wrapper .DatePicker input {
+  width: 100%;
+}
+.task-title{
+  padding-right: 5px;
+  border-right: 2px solid transparent;
+}
+.hightask{
+  border-right:5px solid orangered;
+}
+.lowtask{
+  border-right:5px solid green;
+}
+.midtask{
+  border-right:5px solid silver;
+}
+.image-wrapper{
+
+}
+.fa-status-check{
+  color: green;
+  margin: 2px;
+  line-height: 1;
+}
+.fa-white-check{
+  color: #fff;
+  margin: 1px 2.5px;
+  line-height: 1;
+}
+.check-circle{
+  background-color: green;
+}
+.doneTask{
+  color:silver;
+  text-decoration: line-through
+}
+.fullPopUp {
+  width: calc(100% - 100px);
+  position: relative;
+  height: 100%;
+  background: transparent;
+}
+.fullPopUp .sharif-order-main{
+  height: 100%;
+  overflow-y: auto;
+}
+.closeModal{
+  position: absolute;
+  top:10px;
+  left:20px;
+  font-size: 25px;
+  color: #fff;
+  width: 40px;
+  padding: 0 10px;
+  border-radius: 50%;
+  text-align: center;
+}
+.closeModal:hover{
+  color: red;
+}
+.orderModalTitle{
+  position: absolute;
+  top:15px;
+  right:20px;
+  font-size: 15px;
+  color: #fff;
+  padding: 0 10px;
+}
+.taskData{
+  padding-bottom: 30px;
+}
+.footerTask{
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  right: 0;
+  padding: 10px 5px 0px;
+  min-height: 38px;
+}
+.footerIcons{
+  display: flex;
+  list-style: none;
+}
+.footerIcons li{
+  direction: rtl;
+}
+.footerIcons i{
+  font-size: 16px;
+  padding: 5px 2px 5px 17px;
+
+}
+
+.btn-wrappper{
+  display: flex;
+
+}
+.btn-wrappper .del-btn{
+  width: 45%;
+  text-align: center;
+  margin: 0 auto;
+  border-radius: 4px;
+  font-size: 20px;
+  color: #fff;
+  font-weight: bold;
+  line-height: 2;
+}
+.d-m-icon .icon-wrapper{
+  border-radius: 100%;
+  width: 20px;
+  height: 20px;
+  margin: auto 7px;
+  text-align: center;
 }

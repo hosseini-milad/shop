@@ -15,14 +15,11 @@ function ProductDetailHolder(props){
   const [error,setError] = useState({errorText:'',errorColor:"brown"})
 
   const [content,setContent] = useState('')
-  const [brand,setBrand] = useState('')
-  const [category,setCategory] = useState('')
-  const [fCode,setFCode] = useState('')
+  const [filters,setFilters] = useState({})
   const [purchase,setPurchase] = useState('')
   const [updateContent,setUpdateContent] = useState(0)
   const [productChange,setProductChange] = useState('')
   
-  console.log(productChange)
   useEffect(()=>{
     if(url==="new")return
     var postOptions={
@@ -45,9 +42,8 @@ fetch(env.siteApi + "/panel/product/fetch-product",postOptions)
         setError({errorText:"سرویس پیدا شد",
           errorColor:"green"})
           setUpdateContent(1)
-          setContent(result.filter)
-          setCategory(result.categoryList)
-          setBrand(result.brandList)
+          setContent(result)
+          setFilters(result.filter?result.filter.filters:{})
         setTimeout(()=>setError({errorText:'',errorColor:"brown"}),2000)
       }
       
@@ -63,8 +59,9 @@ fetch(env.siteApi + "/panel/product/fetch-product",postOptions)
           method:'post',
           headers: {'Content-Type': 'application/json'},
           body:JSON.stringify({productId:url,
-            ...productChange})
+            ...productChange,filters:filters})
         }
+        console.log(filters)
        console.log(postOptions)
     fetch(env.siteApi + "/panel/product/editProduct",postOptions)
     .then(res => res.json())
@@ -102,18 +99,19 @@ fetch(env.siteApi + "/panel/product/fetch-product",postOptions)
         <ProductName direction={direction} lang={lang} content={content} 
           productChange={productChange} setProductChange={setProductChange}
           setUpdateContent={setUpdateContent} setContent={setContent}/>
+        {(url==="new"||content)?
         <ProductSKU direction={direction} lang={lang} content={content} 
           productChange={productChange} setProductChange={setProductChange}
-          brand={brand} category={category}/>
-        <ProductPrice direction={direction} lang={lang} content={content} 
-          productChange={productChange} setProductChange={setProductChange}/>
+          setFilters={setFilters}/>:
+          <></>}
+        {/*<ProductPrice direction={direction} lang={lang} content={content} 
+          productChange={productChange} setProductChange={setProductChange}/>*/}
         <div className="create-btn-wrapper">
           <div className="dense-btn">
             <input className="switch-input" type="checkbox" id="switch-3" />
           </div>
-          <p>Publish</p>
           <div className="save-btn" onClick={saveProducts}>{formtrans.saveChanges[lang]}</div>
-          <div className="cancel-btn" onClick={()=>window.location.href="/services"}>{formtrans.cancel[lang]}</div>
+          <div className="cancel-btn" onClick={()=>window.location.href="/products"}>{formtrans.cancel[lang]}</div>
         </div>
         
       </div>:<div>{env.loader}</div>}

@@ -1,10 +1,10 @@
+
 const env={
     //siteApi:'http://localhost:6090/api',
     siteApi:'https://shopadmin.sharifoilco.com/api',
     
     //siteApiUrl:'http://localhost:6090',
     siteApiUrl:'https://shopadmin.sharifoilco.com',
-
     cookieName:'shop-login',
     //cookieName:'panel-login',
     //cookieName:'mehr-login',
@@ -13,12 +13,16 @@ const env={
     //cookieLang:'panel-lang',
     //cookieLang:'mehr-lang',
 
+    shopExpert:'shop-experience',
+    tax: .1,
     loader:<img className="imgLoader" src="/img/loaderPanel.gif"/>,
     defaultUser:"/img/avatar/avatar_1.jpg",
     defaultProduct:"/img/avatar/defaultProduct.png",
 
     editorApi:'qosmvwu6wq395cpq7ay8ud8j9d21cf4cdgkxwmpz317vpy2i'
 }
+export const TAX=0.1
+export const defPay=3
 export function jalali_to_gregorian(jy, jm, jd) {
     var sal_a, gy, gm, gd, days;
     jy += 1595;
@@ -45,9 +49,22 @@ export function normalPriceCount(priceText,count){
     if(!priceText||priceText === null||priceText === undefined) return("")
 
     try{priceText =priceText.split(' ')[0];}catch{}
-    if(priceText === "0"||priceText === 0)return("رایگان");
+    if(priceText === "0"||priceText === 0)return("-");
     var rawPrice = parseInt(priceText.toString().replace(/\D/g,''))*(count?count:1)
     //console.log(rawPrice,priceText)
+    return(
+        (rawPrice.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",").replace( /^\D+/g, ''))
+    )
+}
+export function normalPriceRound(priceText,count,tax){
+    if(!priceText||priceText === null||priceText === undefined) return("")
+
+    try{priceText =priceText.split(' ')[0];}catch{}
+    if(priceText === "0"||priceText === 0)return("رایگان");
+    priceText = priceText.toString().split('.')[0]
+    var rawPrice = parseInt(priceText.toString().replace(/\D/g,''))*
+      (count?count:1)*(tax?tax:1)
+    rawPrice = parseInt(Math.round(rawPrice/1000))*1000
     return(
         (rawPrice.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",").replace( /^\D+/g, ''))
     )
@@ -67,11 +84,22 @@ export function rxFindCountSeprate(order){
   return([right,left])
 }
 export function PriceDiscount(priceText,count,discountText){
+  if(!discountText) discountText = "0"
     if(priceText === null||priceText === undefined) return(priceText)
     var rawPrice = priceText.toString().replaceAll(',', '')
     var rawDiscount = discountText.toString().replace('%', '')
     var priceTemp = normalPriceCount(rawPrice*parseInt(count)*(100-rawDiscount)/100)
     return((priceTemp?priceTemp.toString().split('.')[0]:""))
+  }
+export function PriceDiscountTax(priceText,count,discountText,tax){
+  if(!discountText) discountText = "0"
+    if(priceText === null||priceText === undefined) return(priceText)
+    var rawPrice = priceText.toString().replaceAll(',', '')
+    var rawDiscount = discountText.toString().replace('%', '')
+    var priceTemp = normalPriceCount(rawPrice*parseInt(count)*(100-rawDiscount)/100,tax)
+    var priceNoTax = (priceTemp?priceTemp.toString().split('.')[0]:0)
+    console.log(priceTemp)
+    return(normalPriceRound(priceTemp))
   }
 export function PageInfoFunction(orderInfo,filters){
   var totalPage =orderInfo.size?parseInt(parseInt(orderInfo.size)/
@@ -81,6 +109,7 @@ export function PageInfoFunction(orderInfo,filters){
   return({
     show:true,
     totalPage:totalPage,
+    totalItem:orderInfo.size,
     currentPage:currentPage,
     allowNext:currentPage>0?true:false,
     allowPre:currentPage==totalPage?false:true
@@ -123,5 +152,94 @@ function formatAMPM(date) {
   var strTime = hours + ':' + minutes + ' ' + ampm;
   return strTime;
 }
+export const findPriority=(priority)=>{
+  if(!priority) return("mid")
+  if(priority=="کم") return("low")
+  if(priority=="متوسط") return("mid")
+  if(priority=="بالا") return("high")
+  return("mid")
+}
+export const payValue=(priceSet,payValue,count,off)=>{
+  var price = 0
+  if(!priceSet) return(0)
+  var price = ''
+  if(priceSet.length&&priceSet.constructor === Array)
+    price=priceSet.find(item=>item.saleType==payValue).price
+  else
+    price =priceSet 
+  var rawPrice = parseInt(price)*(1+env.tax)
+  rawPrice = parseInt(Math.round(rawPrice/1000))*1000
+  var rawPriceCount = parseInt(rawPrice)*parseInt(count?count:1)
+  if(off){
+    var offInt = parseInt(off)
+    if(offInt>100)
+      rawPriceCount -= parseInt(off) 
+    else
+      rawPriceCount = rawPriceCount*(100-parseInt(off))/100
+  }
+  return(normalPriceCount(rawPriceCount,1))
+}
+export const stockValue=(stockSet,stockId)=>{
   
+  var count = 0
+  if(!stockSet) return(0)
+  var price = ''
+  if(stockSet.length&&stockSet.constructor === Array){
+    count=stockSet.find(item=>item.Stock==stockId)
+    if(count) count = count.quantity
+  }
+  else
+    count =stockSet 
+  
+  return(count)
+}
+export const findBox=(item)=>{
+  const count = item.count&&item.count.quantity
+  const perBox = item.perBox
+  if(!count || !perBox) return("-")
+  var boxCount = (count/perBox)
+  return(parseInt(boxCount))
+}
+
+export const parseDesc=(desc)=>{
+  var brand = findElement(desc,"برند",1)
+  var vs = findElement(desc,"ویسکوزیته",2)
+  if(!vs)
+    vs = findElement(desc,"ویسکوزیته",1)
+  var suitable = findElement(desc,"مناسب برای",3)
+  if(!suitable)
+    suitable = findElement(desc,"مناسب برای",1)
+  var volume = findElement(desc,"حجم",1)
+  var pack = findElement(desc,"نوع بسته",1)
+  
+  return({brand:brand, vs:vs, suitable:suitable,
+    volume:volume,pack:pack})
+
+
+}
+const findElement=(desc,field,index)=>{
+  var value = desc.split(field)
+  if(value.length>1){
+    value = value[1].split('>')
+    if(value.length>1) value = value[index]&&value[index].split('<')[0]
+  }
+  var pureValue = value
+  if(value&&value.includes(':'))
+    pureValue = value.replace(':','')
+  if(pureValue&&pureValue[0]===' ')
+    pureValue = pureValue.replace(' ','')
+  return(pureValue)
+}
+
+export const findFPage=(user)=>{
+  const userData = user.get(env.cookieName)
+  if(userData){
+    if(userData.profileClass === "660409167887fe34af0d0c77")
+      return("market")
+    else
+      return("dashboard")
+  }
+  return("login")
+}
+
 export default env

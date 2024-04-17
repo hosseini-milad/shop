@@ -7,18 +7,16 @@ function ProductQuickDetail(props){
     return(
     <div className="sub-order-table">
         <div className="sub-row">
-            <div className="sub-avatar">
-            <div className="sub-avatar-container">
-                <img src="/img/lenz01.jpg"
-                alt={"sku.sku"}/>
+            <div className="sub-quick">
+            <div className="sub-quick-container">
+                <img src={product.imageUrl?(env.siteApiUrl+product.imageUrl):env.defaultProduct} 
+                  alt={product?product.title:"default"}/>
                 <div className="sub-info">
-                <p className="sub-name">{product.title}</p>
-                <p className="sub-id"> {product.description}</p>
+                    <p className="sub-name">{product.title}</p>
+                    <p className="sub-id"> {product.description}</p>
                 </div>
             </div>
             </div>
-            <div className="sub-num">کد محصول</div>
-            <div className="sub-price">{product.sku}</div>
         </div>
         <div className="sub-row">
             <p dangerouslySetInnerHTML={{__html:product.fullDesc}}></p>

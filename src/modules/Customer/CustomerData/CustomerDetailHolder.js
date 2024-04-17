@@ -8,6 +8,7 @@ import CustomerNotif from "./CustomerNotif"
 import CustomerSocial from "./CustomerSocial"
 import CustomerSecurity from "./CustomerSecurity"
 import CustomerGeneral from "./CustomerGeneral"
+import CustomerClass from "./CustomerClass"
 
 function CustomerDetailHolder(props){
   const url = window.location.pathname.split('/')[3]
@@ -47,6 +48,8 @@ function CustomerDetailHolder(props){
         {tabIndex===2?<CustomerNotif direction={direction} lang={lang}/>:<></>}
         {tabIndex===3?<CustomerSocial direction={direction} lang={lang}/>:<></>}
         {tabIndex===4?<CustomerSecurity direction={direction} lang={lang}/>:<></>}
+        {tabIndex===5?<CustomerClass direction={direction} lang={lang}
+        userData={userData}/>:<></>}
       </div>
     </div>
     )

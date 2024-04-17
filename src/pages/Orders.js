@@ -7,6 +7,7 @@ import OrderFilters from '../modules/Orders/OrderComponent/OrderFilters';
 import { useEffect } from 'react';
 import { useState } from 'react';
 import env from '../env';
+import tabletrans from '../translate/tables';
 const cookies = new Cookies();
 
 function Orders(props){
@@ -53,7 +54,23 @@ function Orders(props){
   //window.scrollTo(0, 270);},[pageNumber,filters,perPage,refreshTable])
    return(
       <div className="user" style={{direction:direction}}>
-      <h4>{errortrans.orders[lang]}</h4>
+      <div className="od-header">
+        <div className="od-header-info">
+          
+          <div className="od-header-name">
+            <p>{errortrans.orders[lang]}</p>
+          </div>
+          
+        </div>
+      <div className="od-header-btn">
+          
+          <label className="edit-btn" onClick={()=>window.location.href="/orders/business"}>
+            <i className="fa-solid fa-plus"></i>
+            {tabletrans.orderReg[lang]}
+          </label>
+          
+        </div>
+      </div>
       <div className="list-container">
         <StatusBar lang={lang} token={token} filters={filters}
          status={content.rxStatus} setFilters={setFilters}/>

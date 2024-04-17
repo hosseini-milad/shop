@@ -47,6 +47,14 @@ menu:[
                 href:"/customers",
                 url:"customers"
             },
+            {
+                english: "Sale Policy",
+                persian: "سیاست های فروش",
+                index:0,
+                icon:"fa-percent",
+                href:"/policy",
+                url:"policy"
+            },
             ]
     },
     {

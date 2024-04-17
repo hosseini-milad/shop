@@ -3,6 +3,14 @@ const tabletrans ={
         english: "not entered",
         persian: "وارد نشده"
     },
+    customer:{
+        english: "Customer",
+        persian: "مشتری"
+    },
+    classes:{
+        english: "Classes",
+        persian: "کلاس ها"
+    },
     dkmehrDashboard:{
         english: "DKMehr Dashboard",
         persian: "داشبورد داده کاوان"
@@ -27,9 +35,9 @@ const tabletrans ={
         english: "Date",
         persian: "تاریخ"
     },
-    customer:{
-        english: "Customer",
-        persian: "مشتری"
+    customers:{
+        english: "Customers",
+        persian: "مشتریان"
     },
     brand:{
         english: "Brand",
@@ -46,6 +54,10 @@ const tabletrans ={
     order:{
         english: "Order",
         persian: "سفارش"
+    },
+    orderReg:{
+        english: "Order Reg",
+        persian: "ثبت سفارش"
     },
     orderNumber: {
         english: "Order Number",
@@ -304,6 +316,56 @@ const tabletrans ={
     brandCode:{
         english:"Brand Code",
         persian:"کد برند"
+    },
+    
+    /*Brands*/
+    brands:{
+        english:"Brands",
+        persian:"برندها"
+    },
+    addBrand:{
+        english:"Add/Edit Brand",
+        persian:"افزودن یا ویرایش برند"
+    },
+    policies:{
+        english:"Policies",
+        persian:"سیاست های فروش"
+    },
+    addPolicy:{
+        english:"Add/Edit Policy",
+        persian:"افزودن یا ویرایش سیاست فروش"
+    },
+    addCategory:{
+        english:"Add/Edit Category",
+        persian:"افزودن یا ویرایش دسته بندی"
+    },
+    addClass:{
+        english:"Add/Edit Class",
+        persian:"افزودن یا ویرایش کلاس ها"
+    },
+    description:{
+        english:"Description",
+        persian:"توضیحات"
+    },
+    classes:{
+        english:"Classes",
+        persian:"کلاس مشتری"
+    },
+    sendSms:{
+        english:"Send SMS",
+        persian:"ارسال پیامک"
+    },
+    classManage:{
+        english:"Class Manage",
+        persian:"مدیریت کلاس"
+    },
+    fullDescription:{
+        english:"Full Description",
+        persian:"توضیحات کامل"
+    },
+    policyCode:{
+        english: "Policy Code",
+        persian: "کد سیاست"
     },
 
 }

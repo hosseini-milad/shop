@@ -19,11 +19,12 @@ function StyleInput(props){
         stylisPlugins: []
       });
     return(
-        //<CacheProvider value={props.direction==="rtl"?cacheRtl:cacheltR} style={{position:"relative"}}>
+        <CacheProvider value={props.direction==="rtl"?cacheRtl:cacheltR} style={{position:"relative"}}>
             <><TextField label={props.title} 
                 className={props.class}
                 defaultValue={props.defaultValue}
                 onChange={(e)=>props.action(e.target.value)}
+                onKeyDown={(e)=>props.doAction?props.doAction(e):''}
                 type={props.password&&!showPass?"password":"text"}
             />
             {props.password?<i className={`fa ${showPass?"fa-eye-slash":"fa-eye"} 
@@ -32,7 +33,7 @@ function StyleInput(props){
             {props.icon?<div className={props.direction==="rtl"?"showPassRTL":"showPass"}>
                 {props.icon}</div>:<></>}</>
             
-        //</CacheProvider>
+        </CacheProvider>
     )
 }
 export default StyleInput

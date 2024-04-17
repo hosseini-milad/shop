@@ -10203,9 +10203,7 @@
   
   .py-4 {
     padding-top: 1.5rem !important;
-    padding-bottom: 4.5rem !important;
-    overflow: auto;
-    height: calc(100vh - 3rem);
+    padding-bottom: 1.5rem !important;
   }
   
   .py-5 {
@@ -22141,10 +22139,10 @@
   
   .fixed-plugin .card {
     position: fixed !important;
-    right: -360px;
+    left: -500px;
     top: 0;
     height: 100%;
-    left: auto !important;
+    right: auto !important;
     transform: unset !important;
     width: 360px;
     border-radius: 0;
@@ -22182,7 +22180,7 @@
   }
   
   .fixed-plugin.show .card {
-    right: 0;
+    left: 0;
   }
   
   .input-group {

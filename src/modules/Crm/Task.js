@@ -1,11 +1,17 @@
 import {Draggable} from 'react-beautiful-dnd'
-import { dayFromNow } from '../../env'
+import { dayFromNow ,findPriority} from '../../env'
 import { useState } from 'react'
 import TaskPopUp from './TaskPopUp'
+import OrderPopUp from './orderPopUp'
+import TaskData from './TaskData'
 function Task(props){
     const [taskPop,setTaskPop] = useState(0)
+    const [orderPop,setOrderPop] = useState(0)
     const taskData = props.taskList
-    const taskUser = taskData.profileInfo
+    const taskProfile = taskData.profileInfo
+    const creator = taskData.creatorInfo
+    const customer = taskData.customerInfo
+    const taskUser = taskData.userInfo
     return(<Draggable key={taskData._id}
         draggableId ={taskData._id} index={props.index}>
             {(provided,snapshot)=>(
@@ -15,41 +21,25 @@ function Task(props){
                     ref={provided.innerRef} 
                     data-dragging={snapshot.isDragging}>
                         
-                    <div className='titles'>
-                        <a href={`/profile/${taskData._id}`}>
-                            <h3 className="task-title">{taskData.taskId}</h3></a>
-                        {taskData.content?
-                        <a href={`/profile/${taskData.content}`}>
-                            <h3 className="task-title">{taskData.content}</h3></a>
-                            :<></>}
-                    </div>
-                    <div className='editTask'
-                    onClick={()=>setTaskPop(1)}>
-                        Edit
-                    </div>
-                    <span className="task-date">
-                        <span className="icon-calendar"></span>
-                        {dayFromNow(taskData.date)}</span>
-                    <ul className="task-meta">
-                        <li><a href={`mailto:${taskData.email}`}>
-                            <span className="icon-envelope"></span> 
-                            {taskData.email}</a></li>
-                        <li><a href={`tel:${taskData.phone}`}>
-                            <span className="icon-phone"></span>
-                            {taskData.phone}</a></li>
-                    </ul>
-                    {/*<span className={taskData.tag==="Active"?
-                        "task-status status-active":"task-status status-deactive"}
-                        title={taskData.tag}>
-                    {taskData.tag}</span>:<></>}*/}
-                    {taskUser&&taskUser.length?
-                    <div className='task-handler'>
-                        <small>{taskUser[0].profileName}</small>
-                        <small>{taskData.agency}</small>
-                    </div>:<></>}
-                    {taskPop?<TaskPopUp title={"Edit Task"}
-                    btnText={"Update"} action={props.action}
+                    <TaskData taskData = {taskData}
+                        taskProfile = {taskProfile}
+                        customer= {customer} taskUser={taskUser}
+                        creator={creator}
+                        setTaskPop={setTaskPop} setOrderPop={setOrderPop}/>
+                    {taskPop?<TaskPopUp title={"ویرایش تسک"}
+                    btnText={"بروزرسانی"} action={props.action}
+                    token={props.token} crm={props.crm}
+                    direction={props.direction}
+                    setBoardArray={props.setBoardArray}
                     data={taskData} close={()=>setTaskPop(0)}
+                    />:<></>}
+                    {orderPop?<OrderPopUp title={"ویرایش سفارش"}
+                    btnText={"بروزرسانی"} action={props.action}
+                    token={props.token} crm={props.crm}
+                    customer={customer} creator={creator}
+                    direction={props.direction} access={props.access}
+                    setBoardArray={props.setBoardArray}
+                    data={taskData} close={()=>setOrderPop(0)}
                     />:<></>}
                     
                 </li>
