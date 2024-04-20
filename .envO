@@ -1,0 +1,47 @@
+
+API_PORT=6090
+LOG_SIZE=3
+
+MONGO_URI= "mongodb://127.0.0.1:27017/shop"
+JWT_KEY=''
+TOKEN_KEY="initial value"
+
+email_key="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"
+
+OLD_SITE_URL="https://admin.sharifoilco.com"
+SEPIDAR_URL="http://217.218.201.80:7373"
+SEPIDAR_HEADER=`{
+    "GenerationVersion":"101",
+    "IntegrationID":"1003",
+    "ArbitraryCode":"42ecd9f6-9d01-4d4e-a0f5-537462a429a5",
+    "EncArbitraryCode":"utiE0EKnM/Efas2SCMpgCbjVoSfmk71J4Sn+LmIM8fbPRmIaXF5hbkB/sZOH7w9SPt/+fH1+HU/KYX6Juwhcbg==",
+    "Authorization":"Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjYwLCJwaWQiOm51bGwsInV2ZXIiOjIsImR1cGlkIjoxNiwiZHVwdmVyIjoxfQ._cQGCU4A8k-rXxds8u7H2tywBl58zv1j4Y1OJ5IDiss"
+}`
+ADMIN_HEADER=`{
+    "GenerationVersion":"101",
+    "IntegrationID":"1006",
+    "ArbitraryCode":"82e95d4b-f933-49fa-a9bd-b99ab88aaf10",
+    "EncArbitraryCode":"U/2VUSNe09bvvf9xxb3y8W8iylXwYrmdjFw2uG1o4ohpeDHPPJ0O3Cf6/ZjBQ0nMmsZLNgk2+2/m+1cYhuKcAg==",
+    "Authorization":"Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsInBpZCI6bnVsbCwidXZlciI6MiwiZHVwaWQiOjIwLCJkdXB2ZXIiOjF9.PIOoeVEOx-Z3JZkeHVUY0T5ja8jcyabwprHfmntwrrg"
+}`
+
+StockId="21"
+SaleType="4"
+TaxRate=".10"
+
+
+SMS_API='484B4A79716C556D6F425669754F74636C6F425A416A32736142496A517952753546586D72377A616935383D'
+kaveNegarUrl= 'https://api.kavenegar.com/v1/',
+template='logins'
+accessControl='accessControl'
+regOrder='regOrder'
+acceptOrder='AcceptMGM'
+acceptFactory='ّFactoryAccept'
+cancelOrder='CancelOrder'
+sendOrder='sendMGM'
+
+PayURL="https://bpm.shaparak.ir/pgwchannel/services/pgw?wsdl"
+PayTerminalID="7337460"
+PayUsername="7337460"
+PayPassword="74120769"
+PayCallback="https://saleadmin.sharifoilco.com/pay/mellatBankCallback"

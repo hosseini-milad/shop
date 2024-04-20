@@ -5,6 +5,7 @@ const router = express.Router()
 const auth = require("../middleware/auth");
 var ObjectID = require('mongodb').ObjectID;
 const orders = require('../models/orders/orders');
+const carts = require('../models/product/cart')
 const products = require('../models/product/products');
 
 router.post('/sku/find',jsonParser,async (req,res)=>{
@@ -69,13 +70,24 @@ router.post('/list',jsonParser,async (req,res)=>{
         { $sort: {"date":-1}},
  
         ])
+        const cartList = await carts.aggregate([
+            { $addFields: { "userId": { "$toObjectId": "$userId" }}},
+            {$lookup:{
+                from : "customers", 
+                localField: "userId", 
+                foreignField: "_id", 
+                as : "userInfo"
+            }},
+            { $sort: {"date":-1}},
+            {$limit:10}
+            ])
         const filter1Report = data.customer?
         reportList.filter(item=>item.userInfo[0]&&item.userInfo[0].cName&&
             item.userInfo[0].cName.includes(data.customer)):reportList;
         const orderList = filter1Report.slice(offset,
             (parseInt(offset)+parseInt(pageSize)))  
         const brandUnique = [...new Set(filter1Report.map((item) => item.brand))];
-       res.json({filter:orderList,brand:brandUnique,
+       res.json({filter:orderList,brand:brandUnique, cartList:cartList,
         size:filter1Report.length})
     }
     catch(error){
