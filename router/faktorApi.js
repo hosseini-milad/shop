@@ -1561,14 +1561,18 @@ router.post('/edit-payValue',jsonParser, async (req,res)=>{
 })
 
 router.post('/sepidar-find',jsonParser, async (req,res)=>{
-    const faktorId =req.body.faktorId;
+    const cartId =req.body.cartId;
     try{
-        const faktorData = await FaktorSchema.findOne({InvoiceID:faktorId})
-        
+        const faktorData = await tasks.findOne({orderNo:cartId})
+        var faktorId = faktorData&&faktorData.result
+        if(!faktorId){
+            res.send({error:"not Found",message:"not found"})
+            return
+        }
         //logger.warn("main done")
         var userId=faktorData&&faktorData.manageId
         
-        const OnlineFaktor = await sepidarFetch("data","/api/invoices/"+faktorId,userId)
+        const OnlineFaktor = await sepidarFetch("data","/api/invoices/"+faktorId.InvoiceID,userId)
         const userDetail = await customerSchema.findOne({CustomerID:OnlineFaktor.CustomerRef})
         const invoice = OnlineFaktor.InvoiceItems
         if(!invoice)
