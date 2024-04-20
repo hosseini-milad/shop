@@ -1559,4 +1559,31 @@ router.post('/edit-payValue',jsonParser, async (req,res)=>{
         res.status(500).json({message: error.message})
     }
 })
+
+router.post('/sepidar-find',jsonParser, async (req,res)=>{
+    const faktorId =req.body.faktorId;
+    try{
+        const faktorData = await FaktorSchema.findOne({InvoiceID:faktorId})
+        
+        //logger.warn("main done")
+        var userId=faktorData&&faktorData.manageId
+        
+        const OnlineFaktor = await sepidarFetch("data","/api/invoices/"+faktorId,userId)
+        const userDetail = await customerSchema.findOne({CustomerID:OnlineFaktor.CustomerRef})
+        const invoice = OnlineFaktor.InvoiceItems
+        if(!invoice)
+            res.status(400).json({error: OnlineFaktor.Message})
+        //var itemRefs=OnlineFaktor.InvoiceItems
+        for(var i=0;i<invoice.length;i++){
+            var faktorItem = invoice[i]
+            var itemDetail = await products.findOne({ItemID:faktorItem.ItemRef})
+            OnlineFaktor.InvoiceItems[i].itemDetail = itemDetail
+            //itemRefs.push(faktorItem)
+        }
+        res.json({faktor:OnlineFaktor,userDetail:userDetail,itemRefs:invoice})
+    }
+    catch(error){
+        res.status(500).json({error: error.message})
+    }
+})
 module.exports = router;
