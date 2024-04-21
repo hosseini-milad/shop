@@ -87,6 +87,7 @@ const calcTasks=async(userId)=>{
         
     }
     //console.log(columns)
+    const tasksToShow=[]
     for(var c=0;c<taskList.length;c++){ 
         var taskStep = taskList[c].taskStep
         var yesterday = new Date(Date.now() - 86400000); // that is: 24 * 60 * 60 * 1000
@@ -98,11 +99,13 @@ const calcTasks=async(userId)=>{
         if(taskStep=="archive")
             if( taskDate < yesterday)
                 continue
-        try{columns[taskStep].push(taskList[c]._id) }
+        try{columns[taskStep].push(taskList[c]._id) 
+            tasksToShow.push(taskList[c])
+        }
         catch{}
         //columnOrder.find(item=>item.enTitle===taskStep)
     } 
-    return({crmData:crmData,tasks:taskList, crm:crmData,
+    return({crmData:crmData,tasks:tasksToShow, crm:crmData,
         columnOrder:showColumn,columns:columns})
 }
 router.post('/update-tasks',auth,jsonParser,async (req,res)=>{
