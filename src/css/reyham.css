@@ -718,8 +718,14 @@
 .btn-crm-cancel{
   background-color: lightsalmon;
 }
+.btn-crm-edit{
+  background-color: orange;
+}
 .doneTitle{
   border-left: 5px solid greenyellow;
+}
+.suspendTitle{
+  border-left: 5px solid orange;
 }
 
 
@@ -914,6 +920,27 @@
   margin: auto;
 }
 
+
+.userInfo{
+  display: flex;
+  min-height: 100px;
+}
+.userSection{
+  display: grid;
+  margin:auto
+}
+.userSection small{
+  margin:3px 5px;
+  display: flex;
+  justify-content: flex-end;
+}
+.userSection b{
+  border:1px solid var(--main-color);
+  padding: 0 10px;
+  border-radius: 6px;
+  width: 80px;
+  margin: 0 10px;
+}
 /* End Print */
 
 .formal-btn{

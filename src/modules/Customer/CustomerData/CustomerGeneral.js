@@ -144,7 +144,7 @@ function CustomerGeneral(props){
               </div>
             
             </div>
-            {!userData.CustomerID?
+            {userData.agent?
             <div className="delete-user-btn formal-btn" onClick={()=>setFormal(1)}>
               رسمی کردن مشتری</div>:<></>}
             <div className="save-btn" onClick={saveChanges}>{formtrans.saveChanges[props.lang]}</div>

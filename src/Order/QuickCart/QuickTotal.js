@@ -1,11 +1,14 @@
+import { useState } from "react"
 import env, { normalPriceCount, normalPriceRound } from "../../env"
 
 function QuickTotal(props){
   const token = props.token
   const qCart = props.data
   const user = props.user
+  const [loading ,setLoading]=useState(0) 
   //console.log(qCart)
   const SetOrder=()=>{
+    setLoading(1)
       const postOptions={
           method:'post',
           headers: { 'Content-Type': 'application/json' ,
@@ -23,6 +26,7 @@ function QuickTotal(props){
                   props.setError({message:"کالا اضافه شد",color:"green"})
                   setTimeout(()=>props.setError({message:"",color:"brown"}),2000)
                   props.setCart(result)
+                  setLoading(0)
               }
               else
                   props.setCart('') 
@@ -60,9 +64,11 @@ function QuickTotal(props){
         <p>{normalPriceRound(qCart.totalPrice)}</p>
       </div>
       {props.action?<></>:
-      <button type="button" className="product-table-btn temp-btn"
+      !0?<button type="button" className="product-table-btn temp-btn"
       onClick={SetOrder}>
         <p>ثبت سفارش</p>
+      </button>:<button type="button" className="product-table-btn temp-btn">
+        <p>در حال ثبت...</p>
       </button>}
     </div>
     )

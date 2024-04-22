@@ -12,6 +12,7 @@ function OrderTableRow(props){
   const activeAcc = props.index===props.detail
   const order=props.order
   const lang=props.lang;
+  const cart = props.cart
 
     return(<React.Fragment>
         <tr 
@@ -21,9 +22,12 @@ function OrderTableRow(props){
               onChange={(e)=>setCheckState(checkState?false:true)}/></td>
             <td>
                 <div className="order-id">
-                  <p onClick={()=> window.location.href=
-                    "/orders/detail/"+order.orderNo}>
-                    {order.orderNo}</p>
+                  {cart?<p onClick={()=> window.location.href=
+                    "/orders/detail/"+order.cartNo}>
+                    {order.cartNo}</p>:
+                    <p onClick={()=> window.location.href=
+                      "/orders/detail/"+order.orderNo}>
+                      {order.orderNo}</p>}
                 </div>
             </td>
             <td>
@@ -52,12 +56,19 @@ function OrderTableRow(props){
                 </div>
               </td>
               <td>
+              {cart?<div className="or-date">
+                  <p className="date">{new Date(order.initDate)
+                  .toLocaleDateString(props.lang==="persian"?'fa':'en')}</p>
+                  <p className="time">{new Date(order.initDate)
+                  .toLocaleTimeString(props.lang==="persian"?'fa':'en')}</p>
+                </div>:
                 <div className="or-date">
                   <p className="date">{new Date(order.date)
                   .toLocaleDateString(props.lang==="persian"?'fa':'en')}</p>
                   <p className="time">{new Date(order.date)
                   .toLocaleTimeString(props.lang==="persian"?'fa':'en')}</p>
                 </div>
+                  }
               </td>
 
 

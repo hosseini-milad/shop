@@ -8,6 +8,7 @@ function ProductTableRow(props){
   const [checkState,setCheckState] = useState(false)
   const activeAcc = props.index===props.detail
   const product=props.product
+  console.log(product)
     return(<React.Fragment>
         <tr 
             className={activeAcc?"activeAccordion":"accordion"}>
@@ -30,7 +31,8 @@ function ProductTableRow(props){
               </td>
               <td>
                 <div className="order-num">
-                  <p>{product.brand}</p>
+                  <p>{product.brandInfo&&product.brandInfo[0]?
+                    product.brandInfo[0].title:product.brandId}</p>
                 </div>
               </td>
               <td>

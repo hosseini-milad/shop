@@ -16,6 +16,7 @@ function Orders(props){
     const [content,setContent] = useState("")
     const [filters,setFilters] = useState("")
     const [loading,setLoading] = useState(0)
+    const [tab,setTab] = useState(0)
     const token=cookies.get(env.cookieName)
     useEffect(() => {
       setLoading(1)
@@ -56,7 +57,8 @@ function Orders(props){
       <div className="user" style={{direction:direction}}>
       <div className="od-header">
         <div className="od-header-info">
-          
+          <input type='button' onClick={()=>setTab(tab?0:1)}
+          value={"switch"} />
           <div className="od-header-name">
             <p>{errortrans.orders[lang]}</p>
           </div>
@@ -76,9 +78,14 @@ function Orders(props){
          status={content.rxStatus} setFilters={setFilters}/>
         <OrderFilters lang={props.lang} setFilters={setFilters}
           options={content.brand} filters={filters}/>
+        {tab===0?<div className="user-list">
+          {loading?env.loader:
+          <OrderTable orders={content?content.filter:{}} lang={lang}/>}
+        </div>:
         <div className="user-list">
-          {loading?env.loader:<OrderTable orders={content} lang={lang}/>}
-        </div>
+        {loading?env.loader:
+        <OrderTable orders={content?content.cartList:{}} lang={lang} cart="1"/>}
+      </div>}
         <Paging content={content} setFilters={setFilters} filters={filters} 
           lang={props.lang}/>
       </div>

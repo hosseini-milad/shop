@@ -7,7 +7,8 @@ function TaskData(props){
     const taskUser=props.taskUser
     const creator=props.creator
     return(
-        <div className={taskData.result?"taskData doneTitle":"taskData"}>
+        <div className={taskData.result?taskData.result.Number?
+            "taskData doneTitle":"taskData suspendTitle":"taskData"}>
             <div className='titles'
                 onClick={()=>props.setOrderPop(1)}>
                 <h3 className={"task-title "+ 
@@ -46,11 +47,13 @@ function TaskData(props){
                     }</li>:<></>}
                 </ul>
             </div>
+            {taskData.result&&taskData.result.Number?
+            <div className="footerTask">
+                <span className={"task-status status-active"}
+                    title={taskData.result.Number}>
+                {taskData.result.Number}</span></div>:
+            <></>}
             
-            {/*<span className={taskData.tag==="Active"?
-                "task-status status-active":"task-status status-deactive"}
-                title={taskData.tag}>
-            {taskData.tag}</span>:<></>}*/}
             {taskProfile&&taskProfile.length?
             <div className='task-handler creatorInfo'>
                 <small>{taskProfile[0].profileName}</small>

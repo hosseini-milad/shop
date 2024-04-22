@@ -60,7 +60,7 @@ function OrderHeader(props){
             {props.user.agent?<></>:
             <i className="fa-solid fa-check-circle" aria-hidden="true"></i>}
 
-            <small>({props.user.phone?props.user.phone:'-'})</small></b>
+            <small>({props.user.phone?props.user.phone:props.user.mobile})</small></b>
             <small>{props.user.Address?
               props.user.Address:'-'}</small>
           </div>
