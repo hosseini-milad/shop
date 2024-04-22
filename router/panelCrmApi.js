@@ -152,7 +152,7 @@ router.post('/update-tasks-status',auth,jsonParser,async (req,res)=>{
             userData = await customers.findOne({_id:ObjectID(cartData.userId)})
             adminData = await user.findOne({_id:ObjectID(cartData.manageId)})
             sepidarQuery = await SepidarFunc(cartData,faktorNo,
-                userData.CustomerID?userData.CustomerID:adminData.CustomerID,adminData.StockId)
+                userData.CustomerID?userData:adminData,adminData.StockId)
             sepidarResult = await sepidarPOST(sepidarQuery,"/api/invoices",adminData._id)
             
             if(sepidarResult.Message)
@@ -307,8 +307,8 @@ const SepidarFunc=async(data,faktorNo,user,stock)=>{
         notNullCartItem.push(data.cartItems[i]):''
     var query ={
         "GUID": "124ab075-fc79-417f-b8cf-2a"+faktorNo,
-        "CustomerRef": toInt(user),
-        "AddressRef": 1,
+        "CustomerRef": toInt(user.CustomerID),
+        "AddressRef": user.AddressID,
         "CurrencyRef":1,
         "SaleTypeRef": data.payValue?toInt(data.payValue):3,
         "Duty":0.0000,
