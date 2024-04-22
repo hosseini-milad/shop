@@ -10,10 +10,11 @@ import ShowError from "../../components/Modal/ShowError"
 import TaskAction from "./Tasks/TaskAction"
 
 function OrderPopUp(props){
-    const [data,setData] = useState(props.data)
+    const data =props.data
     const token = props.token
     const [payValue,setPayValue] = useState(defPay)
     const [content,setContent] = useState()
+    console.log(content)
     const [error,setError] = useState({message:'',color:"brown"})
     useEffect(()=>{
         const postOptions={
@@ -34,7 +35,7 @@ function OrderPopUp(props){
           console.log(error);
         })
     },[])
-    console.log(content)
+    console.log(data)
     const updateTotal =()=>{
         const postOptions={
             method:'post',
@@ -160,7 +161,8 @@ function OrderPopUp(props){
                         addToCart={(e)=>addToCart(e)}
                         deleteFromCart={(e)=>removeItem(e)}
                         regCart={(e)=>regSepidar(e)}
-                        cart={content.cart[0]} setCart={(e)=>setContent(e)}
+                        cart={content.cart&&content.cart[0]} 
+                        setCart={(e)=>setContent(e)}
                         cartDetail={content.orderData?content.orderData:content.cartDetail} 
                         setError={setError}/>:
                         <div>{env.loader}</div>}
@@ -173,6 +175,7 @@ function OrderPopUp(props){
                 close={props.close}/>
             </div>:<></>}
             </div>
+            
         </div>
         {error&&error.message?
         <ShowError color={error.color} status={"مدیریت"} 

@@ -880,7 +880,7 @@ margin-left: auto;
   text-decoration: line-through
 }
 .fullPopUp {
-  width: calc(100% - 100px);
+  width: 95%;
   position: relative;
   height: 100%;
   background: transparent;
@@ -911,14 +911,8 @@ margin-left: auto;
   color: #fff;
   padding: 0 10px;
 }
-.taskData{
-  padding-bottom: 30px;
-}
 .footerTask{
-  position: absolute;
-  bottom: 0;
   width: 100%;
-  right: 0;
   padding: 10px 5px 0px;
   min-height: 38px;
 }

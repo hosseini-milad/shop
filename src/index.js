@@ -53,6 +53,7 @@ import PolicyDetailHolder from './modules/Policy/PolicyData/PolicyDetailHolder';
 import Policy from './pages/Policy';
 import Users from './modules/Users/UserList';
 import FaktorSitePrint from './modules/Print/PrintSiteHolder';
+import PrintSepidar from './modules/Print/PrintSepidar';
 
 const cookies = new Cookies();
 const style = document.getElementById('style-direction');
@@ -93,6 +94,8 @@ root.render(
         <Route path="/orders/business" element={<OrderHolder lang={"fa"}/>}/>
         <Route path="/orders/print/:orderId" element={<FaktorSitePrint lang={"fa"}/>}/>
         <Route path="/orders/invoice/:orderId" element={<FaktorSitePrint lang={"fa"}/>}/>
+        <Route path="/print/sepidar/:orderId" element={<PrintSepidar lang={"fa"}/>}/>
+        <Route path="/fishprint/sepidar/:orderId" element={<PrintSepidar lang={"fa"}/>}/>
 
         <Route path="/services" element={<Layout><Services lang={lang}/></Layout>}/>
         <Route path="/services/detail/:orderId" element={<Layout><ServiceDetailHolder lang={lang}/></Layout>}/>

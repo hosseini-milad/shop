@@ -4,9 +4,11 @@ import tabletrans from "../../translate/tables"
 
 function OrderTable(props){
   const orders = props.orders
+  console.log(orders)
   const lang=props.lang;
   const [detail,showDetail] = useState(-1)
-    return(
+  if(!orders||!orders.length) return <main>waiting</main>
+  else  return(
         <table>
         <thead>
         <tr>
@@ -54,8 +56,9 @@ function OrderTable(props){
           </tr>
         </thead>
         <tbody>
-          {orders&&orders.filter?orders.filter.map((order,i)=>(
+          {orders?orders.map((order,i)=>(
             <OrderTableRow detail={detail} showDetail={showDetail} 
+              cart={props.cart}
               order={order} index={i} key={i} lang={lang}/>
           )):''}
           
