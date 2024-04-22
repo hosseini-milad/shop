@@ -9,17 +9,17 @@ function ProductFilters(props){
         <div className="user-filter">
             
           <div className="serach-input">
-            <StyleInput title={"Title"} direction={props.lang.dir} 
+            <StyleInput title={"عنوان"} direction={props.lang.dir} 
             action={(e)=>(e.length>3||e.length===0)&&props.setFilters(prevState => ({
               ...prevState,
               title:e
             }))}/>
-            <StyleInput title={"Sku"} direction={props.lang.dir} 
+            <StyleInput title={" واحد نگهداری موجودی sku"} direction={props.lang.dir} 
               action={(e)=>(e.length>3||e.length===0)&&props.setFilters(prevState => ({
                 ...prevState,
                 sku:e
               }))}/>
-            <StyleSelect title={"Active"} direction={props.lang.dir} 
+            <StyleSelect title={"وضعیت"} direction={props.lang.dir} 
               options={["active","deactive"]} 
               defaultValue="active"
               action={(e)=>props.setFilters(prevState => ({

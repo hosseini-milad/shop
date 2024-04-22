@@ -9,18 +9,18 @@ function OrderFilters(props){
         <div className="user-filter">
             
           <div className="serach-input">
-            <StyleInput title={"Order No"} direction={props.lang.dir} 
+            <StyleInput title={"شماره سفارش"} direction={props.lang.dir} 
             action={(e)=>(e.length>7||e.length===0)&&props.setFilters(prevState => ({
               ...prevState,
               orderNo:e
             }))}/>
-            <StyleSelect title={"Brand"} direction={props.lang.dir} 
+            <StyleSelect title={"برند"} direction={props.lang.dir} 
               options={props.options} 
               action={(e)=>props.setFilters(prevState => ({
                 ...prevState,
                 brand:e
               }))}/>
-            <StyleInput title={"Customer"} direction={props.lang.dir} 
+            <StyleInput title={"مشتری"} direction={props.lang.dir} 
               action={(e)=>(e.length>3||e.length===0)&&props.setFilters(prevState => ({
                 ...prevState,
                 customer:e

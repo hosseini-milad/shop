@@ -58,28 +58,20 @@ menu:[
             ]
     },
     {
-        english: "Orders",
-        persian: "سفارشات",
+        english: "Users",
+        persian: "کاربران",
         index:2,
         icon:"fa-tasks",
         href:"#",
         children:[
             {
-                english: "Orders",
-                persian: "سفارشات",
+                english: "User Management",
+                persian: "مدیریت کاربران",
                 index:0,
                 icon:"fa-tasks",
-                href:"/orders",
-                url:"orders"
-            },
-            {
-                english: "Transactions",
-                persian: "تراکنش ها",
-                index:0,
-                icon:"fa-tasks",
-                href:"/transactions",
-                url:"transactions"
-            },
+                href:"/users",
+                url:"users"
+            }
             ]
     },
     {

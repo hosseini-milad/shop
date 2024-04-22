@@ -51,6 +51,7 @@ import Classes from './pages/Classes';
 import ClassDetailHolder from './modules/Classes/ClassData/ClassDetailHolder';
 import PolicyDetailHolder from './modules/Policy/PolicyData/PolicyDetailHolder';
 import Policy from './pages/Policy';
+import Users from './modules/Users/UserList';
 import FaktorSitePrint from './modules/Print/PrintSiteHolder';
 
 const cookies = new Cookies();
@@ -108,6 +109,8 @@ root.render(
         <Route path="/class/detail/:orderId" element={<Layout><ClassDetailHolder lang={lang}/></Layout>}/>
         <Route path="/policy" element={<Layout><Policy lang={lang}/></Layout>}/>
         <Route path="/policy/detail/:orderId" element={<Layout><PolicyDetailHolder lang={lang}/></Layout>}/>
+
+        <Route path="users" element={<Layout><Users lang={lang}/></Layout>}/>
         
         <Route path="/config/sepidar" element={<Layout><Sepidar lang={lang}/></Layout>}/>
         <Route path="/sliders" element={<Layout><Sliders lang={lang}/></Layout>}/>

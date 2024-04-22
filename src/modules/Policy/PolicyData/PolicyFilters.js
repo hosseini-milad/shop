@@ -6,7 +6,7 @@ import formtrans from "../../../translate/forms"
 function PolicyFilters(props){
     const content = props.content
     const filters = props.filterOptions
-    //console.log(filters)
+    console.log(filters)
     return(
         <div className=''>
           <table>

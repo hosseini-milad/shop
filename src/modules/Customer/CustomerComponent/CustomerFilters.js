@@ -4,14 +4,14 @@ import StyleSelect from "../../../components/Button/AutoComplete"
 function CustomerFilters(props){
     return(
         <div className="user-filter">
-            <StyleSelect title={"Role"} class="filterComponent" direction={props.lang.dir}
+            <StyleSelect title={"نقش"} class="filterComponent" direction={props.lang.dir}
             options={props.options} 
             action={(e)=>props.setFilters(prevState => ({
               ...prevState,
               access:e
             }))}/>
           <div className="serach-input">
-            <StyleInput title={"Customer"} direction={props.lang.dir} 
+            <StyleInput title={"مشتری"} direction={props.lang.dir} 
             action={(e)=>(e.length>3||e.length===0)&&props.setFilters(prevState => ({
               ...prevState,
               customer:e
