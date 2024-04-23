@@ -80,7 +80,9 @@ function Sepidar(props){
                     className="btn bg-gradient-info my-4 mb-2"
                     onClick={()=>updateSepidar(filter.enTitle)}/></td>
                     <td>{updateTime&&
-                    new Date(updateTime[filter.enTitle].date).toLocaleDateString('fa')}</td>
+                    new Date(updateTime[filter.enTitle].date).toLocaleDateString('fa')}<br/>
+                    <smal>{updateTime&&
+                    new Date(updateTime[filter.enTitle].date).toLocaleTimeString('fa')}</smal></td>
                     <td>
                         <div className="profiles-icons">
                         <i className="fa-solid fa-pen-to-square fa-sm" style={{color: "#c0c0c0"}}></i>
