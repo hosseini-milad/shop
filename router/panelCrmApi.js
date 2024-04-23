@@ -71,7 +71,7 @@ const calcTasks=async(userId)=>{
         to:'objectId', onError:'',onNull:''}}}},
         {$lookup:{from : "customers", 
             localField: "customer_Id", foreignField: "_id", as : "customerInfo"}},
-        {$sort:{progressDate:1}}
+        {$sort:{progressDate:-1}}
     ])
     //const taskList = await tasks.find({crmCode:crmData._id})
     const columnOrder =crmData&&crmData.crmSteps
