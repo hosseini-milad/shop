@@ -3,7 +3,8 @@ import StatusBar from '../modules/Components/StatusBar';
 import Paging from '../modules/Components/Paging';
 import errortrans from "../translate/error";
 import OrderTable from '../modules/Orders/OrderTable';
-import OrderFilters from '../modules/Orders/OrderComponent/OrderFilters';
+import CatFilters from '../modules/Category/CatComponent/CatFilters';
+
 import { useEffect } from 'react';
 import { useState } from 'react';
 import env from '../env';
@@ -80,7 +81,7 @@ function Category(props){
       <div className="list-container">
         <StatusBar lang={lang} token={token} filters={filters}
          status={content.rxStatus} setFilters={setFilters}/>
-        <OrderFilters lang={props.lang} setFilters={setFilters}
+        <CatFilters lang={props.lang} setFilters={setFilters}
           options={content.brand} filters={filters}/>
         <div className="user-list"> 
           {loading?env.loader:<CatTable cat={content} lang={lang}/>}

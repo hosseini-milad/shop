@@ -13,7 +13,7 @@ function BrandTable(props){
           <th className="checkBoxStyle">
               <input type="checkbox" name="" id=""/></th>
             <th>
-              <p>{tabletrans.order[lang]}</p>
+              <p>{tabletrans.brand[lang]}</p>
               <i></i>
             </th>
             <th>
@@ -24,23 +24,16 @@ function BrandTable(props){
               <p>{tabletrans.brandCode[lang]}</p>
               <i></i>
             </th>
-            <th>
-              <p>{tabletrans.brand[lang]}</p>
-              <i></i>
-            </th>
-            <th>
-              <p>{tabletrans.item[lang]}</p>
-              <i></i>
-            </th>
-            <th>
-            <p>{tabletrans.price[lang]}</p>
-              <i></i>
-            </th>
+
+
+
             <th>
             <p>{tabletrans.status[lang]}</p>
               <i></i>
             </th>
             <th>
+            <p>{tabletrans.action[lang]}</p>
+              <i></i>
             </th>
           </tr>
         </thead>
