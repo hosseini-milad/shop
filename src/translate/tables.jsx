@@ -174,6 +174,10 @@ const tabletrans ={
         english:"General",
         persian:"عمومی"
     },
+    supplementary:{
+        english:"ُSupplementary",
+        persian:"تکمیلی"
+    },
     billing:{
         english:"Billing",
         persian:"پرداخت"

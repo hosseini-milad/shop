@@ -2,7 +2,7 @@ import Cookies from 'universal-cookie';
 import StatusBar from '../modules/Components/StatusBar';
 import Paging from '../modules/Components/Paging';
 import errortrans from "../translate/error";
-import OrderFilters from '../modules/Orders/OrderComponent/OrderFilters';
+import TransactionFilters from '../modules/Transactions/TransactionComponent/TransactionFilters';
 import { useEffect } from 'react';
 import { useState } from 'react';
 import env from '../env';
@@ -56,7 +56,7 @@ function Transactions(props){
       <div className="list-container">
         <StatusBar lang={lang} token={token} filters={filters}
          status={content.rxStatus} setFilters={setFilters}/>
-        <OrderFilters lang={props.lang} setFilters={setFilters}
+        <TransactionFilters lang={props.lang} setFilters={setFilters}
           options={content.brand} filters={filters}/>
         <div className="user-list">
           {loading?env.loader:<TransactionTable content={content} lang={lang}

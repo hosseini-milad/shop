@@ -44,8 +44,8 @@ fetch(env.siteApi + "/panel/order/editOrder",postOptions)
             <td>
                 <div className="order-id">
                   <p onClick={()=> window.location.href=
-                    "/orders/detail/"+content.stockOrderNo}>
-                    {content.stockOrderNo}</p>
+                    "/orders/detail/"+orderData._id}>
+                    {orderData.orderNo}</p>
                 </div>
             </td>
             <td>
@@ -71,14 +71,12 @@ fetch(env.siteApi + "/panel/order/editOrder",postOptions)
               </td>
               <td>
                 <div className="order-price">
-                  <p>{normalPriceCount(orderData&&
-                      orderData.stockOrderPrice)}</p>
+                  <p>{orderData.orderPrice}</p>
                 </div>
               </td>
               <td>
                 <div className="order-price">
-                  <p>{content&&content.saleReferenceId!="NaN"?
-                      content.saleReferenceId:''}</p>
+                  <p>{content.saleReferenceId}</p>
                 </div>
               </td>
               <td>
@@ -89,8 +87,8 @@ fetch(env.siteApi + "/panel/order/editOrder",postOptions)
               <div className="more-btn">
               <i className={`tableIcon fas ${activeAcc?"fa-chevron-up":"fa-chevron-down"}`} 
                 onClick={()=>props.showDetail(activeAcc?"-1":props.index)} ></i>
-                <i className="tableIcon fas fa-ellipsis-v" 
-                  onClick={()=>setOpenOption(openOption?0:1)}></i>
+                {/* <i className="tableIcon fas fa-ellipsis-v" 
+                  onClick={()=>setOpenOption(openOption?0:1)}></i> */}
               </div>
               {openOption?<div className={props.direction==="rtl"?
                 "sub-more-menu rtl-sub-menu":"sub-more-menu"}>

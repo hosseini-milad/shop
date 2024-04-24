@@ -8,6 +8,7 @@ import CustomerNotif from "./CustomerNotif"
 import CustomerSocial from "./CustomerSocial"
 import CustomerSecurity from "./CustomerSecurity"
 import CustomerGeneral from "./CustomerGeneral"
+import CustomerSupplementary from "./CustomerSupplementary"
 import CustomerClass from "./CustomerClass"
 
 function CustomerDetailHolder(props){
@@ -44,11 +45,13 @@ function CustomerDetailHolder(props){
       <div className="pages-wrapper">
         {tabIndex===0?<CustomerGeneral direction={direction} lang={lang}
           userData={userData}/>:<></>}
-        {tabIndex===1?<CustomerBill direction={direction} lang={lang}/>:<></>}
-        {tabIndex===2?<CustomerNotif direction={direction} lang={lang}/>:<></>}
-        {tabIndex===3?<CustomerSocial direction={direction} lang={lang}/>:<></>}
-        {tabIndex===4?<CustomerSecurity direction={direction} lang={lang}/>:<></>}
-        {tabIndex===5?<CustomerClass direction={direction} lang={lang}
+        {tabIndex===1?<CustomerSupplementary direction={direction} lang={lang}
+          userData={userData}/>:<></>}
+        {tabIndex===2?<CustomerBill direction={direction} lang={lang}/>:<></>}
+        {tabIndex===3?<CustomerNotif direction={direction} lang={lang}/>:<></>}
+        {tabIndex===4?<CustomerSocial direction={direction} lang={lang}/>:<></>}
+        {tabIndex===5?<CustomerSecurity direction={direction} lang={lang}/>:<></>}
+        {tabIndex===6?<CustomerClass direction={direction} lang={lang}
         userData={userData}/>:<></>}
       </div>
     </div>

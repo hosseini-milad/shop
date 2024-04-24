@@ -3,6 +3,34 @@ const formtrans ={
         english: "Name",
         persian: "نام"
     },
+    clothSize:{
+        english: "Cloth Size",
+        persian: "سایز لباس"
+    },
+    birthDay:{
+        english: "Birth Day",
+        persian: "روز تولد"
+    },
+    StockId:{
+        english: "Stock Id",
+        persian: "شناسه صنفی"
+    },
+    zone:{
+        english: "zone",
+        persian: "منطقه"
+    },
+    roleId:{
+        english: "RoleId",
+        persian: "شناسه ی نقش"
+    },
+    workTime:{
+        english: "Work Time",
+        persian: "ساعت کاری"
+    },
+    fname:{
+        english: "Last Name",
+        persian: "نام خانوادگی"
+    },
     title:{
         english: "Title",
         persian: "نام"
@@ -19,6 +47,18 @@ const formtrans ={
         english: "Phone Number",
         persian: "شماره تماس"
     },
+    EmergencyContact:{
+        english: "Emergency Contact",
+        persian: "شماره تماس ضروری"
+    },
+    userRelatedContacts:{
+        english: "User Related Contacts",
+        persian: "تماس افراد مرتبط"
+    },
+    mobile:{
+        english: "Mobile",
+        persian: "شماره همراه"
+    },
     emailAddress:{
         english: "Email Address",
         persian: "آدرس ایمیل"
@@ -26,6 +66,10 @@ const formtrans ={
     customercode:{
         english: "Customer Code",
         persian: "کد مشتری"
+    },
+    postalCode:{
+        english: "Postal Code",
+        persian: "کد پستی"
     },
     meliCode:{
         english: "Meli Code",
