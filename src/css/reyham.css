@@ -953,6 +953,25 @@
   padding: 7px 20px !important;
   bottom: 14px;
 }
+.card-form{
+  padding: 1rem;
+}
+.customerTab{
+  display: flex;
+  justify-content: space-around;
+  width: 100%;
+  border-bottom: 2px solid;
+}
+.customerTab small{
+  font-size: 13px;
+  background-color: #fff;
+  width:50%;
+  color:#002A54;
+  text-align: center;
+}
+.customerTab small .active{
+
+}
 
 
 @media screen and (max-width: 650px){

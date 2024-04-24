@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import UserCard from './UserCard';
+import env from '../../env';
 
 const UserList = () => {
   const [users, setUsers] = useState([]);
@@ -20,7 +21,7 @@ const UserList = () => {
           body: JSON.stringify(body)
         };
 
-        const response = await fetch('https://shopadmin.sharifoilco.com/api/panel/user/list', postOptions);
+        const response = await fetch(env.siteApi+'/panel/user/list', postOptions);
         const data = await response.json();
         
         // Assuming "filter" contains the user data
@@ -34,8 +35,7 @@ const UserList = () => {
   }, []); // Ensure this effect runs only once on mount
 
   return (
-    <div>
-        <div class="team-users">
+    <div class="team-users" style={{direction:"rtl"}}>
       <div class="create-team-user" style={{display:'none'}}>
         <h4>Add User</h4>
         <div class="email-input">
@@ -126,8 +126,7 @@ const UserList = () => {
 
       ))}
       </div>
-      </div>
-    </div>
+  </div>
   );
 };
 

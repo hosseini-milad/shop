@@ -15,26 +15,23 @@ const UserCard = ({ user }) => {
         <div className="user-state">
           <table>
             <tr>
-              <td>Team Role</td>
-              <td>:</td>
+              <td>Team Role: </td>
               <td>{user.access}</td>
             </tr>
             <tr>
-              <td>Team Profile</td>
-              <td>:</td>
+              <td>Team Profile: </td>
               <td>{user.group || user.cName}</td>
             </tr>
             <tr>
-              <td>Last Accessed on</td>
-              <td>:</td>
+              <td>Last Accessed on: </td>
               <td>{user.lastAccessed}</td>
             </tr>
           </table>
         </div>
       </div>
       <div className="user-btn">
-        <i className="fa-solid fa-magnifying-glass fa-sm"></i>
-        <i className="fa-solid fa-ellipsis fa-sm"></i>
+        <i className="fa-solid fa-search fa-sm"></i>
+        <i className="fa-solid fa-ellipsis-v fa-sm"></i>
       </div>
     </div>
   );
