@@ -960,7 +960,6 @@
   display: flex;
   justify-content: space-around;
   width: 100%;
-  border-bottom: 2px solid;
 }
 .customerTab small{
   font-size: 13px;
@@ -968,9 +967,13 @@
   width:50%;
   color:#002A54;
   text-align: center;
+  padding: 3px;
+  cursor: pointer;
 }
-.customerTab small .active{
-
+.customerTab .active{
+  background-color: var(--dark-blue-sec);
+  color: #fff;
+  cursor: initial;
 }
 
 
