@@ -41,6 +41,17 @@ const customerSchema = new mongoose.Schema({
   shopUrl2:{ type: String },
   shopUrl3:{ type: String },
 
+  roleId:{ type: String },
+  birthDay:{ type: String },
+  clothSize:{ type: String },
+  call:{ type: String },
+  urgCall:{ type: String },
+  contractCall:{ type: String },
+  zone:{ type: String },
+  gps:{ type: String }, 
+  postalCode: { type: String },
+  workTime:{ type: String },
+  
   date:{type:Date} 
 });
 
