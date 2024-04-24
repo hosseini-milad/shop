@@ -51,6 +51,7 @@ const customerSchema = new mongoose.Schema({
   gps:{ type: String }, 
   postalCode: { type: String },
   workTime:{ type: String },
+  website:{ type: String },
   
   date:{type:Date} 
 });
