@@ -3,7 +3,8 @@ import StatusBar from '../modules/Components/StatusBar';
 import Paging from '../modules/Components/Paging';
 import errortrans from "../translate/error";
 import OrderTable from '../modules/Orders/OrderTable';
-import OrderFilters from '../modules/Orders/OrderComponent/OrderFilters';
+// import OrderFilters from '../modules/Orders/OrderComponent/OrderFilters';
+import BrandFilters from '../modules/Brands/BrandComponent/BrandFilters';
 import { useEffect } from 'react';
 import { useState } from 'react';
 import env from '../env';
@@ -79,8 +80,8 @@ function Brands(props){
       <div className="list-container">
         <StatusBar lang={lang} token={token} filters={filters}
          status={content.rxStatus} setFilters={setFilters}/>
-        <OrderFilters lang={props.lang} setFilters={setFilters}
-          options={content.brand} filters={filters}/>
+        {/* <BrandFilters lang={props.lang} setFilters={setFilters}
+          options={content.brand} filters={filters}/> */}
         <div className="user-list"> 
           {loading?env.loader:<BrandTable brand={content} lang={lang}/>}
         </div>

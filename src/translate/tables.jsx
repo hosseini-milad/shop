@@ -75,6 +75,10 @@ const tabletrans ={
         english: "Payment status",
         persian: "وضعیت پرداخت"
     },
+    action:{
+        english: "Action",
+        persian: "عملیات"
+    },
     price:{
         english: "Price",
         persian: "قیمت"

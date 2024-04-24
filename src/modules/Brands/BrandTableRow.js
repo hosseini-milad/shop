@@ -33,26 +33,6 @@ function BrandTableRow(props){
                 </div>
               </td>
               <td>
-                <div className="order-num">
-                  <p>{brand.brandCode}</p>
-                </div>
-              </td>
-              <td>
-                <div className="order-num">
-                  <p>{brand.brand}</p>
-                </div>
-              </td>
-              <td>
-                <div className="order-num">
-                  <p>{"product"}</p>
-                </div>
-              </td>
-              <td>
-                <div className="order-price">
-                  <p>{normalPriceCount(brand.totalPrice)}</p>
-                </div>
-              </td>
-              <td>
                 <Status status={brand.status} class={"order-status"} 
                   lang={props.lang}/>
               </td>
