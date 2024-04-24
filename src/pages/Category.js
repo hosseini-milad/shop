@@ -81,8 +81,8 @@ function Category(props){
       <div className="list-container">
         <StatusBar lang={lang} token={token} filters={filters}
          status={content.rxStatus} setFilters={setFilters}/>
-        <CatFilters lang={props.lang} setFilters={setFilters}
-          options={content.brand} filters={filters}/>
+        {/* <CatFilters lang={props.lang} setFilters={setFilters}
+          options={content.brand} filters={filters}/> */}
         <div className="user-list"> 
           {loading?env.loader:<CatTable cat={content} lang={lang}/>}
         </div>

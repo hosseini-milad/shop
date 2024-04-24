@@ -80,8 +80,8 @@ function Brands(props){
       <div className="list-container">
         <StatusBar lang={lang} token={token} filters={filters}
          status={content.rxStatus} setFilters={setFilters}/>
-        <BrandFilters lang={props.lang} setFilters={setFilters}
-          options={content.brand} filters={filters}/>
+        {/* <BrandFilters lang={props.lang} setFilters={setFilters}
+          options={content.brand} filters={filters}/> */}
         <div className="user-list"> 
           {loading?env.loader:<BrandTable brand={content} lang={lang}/>}
         </div>

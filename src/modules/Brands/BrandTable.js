@@ -20,10 +20,7 @@ function BrandTable(props){
               <p>{tabletrans.brandName[lang]}</p>
               <i></i>
             </th>
-            <th>
-              <p>{tabletrans.brandCode[lang]}</p>
-              <i></i>
-            </th>
+
 
 
 
