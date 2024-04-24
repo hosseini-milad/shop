@@ -426,8 +426,8 @@
     justify-content: center;
     background: var(--dark-blue-sec);
     border-radius: 0.3rem;
-    padding: 1rem;
-    margin-top: 1rem;
+    padding: 0rem;
+    margin-top: 0rem;
     flex-direction: column;
     width: 100%;
     margin-bottom: 1rem;

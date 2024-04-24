@@ -4925,7 +4925,6 @@ table {
 /* Team User */
 .team-users {
   width: 100%;
-  height: 100vh;
   background-color: white;
   padding: 1rem;
   border-radius: 10px;
@@ -5028,7 +5027,7 @@ table {
 .user-info {
   display: flex;
   flex-direction: column;
-  margin-left: 20px;
+  margin: 0 10px;
 }
 .user-id p:nth-child(1) {
   font-size: 1.143rem;
@@ -5043,17 +5042,9 @@ table {
   width: 120px;
   color: #888;
   font-size: 13px;
-  text-align: left;
 }
 .user-state td:nth-child(2) {
-  color: #888;
-  padding-right: 5px;
   font-size: 13px;
-  text-align: left;
-}
-.user-state td:nth-child(3) {
-  font-size: 13px;
-  text-align: left;
   color: black;
 }
 .user-card i {
