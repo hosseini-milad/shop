@@ -147,6 +147,16 @@ router.post('/update-customer',jsonParser,async (req,res)=>{
         nif:req.body.nif,
         active:req.body.active,
         official:req.body.official,
+
+        birthDay:req.body.birthDay,
+        clothSize:req.body.clothSize,
+        call:req.body.call,
+        urgCall:req.body.urgCall,
+        contractCall:req.body.contractCall,
+        zone:req.body.zone,
+        gps:req.body.gps,
+        workTime:req.body.workTime,
+        website:req.body.website,
     }
     if(req.body.imageUrl1) data.imageUrl1 = req.body.imageUrl1
     if(req.body.imageUrl2) data.imageUrl2 = req.body.imageUrl2
