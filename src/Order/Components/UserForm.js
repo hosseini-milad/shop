@@ -10,11 +10,13 @@ function UserForm(props){
     //console.log(def)
     return(<>
         <div className="customerTab">
-          <small>اطلاعات اصلی</small>
-          <small>اطلاعات تکمیلی</small>
+          <small className={userTab===0?"active":""}
+          onClick={()=>setUserTab(0)}>اطلاعات اصلی</small>
+          <small className={userTab===1?"active":""}
+          onClick={()=>setUserTab(1)}>اطلاعات تکمیلی</small>
         </div>
         <div className="card-form">
-            {userTab?<CustomerXtra />
+            {userTab?<CustomerXtra setData={props.setData}/>
             :<div className="card-input">
                 <StyleInput title={"نام"} direction={"rtl"} 
                 class="userInput" defaultValue={def?def.cName:''}
