@@ -28,7 +28,7 @@ const customerSchema = new mongoose.Schema({
   AddressID:{ type: String },
   meliCode:{ type: String , unique: true},
   postalCode:{ type: String },
-
+  activity:{ type: String },
   official:{ type: String },
   status:{ type: String },
   Code:{ type: String },
