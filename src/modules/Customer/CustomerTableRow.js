@@ -44,8 +44,8 @@ function CustomerTableRow(props){
               <div className="more-btn">
                 <i className="tableIcon fas fa-edit" onClick={()=>
                   window.location.href="/customers/detail/"+user._id}></i>
-                <i className="tableIcon fas fa-ellipsis-v" 
-                  onClick={()=>setOpenOption(openOption?0:1)}></i>
+                {/* <i className="tableIcon fas fa-ellipsis-v" 
+                  onClick={()=>setOpenOption(openOption?0:1)}></i> */}
               </div>
               {openOption?<div className="sub-more-menu">
                 <div className="sub-option sub-delete">

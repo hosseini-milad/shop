@@ -5,6 +5,8 @@ import formtrans from "../../../translate/forms"
 import CustomerAvatar from "../CustomerComponent/CustomerAvatar"
 import ErrorShow from "../../../components/Button/ErrorShow"
 import ErrorAction from "../../../components/Modal/ErrorAction"
+import ImageSimple from '../../../components/Button/ImageSimple';
+
 
 function CustomerGeneral(props){
   const userData = props.userData
@@ -73,100 +75,61 @@ function CustomerGeneral(props){
           {/* <CustomerAvatar /> */}
           <div className="info-box">
             <div className="info-wrapper">
-              <StyleInput title={formtrans.name[props.lang]} direction={props.direction} 
-                defaultValue={userData.cName} class={"formInput"}
+              <StyleInput title={formtrans.clothSize[props.lang]} direction={props.direction} 
+                defaultValue={userData.clothSize} class={"formInput"}
                 action={(e)=>setFormData(prevState => ({
                   ...prevState,
-                  cName:e
+                  clothSize:e
                 }))}/>
-              <StyleInput title={formtrans.fname[props.lang]} direction={props.direction} 
-                defaultValue={userData.sName} class={"formInput"}
+              <StyleInput title={formtrans.workTime[props.lang]} direction={props.direction} 
+                defaultValue={userData.workTime} class={"formInput"}
                 action={(e)=>setFormData(prevState => ({
                   ...prevState,
-                  sName:e
-                }))}/>
-              
-              <StyleInput title={formtrans.emailAddress[props.lang]} direction={props.direction} 
-                defaultValue={userData.email} class={"formInput"}
-                action={(e)=>setFormData(prevState => ({
-                  ...prevState,
-                  email:e
+                  workTime:e
                 }))}/>
               
-              <StyleInput title={formtrans.phoneNumber[props.lang]} direction={props.direction} 
-                defaultValue={userData.phone} class={"formInput"}
+              <StyleInput title={formtrans.birthDay[props.lang]} direction={props.direction} 
+                defaultValue={userData.birthDay} class={"formInput"}
                 action={(e)=>setFormData(prevState => ({
                   ...prevState,
-                  phone:e
+                  birthDay:e
                 }))}/>
-              <StyleInput title={formtrans.mobile[props.lang]} direction={props.direction} 
-                defaultValue={userData.mobile} class={"formInput"}
+              
+              <StyleInput title={formtrans.roleId[props.lang]} direction={props.direction} 
+                defaultValue={userData.roleId} class={"formInput"}
                 action={(e)=>setFormData(prevState => ({
                   ...prevState,
-                  mobile:e
+                  roleId:e
                 }))}/>
-              <StyleInput title={formtrans.EmergencyContact[props.lang]} direction={props.direction} 
-                defaultValue={userData.urgCall} class={"formInput"}
+              <StyleInput title={formtrans.userRelatedContacts[props.lang]} direction={props.direction} 
+                defaultValue={userData.contractCall} class={"formInput"}
                 action={(e)=>setFormData(prevState => ({
                   ...prevState,
-                  urgCall:e
+                  contractCall:e
                 }))}/>
 
-              <StyleInput title={formtrans.customercode[props.lang]} direction={props.direction} 
-                defaultValue={userData.cCode} class={"formInput"}
+              <StyleInput title={formtrans.StockId[props.lang]} direction={props.direction} 
+                defaultValue={userData.StockId} class={"formInput"}
                 action={(e)=>setFormData(prevState => ({
                   ...prevState,
-                  cCode:e
+                  StockId:e
                 }))}/>
-              <StyleInput title={formtrans.postalCode[props.lang]} direction={props.direction} 
-                defaultValue={userData.postalCode} class={"formInput"}
+              <StyleInput title={formtrans.zone[props.lang]} direction={props.direction} 
+                defaultValue={userData.zone} class={"formInput"}
                 action={(e)=>setFormData(prevState => ({
                   ...prevState,
-                  postalCode:e
+                  zone:e
                 }))}/>
-              
-              <StyleInput title={formtrans.meliCode[props.lang]} direction={props.direction} 
-                defaultValue={userData.meliCode} class={"formInput"}
-                action={(e)=>setFormData(prevState => ({
-                  ...prevState,
-                  meliCode:e
-                }))}/>
-              <StyleInput title={formtrans.address[props.lang]} direction={props.direction} 
-                defaultValue={userData.Address} class={"formInput"}
-                action={(e)=>setFormData(prevState => ({
-                  ...prevState,
-                  Address:e
-                }))}/>
-              
-              {/* <StyleInput title={formtrans.country[props.lang]} direction={props.direction} 
-                defaultValue={userData.country} class={"formInput"}
-                action={(e)=>setFormData(prevState => ({
-                  ...prevState,
-                  country:e
-                }))}/> */}
-              
-              <StyleInput title={formtrans.state[props.lang]} direction={props.direction} 
-                defaultValue={userData.state} class={"formInput"}
-                action={(e)=>setFormData(prevState => ({
-                  ...prevState,
-                  state:e
-                }))}/>
-              <StyleInput title={formtrans.city[props.lang]} direction={props.direction} 
-                defaultValue={userData.city} class={"formInput"}
-                action={(e)=>setFormData(prevState => ({
-                  ...prevState,
-                  city:e
-                }))}/>
-              
-              <div className="info-input"><label htmlFor="about">
-                  {formtrans.about[props.lang]}</label>
-              <textarea name="about"
-                  id="about" onChange={(e)=>setFormData(prevState => ({
-                    ...prevState,
-                    about:e.target.value
-                  }))}>{userData.about}</textarea>
-              </div>
-            
+                {/* <div className="images">
+                <h5>{tabletrans.images[props.lang]}</h5>
+                <ImageSimple cardName="Input Image" imageGallery={[]} 
+                    setImage={setImage} setImageUrl={setImageUrl} part={1}
+                    setThumb={setThumb}/>
+                <img src={props.productChange.imageUrl?env.siteApiUrl+props.productChange.imageUrl:
+                  (content?(env.siteApiUrl+content.imageUrl):'')} 
+                  alt={content?content.title:env.default}/>
+              </div> */}
+
             </div>
             {userData.agent?
             <div className="delete-user-btn formal-btn" onClick={()=>setFormal(1)}>
