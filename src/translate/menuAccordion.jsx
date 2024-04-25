@@ -1,9 +1,9 @@
 const menutrans ={
     title:{
-        english:"DkMehr",
-        persian:"داده کاوان",
+        english:"SharifOil",
+        persian:"روانکاران شریف",
         icon:"fa-eercast",
-        href:"https://dkmehr.com"
+        href:"https://sharifoilco.com"
         
     },
     menu:[

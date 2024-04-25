@@ -16,7 +16,7 @@ function UserForm(props){
           onClick={()=>setUserTab(1)}>اطلاعات تکمیلی</small>
         </div>
         <div className="card-form">
-            {userTab?<CustomerXtra setData={props.setData}/>
+            {userTab?<CustomerXtra setData={props.setData} def={def}/>
             :<div className="card-input">
                 <StyleInput title={"نام"} direction={"rtl"} 
                 class="userInput" defaultValue={def?def.cName:''}
