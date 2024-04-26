@@ -135,7 +135,7 @@ function Customers(props){
         </div>
       </div>
       <div className="list-container">
-        <StatusBar />
+        
         <CustomerFilters lang={props.lang} setFilters={setFilters} 
           options={content.access}/>
         <div className="user-list">

@@ -45,10 +45,10 @@
     line-height: .8rem;
     color:rgba(0,0,0,.5);
     font-family: vazir;
-    font-size: 12px;
+    font-size:1rem;
     overflow: initial;
     background: #fff;
-    padding: 2px 5px;
+    padding:0 6px;
 }
 .filterComponent{
     min-width: 200px;
@@ -88,7 +88,7 @@
 .page-counter {
     direction: ltr;
 }
-.user-list td ,.cu-name p{
+.cu-name p{
     text-align: initial;
 }
 .user-list th:nth-child(2){
@@ -99,6 +99,7 @@
 }
 .cu-avatar img {
     margin: auto 8px;
+    margin-right: 0;
 }
 .dense-btn {
     width: 45%;
@@ -1008,3 +1009,11 @@
   }
 }
 
+.switch-btn{
+  border: none;
+  outline: none;
+  background-color: grey;
+  color: white;
+  border-radius: 0.5rem;
+  padding: 0.5rem 1rem;
+}

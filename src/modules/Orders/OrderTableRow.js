@@ -104,7 +104,7 @@ function OrderTableRow(props){
             </td>
           </tr>
           {activeAcc?<tr className="sub-order">
-        <td colSpan="9"><OrderQuickDetail order={order.orderItems}/></td></tr>
+        <td colSpan="10"><OrderQuickDetail order={order.orderItems}/></td></tr>
           :<React.Fragment></React.Fragment>}
           </React.Fragment>
     )

@@ -66,7 +66,7 @@ function Sliders(props){
           
         </div>
         <div className="od-header-btn">
-          <div className="edit-btn add-btn" 
+          <div className="edit-btn" 
             onClick={()=>window.location.href="/sliders/detail/new"}>
             <i className="fa-solid fa-plus"></i>
             <p>{tabletrans.addNew[lang]}</p>
