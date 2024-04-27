@@ -985,7 +985,7 @@ router.post('/quick-to-cart',jsonParser, async (req,res)=>{
     try{
         var status = "";
         //const cartAll = await cart.find()
-        
+        const userData = await customers.findOne({_id:ObjectID(userId)})
         const qCartData = await quickCart.findOne({userId:userId})
         data.payValue=qCartData&&qCartData.payValue
         data.description = qCartData&&qCartData.description
@@ -999,7 +999,7 @@ router.post('/quick-to-cart',jsonParser, async (req,res)=>{
         await cart.create(data)
             status = "create cart"
         await quickCart.deleteOne({userId:data.userId})
-        await CreateTask("border",data)
+        await CreateTask("border",data,userData)
         const cartDetails = await findCartFunction(userId,req.headers['userid'])
         setTimeout(()=>res.json(cartDetails),3000)
         
