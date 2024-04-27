@@ -5,10 +5,23 @@ import formtrans from "../../../translate/forms"
 import CustomerAvatar from "../CustomerComponent/CustomerAvatar"
 import ErrorShow from "../../../components/Button/ErrorShow"
 import ErrorAction from "../../../components/Modal/ErrorAction"
-import ImageSimple from '../../../components/Button/ImageSimple';
+import ImageSimple from '../../../components/Button/ImageSimple'
+import CustomerImages from "./CustomerImages"
 
 
 function CustomerGeneral(props){
+
+  const token = props.token
+  const [def,setDef] = useState()
+  const [data,setData] = useState()
+  const [imageUrl,setImageUrl] = useState('')
+  const [imageUrl2,setImageUrl2] = useState('')
+  const [kasbUrl,setKasbUrl] = useState('')
+  
+  const [shopUrl1,setShopUrl1] = useState('')
+  const [shopUrl2,setShopUrl2] = useState('')
+  const [shopUrl3,setShopUrl3] = useState('')
+
   const userData = props.userData
   const [formData, setFormData] = useState()
   const [error,setError] = useState({errorText:'',errorColor:"brown"})
@@ -19,6 +32,8 @@ function CustomerGeneral(props){
         headers: {'Content-Type': 'application/json'},
         body:JSON.stringify({
           userId:userData._id,
+          shopUrl1:shopUrl1,shopUrl2:shopUrl2,shopUrl3:shopUrl3,
+          imageUrl1:imageUrl,imageUrl2:imageUrl2,kasbUrl:kasbUrl,
           ...formData
         })
       }
@@ -114,7 +129,7 @@ function CustomerGeneral(props){
                   ...prevState,
                   StockId:e
                 }))}/> */}
-                
+
               <StyleInput title={formtrans.zone[props.lang]} direction={props.direction} 
                 defaultValue={userData.zone} class={"formInput"}
                 action={(e)=>setFormData(prevState => ({
@@ -131,6 +146,15 @@ function CustomerGeneral(props){
                   alt={content?content.title:env.default}/>
               </div> */}
 
+                    <section className="admin-table-sec ">
+                    {userData?<CustomerImages setFormData={setFormData} def={userData}
+                    imageUrl={imageUrl} setImageUrl={setImageUrl}
+                    imageUrl2={imageUrl2} setImageUrl2={setImageUrl2}
+                    kasbUrl={kasbUrl} setKasbUrl={setKasbUrl}
+                    shopUrl1={shopUrl1} setShopUrl1={setShopUrl1}
+                    shopUrl2={shopUrl2} setShopUrl2={setShopUrl2}
+                    shopUrl3={shopUrl3} setShopUrl3={setShopUrl3}/>:<></>}
+                </section>
             </div>
             {userData.agent?
             <div className="delete-user-btn formal-btn" onClick={()=>setFormal(1)}>
