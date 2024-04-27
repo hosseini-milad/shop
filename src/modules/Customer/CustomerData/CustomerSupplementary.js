@@ -108,12 +108,13 @@ function CustomerGeneral(props){
                   contractCall:e
                 }))}/>
 
-              <StyleInput title={formtrans.StockId[props.lang]} direction={props.direction} 
+              {/* <StyleInput title={formtrans.StockId[props.lang]} direction={props.direction} 
                 defaultValue={userData.StockId} class={"formInput"}
                 action={(e)=>setFormData(prevState => ({
                   ...prevState,
                   StockId:e
-                }))}/>
+                }))}/> */}
+                
               <StyleInput title={formtrans.zone[props.lang]} direction={props.direction} 
                 defaultValue={userData.zone} class={"formInput"}
                 action={(e)=>setFormData(prevState => ({
