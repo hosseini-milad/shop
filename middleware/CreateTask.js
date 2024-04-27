@@ -6,10 +6,12 @@ const CreateTask=async(type,data,user)=>{
     const crmId = await crmlist.findOne()
     var address = user?user.Address:''
     if(address){
-        var addressArray = address.split(' ')
-        address = addressArray.length>3?
-        addressArray[0]+" "+addressArray[1]+" "+addressArray[2]:
-        addressArray[0]
+        var addressArray = address.split(' '||'-'||'_')
+        if( addressArray.length>3)
+        address = addressArray[0]+" "+addressArray[1]+" "+addressArray[2]
+        else if(addressArray.length>1)
+        address = addressArray[0]+" "+addressArray[1]
+        
     }
     if(!crmId) return('')
     const step = crmId.crmSteps.find(item=>item.index==1)
