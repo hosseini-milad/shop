@@ -170,8 +170,7 @@ function Products(props){
         </div>
       </div>
       <div className="list-container">
-        <StatusBar lang={lang} token={token} filters={filters}
-         status={content.rxStatus} setFilters={setFilters}/>
+        
         <ProductFilters lang={props.lang} setFilters={setFilters}
           options={content.brand} filters={filters}/>
         <div className="user-list"> 

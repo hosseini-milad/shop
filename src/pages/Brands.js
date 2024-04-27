@@ -78,8 +78,7 @@ function Brands(props){
         </div>
       </div>
       <div className="list-container">
-        <StatusBar lang={lang} token={token} filters={filters}
-         status={content.rxStatus} setFilters={setFilters}/>
+        
         {/* <BrandFilters lang={props.lang} setFilters={setFilters}
           options={content.brand} filters={filters}/> */}
         <div className="user-list"> 

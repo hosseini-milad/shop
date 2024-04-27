@@ -65,7 +65,7 @@ function Policy(props){
           
         </div>
         <div className="od-header-btn">
-          <div className="edit-btn add-btn" 
+          <div className="edit-btn" 
             onClick={()=>window.location.href="/policy/detail/new"}>
             <i className="fa-solid fa-plus"></i>
             <p>{tabletrans.addNew[lang]}</p>
@@ -77,8 +77,7 @@ function Policy(props){
         </div>
       </div>
       <div className="list-container">
-        <StatusBar lang={lang} token={token} filters={filters}
-         status={content.rxStatus} setFilters={setFilters}/>
+        
         <OrderFilters lang={props.lang} setFilters={setFilters}
           options={content.brand} filters={filters}/>
         <div className="user-list"> 
