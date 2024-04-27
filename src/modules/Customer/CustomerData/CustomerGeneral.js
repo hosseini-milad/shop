@@ -157,6 +157,25 @@ function CustomerGeneral(props){
                   ...prevState,
                   city:e
                 }))}/>
+
+              {/* <StyleInput title={formtrans.address[props.lang]} direction={props.direction} 
+                defaultValue={userData.Address} class={"formInput"}
+                action={(e)=>setFormData(prevState => ({
+                  ...prevState,
+                  Address:e
+                }))}/> */}
+              <div>
+
+                
+              </div>
+              <div className="info-input"><label htmlFor="address">
+                  {formtrans.address[props.lang]}</label>
+              <textarea name="address"
+                  id="address" onChange={(e)=>setFormData(prevState => ({
+                    ...prevState,
+                    Address:e.target.value
+                  }))}>{userData.Address}</textarea>
+              </div>
               
               <div className="info-input"><label htmlFor="about">
                   {formtrans.about[props.lang]}</label>
