@@ -2,13 +2,20 @@ const crmlist = require("../models/crm/crmlist")
 const tasks = require("../models/crm/tasks")
 
 
-const CreateTask=async(type,data)=>{
+const CreateTask=async(type,data,user)=>{
     const crmId = await crmlist.findOne()
+    var address = user?user.Address:''
+    if(address){
+        var addressArray = address.split(' ')
+        address = addressArray.length>3?
+        addressArray[0]+" "+addressArray[1]+" "+addressArray[2]:
+        addressArray[0]
+    }
     if(!crmId) return('')
     const step = crmId.crmSteps.find(item=>item.index==1)
     await tasks.create({
         crmId: crmId._id,
-        taskId:"ثبت سفارش "+data.cartNo,
+        taskId:"ثبت سفارش "+data.cartNo+`(${address})`,
         content:data.description,
         creator: data.manageId,
         customer: data.userId,
