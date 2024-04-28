@@ -52,6 +52,7 @@ const customerSchema = new mongoose.Schema({
   postalCode: { type: String },
   workTime:{ type: String },
   website:{ type: String },
+  senfiCode:{ type: String },
   
   date:{type:Date} 
 });
