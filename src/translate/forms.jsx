@@ -11,6 +11,18 @@ const formtrans ={
         english: "Birth Day",
         persian: "روز تولد"
     },
+    senfiCode:{
+        english: "senfi code",
+        persian: "کد صنفی"
+    },
+    newPassword:{
+        english: "New Password",
+        persian: "رمز جدید"
+    },
+    confirmPassword:{
+        english: "Confirm Password",
+        persian: "تایید رمز جدید"
+    },
     StockId:{
         english: "Stock Id",
         persian: "شناسه صنفی"

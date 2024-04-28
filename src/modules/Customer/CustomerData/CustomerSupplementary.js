@@ -7,6 +7,8 @@ import ErrorShow from "../../../components/Button/ErrorShow"
 import ErrorAction from "../../../components/Modal/ErrorAction"
 import ImageSimple from '../../../components/Button/ImageSimple'
 import CustomerImages from "./CustomerImages"
+import StyleDatePicker from "../../../components/Button/DatePicker"
+import StyleDatePickerSingle from "../../../components/Button/DatePickerSingle"
 
 
 function CustomerGeneral(props){
@@ -102,13 +104,27 @@ function CustomerGeneral(props){
                   ...prevState,
                   workTime:e
                 }))}/>
-              
-              <StyleInput title={formtrans.birthDay[props.lang]} direction={props.direction} 
-                defaultValue={userData.birthDay} class={"formInput"}
+              <StyleInput title={formtrans.senfiCode[props.lang]} direction={props.direction} 
+                defaultValue={userData.senfiCode} class={"formInput"}
                 action={(e)=>setFormData(prevState => ({
                   ...prevState,
-                  birthDay:e
+                  senfiCode:e
                 }))}/>
+                <div className="prob-wrapper">
+                    <i className="fa-solid fa-calendar" style={{color: "#c0c0c0"}}></i>
+                        <div className="prob-title">
+                        <StyleDatePickerSingle title={formtrans.birthDay[props.lang]} class="filterComponent" 
+                            direction={"rtl"} local={"fa"}
+                            
+                            action={(e)=>setFormData(prevState => ({
+                                ...prevState,
+                                birthDay:e
+                            }))}/>
+                        </div>
+                    </div>
+              <small>{userData?userData.birthDay:''}</small>
+
+                
               
               <StyleInput title={formtrans.roleId[props.lang]} direction={props.direction} 
                 defaultValue={userData.roleId} class={"formInput"}
