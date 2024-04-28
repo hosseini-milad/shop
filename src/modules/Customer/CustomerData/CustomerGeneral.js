@@ -5,6 +5,8 @@ import formtrans from "../../../translate/forms"
 import CustomerAvatar from "../CustomerComponent/CustomerAvatar"
 import ErrorShow from "../../../components/Button/ErrorShow"
 import ErrorAction from "../../../components/Modal/ErrorAction"
+import StyleRadio from "../../../components/Button/Radio"
+
 
 function CustomerGeneral(props){
   const userData = props.userData
@@ -131,12 +133,6 @@ function CustomerGeneral(props){
                   ...prevState,
                   meliCode:e
                 }))}/>
-              <StyleInput title={formtrans.address[props.lang]} direction={props.direction} 
-                defaultValue={userData.Address} class={"formInput"}
-                action={(e)=>setFormData(prevState => ({
-                  ...prevState,
-                  Address:e
-                }))}/>
               
               {/* <StyleInput title={formtrans.country[props.lang]} direction={props.direction} 
                 defaultValue={userData.country} class={"formInput"}
@@ -157,6 +153,21 @@ function CustomerGeneral(props){
                   ...prevState,
                   city:e
                 }))}/>
+
+{/* <StyleRadio options={serviceKind} title="Type"
+            label={props.lang} 
+            defaultValue={userData.activity}
+            action={(e)=>props.setFormData(prevState => ({
+              ...prevState,
+              activity:e.english
+          }))} />
+          <StyleRadio options={serviceKind} title="Type"
+            label={props.lang}
+            defaultValue={userData.activity}
+            action={(e)=>props.setFormData(prevState => ({
+              ...prevState,
+              activity:e.english
+          }))} /> */}
 
               {/* <StyleInput title={formtrans.address[props.lang]} direction={props.direction} 
                 defaultValue={userData.Address} class={"formInput"}
@@ -185,6 +196,9 @@ function CustomerGeneral(props){
                     about:e.target.value
                   }))}>{userData.about}</textarea>
               </div>
+
+
+
             
             </div>
             {userData.agent?
