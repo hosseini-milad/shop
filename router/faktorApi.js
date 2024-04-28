@@ -26,6 +26,7 @@ const NewCode = require('../middleware/NewCode');
 const customers = require('../models/auth/customers');
 const brand = require('../models/product/brand');
 const FindCurrentCart = require('../middleware/CurrentCart');
+const FindCurrentExist = require('../middleware/CurrentExist');
 const {TaxRate} = process.env
 
 router.post('/products', async (req,res)=>{
@@ -149,7 +150,7 @@ router.post('/find-products',auth, async (req,res)=>{
             var desc = ''
             var cartCount = findCartCount(searchProducts[i].sku,currentCart.concat(qCartList),stockId)
             if(count)count.quantity = parseInt(count.quantity)-parseInt(cartCount)
-            if(count&&count.quantity){
+            if(count&&(count.quantity>0)){
                 index++
                 desc=searchProducts[i].title+
                 "("+searchProducts[i].sku+")"+
@@ -743,6 +744,8 @@ const checkAvailable= async(items,stockId)=>{
     if(!stockId) stockId="13"
     const existItem = await productcounts.findOne({ItemID:items.id,Stock:stockId})
     if(!existItem) return('')
+    //const currentOrder = await FindCurrentExist(items.id)
+    //console.log(currentOrder)
     return(compareCount(existItem&&existItem.quantity,items.count))
 }
 const createCart=(cartData,cartItem)=>{
