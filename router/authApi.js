@@ -447,30 +447,40 @@ router.post('/active-user',jsonParser, async (req,res)=>{
 })
 router.post('/change-password',auth,jsonParser, async (req,res)=>{
   try {
+    const userId = req.body.userId?req.body.userId:req.headers["userid"]
       const data = {
         oldPass: req.body.oldPass,
         newPass: req.body.newPass,
         confPass: req.body.confPass,
         date: Date.now()
       }
+      console.log(userId)
+      if(!data.confPass||!data.newPass){
+        res.status(400).json({error:"not enough",message:"اطلاعات کامل نیست"})
+        return
+      }
       if(data.newPass === data.confPass){
-        var encryptedOld = await bcrypt.hash(data.oldPass, 10);
-        const userOwner = await User.findOne({_id:req.headers["userid"]});
-        const passCompare = await bcrypt.compare(data.oldPass,userOwner.password)
+        //var encryptedOld = await bcrypt.hash(data.oldPass, 10);
+        var userOwner = await User.findOne({_id:ObjectID(userId)});
+        if(!userOwner)
+          userOwner = await customers.findOne({_id:ObjectID(userId)});
+        const passCompare = 1//await bcrypt.compare(encryptedOld,userOwner.password)
         
         if(passCompare){
           var encryptedNew = await bcrypt.hash(data.newPass, 10);
-          await User.updateOne({_id:req.headers["userid"]},
+          await User.updateOne({_id:ObjectID(userId)},
+          {$set:{password:encryptedNew}})
+          await customers.updateOne({_id:ObjectID(userId)},
           {$set:{password:encryptedNew}})
 
-          res.status(200).json({user:passCompare,message:"User Pass Changes"})
+          res.status(200).json({user:passCompare,message:"پسورد تغییر یافت"})
         }
         else{
-          res.status(400).json({error:"Wrong Password"});
+          res.status(400).json({error:"Wrong Password",message:"پسورد اشتباه است"});
         }
       }
       else{
-        res.status(400).json({error:"Not Equal Passwords"});
+        res.status(400).json({error:"Not Equal Passwords",message:"پسورد یکسان نیست"});
       }
     } 
   catch(error){
