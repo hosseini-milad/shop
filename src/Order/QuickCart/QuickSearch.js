@@ -11,7 +11,7 @@ function QuickSearch(props){
                 onChange={(e)=>props.setSearch(e.target.value)}
             onFocus={()=>setShowDrop(1)}
             onClick={()=>setShowDrop(1)}
-            onBlur={()=>setTimeout(()=>setShowDrop(0),200)}
+            onBlur={()=>setTimeout(()=>setShowDrop(0),20000)}
             />
             <i className="fa-solid fa-angle-down"></i>
         </div>

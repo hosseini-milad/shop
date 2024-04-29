@@ -85,6 +85,7 @@ function CustomerGeneral(props){
   )   
     
   }
+  console.log(userData.birthDay)
   if(!userData)
     return(<div className="general-page">{env.loader}</div> )
   else return(
@@ -115,14 +116,13 @@ function CustomerGeneral(props){
                         <div className="prob-title">
                         <StyleDatePickerSingle title={formtrans.birthDay[props.lang]} class="filterComponent" 
                             direction={"rtl"} local={"fa"}
-                            
+                            default={userData?userData.birthDay:''}
                             action={(e)=>setFormData(prevState => ({
                                 ...prevState,
                                 birthDay:e
                             }))}/>
                         </div>
                     </div>
-              <small>{userData?userData.birthDay:''}</small>
 
                 
               
