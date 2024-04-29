@@ -65,11 +65,15 @@ const formtrans ={
     },
     userRelatedContacts:{
         english: "User Related Contacts",
-        persian: "تماس افراد مرتبط"
+        persian: "شماره تماس افراد مرتبط"
     },
     mobile:{
         english: "Mobile",
         persian: "شماره همراه"
+    },
+    status:{
+        english: "Status",
+        persian: "وضعیت"
     },
     emailAddress:{
         english: "Email Address",

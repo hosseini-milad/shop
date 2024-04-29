@@ -26,6 +26,8 @@ function StyleInput(props){
                 onChange={(e)=>props.action(e.target.value)}
                 onKeyDown={(e)=>props.doAction?props.doAction(e):''}
                 type={props.password&&!showPass?"password":"text"}
+                fullWidth = {props.fullWidth}
+
             />
             {props.password?<i className={`fa ${showPass?"fa-eye-slash":"fa-eye"} 
             ${props.direction==="rtl"?"showPassRTL":"showPass"}`}
