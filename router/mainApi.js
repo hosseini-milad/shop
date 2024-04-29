@@ -25,6 +25,8 @@ const customers = require('../models/auth/customers');
 const schedule = require('node-schedule');
 const bankAccounts = require('../models/product/bankAccounts');
 const updateLog = require('../models/product/updateLog');
+const state = require('../models/main/state');
+const city = require('../models/main/city');
 const { ONLINE_URL} = process.env;
  
 router.get('/main', async (req,res)=>{
@@ -218,6 +220,44 @@ router.get('/sepidar-price', async (req,res)=>{
             date:Date.now()
         })
         res.json({sepidar:sepidarPriceResult.length,message:"قیمت ها بروز شدند"})
+    }
+    catch(error){
+        res.status(500).json({message: error.message})
+    }
+})
+router.get('/sepidar-city', async (req,res)=>{
+    try{
+        const cityResult = await sepidarFetch("data","/api/AdministrativeDivisions")
+        if(cityResult.error||!cityResult.length){
+            res.json({error:"error occure",
+                data:cityResult,message:"خطا در بروزرسانی"})
+            return
+        }
+        //var successItem=[];
+        //var failure = 0;
+        for(var i = 0;i<cityResult.length;i++){
+            //sepidarPriceResult[i].SaleTypeRef===5&& 
+            if(cityResult[i].Type==2){
+                await state.create({
+                    stateName:  cityResult[i].Title,
+                    stateId:cityResult[i].DivisionID
+                })
+            }
+            if(cityResult[i].Type==3){
+                await city.create({
+                    cityName:  cityResult[i].Title,
+                    cityId:cityResult[i].DivisionID,
+                    stateId:cityResult[i].ParentDivisionRef
+                })
+            }
+                
+        }
+        
+        await updateLog.create({
+            updateQuery: "sepidar-city" ,
+            date:Date.now()
+        })
+        res.json({sepidar:cityResult.length,message:"شهرها بروز شدند"})
     }
     catch(error){
         res.status(500).json({message: error.message})

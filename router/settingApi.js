@@ -7,6 +7,8 @@ const task = require('../models/main/task');
 const LogCreator = require('../middleware/LogCreator');
 const users = require('../models/auth/users');
 const slider = require('../models/main/slider');
+const state = require('../models/main/state');
+const city = require('../models/main/city');
 
 router.post('/sliders', async (req,res)=>{
     try{
@@ -84,6 +86,34 @@ router.post('/changeOrder',auth,jsonParser, async (req,res)=>{
        
         //if(leadTask)
         res.json({status:"sort done"})
+    }
+    catch(error){
+        res.status(500).json({message: error.message})
+    }
+})
+router.post('/list-state',jsonParser, async (req,res)=>{
+    const search = req.body.search
+    try{
+        const stateList = await state.find(search?
+            {stateName:new RegExp('.*' + search + '.*')}:{})
+        res.json({data:stateList})
+    }
+    catch(error){
+        res.status(500).json({message: error.message})
+    }
+})
+router.post('/list-city',jsonParser, async (req,res)=>{
+    const search = req.body.search
+    const state = req.body.stateId
+    try{
+        if(!state){
+            res.status(400).json({message: "لطفا کد استان را وارد نمایید"})
+            return('')
+        }
+        const cityList = await city.find(search?
+            {cityName:new RegExp('.*' + search + '.*'),
+            stateId:state}:{stateId:state})
+        res.json({data:cityList})
     }
     catch(error){
         res.status(500).json({message: error.message})
