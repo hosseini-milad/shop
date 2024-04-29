@@ -20,7 +20,7 @@ const customerSchema = new mongoose.Schema({
   agent:{ type: String },
   creator:{ type: String },
   roleId:{ type: String },
-  active:{ type: String },
+  active:{ type: Boolean },
   status:{ type: String },
   cCode:{ type: String },
   CustomerID:{ type: String },
@@ -54,6 +54,12 @@ const customerSchema = new mongoose.Schema({
   website:{ type: String },
   senfiCode:{ type: String },
   
+  about:{ type: String },
+  state:{ type: String },
+  stateId:{ type: String },
+  city:{ type: String },
+  cityId:{ type: String },
+
   date:{type:Date} 
 });
 
