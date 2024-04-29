@@ -111,29 +111,28 @@ function CustomerGeneral(props){
                   ...prevState,
                   senfiCode:e
                 }))}/>
-                <div className="prob-wrapper">
-                    <i className="fa-solid fa-calendar" style={{color: "#c0c0c0"}}></i>
-                        <div className="prob-title">
-                        <StyleDatePickerSingle title={formtrans.birthDay[props.lang]} class="filterComponent" 
-                            direction={"rtl"} local={"fa"}
-                            default={userData?userData.birthDay:''}
-                            action={(e)=>setFormData(prevState => ({
-                                ...prevState,
-                                birthDay:e
-                            }))}/>
-                        </div>
-                    </div>
-
                 
               
+              <StyleInput title={formtrans.birthDay[props.lang]} direction={props.direction} 
+                defaultValue={userData.birthDay} class={"formInput"}
+                action={(e)=>setFormData(prevState => ({
+                  ...prevState,
+                  birthDay:e
+                }))}/>
               <StyleInput title={formtrans.roleId[props.lang]} direction={props.direction} 
                 defaultValue={userData.roleId} class={"formInput"}
                 action={(e)=>setFormData(prevState => ({
                   ...prevState,
                   roleId:e
                 }))}/>
+                <StyleInput title={formtrans.zone[props.lang]} direction={props.direction} 
+                defaultValue={userData.zone} class={"formInput"}
+                action={(e)=>setFormData(prevState => ({
+                  ...prevState,
+                  zone:e
+                }))}/>
               <StyleInput title={formtrans.userRelatedContacts[props.lang]} direction={props.direction} 
-                defaultValue={userData.contractCall} class={"formInput"}
+                defaultValue={userData.contractCall} class={"formInput"} fullWidth
                 action={(e)=>setFormData(prevState => ({
                   ...prevState,
                   contractCall:e
@@ -146,12 +145,7 @@ function CustomerGeneral(props){
                   StockId:e
                 }))}/> */}
 
-              <StyleInput title={formtrans.zone[props.lang]} direction={props.direction} 
-                defaultValue={userData.zone} class={"formInput"}
-                action={(e)=>setFormData(prevState => ({
-                  ...prevState,
-                  zone:e
-                }))}/>
+
                 {/* <div className="images">
                 <h5>{tabletrans.images[props.lang]}</h5>
                 <ImageSimple cardName="Input Image" imageGallery={[]} 
