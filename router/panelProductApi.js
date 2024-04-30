@@ -389,32 +389,14 @@ router.post('/update-brand',jsonParser,async(req,res)=>{
         res.status(500).json({message: error.message})
     }
 })
-router.post('/update-brand',jsonParser,async(req,res)=>{
+router.post('/delete-brand',jsonParser,async(req,res)=>{
     var brandId= req.body.brandId?req.body.brandId:''
-    if(brandId === "new")brandId=''
     try{ 
-        const data = {
-            title:  req.body.title,
-            enTitle: req.body.sku, 
-            productMeta: req.body.productMeta,
-            type:req.body.type,
-            value:req.body.value,
-            description:req.body.description,
-            fullDesc:req.body.fullDesc,
-            brandCode: req.body.brandCode,
-            price: req.body.price,
-            active:req.body.active,
-            sort: req.body.sort,
-            brandUrl:  req.body.brandUrl,
-            imageUrl:  req.body.imageUrl
-        }
-        var brandResult = ''
-        if(brandId) brandResult=await BrandSchema.updateOne({_id:ObjectID(brandId)},
-            {$set:data})
-        else
-        brandResult= await BrandSchema.create(data)
         
-        res.json({result:brandResult,success:brandId?"Updated":"Created"})
+        var brandResult = ''
+        if(brandId) brandResult=await BrandSchema.deleteOne({_id:ObjectID(brandId)})
+        
+        res.json({result:brandResult,success:brandId?"deleted":""})
     }
     catch(error){
         res.status(500).json({message: error.message})
