@@ -359,7 +359,7 @@ router.post('/list-brands',jsonParser,async (req,res)=>{
         res.status(500).json({message: error.message})
     } 
 })
-router.post('/update-brand',jsonParser,async(req,res)=>{
+router.post('/update-brand',jsonParser,auth,async(req,res)=>{
     var brandId= req.body.brandId?req.body.brandId:''
     if(brandId === "new")brandId=''
     try{ 
@@ -391,7 +391,7 @@ router.post('/update-brand',jsonParser,async(req,res)=>{
         res.status(500).json({message: error.message})
     }
 })
-router.post('/delete-brand',jsonParser,async(req,res)=>{
+router.post('/delete-brand',jsonParser,auth,async(req,res)=>{
     var brandId= req.body.brandId?req.body.brandId:''
     try{ 
         
