@@ -379,14 +379,13 @@ router.post('/update-brand',jsonParser,async(req,res)=>{
             imageUrl:  req.body.imageUrl
         }
         var brandResult = ''
-        const brandDetail = await BrandSchema.updateOne({_id:ObjectID(brandId)})
+        //const brandDetail = await BrandSchema.updateOne({_id:ObjectID(brandId)})
         if(brandId) brandResult=await BrandSchema.updateOne({_id:ObjectID(brandId)},
             {$set:data})
         else
         brandResult= await BrandSchema.create(data)
         
-        res.json({result:brandResult,success:brandId?"Updated":"Created",
-        brandDetail:brandDetail})
+        res.json({result:brandResult,success:brandId?"Updated":"Created"})
     }
     catch(error){
         res.status(500).json({message: error.message})
