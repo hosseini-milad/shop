@@ -33,7 +33,7 @@ function CheckItem(props){
                 <i className="fa-regular fa-check fa-status-check" 
                 onClick={()=>(setStatus(1),setSave(1))}/>
             </div>}
-            {edit?<textarea rows="5" value={props.data?props.data.title:''} 
+            {edit?<input value={props.data?props.data.title:''} 
                 onChange={(e)=>updateTitle(e.target.value)}
                 onKeyDown={(e)=>e.keyCode ===13&&
                 (console.log('next row'))} className="checkInput"/>:
