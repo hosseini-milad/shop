@@ -11,6 +11,24 @@ const tabletrans ={
         english: "Classes",
         persian: "کلاس ها"
     },
+    
+    activeText:{
+        english: "Active",
+        persian: "فعال"
+    },
+    deactiveText:{
+        english: "Deactive",
+        persian: "غیر فعال"
+    },
+    delete:{
+        english: "delete",
+        persian: "حذف"
+    },
+    edit:{
+        english: "Edit",
+        persian: "ویرایش"
+    },
+
     dkmehrDashboard:{
         english: "DKMehr Dashboard",
         persian: "داشبورد داده کاوان"
