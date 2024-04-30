@@ -373,6 +373,7 @@ router.post('/update-brand',jsonParser,async(req,res)=>{
             fullDesc:req.body.fullDesc,
             brandCode: req.body.brandCode,
             price: req.body.price,
+            active:req.body.active,
             sort: req.body.sort,
             brandUrl:  req.body.brandUrl,
             imageUrl:  req.body.imageUrl
