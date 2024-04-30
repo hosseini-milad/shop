@@ -12,6 +12,7 @@ const BrandSchema = new Schema({
     description: String,
     fullDesc: String,
     brandCode:String,
+    active:Boolean,
     store: String,
 })
 module.exports = mongoose.model('brands',BrandSchema);
