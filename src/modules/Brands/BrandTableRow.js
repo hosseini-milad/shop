@@ -15,6 +15,7 @@ function BrandTableRow(props){
   const activeAcc = props.index===props.detail
   const brand=props.brand
   const token=cookies.get(env.cookieName)
+  
 
   const deleteBrand = () => {
     var postOptions = {
@@ -43,12 +44,14 @@ function BrandTableRow(props){
       );
   };
   const changeStatus = () => {
+  
     var current = "true"
-    if(brand.active && brand.active == "true"){
+    if(brand.active == true){
       current = "false"
     } else {
       current = "true"
     }
+    
     var postOptions = {
       method: "post",
       headers: { "Content-Type": "application/json", 
@@ -64,6 +67,8 @@ function BrandTableRow(props){
         (result) => {
           if (result.success) {
             setError({ errorText: result.success, errorColor: "green" });
+            props.setloading(1);
+
             setTimeout(
               () => setError({ errorText: "", errorColor: "brown" }),
               3000

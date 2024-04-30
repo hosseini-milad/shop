@@ -6,6 +6,7 @@ function BrandTable(props){
   const brand = props.brand
   const lang=props.lang;
   const [detail,showDetail] = useState(-1)
+  
     return(
         <table>
         <thead>
@@ -32,7 +33,7 @@ function BrandTable(props){
         </thead>
         <tbody>
           {brand&&brand.filter?brand.filter.map((brand,i)=>(
-            <BrandTableRow detail={detail} showDetail={showDetail} 
+            <BrandTableRow setLoading={props.setLoading} detail={detail} showDetail={showDetail} 
             brand={brand} index={i} key={i} lang={lang}/>
           )):''}
           
