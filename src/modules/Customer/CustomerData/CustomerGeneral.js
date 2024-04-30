@@ -24,7 +24,6 @@ function CustomerGeneral(props) {
   }, [userData]);
 
   const saveChanges = () => {
-    // console.log(formData)
     var postOptions = {
       method: "post",
       headers: { "Content-Type": "application/json" },
@@ -33,7 +32,6 @@ function CustomerGeneral(props) {
         ...formData,
       }),
     };
-    console.log(postOptions);
     fetch(env.siteApi + "/panel/user/update-customer", postOptions)
       .then((res) => res.json())
       .then(
