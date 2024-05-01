@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react";
 import DatePicker from "react-modern-calendar-datepicker";
-import 'react-modern-calendar-datepicker/lib/DatePicker.css';
-import { jalali_to_gregorian} from "../../env";
+import "react-modern-calendar-datepicker/lib/DatePicker.css";
+import { jalali_to_gregorian } from "../../env";
 
+<<<<<<< HEAD
 function StyleDatePickerSingle(props){
     const [selectedDate, setSelectedDate] = useState();
     
@@ -39,5 +40,24 @@ function StyleDatePickerSingle(props){
             locale={props.local} // add this
     />
     )
+=======
+function StyleDatePickerSingle(props) {
+  const [selectedDate, setSelectedDate] = useState();
+  const changeDate = () => {
+    props.action(selectedDate ? selectedDate : "");
+  };
+  useEffect(() => {
+    if (selectedDate) changeDate();
+  }, [selectedDate]);
+  return (
+    <DatePicker
+      value={selectedDate || null}
+      onChange={setSelectedDate}
+      inputPlaceholder={props.title}
+      shouldHighlightWeekends
+      locale={props.local} // add this
+    />
+  );
+>>>>>>> 153b326483d60b8a5a3c708ad0ad39305b1f62e9
 }
-export default StyleDatePickerSingle
+export default StyleDatePickerSingle;

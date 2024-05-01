@@ -1328,7 +1328,6 @@ input:checked + .switch-label:after {
   flex-direction: column;
   width: 100%;
   border-bottom: 2px solid #f6f7f9;
-
 }
 .user-list p {
   margin: 0;
@@ -5143,7 +5142,6 @@ table {
   display: flex;
   justify-content: center;
   gap: 10px;
-  margin-bottom: 30px;
 }
 .assign-box {
   border: 1px solid #e1e1e1;
@@ -5440,3 +5438,19 @@ table {
 }
 
 /*End Modal*/
+.nt-btn-wrapper {
+  background-color: #f4f4f6;
+  .wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 480px;
+    padding-inline: 1rem;
+    background-color: white;
+  }
+  .filler {
+    width: 220px;
+    height: 100%;
+    
+  }
+}
