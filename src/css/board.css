@@ -10,7 +10,7 @@
 .board-title {
   position: relative;
 }
-.board-title span{
+.board-title span {
   margin-right: 6px;
 }
 .container-fluid {
@@ -239,6 +239,7 @@ li.board-task {
   display: flex;
   flex-direction: column;
   border-radius: 8px;
+  overflow: hidden;
 }
 .fullPopUp .task-popup {
   max-height: calc(100% - 100px);
@@ -249,12 +250,14 @@ li.board-task {
 .nt-header {
   width: 100%;
   border-bottom: 1px solid #e6eaf0;
-  padding: 1em;
+  padding: 1rem;
 }
 .nt-header h4 {
-  font-size: 1.4em;
+  font-size: 1.5rem;
   font-weight: 700;
   color: #111;
+  padding: 0;
+  margin: 0;
 }
 .nt-wrapper {
   display: flex;
@@ -329,14 +332,18 @@ li.board-task {
   border: 1px solid #ababab;
   border-radius: 50%;
   margin-left: 20px;
-  margin-right: 10px;
   cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 .member-btn-wrapper {
   display: flex;
   align-items: center;
-  margin-left: auto;
-  gap: 10px;
+  margin-right: auto;
+  i {
+    font-size: 1rem;
+  }
 }
 .add-list-wrapper {
   display: none;
@@ -374,34 +381,44 @@ li.board-task {
   width: 100%;
   display: flex;
   align-items: center;
-  margin-left: 50px;
-  padding: 10px;
   cursor: pointer;
+  padding-block: 1rem;
 }
 .add-list-btn i {
-  color: #68adeb;
+  color: white;
   margin-right: 8px;
+  background-color: #68adeb;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.7rem;
+  padding-block: 6px;
 }
 .add-list-btn p {
   color: #3b95e3;
   font-size: 1.1em;
 }
 .assign-input {
-  width: 90%;
+  width: 100%;
   display: flex;
   align-items: center;
-  align-self: center;
+  justify-content: center;
   position: relative;
   margin-bottom: 1.5em;
+  gap: 0.5rem;
 }
 .avatar {
-  width: 30px;
-  height: 30px;
+  width: 35px;
+  height: 35px;
   background-color: orange;
   border-radius: 50%;
   display: flex !important;
   align-items: center;
   justify-content: center;
+  margin: 0 !important;
 }
 
 .assign-wrapper {
@@ -477,7 +494,6 @@ li.board-task {
   cursor: pointer;
 }
 .nt-btn-wrapper {
-  width: 90%;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -536,6 +552,9 @@ li.board-task {
   display: flex;
   gap: 10px;
   margin-bottom: 30px;
+  i{
+    font-size: 1.2rem;
+  }
 }
 .prob-title {
   width: 100%;
@@ -564,7 +583,8 @@ li.board-task {
   justify-content: center;
   text-align: center;
   padding: 10px;
-  margin-bottom: 5px;
+  min-width: 100px;
+  margin-left: 0.5rem;
 }
 .addTask {
   position: absolute;
@@ -839,8 +859,9 @@ li.board-task {
 
 .checkInput {
   width: 82%;
-  max-height: 100px;
+  max-height:30px;
   min-height: auto;
+  resize: none;
 }
 .prob-wrapper .DatePicker input {
   width: 100%;
