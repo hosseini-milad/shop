@@ -21,6 +21,12 @@ function CustomerGeneral(props) {
         active: userData.active,
       }));
     }
+    else if (userData && userData.false) {
+      setFormData((prevState) => ({
+        ...prevState,
+        active: userData.active,
+      }));
+    }
   }, [userData]);
 
   const saveChanges = () => {
@@ -73,10 +79,16 @@ function CustomerGeneral(props) {
       );
   };
 
-  const handleRadioChange = () => {
+  const activityStatusHandler = () => {
     setFormData((prevState) => ({
       ...prevState,
       active: formData.active === "false" ? "true" : "false", // Toggle between "true" and "false"
+    }));
+  };
+  const realOrJuridical = () => {
+    setFormData((prevState) => ({
+      ...prevState,
+      activity: formData.activity === "false" ? "true" : "false", // Toggle between "true" and "false"
     }));
   };
 
@@ -232,6 +244,31 @@ function CustomerGeneral(props) {
               }
             />
 
+            <span style={{ whiteSpace: 'pre-wrap' }}>
+            </span>
+
+            <div className="dense-btn">
+              <label htmlFor="view">
+                {/* Text indicating the radio button */}
+                {formtrans.status[props.lang]}
+              </label>
+              <input
+                className="switch-input"
+                type="checkbox"
+                id="view"
+                defaultChecked={userData.active === "true" ? true : false}
+                onClick={activityStatusHandler}
+              />
+              <label
+                htmlFor="view"
+                className={true ? "switch-label" : "switch-label disable-label"}
+              ></label>
+            </div>
+            <span style={{ whiteSpace: 'pre-wrap' }}>
+            </span>
+
+
+
             <div className="info-input">
               <label htmlFor="address">{formtrans.address[props.lang]}</label>
               <textarea
@@ -264,23 +301,7 @@ function CustomerGeneral(props) {
               </textarea>
             </div>
 
-            <div className="dense-btn">
-              <label htmlFor="view">
-                {/* Text indicating the radio button */}
-                {formtrans.status[props.lang]}
-              </label>
-              <input
-                className="switch-input"
-                type="checkbox"
-                id="view"
-                defaultChecked={userData.active === "true" ? true : false}
-                onClick={handleRadioChange}
-              />
-              <label
-                htmlFor="view"
-                className={true ? "switch-label" : "switch-label disable-label"}
-              ></label>
-            </div>
+
           </div>
           {userData.agent ? (
             <div

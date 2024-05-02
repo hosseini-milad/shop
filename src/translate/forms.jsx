@@ -33,7 +33,7 @@ const formtrans ={
     },
     roleId:{
         english: "RoleId",
-        persian: "شناسه ی نقش"
+        persian: "کد نقش"
     },
     workTime:{
         english: "Work Time",
@@ -67,6 +67,10 @@ const formtrans ={
         english: "User Related Contacts",
         persian: "شماره تماس افراد مرتبط"
     },
+    nif:{
+        english: "location",
+        persian: "موقعیت مکانی"
+    },
     mobile:{
         english: "Mobile",
         persian: "شماره همراه"
@@ -74,6 +78,10 @@ const formtrans ={
     status:{
         english: "Status",
         persian: "وضعیت"
+    },
+    statusOfRealOrJur:{
+        english: "Real",
+        persian: "حقیقی"
     },
     emailAddress:{
         english: "Email Address",
