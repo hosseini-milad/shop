@@ -6,6 +6,7 @@ import CustomerAvatar from "../CustomerComponent/CustomerAvatar";
 import ErrorShow from "../../../components/Button/ErrorShow";
 import ErrorAction from "../../../components/Modal/ErrorAction";
 import StyleRadio from "../../../components/Button/Radio";
+import StyleSelect from "../../../components/Button/AutoComplete";
 
 function CustomerGeneral(props) {
   const userData = props.userData;
@@ -20,14 +21,44 @@ function CustomerGeneral(props) {
         ...prevState,
         active: userData.active,
       }));
-    }
-    else if (userData && userData.false) {
+    } else if (userData && userData.false) {
       setFormData((prevState) => ({
         ...prevState,
         active: userData.active,
       }));
     }
   }, [userData]);
+// drop downs
+const [states, setStates] = useState([]);
+const [search, setSearch] = useState('');
+const [cities, setCities] = useState([]);
+const [stateSearch, setStateSearch] = useState('');
+const [citySearch, setCitySearch] = useState('');
+
+  useEffect(() => {
+    fetchStates();
+}, []);
+
+const fetchStates = () => {
+  fetch('/api/setting/list-state', {
+      method: 'POST',
+      headers: {
+          'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ search: search })
+  })
+  .then(response => response.json())
+  .then(data => {
+      setStates(data.data);
+  })
+  .catch(error => console.error('Error fetching states:', error));
+};
+
+const handleStateChange = (e) => {
+  const selectedState = e.target.value;
+  // onSelect(selectedState);
+};
+
 
   const saveChanges = () => {
     var postOptions = {
@@ -99,6 +130,22 @@ function CustomerGeneral(props) {
         {/* <CustomerAvatar /> */}
         <div className="info-box">
           <div className="info-wrapper">
+{/* 
+          <StyleSelect
+    title={formtrans.state[props.lang]}
+    direction={props.direction}
+    defaultValue={userData.state}
+              class={"formInput"}
+              options={states.map(state => ({ label: state.stateName, value: state.stateId }))}
+              label={"profileName"}
+              action={(e) =>
+                setFormData((prevState) => ({
+                    ...prevState,
+                    state: e,
+                }))
+            }
+            /> */}
+
             <StyleInput
               title={formtrans.name[props.lang]}
               direction={props.direction}
@@ -212,6 +259,8 @@ function CustomerGeneral(props) {
               }
             />
 
+
+
             {/* <StyleInput title={formtrans.country[props.lang]} direction={props.direction} 
                 defaultValue={userData.country} class={"formInput"}
                 action={(e)=>setFormData(prevState => ({
@@ -244,8 +293,7 @@ function CustomerGeneral(props) {
               }
             />
 
-            <span style={{ whiteSpace: 'pre-wrap' }}>
-            </span>
+            <span style={{ whiteSpace: "pre-wrap" }}></span>
 
             <div className="dense-btn">
               <label htmlFor="view">
@@ -264,10 +312,15 @@ function CustomerGeneral(props) {
                 className={true ? "switch-label" : "switch-label disable-label"}
               ></label>
             </div>
-            <span style={{ whiteSpace: 'pre-wrap' }}>
-            </span>
+            <span style={{ whiteSpace: "pre-wrap" }}></span>
 
-
+            <StyleSelect title={"حقوقی/حقیقی"} direction={props.direction} 
+                defaultValue={userData.activity} class={"formInput"}
+                options={["حقیقی","حقوقی"]}
+                action={(e)=>setFormData(prevState => ({
+                  ...prevState,
+                  activity:e
+                }))}/>
 
             <div className="info-input">
               <label htmlFor="address">{formtrans.address[props.lang]}</label>
@@ -300,8 +353,6 @@ function CustomerGeneral(props) {
                 {userData.about}
               </textarea>
             </div>
-
-
           </div>
           {userData.agent ? (
             <div

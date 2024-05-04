@@ -240,5 +240,30 @@ const formtrans ={
         persian: "پیام"
     },
 
+    // form users
+
+    addUser:{
+        english:"Add User",
+        persian: "کاربر جدید"
+    },
+    
+    users:{
+        english:"Users",
+        persian: "کاربران"
+    },
+    role:{
+        english:"Role",
+        persian: "نقش"
+    },
+    group:{
+        english:"Group",
+        persian: "گروه"
+    },
+    lastAccess:{
+        english:"Last Access",
+        persian: "آخرین دسترسی"
+    },
+    
+
 }
 export default formtrans
