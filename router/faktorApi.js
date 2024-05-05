@@ -995,6 +995,12 @@ router.post('/quick-to-cart',jsonParser, async (req,res)=>{
         data.discount = qCartData&&qCartData.discount
         const quickCartItems = qCartData&&qCartData.cartItems
         data.cartItems = quickCartItems
+        const availItems = await checkAvailable(quickCartItems)
+        
+        if(!availItems){
+            res.status(400).json({error:"موجودی کافی نیست"}) 
+            return
+        }
         //data.cartItems =pureCartPrice(quickCartItems,qCartData.payValue)
         data.cartNo = await NewCode("c")
         data.stockId = qCartData&&qCartData.stockId
