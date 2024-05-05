@@ -995,12 +995,12 @@ router.post('/quick-to-cart',jsonParser, async (req,res)=>{
         data.discount = qCartData&&qCartData.discount
         const quickCartItems = qCartData&&qCartData.cartItems
         data.cartItems = quickCartItems
-        const availItems = await checkAvailable(quickCartItems)
+        const availItems = await checkCart(quickCartItems,userData)
         
-        if(!availItems){
+        /*if(!availItems){
             res.status(400).json({error:"موجودی کافی نیست"}) 
             return
-        }
+        }*/
         //data.cartItems =pureCartPrice(quickCartItems,qCartData.payValue)
         data.cartNo = await NewCode("c")
         data.stockId = qCartData&&qCartData.stockId
@@ -1028,7 +1028,9 @@ const pureCartPrice=(cartItem,payValue)=>{
     }
     return cartItems
 }
-
+const checkCart=async(cartItems,userId)=>{
+    //const orders = await carts.
+}
 router.post('/faktor', async (req,res)=>{
     const offset =req.body.offset?parseInt(req.body.offset):0 
     const userId =req.body.userId?req.body.userId:req.headers['userid'];
