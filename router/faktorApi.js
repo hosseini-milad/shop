@@ -556,13 +556,15 @@ router.post('/cart-find', async (req,res)=>{
             as : "managerData"
         }}])
         const cartData =cartList&&cartList[0] 
-        if(!cartData) return
+        if(!cartData){
+            res.status(400).json({error:"error",message:"آیتم ها با مشکل مواجه شدند"})
+             return
+        }
         var cartItems = cartData.cartItems
         if(cartItems)
             for(var i=0;i<cartItems.length;i++){
-            console.log(cartItems.length)
             cartList[0].cartItems[i].total =findCartItemDetail(cartItems[i],cartData.payValue)
-            console.log(cartList[0].cartItems[i])
+            
         }
         var orderData=findQuickCartSum(cartItems,cartData.payValue,
             cartData.discount)
