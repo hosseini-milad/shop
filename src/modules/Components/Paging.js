@@ -4,6 +4,7 @@ import Pagination from "material-ui-flat-pagination";
 
 function Paging(props){
   const pageInfo = props.content&&PageInfoFunction(props.content,props.filters)
+  
   console.log(pageInfo)
   const setOffset=(value)=>{
     var curPage = pageInfo&&pageInfo.currentPage

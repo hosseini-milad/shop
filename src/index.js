@@ -51,7 +51,7 @@ import Classes from './pages/Classes';
 import ClassDetailHolder from './modules/Classes/ClassData/ClassDetailHolder';
 import PolicyDetailHolder from './modules/Policy/PolicyData/PolicyDetailHolder';
 import Policy from './pages/Policy';
-import Users from './modules/Users/UserList';
+import Users from './pages/Users';
 import FaktorSitePrint from './modules/Print/PrintSiteHolder';
 import PrintSepidar from './modules/Print/PrintSepidar';
 
