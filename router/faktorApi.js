@@ -541,17 +541,19 @@ router.post('/cart-find', async (req,res)=>{
     try{
         const cartList = await cart.aggregate
         ([{$match:{cartNo:cartNo}},
-        { $addFields: { "manageId": { "$toObjectId": "$manageId" }}},
-        { $addFields: { "userId": { "$toObjectId": "$userId" }}},
+        { $addFields: { "manageId": { $convert: {input:"$manager" ,
+        to:'objectId', onError:'',onNull:''}}}},
+        { $addFields: { "userId": { $convert: {input:"$users" ,
+        to:'objectId', onError:'',onNull:''}}}},
         {$lookup:{
             from : "customers", 
-            localField: "userId", 
+            localField: "users", 
             foreignField: "_id", 
             as : "userData"
         }},
         {$lookup:{
             from : "users", 
-            localField: "manageId", 
+            localField: "manager", 
             foreignField: "_id", 
             as : "managerData"
         }}])
