@@ -279,7 +279,10 @@ const findCartFunction=async(userId)=>{
     var description = ''
     for(var c=0;c<cartData.length;c++){
        try{ cartDetail.push(findCartSum(cartData[c].cartItems))}catch{}}
-    if(qCartData) qCartDetail =findQuickCartSum(qCartData.cartItems,qCartData.payValue)
+    if(qCartData) {
+        try{qCartDetail =findQuickCartSum(qCartData.cartItems,qCartData.payValue)}
+        catch{}
+    }
     return({cart:cartData,cartDetail:cartDetail,
         quickCart:qCartData,qCartDetail:qCartDetail})
         }
