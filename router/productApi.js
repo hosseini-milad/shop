@@ -277,8 +277,8 @@ const findCartFunction=async(userId)=>{
     var cartDetail = []
     var qCartDetail = ''
     var description = ''
-    for(var c=0;c<cartData.length;c++)
-        cartDetail.push(findCartSum(cartData[c].cartItems))
+    for(var c=0;c<cartData.length;c++){
+       try{ cartDetail.push(findCartSum(cartData[c].cartItems))}catch{}}
     if(qCartData) qCartDetail =findQuickCartSum(qCartData.cartItems,qCartData.payValue)
     return({cart:cartData,cartDetail:cartDetail,
         quickCart:qCartData,qCartDetail:qCartDetail})
