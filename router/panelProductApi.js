@@ -202,7 +202,7 @@ router.post('/list-product',jsonParser,async (req,res)=>{
                 const priceData = await productPrice.findOne(
                     {ItemID:products[i].ItemID,saleType:SaleType})
                 products[i].price = priceData?priceData.price:''
-                products[i].taxPrice=NormalTax(products[i].price)
+                products[i].taxPrice=NormalTax(products[i].price)/10
                 products[i].count = countData?countData.quantity:''
                 products[i].openOrderCount = openCount
             }

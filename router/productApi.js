@@ -52,7 +52,7 @@ router.post('/getlist', async (req,res)=>{
             
             const priceData = await productPrice.findOne(
                 {ItemID:products[i].ItemID,saleType:SaleType})
-            products[i].price = priceData.price?NormalTax(priceData.price):''
+            products[i].price = priceData.price?NormalTax(priceData.price)/10:''
             
         }
         const categoryList = await category.find()
@@ -176,7 +176,7 @@ const findPriceCount=async(products)=>{
         {ItemID:products.ItemID,Stock:StockId})
     const priceData = await productPrice.findOne(
         {ItemID:products.ItemID,saleType:SaleType})
-    return({price:priceData.price?NormalTax(priceData.price):'',
+    return({price:priceData.price?NormalTax(priceData.price)/10:'',
            count:countData?countData.quantity:''})
 }
 
