@@ -322,7 +322,7 @@ const findCartSum=(cartItems,payValue)=>{
     var cartSum=0;
     var cartCount=0;
     var cartDescription = ''
-    for (var i=0;i<cartItems.length;i++){
+    for (var i=0;i<cartItems.length;i++){try{
         //console.log(payValue)
         var cartItemPrice = cartItems[i].price
             .replace( /,/g, '').replace( /^\D+/g, '')
@@ -333,6 +333,7 @@ const findCartSum=(cartItems,payValue)=>{
         if(cartItems[i].count)
             cartCount+=parseInt(cartItems[i].count.toString().replace( /,/g, '').replace( /^\D+/g, ''))
             cartDescription += cartItems[i].description?cartItems[i].description:''
+    }catch{}
     }
     return({totalPrice:cartSum,
         totalCount:cartCount,cartDescription:cartDescription})
