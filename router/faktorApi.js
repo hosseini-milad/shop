@@ -268,10 +268,8 @@ const findCartFunction=async(userId,managerId)=>{
     var qCartDetail = ''
     var description = ''
    for(var c=0;c<(cartData&&cartData.length);c++){
-    console.log(cartData[c])
         try{
             for(var j=0;j<cartData[c].cartItems.length;j++){
-                console.log(cartData[c])
                 try{var cartTemp = cartData[c].cartItems[j]
                 const cartItemDetail = findCartItemDetail(cartTemp,cartData[c].payValue)
                 cartData[c].cartItems[j].total = cartItemDetail

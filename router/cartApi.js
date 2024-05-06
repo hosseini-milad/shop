@@ -557,7 +557,7 @@ router.post('/check-exist',jsonParser, async (req,res)=>{
     const ordersList = req.body.orderList
     try{
         const exist = await checkExistance(ordersList.cart)
-        if(exist){
+        if(0&&exist){
             res.json({data:exist,message:"not enough"})
             return
         }
