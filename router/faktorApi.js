@@ -267,8 +267,8 @@ const findCartFunction=async(userId,managerId)=>{
     var cartDetail = []
     var qCartDetail = ''
     var description = ''
-    try{
-        for(var c=0;c<cartData&&cartData.length;c++){
+   for(var c=0;c<cartData&&cartData.length;c++){
+        try{
             for(var j=0;j<cartData[c].cartItems.length;j++){
                 var cartTemp = cartData[c].cartItems[j]
                 const cartItemDetail = findCartItemDetail(cartTemp,cartData[c].payValue)
@@ -278,12 +278,12 @@ const findCartFunction=async(userId,managerId)=>{
             cartData[c] = {...cartData[c],userData:userData}
             cartDetail.push(findCartSum(cartData[c].cartItems))
 
+    }catch{}
         }
         if(qCartData) {
             qCartDetail =findQuickCartSum(qCartData.cartItems,
             qCartData.payValue,qCartData.discount)
         }
-    }catch{}
     return({cart:cartData,cartDetail:cartDetail,//userData:userData,
         quickCart:qCartData,qCartDetail:qCartDetail})
         }
