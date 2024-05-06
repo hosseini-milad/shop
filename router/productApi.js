@@ -286,7 +286,7 @@ const findCartFunction=async(userId)=>{
         try{qCartDetail =findQuickCartSum(qCartData.cartItems,qCartData.payValue)}
         catch{qCartDetail={}}
     }
-    return({cart:cartData,cartDetail:cartDetail,
+    return({cart:cartData,cartDetail:cartDetail, message:"error",
         quickCart:qCartData,qCartDetail:qCartDetail})
         }
     catch{
