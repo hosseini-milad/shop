@@ -263,11 +263,12 @@ const findCartFunction=async(userId,managerId)=>{
         .sort({"initDate":-1}).lean()
     const qCartData = await qCart.findOne({userId:userId})
     //const userData = await customerSchema.findOne({userId:ObjectID(userId)})
+    
     var cartDetail = []
     var qCartDetail = ''
     var description = ''
     try{
-        for(var c=0;c<cartData.length;c++){
+        for(var c=0;c<cartData&&cartData.length;c++){
             for(var j=0;j<cartData[c].cartItems.length;j++){
                 var cartTemp = cartData[c].cartItems[j]
                 const cartItemDetail = findCartItemDetail(cartTemp,cartData[c].payValue)
@@ -278,8 +279,10 @@ const findCartFunction=async(userId,managerId)=>{
             cartDetail.push(findCartSum(cartData[c].cartItems))
 
         }
-        if(qCartData) qCartDetail =findQuickCartSum(qCartData.cartItems,
+        if(qCartData) {
+            qCartDetail =findQuickCartSum(qCartData.cartItems,
             qCartData.payValue,qCartData.discount)
+        }
     }catch{}
     return({cart:cartData,cartDetail:cartDetail,//userData:userData,
         quickCart:qCartData,qCartDetail:qCartDetail})
@@ -559,7 +562,7 @@ router.post('/cart-find', async (req,res)=>{
         if(!cartData){
             res.status(400).json({error:"error",message:"آیتم ها با مشکل مواجه شدند"})
              return
-        }
+        } 
         var cartItems = cartData.cartItems
         if(cartItems)
             for(var i=0;i<cartItems.length;i++){
@@ -997,12 +1000,14 @@ router.post('/quick-to-cart',jsonParser, async (req,res)=>{
         data.discount = qCartData&&qCartData.discount
         const quickCartItems = qCartData&&qCartData.cartItems
         data.cartItems = quickCartItems
-        const availItems = await checkCart(quickCartItems,userData)
+        const stockId = userData.StockId?userData.StockId:"5"
+        const availItems = await checkCart(quickCartItems,stockId,data.payValue)
         
-        /*if(!availItems){
-            res.status(400).json({error:"موجودی کافی نیست"}) 
+        
+        if(availItems){
+            res.status(400).json({error:availItems}) 
             return
-        }*/
+        }
         //data.cartItems =pureCartPrice(quickCartItems,qCartData.payValue)
         data.cartNo = await NewCode("c")
         data.stockId = qCartData&&qCartData.stockId
@@ -1030,8 +1035,30 @@ const pureCartPrice=(cartItem,payValue)=>{
     }
     return cartItems
 }
-const checkCart=async(cartItems,userId)=>{
+const checkCart=async(cartItems,stockId,payValue)=>{
+    const cartList = await cart.find(stockId?{stockId:stockId,}:{})
+    var currentCart = await FindCurrentCart(cartList)
+    const qCartList = await qCart.find(stockId?{stockId:stockId}:{})
+    var checkCart=''
+    for(var i =0;i<cartItems.length;i++){
+        var sku = cartItems[i].sku
+        const count = await findItemBySku(sku,currentCart.concat(qCartList),stockId,cartItems[i])
+        //console.log(count)
+        if(count<0) 
+            checkCart+=`sku: ${sku}, value: ${count} || `
+    }
+    return(checkCart)
     //const orders = await carts.
+}
+const findItemBySku=async(sku,cartItems,stockId,item)=>{
+    var existCount =0
+    const ItemID = item.price?item.price[0].ItemID:"0"
+    const searchProducts = await productCount.find({ItemID:ItemID})
+    var countSep = (searchProducts.find(item=>item.Stock==stockId))
+    countSep = countSep?countSep.quantity:0
+    var countCart = findCartCount(sku,cartItems,stockId)
+    return(countSep-countCart)
+
 }
 router.post('/faktor', async (req,res)=>{
     const offset =req.body.offset?parseInt(req.body.offset):0 
