@@ -278,12 +278,13 @@ const findCartFunction=async(userId,managerId)=>{
             cartData[c] = {...cartData[c],userData:userData}
             cartDetail.push(findCartSum(cartData[c].cartItems))
 
-    }catch{}
-        }
+    
+        
         if(qCartData) {
             qCartDetail =findQuickCartSum(qCartData.cartItems,
             qCartData.payValue,qCartData.discount)
-        }
+        }}
+    catch{}}
     return({cart:cartData,cartDetail:cartDetail,//userData:userData,
         quickCart:qCartData,qCartDetail:qCartDetail})
         }
