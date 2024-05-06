@@ -35,7 +35,7 @@ router.post('/getlist', async (req,res)=>{
         for(var a=0;a<allProducts.length;a++){
 
             const countDataRaw = await productCount.findOne(
-                {ItemID:allProducts[a].ItemID,Stock:StockId})
+                {ItemID:allProducts[a].ItemID,Stock:"21"})
             const countData =(countDataRaw&&countDataRaw.quantity)?
                 parseInt(countDataRaw.quantity):0
             if(countData){
@@ -74,7 +74,7 @@ router.post('/getProduct', async (req,res)=>{
         const price = await productPrice.findOne(
             {ItemID:productData.ItemID,saleType:SaleType})
         
-        productData.price = price?NormalTax(price.price):''
+        productData.price = price?NormalTax(price.price)/10:''
         productData.count = quantity?quantity.quantity:''  
         var openCount = 0
         const openList = await openOrders.find({sku:productData.sku,payStatus:"paid"})
