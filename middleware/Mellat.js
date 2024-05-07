@@ -377,7 +377,7 @@ exports.pay = async (req, res) => {
             //return
             await PayLogSchema.create(query)
             try{
-                payRequestResult = await bpPayRequest(orderId, parseInt(orderPrice)*10, 'ok', callbackUrl);
+                payRequestResult = await bpPayRequest(orderId, parseInt(orderPrice), 'ok', callbackUrl);
             }
             catch{
                 return res.status(422).json({error: 'اطلاعات ورودی اشتباه است.'});
