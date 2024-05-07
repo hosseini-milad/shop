@@ -14,7 +14,8 @@ const PrepareOrder=async(userid)=>{
     const orderData = await sepCart.find({userId:userid})
     const usersData = await customers.findOne({_id:ObjectID(userid)})
     const dateNow = new Date()
-    const orderId = await checkRep(usersData.phone,dateNow.toLocaleDateString('fa'))
+    const orderId = await checkRep(usersData?usersData.phone:"000000000",
+    dateNow.toLocaleDateString('fa'))
     
     const orderPrice = await CalcCart(orderData)
     for(var i=0;i<orderData.length;i++)
