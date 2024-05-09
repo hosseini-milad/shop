@@ -348,7 +348,7 @@ const findQuickCartSum=(cartItems,payValue,discount)=>{
     var cartDescription = ''
     var cartDiscount = 0;
     for (var i=0;i<cartItems.length;i++){
-        //console.log(payValue)
+        try{//console.log(payValue)
         var cartItemPrice = ''
         try{cartItemPrice =cartItems[i].price.find(item=>item.saleType===payValue).price
             .replace( /,/g, '').replace( /^\D+/g, '')}
@@ -373,6 +373,7 @@ const findQuickCartSum=(cartItems,payValue,discount)=>{
                 newCount*(off)/100
             //console.log(off+": "+cartDiscount)
         }
+    }catch{}
 
     }
     if(discount){
