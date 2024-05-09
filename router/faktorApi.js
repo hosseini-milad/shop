@@ -260,7 +260,7 @@ const findCartFunction=async(userId,managerId)=>{
     try{
         const cartData = await cart.find({manageId:managerId,
         result:{$exists:false}})
-        .sort({"initDate":-1}).lean()
+        .sort({"initDate":-1}).limit(10).lean()
     const qCartData = await qCart.findOne({userId:userId})
     //const userData = await customerSchema.findOne({userId:ObjectID(userId)})
     
