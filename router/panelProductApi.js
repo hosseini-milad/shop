@@ -196,6 +196,8 @@ router.post('/list-product',jsonParser,async (req,res)=>{
             for(var i=0;i<products.length;i++){
                 const countData = await productCount.findOne(
                     {ItemID:products[i].ItemID,Stock:StockId})
+                const countAll = await productCount.find(
+                    {ItemID:products[i].ItemID})
                 var openCount = 0
                 const openList = await openOrders.find({sku:products[i].sku,payStatus:"paid"})
                 for(var c=0;c<openList.length;c++) openCount+= parseInt(openList[c].count)
@@ -204,6 +206,7 @@ router.post('/list-product',jsonParser,async (req,res)=>{
                 products[i].price = priceData?priceData.price:''
                 products[i].taxPrice=NormalTax(products[i].price)/10
                 products[i].count = countData?countData.quantity:''
+                products[i].countTotal=countAll
                 products[i].openOrderCount = openCount
             }
             const typeUnique = [...new Set(productList.map((item) => item.category))];
