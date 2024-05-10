@@ -156,7 +156,7 @@ function OrderPopUp(props){
                     </div>
                 <i className="fa fa-remove closeModal" 
                     onClick={props.close}></i>
-                <div className="sharif" style={{padding: "48px 10px 10px"}}>
+                <div className="sharif" style={{padding: "70px 10px 10px"}}>
                     <main className="sharif-order-main">
                         {content?<QuickCartHolder token={token} 
                         user={content.cart&&content.cart.userId}

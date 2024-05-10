@@ -22,14 +22,17 @@ function QuickTotal(props){
       .then(res => res.json())
       .then(
           (result) => {
-              if(result){
+              if(!result.error){
                   props.setError({message:"کالا اضافه شد",color:"green"})
                   setTimeout(()=>props.setError({message:"",color:"brown"}),2000)
                   props.setCart(result)
                   setLoading(0)
               }
-              else
-                  props.setCart('') 
+              else{
+                props.setError({message:result.error,color:"brown"})
+                  setTimeout(()=>props.setError({message:"",color:"brown"}),2000)
+              }
+                  
           },
           (error) => {
               console.log(error)
