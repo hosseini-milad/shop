@@ -263,6 +263,10 @@ const formtrans ={
         english:"Last Access",
         persian: "آخرین دسترسی"
     },
+    searchUser:{
+        english:"Search Users ...",
+        persian: "جستجوی کاربر"
+    },
     
 
 }

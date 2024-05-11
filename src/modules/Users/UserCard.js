@@ -82,14 +82,74 @@ const UserCard = ({ user, lang, onEdit }) => {
       {/* Create Team User Panel */}
       {showCreatePanel && userData && (
         <div className="create-team-user">
-          {/* Populate fields with userData */}
-          <input type="text" value={userData.username} onChange={e => setUserData({ ...userData, username: e.target.value })} />
-          <input type="text" value={userData.email} onChange={e => setUserData({ ...userData, email: e.target.value })} />
-          {/* Add other fields as needed */}
-          <button onClick={handleFormSubmit}>Submit</button>
+        <h4>{formtrans.addUser[lang]}</h4>
+        <div className="email-input">
+        <label for="email">User Email</label>
+        <input type="text" id="email"  value={userData.email} onChange={e => setUserData({ ...userData, username: e.target.value })}/>
+        <div className="red-line"></div>
+        </div>
+        <div className="note-input">
+        <p><span>Note:</span>To add multiple users, press enter.</p>
+        </div>
+        <div className="assign-wrapper">
+        <div className="assign-box left-box">
+        <h6 className="unchecked-header">Available Projects</h6>
+        <div className="checked-header">
+        <p>0 Projects selected</p>
+        <i className="fa-solid fa-arrow-right transfer-arrow"></i>
+        </div>
+        <div className="gp-wrapper">
+        <div className="gp-header"><p>Ungrouped Projects</p></div>
+        <div className="gp-member">
+        <input type="checkbox" name="" id="member-1"/>
+        <label for="member-1">Sample Project</label>
+        <i className="fa-solid fa-arrow-right transfer-arrow"></i>
+        </div>
+        </div>
+        </div>
+        <div className="assign-box right-box">
+        <h6 className="unchecked-header">Assigned Projects</h6>
+        <div className="checked-header">
+        <p>0 Projects selected</p>
+        <i className="fa-solid fa-arrow-left transfer-arrow"></i>
+        </div>
+        <div className="gp-wrapper">
+        <div className="gp-header"><p>Ungrouped Projects</p></div>
+        <div className="gp-member">
+        <input type="checkbox" name="" id="member-1"/>
+        <label for="member-1">Sample Project</label>
+        <i className="fa-solid fa-arrow-left transfer-arrow"></i>
+        </div>
+        </div>
+        </div>
+        </div>
+        <div className="default-line"><p>Default Section</p></div>
+        <div className="role-input">
+        <label for="role">User Role</label>
+        <div className="red-line"></div>
+        <select name="" id="role">
+        <option value="">Member</option>
+        <option value="">Admin</option>
+        </select>
+        </div>
+        <div className="profile-input">
+        <label for="profile">Profile</label>
+        <div className="red-line"></div>
+        <select name="" id="profile">
+        <option value="">Member</option>
+        <option value="">Admin</option>
+        </select>
+        </div>
+        <div className="notify-input">
+        <input type="checkbox" id="notify"/>
+        <label for="notify">Notify via email</label>
+        </div>
+        <div className="create-btn-wrapper">
+        <div className="add-btn" onClick={handleFormSubmit}><p>Submit</p></div>
+        <div className="cancel-btn"><p>Cancel</p></div>
+        </div>
         </div>
       )}
-
     </div>
   );
 };

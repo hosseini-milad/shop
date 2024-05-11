@@ -11,6 +11,10 @@ const tabletrans ={
         english: "Classes",
         persian: "کلاس ها"
     },
+    productTitle:{
+        english: "Product Title",
+        persian: "عنوان محصول"
+    },
     
     activeText:{
         english: "Active",

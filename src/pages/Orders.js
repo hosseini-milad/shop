@@ -8,16 +8,28 @@ import { useEffect } from "react";
 import { useState } from "react";
 import env from "../env";
 import tabletrans from "../translate/tables";
+import {
+  getFiltersFromUrl,
+  updateUrlWithFilters,
+  defaultFilterValues,
+  handleFilterChange,
+} from "../utils/filterUtils"; // Import the utility functions
 const cookies = new Cookies();
 
 function Orders(props) {
   const direction = props.lang ? props.lang.dir : errortrans.defaultDir;
   const lang = props.lang ? props.lang.lang : errortrans.defaultLang;
   const [content, setContent] = useState("");
-  const [filters, setFilters] = useState("");
+  const [filters, setFilters] = useState(getFiltersFromUrl());
   const [loading, setLoading] = useState(0);
   const [tab, setTab] = useState(0);
   const token = cookies.get(env.cookieName);
+
+  function handleFilterChange(newFilters) {
+    setFilters(newFilters);
+    updateUrlWithFilters(newFilters);
+  }
+
   useEffect(() => {
     setLoading(1);
     const body = {
@@ -89,7 +101,8 @@ function Orders(props) {
       <div className="list-container">
         <OrderFilters
           lang={props.lang}
-          setFilters={setFilters}
+          setFilters={handleFilterChange}
+          updateUrlWithFilters={updateUrlWithFilters} // Pass the function as a prop
           options={content.brand}
           filters={filters}
         />
@@ -119,6 +132,7 @@ function Orders(props) {
           setFilters={setFilters}
           filters={filters}
           lang={props.lang}
+          updateUrlWithFilters={updateUrlWithFilters} // Pass the function as a prop
         />
       </div>
     </div>
