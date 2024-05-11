@@ -110,6 +110,20 @@ function PrintCart(props){
                     <h3>مبلغ کل: {normalPriceRound(total.totalPrice)} ریال</h3>
                     <strong> </strong>
                   </div>
+                  <div className="hesabfaPrice">
+                    <div className="priceSeprate">
+                      <span>توضیحات:</span>
+                      <span>{orderInfo.description}</span>
+                    </div>
+                <div className="sharePart">
+                <button type="button" className="print-btn-crm"
+                  onClick={()=>window.print()}>
+                  چاپ</button>
+                
+                  <i className="fa fa-share-alt"
+                  onClick={()=>navigator.share()}></i>
+                  </div>    
+                  </div>
                 </div>
             </div>
             {/*<button className="printBtn" onClick={()=>printNow()}>چاپ</button>*/}

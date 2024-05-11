@@ -808,6 +808,7 @@
 }
 .hesabfaPrice{
   display: grid;
+  min-width: 200px;
 }
 .hesabfaPrice h3{
   padding-bottom: 6px;
@@ -976,7 +977,27 @@
   color: #fff;
   cursor: initial;
 }
-
+.sharePart{
+  display: flex;
+}
+.sharePart i{
+  margin: 0px;
+  padding: 8px 13px;
+  height: 40px;
+  border-radius: 17px;
+  margin-right: 5px;
+  cursor: pointer;
+  border: 1px solid transparent;
+}
+.sharePart i:hover{
+  background-color: #eee;
+}
+.print-btn-crm{
+  border: 1px solid gray;
+  border-radius: 4px;
+  height: 40px;
+  width: 100%;
+}
 
 @media screen and (max-width: 650px){
   .order-wrapper .col {

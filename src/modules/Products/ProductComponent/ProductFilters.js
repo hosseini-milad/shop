@@ -5,6 +5,50 @@ import tabletrans from "../../../translate/tables"
 import { useState } from "react"
 
 function ProductFilters(props){
+  const stock=[
+    {
+      "StockID": 5,
+      "Code": 1,
+      "Title": "انبار مرکزی",
+      "IsActive": true
+    },
+    {
+      "StockID": 6,
+      "Code": 2,
+      "Title": "انبار فروشگاه ",
+      "IsActive": true
+    },
+    {
+      "StockID": 9,
+      "Code": 3,
+      "Title": "انبار 3",
+      "IsActive": true
+    },
+    {
+      "StockID": 12,
+      "Code": 4,
+      "Title": "انبار غیر قابل فروش",
+      "IsActive": true
+    },
+    {
+      "StockID": 13,
+      "Code": 5,
+      "Title": "انبار فروشگاه جایگاه",
+      "IsActive": true
+    },
+    {
+      "StockID": 17,
+      "Code": 6,
+      "Title": "انبار پخش",
+      "IsActive": true
+    },
+    {
+      "StockID": 21,
+      "Code": 7,
+      "Title": "انبار سایت",
+      "IsActive": true
+    }
+  ]
     return(
         <div className="user-filter">
             
@@ -26,6 +70,11 @@ function ProductFilters(props){
                 ...prevState,
                 active:e==="active"?1:0
               }))}/>
+              
+            <StyleSelect title={"انبار"} direction={props.lang.dir} 
+              options={stock} label="Title" 
+              
+              action={(e)=>props.setStore(e)}/>
 
 
             <i className="tableIcon fas fa-ellipsis-v"></i>

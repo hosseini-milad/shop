@@ -33,7 +33,8 @@ const FaktorSitePrint = (props)=>{
                         manData:result.cart[0].managerData,
                         orderDate:result.cart[0].progressDate,
                         orderData:result.orderData,
-                        stockId:result.cart[0].stockId}) 
+                        stockId:result.cart[0].stockId,
+                        description:result.cart[0].description}) 
             },
             (error) => {
                 console.log(error)

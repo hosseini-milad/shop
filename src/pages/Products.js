@@ -14,6 +14,7 @@ function Products(props){
     const direction = props.lang?props.lang.dir:errortrans.defaultDir;
     const lang = props.lang?props.lang.lang:errortrans.defaultLang;
     const [content,setContent] = useState("")
+    const [store,setStore] = useState()
     const [filters,setFilters] = useState({active:"1"})
     const [tempProduct,setTempProduct] = useState("")
     const [loading,setLoading] = useState(0)
@@ -172,9 +173,10 @@ function Products(props){
       <div className="list-container">
         
         <ProductFilters lang={props.lang} setFilters={setFilters}
-          options={content.brand} filters={filters}/>
+          options={content.brand} filters={filters} setStore={setStore}/>
         <div className="user-list"> 
-          {loading?env.loader:<ProductTable product={content} lang={lang}/>}
+          {loading?env.loader:<ProductTable product={content} lang={lang}
+          store={store}/>}
         </div>
         <Paging content={content} setFilters={setFilters} filters={filters} 
           lang={props.lang}/>

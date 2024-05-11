@@ -40,6 +40,7 @@ function QuickNew(props){
         .then(
             (result) => {
                 if(result.error){
+                    setTimeout(()=>props.setReload(1),500)
                     props.setError({message:result.error,color:"brown"})
                     setTimeout(()=>props.setError({message:'',
                         color:"brown"}),3000)

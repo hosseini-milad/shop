@@ -8,8 +8,12 @@ function ProductTableRow(props){
   const [checkState,setCheckState] = useState(false)
   const activeAcc = props.index===props.detail
   const product=props.product
-  console.log(product)
-    return(<React.Fragment>
+  const stockId=props.stockId
+  var newStockCount = (product.countTotal.length?product.countTotal:'')
+  var stockIndex = stockId?product.countTotal.findIndex(item=>item.Stock==stockId.StockID):-1
+  if(newStockCount&&stockIndex!==-1) newStockCount = newStockCount[stockIndex].quantity
+  if(newStockCount&&stockIndex==-1) newStockCount="ناموجود"
+  return(<React.Fragment>
         <tr 
             className={activeAcc?"activeAccordion":"accordion"}>
             <td className="checkBoxStyle">
@@ -37,9 +41,10 @@ function ProductTableRow(props){
               </td>
               <td>
                 <div className="order-num">
-                  <span>{product.count?product.count:"ناموجود"}</span>
+                  {stockId?<span>{newStockCount}</span>:
+                  <><span>{product.count?product.count:"ناموجود"}</span>
                   <small> {product.openOrderCount?"(متنظر تایید: "+
-                           product.openOrderCount+")":''}</small>
+                           product.openOrderCount+")":''}</small></>}
                 </div>
               </td>
               <td>

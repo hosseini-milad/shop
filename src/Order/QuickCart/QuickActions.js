@@ -51,7 +51,7 @@ function QuickActions(props){
     
     },[description,discount])
     useEffect(()=>{
-        if(!cart)return
+        if(!cart||!cart.payValue)return
         if(cart.payValue == props.payValue) return
         const postOptions={
             method:'post',
