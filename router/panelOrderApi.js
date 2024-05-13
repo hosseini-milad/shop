@@ -89,9 +89,11 @@ router.post('/list',jsonParser,async (req,res)=>{
             item.userInfo[0].cName.includes(data.customer)):reportList;
         const orderList = filter1Report.slice(offset,
             (parseInt(offset)+parseInt(pageSize)))  
+        const cartListPage = cartList.slice(offset,
+            (parseInt(offset)+parseInt(pageSize))) 
         const brandUnique = [...new Set(filter1Report.map((item) => item.brand))];
-       res.json({filter:orderList,brand:brandUnique, cartList:cartList,
-        size:filter1Report.length})
+       res.json({filter:orderList,brand:brandUnique, cartList:cartListPage,
+        size:filter1Report.length,cartSize:cartList.length})
     }
     catch(error){
         res.status(500).json({message: error.message})
