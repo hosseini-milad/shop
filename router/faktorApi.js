@@ -262,6 +262,7 @@ const findCartFunction=async(userId,managerId)=>{
         result:{$exists:false}})
         .sort({"initDate":-1}).limit(10).lean()
     const qCartData = await qCart.findOne({userId:userId})
+    const qCartAdmin = await qCart.findOne({managerId:managerId})
     //const userData = await customerSchema.findOne({userId:ObjectID(userId)})
     
     var cartDetail = []
@@ -288,7 +289,7 @@ const findCartFunction=async(userId,managerId)=>{
         }
    }
     return({cart:cartData,cartDetail:cartDetail,userData:"userData",
-        quickCart:qCartData,qCartDetail:qCartDetail})
+        quickCart:qCartData,qCartDetail:qCartDetail,qCartAdmin:qCartAdmin})
         }
     catch{
         return({cart:[],cartDetail:[],
