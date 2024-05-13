@@ -63,10 +63,10 @@ router.post('/list',jsonParser,async (req,res)=>{
         }},
         //{ $match:req.body.userId?{userId:ObjectID(req.body.userId)}:{}},
         //{ $match:data.status?{status:new RegExp('.*' + data.status + '.*')}:{status:{$not:{$regex:/^initial.*/}}}},
-        //{ $match:data.orderNo?{rxOrderNo:new RegExp('.*' + data.orderNo + '.*')}:{}},
+        { $match:data.orderNo?{rxOrderNo:new RegExp('.*' + data.orderNo + '.*')}:{}},
         //{ $match:data.brand?{brand:data.brand}:{}},
-        //{ $match:!data.orderNo?{date:{$gte:new Date(data.dateFrom)}}:{}},
-        //{ $match:!data.orderNo?{date:{$lte:new Date(data.dateTo)}}:{}},
+        { $match:!data.orderNo?{date:{$gte:new Date(data.dateFrom)}}:{}},
+        { $match:!data.orderNo?{date:{$lte:new Date(data.dateTo)}}:{}},
         { $sort: {"date":-1}},
  
         ])
@@ -78,6 +78,10 @@ router.post('/list',jsonParser,async (req,res)=>{
                 foreignField: "_id", 
                 as : "userInfo"
             }},
+            { $match:data.orderNo?{cartNo:new RegExp('.*' + data.orderNo + '.*')}:{}},
+        
+            { $match:!data.orderNo?{date:{$gte:new Date(data.dateFrom)}}:{}},
+            { $match:!data.orderNo?{date:{$lte:new Date(data.dateTo)}}:{}},
             { $sort: {"initDate":-1}}
             ])
         const filter1Report = data.customer?
