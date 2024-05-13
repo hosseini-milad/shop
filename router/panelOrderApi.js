@@ -91,8 +91,8 @@ router.post('/list',jsonParser,async (req,res)=>{
             (parseInt(offset)+parseInt(pageSize)))  
         
         const filterCart = data.customer?
-        cartList.filter(item=>item.userInfo[0]&&item.userInfo[0].cName&&
-            item.userInfo[0].cName.includes(data.customer)):cartList;
+        cartList.filter(item=>item.userInfo[0]&&item.userInfo[0].username&&
+            item.userInfo[0].username.includes(data.customer)):cartList;
         const cartListPage = filterCart.slice(offset,
             (parseInt(offset)+parseInt(pageSize))) 
         const brandUnique = [...new Set(filter1Report.map((item) => item.brand))];
