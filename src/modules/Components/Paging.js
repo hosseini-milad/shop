@@ -55,7 +55,7 @@ function Paging(props) {
             offset={parseInt(props.filters.offset) || 0}
             otherPageColor={"default"}
             currentPageColor={"primary"}
-            total={pageInfo.totalItem}
+            total={props.size?props.size:pageInfo.totalItem}
             onClick={(e, offset) => {
               props.setFilters((prevState) => ({
                 ...prevState,

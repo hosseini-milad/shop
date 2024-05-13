@@ -2,7 +2,7 @@ import { useEffect, useState } from "react"
 import env, { normalPriceCount, rxFindCount } from "../../../env"
 import OrderQuickRow from "./OrderQuickRow"
 
-function OrderQuickDetail(props){
+function OrderQuickCart(props){
     const order = props.order
     const [itemDetail,setItemDetail]=useState()
     console.log(order)
@@ -12,13 +12,13 @@ function OrderQuickDetail(props){
                 {order&&order.map((item,i)=>(
                     <div className="sub-row" key={i}>
                     <div className="sub-avatar">
-                        <OrderQuickRow orderItem={item[0]} />
+                        <OrderQuickRow orderItem={item} />
                     </div>
-                    <div className="sub-num">{item[0].count}</div>
-                    <div className="sub-price">{normalPriceCount(item[0].price)}</div>
+                    <div className="sub-num">{item.count}</div>
+                    <div className="sub-price">{normalPriceCount(item.price)}</div>
                 </div>))}
                 
             </div>:env.loader}</>
     )
 }
-export default OrderQuickDetail
+export default OrderQuickCart

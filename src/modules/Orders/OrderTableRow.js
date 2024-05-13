@@ -4,6 +4,7 @@ import PayStatus from "../Components/PayStatus"
 import  { normalPriceCount, rxFindCount } from "../../env"
 import OrderQuickDetail from "./OrderComponent/OrderQuickDetail"
 import tabletrans from "../../translate/tables"
+import OrderQuickCart from "./OrderComponent/OrderQuickCart"
 
 
 function OrderTableRow(props){
@@ -104,7 +105,10 @@ function OrderTableRow(props){
             </td>
           </tr>
           {activeAcc?<tr className="sub-order">
-        <td colSpan="10"><OrderQuickDetail order={order.orderItems}/></td></tr>
+        <td colSpan="10">{order.orderItems?<OrderQuickDetail 
+          order={order.orderItems}/>:
+          <OrderQuickCart order={order.cartItems}/>}
+          </td></tr>
           :<React.Fragment></React.Fragment>}
           </React.Fragment>
     )

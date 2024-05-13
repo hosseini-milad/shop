@@ -129,6 +129,7 @@ function Orders(props) {
         )}
         <Paging
           content={content}
+          size={tab?content.cartSize:content.size}
           setFilters={setFilters}
           filters={filters}
           lang={props.lang}
