@@ -262,7 +262,16 @@ const findCartFunction=async(userId,managerId)=>{
         result:{$exists:false}})
         .sort({"initDate":-1}).limit(10).lean()
     const qCartData = await qCart.findOne({userId:userId})
-    const qCartAdmin = await qCart.findOne({manageId:managerId})
+    const qCartAdmin = await qCart.aggregate([
+        {$match:{manageId:managerId}},
+        { $addFields: { "userId": { "$toObjectId": "$userId" }}},
+            {$lookup:{
+                from : "customers", 
+                localField: "userId", 
+                foreignField: "_id", 
+                as : "userInfo"
+            }},
+    ])
     //const userData = await customerSchema.findOne({userId:ObjectID(userId)})
     
     var cartDetail = []
