@@ -264,7 +264,7 @@ const findCartFunction=async(userId,managerId)=>{
     const qCartData = await qCart.findOne({userId:userId})
     const qCartAdmin = await qCart.aggregate([
         {$match:{manageId:managerId}},
-        {$math:{cartItems:{$nin:[[],'']}}},
+        {$math:{cartItems:{$ne:[]}}},
         { $addFields: { "userId": { "$toObjectId": "$userId" }}},
             {$lookup:{
                 from : "customers", 
