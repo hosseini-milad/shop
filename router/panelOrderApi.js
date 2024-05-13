@@ -80,8 +80,8 @@ router.post('/list',jsonParser,async (req,res)=>{
             }},
             { $match:data.orderNo?{cartNo:new RegExp('.*' + data.orderNo + '.*')}:{}},
         
-            { $match:!data.orderNo?{date:{$gte:new Date(data.dateFrom)}}:{}},
-            { $match:!data.orderNo?{date:{$lte:new Date(data.dateTo)}}:{}},
+            { $match:!data.orderNo?{initDate:{$gte:new Date(data.dateFrom)}}:{}},
+            { $match:!data.orderNo?{initDate:{$lte:new Date(data.dateTo)}}:{}},
             { $sort: {"initDate":-1}}
             ])
         const filter1Report = data.customer?
