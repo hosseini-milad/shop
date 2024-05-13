@@ -78,8 +78,7 @@ router.post('/list',jsonParser,async (req,res)=>{
                 foreignField: "_id", 
                 as : "userInfo"
             }},
-            { $sort: {"date":-1}},
-            {$limit:10}
+            { $sort: {"initDate":-1}}
             ])
         const filter1Report = data.customer?
         reportList.filter(item=>item.userInfo[0]&&item.userInfo[0].cName&&
