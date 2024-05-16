@@ -190,21 +190,24 @@ router.post('/list-product',jsonParser,async (req,res)=>{
             {$lookup:{from : "brands", 
             localField: "brandId", foreignField: "brandCode", as : "brandInfo"}},
             ])
+        const productsQuantity = await productCount.find({Stock:stockId})
             var quantity = []
             var price = []
             const newProduct=[]
             for(var i=0;i<products.length;i++){
-                if(newProduct.length>pageSize){
+                const countData = productsQuantity.find(
+                    Item=>Item.ItemID==products[i].ItemID)
+                //const countStock = stockData?countData.find(item=>item.Stock==stockData):''
+                if(!countData||!countData.quantity) continue
+                
+                if(newProduct.length>(pageSize+offset)){
                     newProduct.push({})
                     continue;
                 }
-                const countData = await productCount.findOne(
-                    {ItemID:products[i].ItemID,Stock:stockId})
-                //const countStock = stockData?countData.find(item=>item.Stock==stockData):''
-                if(!countData||!countData.quantity) continue
                 const countAll = await productCount.find(
                     {ItemID:products[i].ItemID})
                 var openCount = 0
+                //if()
                 const openList = await openOrders.find({sku:products[i].sku,payStatus:"paid"})
                 for(var c=0;c<openList.length;c++) openCount+= parseInt(openList[c].count)
                 const priceData = await productPrice.findOne(
