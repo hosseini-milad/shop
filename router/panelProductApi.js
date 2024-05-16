@@ -172,6 +172,7 @@ router.post('/fetch-product',jsonParser,async (req,res)=>{
 router.post('/list-product',jsonParser,async (req,res)=>{
     var pageSize = req.body.pageSize?req.body.pageSize:"10";
     var offset = req.body.offset?(parseInt(req.body.offset)):0;
+    var stockId = req.body.store?req.body.store.StockID:StockId
     try{const data={
         category:req.body.category,
         title:req.body.title,
@@ -181,21 +182,26 @@ router.post('/list-product',jsonParser,async (req,res)=>{
         offset:req.body.offset,
         pageSize:pageSize
     }
-        const productList = await ProductSchema.aggregate([
+        const products = await ProductSchema.aggregate([
             { $match:data.title?{title:new RegExp('.*' + data.title + '.*')}:{}},
             { $match:data.sku?{sku:new RegExp('.*' + data.sku + '.*')}:{}},
             { $match:data.category?{category:data.category}:{}},
-            { $match:data.active?{enTitle:{ $exists: true}}:{}},
+            { $match:data.active?{active:true}:{}},
             {$lookup:{from : "brands", 
             localField: "brandId", foreignField: "brandCode", as : "brandInfo"}},
             ])
-            const products = productList.slice(offset,
-                (parseInt(offset)+parseInt(pageSize)))  
             var quantity = []
             var price = []
+            const newProduct=[]
             for(var i=0;i<products.length;i++){
+                if(newProduct.length>pageSize){
+                    newProduct.push({})
+                    continue;
+                }
                 const countData = await productCount.findOne(
-                    {ItemID:products[i].ItemID,Stock:StockId})
+                    {ItemID:products[i].ItemID,Stock:stockId})
+                //const countStock = stockData?countData.find(item=>item.Stock==stockData):''
+                if(!countData||!countData.quantity) continue
                 const countAll = await productCount.find(
                     {ItemID:products[i].ItemID})
                 var openCount = 0
@@ -203,16 +209,22 @@ router.post('/list-product',jsonParser,async (req,res)=>{
                 for(var c=0;c<openList.length;c++) openCount+= parseInt(openList[c].count)
                 const priceData = await productPrice.findOne(
                     {ItemID:products[i].ItemID,saleType:SaleType})
-                products[i].price = priceData?priceData.price:''
-                products[i].taxPrice=NormalTax(products[i].price)/10
-                products[i].count = countData?countData.quantity:''
-                products[i].countTotal=countAll
-                products[i].openOrderCount = openCount
+                newProduct.push({
+                    ...products[i],
+                    price:priceData?priceData.price:'',
+                    taxPrice:NormalTax(products[i].price)/10,
+                    count:countData?countData.quantity:'',
+                    countTotal:countAll,
+                    openOrderCount:openCount
+                })
             }
+            
+            const productList = newProduct.slice(offset,
+                (parseInt(offset)+parseInt(pageSize)))  
             const typeUnique = [...new Set(productList.map((item) => item.category))];
             
-           res.json({filter:products,type:typeUnique,
-            size:productList.length,full:productList,
+           res.json({filter:productList,type:typeUnique,
+            size:newProduct.length,
             quantity:quantity,price:price})
     }
     catch(error){
