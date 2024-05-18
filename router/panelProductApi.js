@@ -184,6 +184,7 @@ router.post('/list-product',jsonParser,async (req,res)=>{
         category:req.body.category,
         title:req.body.title,
         sku:req.body.sku,
+        exists: req.body.exists?1:0,
         brand:req.body.brand,
         active:req.body.active,
         offset:req.body.offset,
@@ -205,7 +206,7 @@ router.post('/list-product',jsonParser,async (req,res)=>{
                 const countData = productsQuantity.find(
                     Item=>Item.ItemID==products[i].ItemID)
                 //const countStock = stockData?countData.find(item=>item.Stock==stockData):''
-                if(!countData||!countData.quantity) continue
+                if(!exists||!countData||!countData.quantity) continue
                 
                 if(newProduct.length>(pageSize+offset)){
                     newProduct.push({})
