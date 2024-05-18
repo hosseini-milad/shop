@@ -371,7 +371,7 @@ router.post('/list-brands',jsonParser,async (req,res)=>{
             const typeUnique = [...new Set(brandList.map((item) => item.category))];
             
            res.json({filter:brands,type:typeUnique,
-            size:brands.length})
+            size:brandList.length})
     }
     catch(error){
         res.status(500).json({message: error.message})
