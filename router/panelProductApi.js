@@ -156,11 +156,18 @@ router.post('/fetch-product',jsonParser,async (req,res)=>{
             return
         } 
         const productData = await ProductSchema.findOne({_id: ObjectID(productId)})
+        if(!productData){
+            res.json({filter:{}})
+            return
+        }
         const brandList = await BrandSchema.find({})
         const categoryList = await category.find({})
-        const brandData = brandList.find(item=>item.brandCode==productData.brandId)
-        const catData = categoryList.find(item=>item.catCode==productData.catId)
-        const filterList = await Filters.find({"category._id":catData._id.toString()})
+        const brandData = productData.brandId?
+            brandList.find(item=>item.brandCode==productData.brandId):''
+        const catData = productData.catId?
+            categoryList.find(item=>item.catCode==productData.catId):''
+        const filterList = catData?
+            await Filters.find({"category._id":catData._id.toString()}):''
        
         res.json({filter:productData,brandList:brandList,categoryList:categoryList,
         brandData:brandData,catData:catData,filterList:filterList})
