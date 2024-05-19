@@ -76,10 +76,11 @@ fetch(env.siteApi + "/panel/product/fetch-product",postOptions)
           else{
             setError({errorText:result.success,
               errorColor:"green"})
-            setTimeout(()=>window.location.href="/products",2000)
-          }
-          
-      },
+              setTimeout(() => {
+                window.history.back();
+              }, 2000);
+            }
+          },
       (error) => {
         console.log(error);
       }
@@ -111,7 +112,7 @@ fetch(env.siteApi + "/panel/product/fetch-product",postOptions)
             <input className="switch-input" type="checkbox" id="switch-3" />
           </div>
           <div className="save-btn" onClick={saveProducts}>{formtrans.saveChanges[lang]}</div>
-          <div className="cancel-btn" onClick={()=>window.location.href="/products"}>{formtrans.cancel[lang]}</div>
+          <div className="cancel-btn" onClick={()=>window.history.back()}>{formtrans.cancel[lang]}</div>
         </div>
         
       </div>:<div>{env.loader}</div>}
