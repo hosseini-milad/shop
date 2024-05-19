@@ -1,14 +1,27 @@
 
 
 // Function to get filters from URL
+// export function getFiltersFromUrl() {
+//     const searchParams = new URLSearchParams(window.location.search);
+//     const filters = {};
+//     for (const [key, value] of searchParams.entries()) {
+//       filters[key] = value;
+//     }
+//     return filters;
+//   }
 export function getFiltersFromUrl() {
-    const searchParams = new URLSearchParams(window.location.search);
-    const filters = {};
-    for (const [key, value] of searchParams.entries()) {
+  const searchParams = new URLSearchParams(window.location.search);
+  const filters = {};
+  for (const [key, value] of searchParams.entries()) {
+    // Deserialize the store filter value
+    if (key === 'store') {
+      filters[key] = JSON.parse(value);
+    } else {
       filters[key] = value;
     }
-    return filters;
   }
+  return filters;
+}
   
   // Default filter values
 export const defaultFilterValues = {
@@ -17,18 +30,35 @@ export const defaultFilterValues = {
   };
 
   // Function to update URL with filters
+// export function updateUrlWithFilters(newFilters) {
+//     const searchParams = new URLSearchParams(window.location.search);
+//     for (const key in newFilters) {
+//       if (newFilters[key]) {
+//         searchParams.set(key, newFilters[key]);
+//       } else {
+//         searchParams.delete(key); // Remove the parameter if the value is falsy
+//       }
+//     }
+//     const newUrl = `${window.location.pathname}?${searchParams.toString()}`;
+//     window.history.replaceState({}, "", newUrl);
+//   }
 export function updateUrlWithFilters(newFilters) {
-    const searchParams = new URLSearchParams(window.location.search);
-    for (const key in newFilters) {
-      if (newFilters[key]) {
-        searchParams.set(key, newFilters[key]);
+  const searchParams = new URLSearchParams(window.location.search);
+  for (const key in newFilters) {
+    if (newFilters[key]) {
+      // Serialize the store filter value
+      if (key === 'store') {
+        searchParams.set(key, JSON.stringify(newFilters[key]));
       } else {
-        searchParams.delete(key); // Remove the parameter if the value is falsy
+        searchParams.set(key, newFilters[key]);
       }
+    } else {
+      searchParams.delete(key); // Remove the parameter if the value is falsy
     }
-    const newUrl = `${window.location.pathname}?${searchParams.toString()}`;
-    window.history.replaceState({}, "", newUrl);
   }
+  const newUrl = `${window.location.pathname}?${searchParams.toString()}`;
+  window.history.replaceState({}, "", newUrl);
+}
 
   // Function to handle filter changes
 export function handleFilterChange(setFilters) {
