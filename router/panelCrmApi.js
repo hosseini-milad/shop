@@ -317,6 +317,7 @@ const SepidarFunc=async(data,faktorNo,user,stock)=>{
         "Items": 
         notNullCartItem.map((item,i)=>{
             const price = findPayValuePrice(item.price,data.payValue)
+            const discount =normalPriceDiscount(price,item.discount,1)
             return({
             "ItemRef": toInt(item.id),
             "TracingRef": null,
@@ -325,8 +326,8 @@ const SepidarFunc=async(data,faktorNo,user,stock)=>{
             "Quantity": toInt(item.count),
             "Fee": toInt(price),
             "Price": normalPriceCount(price,item.count,1),
-            "Discount": normalPriceDiscount(price,item.discount,item.count),
-            "Tax": normalPriceCount(price,item.count,TaxRate),
+            "Discount": discount*item.count,
+            "Tax": normalPriceCount(price-discount,item.count,TaxRate),
             "Duty": 0.0000,
             "Addition": 0.0000
           })})
