@@ -69,6 +69,14 @@ export function normalPriceRound(priceText,count,tax){
         (rawPrice.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",").replace( /^\D+/g, ''))
     )
 }
+export function notNull(array,item){
+  var notNullArray = []
+  for(var i =0;i<array.length;i++){
+    if(array[i][item])
+      notNullArray.push(array[i])
+  }
+  return(notNullArray)
+}
 export function rxFindCount(order){
     var count = 0;
     if(!order) return(0)

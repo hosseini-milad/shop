@@ -2,11 +2,13 @@
 import { useState } from "react"
 import FilterGrid from "./FilterGrid"
 import StyleSelect from "../../components/Button/AutoComplete"
+import { notNull } from "../../env"
 
 function OrderFilters(props){
   const filters = props.filters
-  const brands = filters&&filters.brands
+  const brands = filters&&filters.brands?notNull(filters.brands,"title"):[]
   const cat=filters&&filters.cats
+  console.log(brands)
   const updateFilter=(kind,value)=>{
     //console.log(kind ,value)
     props.setFilters(prevState => ({

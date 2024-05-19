@@ -79,10 +79,11 @@ function ProductFilters(props){
           action={createConditionalAction("title", 3)}
 
         />
-        <StyleInput
-          title={" واحد نگهداری موجودی sku"}
+        <StyleSelect
+          title={"موجودی"}
           direction={props.lang.dir}
-          action={createConditionalAction("sku", 3)}
+          options={["موجود", "نمایش همه"]}
+          action={(e)=>handleFilterChange("exist", e)}
 
         />
         <StyleSelect
@@ -102,7 +103,7 @@ function ProductFilters(props){
         <StyleSelect title={"انبار"} direction={props.lang.dir} 
               options={stock} label="Title" 
               
-              action={(e)=>props.setStore(e)}/>
+              action={(e)=>handleFilterChange("store", e)}/>
         <i className="tableIcon fas fa-ellipsis-v"></i>
       </div>
       <div className="option-sub">

@@ -41,11 +41,13 @@ function ProductTableRow(props){
               </td>
               <td>
                 <div className="order-num">
-                  {stockId?<span>{newStockCount}</span>:
+                  {/*{stockId?<span>{newStockCount}</span>:
                   <><span>{product.count?product.count:"ناموجود"}</span>
                   <small> {product.openOrderCount?"(متنظر تایید: "+
                            product.openOrderCount+")":''}</small></>}
-                </div>
+                  */}
+                  <span>{product.count?product.count:"ناموجود"}</span>
+                  </div>
               </td>
               <td>
                 <div className="order-price">
