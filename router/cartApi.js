@@ -20,6 +20,7 @@ const bankAccounts = require('../models/product/bankAccounts');
 const sepidarFetch = require('../middleware/Sepidar');
 const sepCart = require('../models/product/sepCart');
 const NormalTax = require('../middleware/NormalTax');
+const {TaxRate} = process.env
 const CalcCart = require('../middleware/CalcCart');
 const openOrders = require('../models/orders/openOrders');
 var {StockId,SaleType} = process.env;
@@ -496,7 +497,7 @@ const SepidarFunc=async(data,faktorNo)=>{
             "Fee": toInt(item.price),
             "Price": normalPriceCount(item.price,item.count,1),
             "Discount": 0.0000,
-            "Tax": normalPriceCount(item.price,item.count,"0.09"),
+            "Tax": normalPriceCount(item.price,item.count,TaxRate),
             "Duty": 0.0000,
             "Addition": 0.0000
           }))

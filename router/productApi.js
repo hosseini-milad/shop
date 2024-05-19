@@ -21,6 +21,7 @@ const bankAccounts = require('../models/product/bankAccounts');
 const sepidarFetch = require('../middleware/Sepidar');
 const NormalTax = require('../middleware/NormalTax');
 const openOrders = require('../models/orders/openOrders');
+const {TaxRate} = process.env
 
 router.post('/getlist', async (req,res)=>{
     var pageSize = req.body.pageSize?req.body.pageSize:"12";
@@ -821,7 +822,7 @@ const SepidarFunc=async(data,faktorNo)=>{
             "Fee": toInt(item.price),
             "Price": normalPriceCount(item.price,item.count,1),
             "Discount": 0.0000,
-            "Tax": normalPriceCount(item.price,item.count,"0.09"),
+            "Tax": normalPriceCount(item.price,item.count,TaxRate),
             "Duty": 0.0000,
             "Addition": 0.0000
           }))
