@@ -16,6 +16,9 @@ const ProductSchema = new Schema({
     imageUrl: {
         type:String
     },
+    thumbUrl: {
+        type:String
+    },
     imgGallery:String,
     imgGalleryUrl:{
         type:String 
