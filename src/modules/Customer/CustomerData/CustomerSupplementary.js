@@ -26,7 +26,7 @@ function CustomerGeneral(props) {
   const [formData, setFormData] = useState();
   const [error, setError] = useState({ errorText: "", errorColor: "brown" });
   const [formalShow, setFormal] = useState(0);
-  const saveChanges = () => {
+  const saveChanges = (navigateBack) => {
     var postOptions = {
       method: "post",
       headers: { "Content-Type": "application/json" },
@@ -52,6 +52,11 @@ function CustomerGeneral(props) {
               () => setError({ errorText: "", errorColor: "brown" }),
               3000
             );
+            if (navigateBack) {
+              setTimeout(() => {
+                window.history.back();
+              }, 2000);
+            }
           } else console.log(result);
         },
         (error) => {
@@ -238,9 +243,6 @@ function CustomerGeneral(props) {
           ) : (
             <></>
           )}
-          <div className="save-btn" onClick={saveChanges}>
-            {formtrans.saveChanges[props.lang]}
-          </div>
           <ErrorShow message={error.errorText} color={error.errorColor} />
           {formalShow ? (
             <ErrorAction
@@ -254,6 +256,18 @@ function CustomerGeneral(props) {
           ) : (
             <></>
           )}
+          <div className="create-btn-wrapper">
+            <div className="save-btn" onClick={() => saveChanges(false)}>
+              {formtrans.saveChanges[props.lang]}
+            </div>
+            <div
+              className="save-btn"
+              style={{ marginLeft: 10 + "em" }}
+              onClick={() => saveChanges(true)}
+            >
+              {formtrans.saveAndClose[props.lang]}
+            </div>
+          </div>
         </div>
       </div>
     );

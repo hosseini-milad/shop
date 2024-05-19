@@ -28,39 +28,38 @@ function CustomerGeneral(props) {
       }));
     }
   }, [userData]);
-// drop downs
-const [states, setStates] = useState([]);
-const [search, setSearch] = useState('');
-const [cities, setCities] = useState([]);
-const [stateSearch, setStateSearch] = useState('');
-const [citySearch, setCitySearch] = useState('');
+  // drop downs
+  const [states, setStates] = useState([]);
+  const [search, setSearch] = useState("");
+  const [cities, setCities] = useState([]);
+  const [stateSearch, setStateSearch] = useState("");
+  const [citySearch, setCitySearch] = useState("");
 
   useEffect(() => {
     fetchStates();
-}, []);
+  }, []);
 
-const fetchStates = () => {
-  fetch('/api/setting/list-state', {
-      method: 'POST',
+  const fetchStates = () => {
+    fetch("/api/setting/list-state", {
+      method: "POST",
       headers: {
-          'Content-Type': 'application/json'
+        "Content-Type": "application/json",
       },
-      body: JSON.stringify({ search: search })
-  })
-  .then(response => response.json())
-  .then(data => {
-      setStates(data.data);
-  })
-  .catch(error => console.error('Error fetching states:', error));
-};
+      body: JSON.stringify({ search: search }),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        setStates(data.data);
+      })
+      .catch((error) => console.error("Error fetching states:", error));
+  };
 
-const handleStateChange = (e) => {
-  const selectedState = e.target.value;
-  // onSelect(selectedState);
-};
+  const handleStateChange = (e) => {
+    const selectedState = e.target.value;
+    // onSelect(selectedState);
+  };
 
-
-  const saveChanges = () => {
+  const saveChanges = (navigateBack) => {
     var postOptions = {
       method: "post",
       headers: { "Content-Type": "application/json" },
@@ -79,6 +78,11 @@ const handleStateChange = (e) => {
               () => setError({ errorText: "", errorColor: "brown" }),
               3000
             );
+            if (navigateBack) {
+              setTimeout(() => {
+                window.history.back();
+              }, 2000);
+            }
           } else console.log(result);
         },
         (error) => {
@@ -130,7 +134,7 @@ const handleStateChange = (e) => {
         {/* <CustomerAvatar /> */}
         <div className="info-box">
           <div className="info-wrapper">
-{/* 
+            {/* 
           <StyleSelect
     title={formtrans.state[props.lang]}
     direction={props.direction}
@@ -259,8 +263,6 @@ const handleStateChange = (e) => {
               }
             />
 
-
-
             {/* <StyleInput title={formtrans.country[props.lang]} direction={props.direction} 
                 defaultValue={userData.country} class={"formInput"}
                 action={(e)=>setFormData(prevState => ({
@@ -314,13 +316,19 @@ const handleStateChange = (e) => {
             </div>
             <span style={{ whiteSpace: "pre-wrap" }}></span>
 
-            <StyleSelect title={"حقوقی/حقیقی"} direction={props.direction} 
-                defaultValue={userData.activity} class={"formInput"}
-                options={["حقیقی","حقوقی"]}
-                action={(e)=>setFormData(prevState => ({
+            <StyleSelect
+              title={"حقوقی/حقیقی"}
+              direction={props.direction}
+              defaultValue={userData.activity}
+              class={"formInput"}
+              options={["حقیقی", "حقوقی"]}
+              action={(e) =>
+                setFormData((prevState) => ({
                   ...prevState,
-                  activity:e
-                }))}/>
+                  activity: e,
+                }))
+              }
+            />
 
             <div className="info-input">
               <label htmlFor="address">{formtrans.address[props.lang]}</label>
@@ -364,9 +372,7 @@ const handleStateChange = (e) => {
           ) : (
             <></>
           )}
-          <div className="save-btn" onClick={saveChanges}>
-            {formtrans.saveChanges[props.lang]}
-          </div>
+
           <ErrorShow message={error.errorText} color={error.errorColor} />
           {formalShow ? (
             <ErrorAction
@@ -380,6 +386,18 @@ const handleStateChange = (e) => {
           ) : (
             <></>
           )}
+          <div className="create-btn-wrapper">
+            <div className="save-btn" onClick={() => saveChanges(false)}>
+              {formtrans.saveChanges[props.lang]}
+            </div>
+            <div
+              className="save-btn"
+              style={{ marginLeft: 10 + "em" }}
+              onClick={() => saveChanges(true)}
+            >
+              {formtrans.saveAndClose[props.lang]}
+            </div>
+          </div>
         </div>
       </div>
     );
