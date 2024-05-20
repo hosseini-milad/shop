@@ -326,7 +326,7 @@ const SepidarFunc=async(data,faktorNo,user,stock)=>{
             "Quantity": toInt(item.count),
             "Fee": toInt(price),
             "Price": normalPriceCount(price,item.count,1),
-            "Discount": normalPriceCount(discount,item.count,1),
+            "Discount": discount?normalPriceCount(discount,item.count,1):0,
             "Tax": normalPriceCount(price-discount,item.count,TaxRate),
             "Duty": 0.0000,
             "Addition": 0.0000
