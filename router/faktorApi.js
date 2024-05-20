@@ -1001,7 +1001,7 @@ const findNullCount=async(items,cart)=>{
 }
 router.post('/quick-to-cart',jsonParser, async (req,res)=>{
     const userId=req.body.userId?req.body.userId:req.headers['userid']
-    const data={
+    const data={ 
         userId:userId,
         manageId:req.headers['userid'],
         date:req.body.date,

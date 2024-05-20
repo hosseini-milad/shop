@@ -7,6 +7,7 @@ var ObjectID = require('mongodb').ObjectID;
 const orders = require('../models/orders/orders');
 const carts = require('../models/product/cart')
 const products = require('../models/product/products');
+const { findQuickCartSum } = require('./faktorApi');
 
 router.post('/sku/find',jsonParser,async (req,res)=>{
     try{
@@ -95,13 +96,64 @@ router.post('/list',jsonParser,async (req,res)=>{
             item.userInfo[0].username.includes(data.customer)):cartList;
         const cartListPage = filterCart.slice(offset,
             (parseInt(offset)+parseInt(pageSize))) 
+        var showCart=[]
+        for(var i=0;i<cartList.length;i++){
+            var totalPrice=findCartSum(cartList[i].cartItems,
+                cartList[i].payValue)
+            
+            showCart.push({...cartList[i],totalCart:totalPrice})
+        }
         const brandUnique = [...new Set(filter1Report.map((item) => item.brand))];
        res.json({filter:orderList,brand:brandUnique, cartList:cartListPage,
-        size:filter1Report.length,cartSize:cartList.length})
+        size:filter1Report.length,cartSize:cartList.length,
+        showCart:showCart})
     }
     catch(error){
         res.status(500).json({message: error.message})
     } 
 })
+const findCartSum=(cartItems,payValue)=>{
+    if(!cartItems)return({totalPrice:0,totalCount:0})
+    var cartSum=0;
+    var cartCount=0;
+    var cartDiscount = 0;
+    var cartDescription = ''
+    for (var i=0;i<cartItems.length;i++){
+        //console.log(payValue)
+        var cartItemPrice = findPayValuePrice(cartItems[i].price,payValue)
+        //console.log(cartItemPrice)
+        try{if(cartItems[i].price) 
+            cartSum+= parseInt(cartItemPrice)*
+            parseInt(cartItems[i].count.toString().replace( /,/g, '').replace( /^\D+/g, ''))
+        if(cartItems[i].count)
+            cartCount+=parseInt(cartItems[i].count.toString().replace( /,/g, '').replace( /^\D+/g, ''))
+        cartDescription += cartItems[i].description?cartItems[i].description:''
+        if(cartItems[i].discount){
+            var off = parseInt(cartItems[i].discount.toString().replace( /,/g, '').replace( /^\D+/g, ''))
+            if(off>100)
+                cartDiscount += off 
+            else
+                cartDiscount += parseInt(cartItemPrice)
+                *Number(cartItems[i].count)*
+                (1+TaxRate)*(off)/100
+        }
+        }catch{}
+    }
+    return({totalFee:cartSum,
+        totalCount:cartCount,
+        totalDiscount:cartDiscount,
+        totalTax:(cartSum*TaxRate),
+        totalPrice:(cartSum*(1+TaxRate)-cartDiscount),
+        cartDescription:cartDescription})
+}
+const findPayValuePrice=(priceArray,payValue)=>{
+    if(!priceArray)return(0)
+    if(!payValue)payValue = 3
+    var price = priceArray
+    if(priceArray.length&&priceArray.constructor === Array)
+        price=priceArray.find(item=>item.saleType==payValue).price
+   
+    return(price)
 
+}
 module.exports = router;
