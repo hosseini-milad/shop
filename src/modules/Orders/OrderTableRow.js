@@ -14,7 +14,7 @@ function OrderTableRow(props){
   const order=props.order
   const lang=props.lang;
   const cart = props.cart
-
+console.log(order);
     return(<React.Fragment>
         <tr 
             className={activeAcc?"activeAccordion":"accordion"}>
@@ -75,7 +75,7 @@ function OrderTableRow(props){
 
               <td>
                 <div className="order-price">
-                  <p>{normalPriceCount(order.orderPrice)}</p>
+                  <p>{normalPriceCount(order.totalCart.totalPrice)}</p>
                 </div>
               </td>
               <td>
