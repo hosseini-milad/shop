@@ -8,6 +8,7 @@ const orders = require('../models/orders/orders');
 const carts = require('../models/product/cart')
 const products = require('../models/product/products');
 const { findQuickCartSum } = require('./faktorApi');
+const {TaxRate} = process.env
 
 router.post('/sku/find',jsonParser,async (req,res)=>{
     try{
