@@ -105,9 +105,8 @@ router.post('/list',jsonParser,async (req,res)=>{
             showCart.push({...cartList[i],totalCart:totalPrice})
         }
         const brandUnique = [...new Set(filter1Report.map((item) => item.brand))];
-       res.json({filter:orderList,brand:brandUnique, cartList:cartListPage,
-        size:filter1Report.length,cartSize:cartList.length,
-        showCart:showCart})
+       res.json({filter:showCart,brand:brandUnique, cartList:cartListPage,
+        size:filter1Report.length,cartSize:cartList.length})
     }
     catch(error){
         res.status(500).json({message: error.message})
