@@ -130,11 +130,11 @@ function Orders(props) {
         <Paging
           content={content}
           size={tab?content.cartSize:content.size}
-          setFilters={setFilters}
           filters={filters}
           lang={props.lang}
+          setFilters={handleFilterChange}
           updateUrlWithFilters={updateUrlWithFilters} // Pass the function as a prop
-        />
+          />
       </div>
     </div>
   );

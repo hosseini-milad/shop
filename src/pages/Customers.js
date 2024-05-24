@@ -168,10 +168,10 @@ function Customers(props) {
         </div>
         <Paging
           content={content}
-          setFilters={setFilters}
+          setFilters={handleFilterChange}
+          updateUrlWithFilters={updateUrlWithFilters} // Pass the function as a prop
           filters={filters}
           lang={props.lang}
-          updateUrlWithFilters={updateUrlWithFilters} // Pass the function as a prop
 
         />
       </div>

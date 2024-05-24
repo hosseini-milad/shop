@@ -5607,7 +5607,6 @@ table {
   color: blue;
 }
 .create-team-user {
-  display: none;
   flex-direction: column;
   position: absolute;
   right: 0;
@@ -6760,3 +6759,264 @@ table {
 }
 
 /* End Major Order -----------------------------------------*/
+
+/* start of profile css  -----------------------------------------*/
+.profiles {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  padding-inline: 3rem;
+  padding-block: 1rem;
+  background-color: white;
+  border-radius: 10px;
+  position: relative;
+}
+.create-profile {
+  display: block;
+  position: absolute;
+  right: 0;
+  top: 0;
+  height: 100vh;
+  box-shadow: rgba(0, 0, 0, 0.2) 0 6px 20px 2px;
+  width: 600px;
+  background-color: #fff;
+  padding: 2rem;
+  z-index: 2;
+  border-radius: 10px;
+}
+.create-profile h4 {
+  border-bottom: 1px solid #f0f0f0;
+  font-size: 1.286rem;
+  cursor: pointer;
+  color: #000;
+  font-weight: 500;
+  padding-bottom: 10px;
+}
+.clone-input,
+.name-input,
+.dec-input,
+.type-input {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding-block: 1rem;
+  position: relative;
+}
+.clone-input select,
+.name-input input,
+.dec-input textarea,
+.type-input select {
+  width: 70%;
+  background-color: transparent;
+  padding-inline: 0.5rem;
+  outline: none;
+  border: none;
+  border-bottom: 1px solid #f0f0f0;
+  padding-bottom: 10.3px;
+}
+.clone-input label,
+.name-input label,
+.dec-input label,
+.type-input label {
+  margin: 0;
+  width: 30%;
+  border-bottom: 1px solid #f0f0f0;
+  padding-bottom: 7.2px;
+  color: #666;
+  font-size: 0.9rem;
+}
+.red-line {
+  background-color: rgb(206, 0, 0);
+  height: 2px;
+  width: 25px;
+  position: absolute;
+  bottom: 16.1px;
+  left: 0;
+}
+.name-input input {
+  padding-bottom: 3.8px;
+}
+.dec-input textarea {
+  resize: none;
+}
+.dec-input label {
+  padding-bottom: 58px;
+}
+.checkbox-input {
+  width: 100%;
+}
+.checkbox input {
+  accent-color: rgb(0, 134, 0);
+}
+.create-btn-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 15px;
+}
+.create-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background-color: #14b474;
+  border-radius: 2px;
+  cursor: pointer;
+  text-shadow: 1px 1px 0 rgba(0, 0, 0, 0.2);
+  padding: 2px 15px;
+}
+.create-btn p,
+.c-and-p-btn p,
+.cancel-btn p {
+  margin: 0;
+  font-size: 1rem;
+  color: #fff;
+  font-weight: 300;
+}
+.cancel-btn p {
+  color: black;
+}
+.c-and-p-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background-color: #14b474;
+  border-radius: 2px;
+  cursor: pointer;
+  text-shadow: 1px 1px 0 rgba(0, 0, 0, 0.2);
+  padding: 2px 15px;
+}
+.cancel-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  border: 1px solid #c4c4c4;
+  background: #fff;
+  border-radius: 2px;
+  cursor: pointer;
+  text-shadow: 1px 1px 0 rgba(0, 0, 0, 0.2);
+  padding: 2px 15px;
+}
+
+.profiles-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid #e4e4e4;
+  padding-block: 0.8rem;
+}
+.profiles-header h5 {
+  font-size: 1.143rem;
+}
+.add-profile-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background-color: #14b474;
+  border-radius: 2px;
+  cursor: pointer;
+  text-shadow: 1px 1px 0 rgba(0, 0, 0, 0.2);
+  font-size: 1rem;
+  color: #fff;
+  padding: 4px 10px;
+}
+.add-profile-btn p {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 400;
+  color: #fff;
+}
+.profile-table {
+  padding: 0.5rem 1rem;
+  width: 100%;
+}
+table {
+  width: 100%;
+  position: relative;
+  overflow: scroll;
+}
+.profile-table td {
+  font-size: 0.9rem;
+  color: #5c5c5c;
+  line-height: 1.5rem;
+  font-weight: 300;
+}
+.profile-table tr {
+  border-bottom: 1px dashed #e5e5e5;
+}
+.profile-table td:nth-child(1),
+.profile-table th:nth-child(1) {
+  width: 50%;
+}
+.profile-table td:nth-child(2),
+.profile-table th:nth-child(2) {
+  width: 200px;
+}
+.profile-table td:nth-child(3),
+.profile-table th:nth-child(3),
+.profile-table td:nth-child(4),
+.profile-table th:nth-child(4) {
+  width: 100px;
+}
+.profile-table th {
+  text-align: left;
+  color: #777;
+  font-size: 13px;
+  text-transform: uppercase;
+  padding-bottom: 5px;
+  font-weight: 400;
+}
+
+.profiles-title {
+  width: 90%;
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-start;
+  gap: 10px;
+  padding-block: 1.5rem;
+  cursor: pointer;
+}
+.profiles-title i {
+  margin-top: 12px;
+}
+
+.p-wrapper {
+  display: flex;
+  flex-direction: column;
+}
+.p-wrapper span {
+  font-style: italic;
+  color: #e74c3c;
+  font-size: 13px;
+  font-weight: 400;
+}
+.p-wrapper p:nth-child(1) {
+  color: #3c3c3c;
+  font-size: 17px;
+  font-weight: 500;
+  margin: 0;
+}
+.p-wrapper p:nth-child(2) {
+  font-size: 13px;
+  font-weight: 300;
+  color: #5c5c5c;
+  margin: 0;
+}
+.profiles-icons {
+  align-items: center;
+  justify-content: flex-end;
+  gap: 10px;
+  display: none;
+}
+.profiles-icons i {
+  cursor: pointer;
+}
+.profile-table tr:hover .profiles-icons {
+  display: flex;
+}
+
+/* end of profile css  -----------------------------------------*/

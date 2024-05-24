@@ -103,7 +103,7 @@ function Services(props) {
         </div>
         <Paging
           content={content}
-          setFilters={setFilters}
+          setFilters={handleFilterChange}
           filters={filters}
           lang={props.lang}
           updateUrlWithFilters={updateUrlWithFilters} // Pass the function as a prop

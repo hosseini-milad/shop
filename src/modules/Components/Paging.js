@@ -37,9 +37,17 @@ function Paging(props) {
         <select
           name="page"
           id=""
-          onChange={(e) =>
-            updateUrlWithPagination(props.filters.offset, e.target.value)
-          }
+          onChange={(e) => {
+            const pageSize = e.target.value;
+            props.setFilters((prevState) => ({
+              ...prevState,
+              pageSize: pageSize.toString(),
+            }));
+            props.updateUrlWithFilters({
+              ...props.filters,
+              pageSize: pageSize.toString(),
+            });
+          }}
         >
           <option value="5">5</option>
           <option value="10" selected={true}>

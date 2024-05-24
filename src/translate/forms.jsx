@@ -15,6 +15,10 @@ const formtrans ={
         english: "senfi code",
         persian: "کد صنفی"
     },
+    teamUsers:{
+        english: "Users",
+        persian: "کاربران"
+    },
     newPassword:{
         english: "New Password",
         persian: "رمز جدید"
@@ -271,6 +275,15 @@ const formtrans ={
         english:"Search Users ...",
         persian: "جستجوی کاربر"
     },
+    access:{
+        english:"Access",
+        persian: "دسترسی"
+    },
+    email:{
+        english:"Email",
+        persian: "ایمیل"
+    },
+
     
 
 }
