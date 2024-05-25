@@ -241,8 +241,13 @@ function CustomerGeneral(props) {
               رسمی کردن مشتری
             </div>
           ) : (
-            <></>
-          )}
+            <div
+              className="delete-user-btn formal-btn"
+              onClick={() => setFormal(1)}
+            >
+              غیر رسمی کردن
+            </div>
+            )}
           <ErrorShow message={error.errorText} color={error.errorColor} />
           {formalShow ? (
             <ErrorAction

@@ -279,6 +279,10 @@ const formtrans ={
         english:"Access",
         persian: "دسترسی"
     },
+    profile:{
+        english:"Profile",
+        persian: "پروفایل"
+    },
     email:{
         english:"Email",
         persian: "ایمیل"
