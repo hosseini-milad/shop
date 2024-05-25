@@ -145,7 +145,7 @@ function OrderTableRow(props) {
             <i
               className="tableIcon fas fa-print"
               onClick={() =>
-                (window.location.href = "/orders/print/" + order.rxOrderNo)
+                (window.location.href = "/orders/print/" + order.cartNo)
               }
             ></i>
             {/* <i className="tableIcon fas fa-ellipsis-v" 
