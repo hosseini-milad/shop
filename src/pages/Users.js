@@ -7,6 +7,7 @@ import UserList from "../modules/Users/UserList";
 import UserCard from "../modules/Users/UserCard";
 import formtrans from "../translate/forms";
 import StyleSelect from "../components/Button/AutoComplete";
+import StyleInput from "../components/Button/Input";
 
 
 const cookies = new Cookies();
@@ -21,8 +22,8 @@ const Users = (props) => {
   const [userData, setUserData] = useState(null);
   const [showCreatePanel, setShowCreatePanel] = useState(false);
   const [accessList, setAccess] = useState(null);
-  const [profiles, setProfiles] = useState(null);
-  const [formData, setFormData] = useState("");
+  const [profiles, setProfiles] = useState([]);
+  const [formData, setFormData] = useState({});
 
   const token = cookies.get(env.cookieName);
   const userId = token.userId; // userId
@@ -50,11 +51,32 @@ const Users = (props) => {
       });
       const data = await response.json();
       setUserData(data.data);
-      setFormData(data.data._id)
+      setFormData({
+        _id: data.data._id,
+        profile: data.data.profile,
+        access: data.data.access,
+        password: data.data.password,
+      });
       setShowCreatePanel(true); // Show the create panel after user data is fetched
 
     } catch (error) {
       console.error("Error fetching user data:", error);
+    }
+  };
+
+  const fetchProfiles = async () => {
+    try {
+      const response = await fetch(`${env.siteApi}/panel/user/list-profiles`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          "x-access-token": token && token.token,
+        },
+      });
+      const data = await response.json();
+      setProfiles(data.profiles);
+    } catch (error) {
+      console.error("Error fetching profiles:", error);
     }
   };
 
@@ -79,41 +101,6 @@ const Users = (props) => {
     }
   };
 
-  const handleUserBtnClick = async (user) => {
-    try {
-        const response = await fetch(`${env.siteApi}/panel/user/fetch-user`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                "x-access-token": token && token.token,
-            },
-            body: JSON.stringify({ userId: user._id })
-        });
-        const data = await response.json();
-        setUserData(data.data);
-        setShowCreatePanel(true);
-    } catch (error) {
-        console.error('Error fetching user data:', error);
-    }
-}; 
-//  handleUserBtnClick = async (user) => {
-//     try {
-//         const response = await fetch(`${env.siteApi}/panel/user/fetch-user`, {
-//             method: 'POST',
-//             headers: {
-//                 'Content-Type': 'application/json',
-//                 "x-access-token": token && token.token,
-//             },
-//             body: JSON.stringify({ userId: user._id })
-//         });
-//         const data = await response.json();
-//         setUserData(data.data);
-//         setShowCreatePanel(true);
-//     } catch (error) {
-//         console.error('Error fetching user data:', error);
-//     }
-// };
-
   useEffect(() => {
     const fetchUsers = async () => {
       try {
@@ -134,9 +121,13 @@ const Users = (props) => {
     };
 
     fetchUsers();
+    fetchProfiles();
+
+    console.log(userData);
+    console.log(formData);
   }, []);
 
-  console.log(userData);
+
   return (
     <div className="team-users" style={{ direction: direction }}>
       {showCreatePanel && userData && (
@@ -178,7 +169,7 @@ const Users = (props) => {
 
             <StyleSelect
               title={formtrans.access[lang]}
-              direction={props.direction}
+              direction={direction}
               defaultValue={userData.access ? userData.access : ""}
               class={"formInput"}
               options={accessList || []}
@@ -186,7 +177,35 @@ const Users = (props) => {
               action={(e) =>
                 setFormData((prevState) => ({
                   ...prevState,
-                  ac: e ? e._id : "",
+                  access: e ? e._id : "",
+                }))
+              }
+            />
+            <label htmlFor="role">{formtrans.profile[lang]}</label>
+
+            <StyleSelect
+            title={formtrans.profile[lang]}
+            direction={direction}
+            defaultValue={profiles.find((profile) => profile._id === userData.profile)}
+            class={"formInput"}
+            options={profiles}
+            label={"profileName"}
+            action={(e) =>
+              setFormData((prevState) => ({
+                ...prevState,
+                profile: e ? e._id : "",
+              }))
+            }
+          />
+            <StyleInput
+              title={formtrans.newPassword[lang]}
+              direction={direction}
+              defaultValue={userData.password}
+              class={"formInput"}
+              action={(e) =>
+                setFormData((prevState) => ({
+                  ...prevState,
+                  password: e,
                 }))
               }
             />
@@ -205,7 +224,7 @@ const Users = (props) => {
               <option value="admin">Admin</option>
             </select>
           </div>
-          <div className="notify-input">
+          {/* <div className="notify-input">
             <input
               type="checkbox"
               id="notify"
@@ -215,7 +234,7 @@ const Users = (props) => {
               }
             />
             <label htmlFor="notify">Notify via email</label>
-          </div>
+          </div> */}
           <div className="create-btn-wrapper">
             <div className="add-btn" onClick={handleFormSubmit}>
               <p>Submit</p>
