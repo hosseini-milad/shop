@@ -25085,7 +25085,6 @@
   }
   
   .rtl .fixed-plugin .card {
-    left: -360px !important;
     right: auto;
   }
   
