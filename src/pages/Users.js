@@ -9,7 +9,6 @@ import formtrans from "../translate/forms";
 import StyleSelect from "../components/Button/AutoComplete";
 import StyleInput from "../components/Button/Input";
 
-
 const cookies = new Cookies();
 
 const Users = (props) => {
@@ -23,8 +22,14 @@ const Users = (props) => {
   const [showCreatePanel, setShowCreatePanel] = useState(false);
   const [accessList, setAccess] = useState(null);
   const [profiles, setProfiles] = useState([]);
-  const [formData, setFormData] = useState({});
-
+  const [formData, setFormData] = useState({
+    _id: "",
+    profile: "",
+    access: "",
+    password: "",
+    email: "",
+    username: "",
+  });
   const token = cookies.get(env.cookieName);
   const userId = token.userId; // userId
   const body = {
@@ -35,7 +40,6 @@ const Users = (props) => {
     access: filters.access,
     search: filters.search,
   }; // Add any additional body parameters if required
-
 
   //selected user
 
@@ -56,9 +60,10 @@ const Users = (props) => {
         profile: data.data.profile,
         access: data.data.access,
         password: data.data.password,
+        email: data.data.email,
+        username: data.data.username,
       });
       setShowCreatePanel(true); // Show the create panel after user data is fetched
-
     } catch (error) {
       console.error("Error fetching user data:", error);
     }
@@ -67,7 +72,7 @@ const Users = (props) => {
   const fetchProfiles = async () => {
     try {
       const response = await fetch(`${env.siteApi}/panel/user/list-profiles`, {
-        method: "GET",
+        method: "POST",
         headers: {
           "Content-Type": "application/json",
           "x-access-token": token && token.token,
@@ -79,14 +84,31 @@ const Users = (props) => {
       console.error("Error fetching profiles:", error);
     }
   };
+  // must be activated after the list-access api is added to back-end
+  // const fetchAccessList = async () => {
+  //   try {
+  //     const response = await fetch(`${env.siteApi}/panel/user/list-access`, {
+  //       method: "POST",
+  //       headers: {
+  //         "Content-Type": "application/json",
+  //         "x-access-token": token && token.token,
+  //       },
+  //     });
+  //     const data = await response.json();
+  //     setAccess(data.access);
+  //   } catch (error) {
+  //     console.error("Error fetching access list:", error);
+  //   }
+  // };
 
   const handleUserEdit = (userId) => {
     fetchUser(userId);
   };
 
   const handleFormSubmit = async () => {
+    console.log("Form Data:", formData);
     try {
-    //   const token = cookies.get(env.cookieName);
+      //   const token = cookies.get(env.cookieName);
       await fetch(`${env.siteApi}/panel/user/update-user`, {
         method: "POST",
         headers: {
@@ -110,7 +132,7 @@ const Users = (props) => {
             "Content-Type": "application/json",
             "x-access-token": token && token.token,
           },
-          body: JSON.stringify(body)
+          body: JSON.stringify(body),
         });
         const data = await response.json();
         setUsers(data.filter);
@@ -122,34 +144,34 @@ const Users = (props) => {
 
     fetchUsers();
     fetchProfiles();
-
-    console.log(userData);
-    console.log(formData);
   }, []);
 
+  // useEffect(() => {
+  //   console.log("Access List:", accessList);
+  // }, [accessList]);
 
   return (
     <div className="team-users" style={{ direction: direction }}>
-      {showCreatePanel && userData && (
+      {showCreatePanel && (
         <div className="create-team-user">
           <h4>{formtrans.addUser[lang]}</h4>
           <div className="email-input">
             <label htmlFor="email">{formtrans.email[lang]}</label>
-            <label htmlFor="email">{userData.email}</label>
-            {/* <input
-              type="text"
-              id="email"
-              value={userData.email}
-              onChange={(e) =>
-                setUserData({ ...userData, email: e.target.value })
+            {/* <label htmlFor="email">{userData.email}</label> */}
+            <StyleInput
+              title={formtrans.emailAddress[props.lang]}
+              direction={props.direction}
+              defaultValue={userData.email || ""}
+              class={"formInput"}
+              action={(e) =>
+                setFormData((prevState) => ({
+                  ...prevState,
+                  email: e,
+                }))
               }
-            /> */}
-            <div className="red-line"></div>
+            />
           </div>
 
-
-          <div className="default-line">
-          </div>
           {/* <div className="role-input">
             <label htmlFor="role">User Role</label>
             <div className="red-line"></div>
@@ -165,86 +187,81 @@ const Users = (props) => {
               <option value="admin">Admin</option>
             </select>
           </div> */}
-            <label htmlFor="role">{formtrans.access[lang]}</label>
+          <label htmlFor="role">{formtrans.access[lang]}</label>
 
-            <StyleSelect
-              title={formtrans.access[lang]}
-              direction={direction}
-              defaultValue={userData.access ? userData.access : ""}
-              class={"formInput"}
-              options={accessList || []}
-              label={"profileName"}
-              action={(e) =>
-                setFormData((prevState) => ({
-                  ...prevState,
-                  access: e ? e._id : "",
-                }))
-              }
-            />
-            <label htmlFor="role">{formtrans.profile[lang]}</label>
+          <StyleSelect
+            title={formtrans.access[lang]}
+            direction={direction}
+            defaultValue={userData.access ? userData.access : ""}
+            class={"formInput"}
+            options={accessList || []}
+            label={"profileName"}
+            action={(e) => {
+              console.log("Selected Access:", e);
+              setFormData((prevState) => ({
+                ...prevState,
+                access: e ? e : "",
+              }));
+            }}
+          />
+          <label htmlFor="role">{formtrans.profile[lang]}</label>
 
-            <StyleSelect
+          <StyleSelect
             title={formtrans.profile[lang]}
             direction={direction}
-            defaultValue={profiles.find((profile) => profile._id === userData.profile)}
+            defaultValue={profiles.find(
+              (profile) => profile._id === userData.profile
+            )}
             class={"formInput"}
             options={profiles}
             label={"profileName"}
-            action={(e) =>
+            action={(e) => {
+              console.log("Selected Profile:", e);
               setFormData((prevState) => ({
                 ...prevState,
                 profile: e ? e._id : "",
+              }));
+            }}
+          />
+          <StyleInput
+            title={formtrans.username[lang]}
+            direction={direction}
+            defaultValue={userData.username || ""}
+            class={"formInput"}
+            action={(e) =>
+              setFormData((prevState) => ({
+                ...prevState,
+                username: e,
               }))
             }
           />
-            <StyleInput
-              title={formtrans.newPassword[lang]}
-              direction={direction}
-              defaultValue={userData.password}
-              class={"formInput"}
-              action={(e) =>
-                setFormData((prevState) => ({
-                  ...prevState,
-                  password: e,
-                }))
-              }
-            />
-          <div className="profile-input">
-            <label htmlFor="profile">Profile</label>
-            <div className="red-line"></div>
-            <select
-              name=""
-              id="profile"
-              value={userData.profile}
-              onChange={(e) =>
-                setUserData({ ...userData, profile: e.target.value })
-              }
-            >
-              <option value="member">Member</option>
-              <option value="admin">Admin</option>
-            </select>
-          </div>
-          {/* <div className="notify-input">
-            <input
-              type="checkbox"
-              id="notify"
-              checked={userData.notify || false}
-              onChange={(e) =>
-                setUserData({ ...userData, notify: e.target.checked })
-              }
-            />
-            <label htmlFor="notify">Notify via email</label>
-          </div> */}
+          <StyleInput
+            title={formtrans.newPassword[lang]}
+            direction={direction}
+            defaultValue={userData.password || ""}
+            class={"formInput"}
+            action={(e) =>
+              setFormData((prevState) => ({
+                ...prevState,
+                password: e,
+              }))
+            }
+          />
           <div className="create-btn-wrapper">
-            <div className="add-btn" onClick={handleFormSubmit}>
-              <p>Submit</p>
-            </div>
-            <div
+            <button
+              type="button"
+              className="add-btn"
+              onClick={handleFormSubmit}
+            >
+              {formtrans.saveChanges[lang]}
+            </button>
+            <button
+              type="button"
               className="cancel-btn"
               onClick={() => setShowCreatePanel(false)}
             >
-              <p>Cancel</p>
-            </div>
+              {formtrans.cancel[lang]}
+            </button>
           </div>
         </div>
       )}
@@ -258,16 +275,43 @@ const Users = (props) => {
           ></i>
           <input type="search" placeholder={formtrans.searchUser[lang]} />
         </div>
-        <div className="team-create">
+        <div
+          className="team-create"
+          onClick={() => {
+            setShowCreatePanel(true);
+            setFormData({
+              _id: "",
+              profile: "",
+              access: "",
+              password: "",
+              email: "",
+              username: "",
+            });
+            setUserData({
+              _id: "",
+              profile: "",
+              access: "",
+              password: "",
+              email: "",
+              username: "",
+            });
+          }}
+        >
           <i className="fa-solid fa-plus" style={{ color: "#ffffff" }}></i>
           <p>{formtrans.addUser[lang]}</p>
         </div>
       </div>
 
       <div className="team-wrapper">
-      {users.map(user => (
-                    <UserCard key={user._id} user={user} userData={userData} lang={lang} onEdit={handleUserEdit} />
-                ))}
+        {users.map((user) => (
+          <UserCard
+            key={user._id}
+            user={user}
+            userData={userData}
+            lang={lang}
+            onEdit={handleUserEdit}
+          />
+        ))}
       </div>
     </div>
   );

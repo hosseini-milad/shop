@@ -287,6 +287,10 @@ const formtrans ={
         english:"Email",
         persian: "ایمیل"
     },
+    username:{
+        english:"Username",
+        persian: "نام کاربری"
+    },
 
     
 
