@@ -136,12 +136,12 @@ function OrderTableRow(props) {
               }`}
               onClick={() => props.showDetail(activeAcc ? "-1" : props.index)}
             ></i>
-            <i
+            {/* <i
               className="tableIcon fas fa-edit"
               onClick={() =>
-                (window.location.href = "/orders/detail/" + order.rxOrderNo)
+                (window.location.href = "/orders/detail/" + order.cartNo)
               }
-            ></i>
+            ></i> */}
             <i
               className="tableIcon fas fa-print"
               onClick={() =>
