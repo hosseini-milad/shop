@@ -54,6 +54,8 @@ import Policy from './pages/Policy';
 import Users from './pages/Users';
 import FaktorSitePrint from './modules/Print/PrintSiteHolder';
 import PrintSepidar from './modules/Print/PrintSepidar';
+import Printofficial from './modules/Print/Printofficial';
+
 
 const cookies = new Cookies();
 const style = document.getElementById('style-direction');
@@ -95,6 +97,7 @@ root.render(
         <Route path="/orders/print/:orderId" element={<FaktorSitePrint lang={"fa"}/>}/>
         <Route path="/orders/invoice/:orderId" element={<FaktorSitePrint lang={"fa"}/>}/>
         <Route path="/print/sepidar/:orderId" element={<PrintSepidar lang={"fa"}/>}/>
+        <Route path="/print/official/:orderId" element={<Printofficial lang={"fa"}/>}/>
         <Route path="/fishprint/sepidar/:orderId" element={<PrintSepidar lang={"fa"}/>}/>
 
         <Route path="/services" element={<Layout><Services lang={lang}/></Layout>}/>
