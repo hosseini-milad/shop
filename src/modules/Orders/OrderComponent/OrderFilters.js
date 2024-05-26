@@ -33,22 +33,15 @@ function OrderFilters(props) {
     <div className="user-filter">
       <div className="serach-input">
         <StyleInput
-          title={tabletrans.order[props.lang.lang]}
+          title={tabletrans.orderNumber[props.lang.lang]}
           direction={props.lang.dir}
-          action={createConditionalAction("orderNo", 7)} // Remove the parentheses here
+          action={createConditionalAction("orderNo", 3)} // Remove the parentheses here
+        />
 
-        />
-        <StyleSelect
-          title={tabletrans.brand[props.lang.lang]}
-          direction={props.lang.dir}
-          options={props.options}
-          action={(e) => handleFilterChange("brand", e)}
-        />
         <StyleInput
-          title={tabletrans.customer[props.lang.lang]}
+          title={tabletrans.mobileOrName[props.lang.lang]}
           direction={props.lang.dir}
           action={(e) => handleFilterChange("customer", e)}
-
         />
 
         <StyleDatePicker
