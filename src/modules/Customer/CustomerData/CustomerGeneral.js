@@ -319,32 +319,6 @@ function CustomerGeneral(props) {
               disabled={!formData.stateId} // Disable if no state is selected
             />
 
-
-            <StyleInput
-              title={formtrans.state[props.lang]}
-              direction={props.direction}
-              defaultValue={userData.state}
-              class={"formInput"}
-              action={(e) =>
-                setFormData((prevState) => ({
-                  ...prevState,
-                  state: e,
-                }))
-              }
-            />
-            <StyleInput
-              title={formtrans.city[props.lang]}
-              direction={props.direction}
-              defaultValue={userData.city}
-              class={"formInput"}
-              action={(e) =>
-                setFormData((prevState) => ({
-                  ...prevState,
-                  city: e,
-                }))
-              }
-            />
-
             <span style={{ whiteSpace: "pre-wrap" }}></span>
 
             <div className="dense-btn">
