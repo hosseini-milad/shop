@@ -10,10 +10,10 @@ import StyleSelect from "../../../components/Button/AutoComplete";
 
 function CustomerGeneral(props) {
   const userData = props.userData;
+  const token = props.token;
   const [formData, setFormData] = useState({ active: "false" }); // Initialize active as a string
   const [error, setError] = useState({ errorText: "", errorColor: "brown" });
   const [formalShow, setFormal] = useState(0);
-
   useEffect(() => {
     // Initialize formData.active with userData.active when userData changes
     if (userData && userData.active) {
@@ -39,11 +39,14 @@ function CustomerGeneral(props) {
     fetchStates();
   }, []);
 
+  // fetches the states to populate dropdown
   const fetchStates = () => {
-    fetch("/api/setting/list-state", {
+    fetch(env.siteApi + "/setting/list-state", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
+        "x-access-token": token && token.token,
+        userId: token && token.userId,
       },
       body: JSON.stringify({ search: search }),
     })
@@ -54,15 +57,58 @@ function CustomerGeneral(props) {
       .catch((error) => console.error("Error fetching states:", error));
   };
 
-  const handleStateChange = (e) => {
-    const selectedState = e.target.value;
-    // onSelect(selectedState);
+  // fetchesh cities to populate dropdown
+
+  const fetchCities = (stateId) => {
+    fetch(env.siteApi + "/setting/list-city", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "x-access-token": token && token.token,
+        userId: token && token.userId,
+      },
+      body: JSON.stringify({ stateId: stateId }),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        setCities(data.data);
+      })
+      .catch((error) => console.error("Error fetching cities:", error));
+  };
+
+  const handleStateChange = (value) => {
+    if (value) {
+      setFormData((prevState) => ({
+        ...prevState,
+        state: value.stateName,
+        stateId: value.value, // Store stateId to use for fetching cities
+      }));
+      fetchCities(value.value);
+    } else {
+      setFormData((prevState) => ({
+        ...prevState,
+        state: "",
+        stateId: "",
+      }));
+      setCities([]); // Clear cities if no state is selected
+    }
+  };
+
+  const handleCityChange = (value) => {
+    setFormData((prevState) => ({
+      ...prevState,
+      city: value ? value.cityName : "",
+    }));
   };
 
   const saveChanges = (navigateBack) => {
     var postOptions = {
       method: "post",
-      headers: { "Content-Type": "application/json" },
+      headers: {
+        "Content-Type": "application/json",
+        "x-access-token": token && token.token,
+        userId: token && token.userId,
+      },
       body: JSON.stringify({
         userId: userData._id,
         ...formData,
@@ -134,21 +180,6 @@ function CustomerGeneral(props) {
         {/* <CustomerAvatar /> */}
         <div className="info-box">
           <div className="info-wrapper">
-            {/* 
-          <StyleSelect
-    title={formtrans.state[props.lang]}
-    direction={props.direction}
-    defaultValue={userData.state}
-              class={"formInput"}
-              options={states.map(state => ({ label: state.stateName, value: state.stateId }))}
-              label={"profileName"}
-              action={(e) =>
-                setFormData((prevState) => ({
-                    ...prevState,
-                    state: e,
-                }))
-            }
-            /> */}
 
             <StyleInput
               title={formtrans.name[props.lang]}
@@ -262,13 +293,32 @@ function CustomerGeneral(props) {
                 }))
               }
             />
+            <StyleSelect
+              title={formtrans.state[props.lang]}
+              direction={props.direction}
+              // defaultValue={userData.state}
+              class={"formInput"}
+              options={states.map((state) => ({
+                label: state.stateName,
+                value: state.stateId,
+              }))}
+              label="label"
+              action={handleStateChange}
+            />
 
-            {/* <StyleInput title={formtrans.country[props.lang]} direction={props.direction} 
-                defaultValue={userData.country} class={"formInput"}
-                action={(e)=>setFormData(prevState => ({
-                  ...prevState,
-                  country:e
-                }))}/> */}
+            <StyleSelect
+              title={formtrans.city[props.lang]}
+              direction={props.direction}
+              class="formInput"
+              options={cities.map((city) => ({
+                label: city.cityName,
+                value: city.cityId,
+              }))}
+              label="label"
+              action={handleCityChange}
+              disabled={!formData.stateId} // Disable if no state is selected
+            />
+
 
             <StyleInput
               title={formtrans.state[props.lang]}
@@ -376,7 +426,7 @@ function CustomerGeneral(props) {
             >
               غیر رسمی کردن
             </div>
-            )}
+          )}
 
           <ErrorShow message={error.errorText} color={error.errorColor} />
           {formalShow ? (
