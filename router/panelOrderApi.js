@@ -80,6 +80,12 @@ router.post('/list',jsonParser,async (req,res)=>{
                 foreignField: "_id", 
                 as : "userInfo"
             }},
+            {$lookup:{
+                from : "tasks", 
+                localField: "cartNo", 
+                foreignField: "orderNo", 
+                as : "taskInfo"
+            }},
             { $match:data.orderNo?{cartNo:new RegExp('.*' + data.orderNo + '.*')}:{}},
         
             { $match:!data.orderNo?{initDate:{$gte:new Date(data.dateFrom)}}:{}},
