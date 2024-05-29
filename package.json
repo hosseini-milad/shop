@@ -15,6 +15,7 @@
     "install": "^0.13.0",
     "material-ui-flat-pagination": "^4.1.2",
     "npm": "^10.2.3",
+    "num2persian": "^3.2.2",
     "react": "^18.2.0",
     "react-beautiful-dnd": "^13.1.1",
     "react-custom-scrollbars": "^4.2.1",

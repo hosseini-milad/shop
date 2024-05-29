@@ -56,6 +56,15 @@ export function normalPriceCount(priceText,count){
         (rawPrice.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",").replace( /^\D+/g, ''))
     )
 }
+export function normalPriceCalc(priceAdd,price,priceMinus){
+  //if(!priceAdd||priceAdd === null||priceAdd === undefined) return("")
+
+  
+  //console.log(rawPrice,priceText)
+  return(
+      (priceAdd)
+  )
+}
 export function normalPriceRound(priceText,count,tax){
     if(!priceText||priceText === null||priceText === undefined) return("")
 
