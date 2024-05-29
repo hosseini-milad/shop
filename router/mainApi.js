@@ -57,16 +57,14 @@ router.use('/panel/product', panelProductApi)
 router.use('/panel/faktor', panelFaktorApi)
 
 router.use('/panel/crm',CRMPanelApi)
-0&&schedule.scheduleJob('0 0 * * *', async() => { 
+schedule.scheduleJob('5 */2 * * *', async() => { 
     response = await fetch(ONLINE_URL+"/sepidar-product",
         {method: 'GET'});
     response = await fetch(ONLINE_URL+"/sepidar-price",
         {method: 'GET'});
     response = await fetch(ONLINE_URL+"/sepidar-quantity",
         {method: 'GET'});
-    response = await fetch(ONLINE_URL+"/sepidar-users",
-        {method: 'GET'});
-    response = await fetch(ONLINE_URL+"/sepidar-bank",
+    response = await fetch(ONLINE_URL+"/sepidar-customer",
         {method: 'GET'});
  })
 router.get('/sepidar-product', async (req,res)=>{
