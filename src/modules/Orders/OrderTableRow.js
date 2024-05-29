@@ -122,7 +122,7 @@ function OrderTableRow(props) {
         </td>
         <td>
           {order.taskInfo&&order.taskInfo[0]&&
-          order.taskInfo[0].taskStep=="initial"?"آماده":""}
+          order.taskInfo[0].taskStep=="archive"?"آماده":""}
           <Status
             status={order.status}
             class={"order-status"}
@@ -146,7 +146,7 @@ function OrderTableRow(props) {
             ></i> */}
             <i
               className="tableIcon fas fa-print"
-              onClick={() =>(order.taskInfo[0].taskStep=="initial"?setOpenOption(openOption?0:1):(window.location.href = "/orders/print/" + order.cartNo))
+              onClick={() =>(order.taskInfo[0].taskStep=="archive"?setOpenOption(openOption?0:1):(window.location.href = "/orders/print/" + order.cartNo))
                 
               }
             ></i>
@@ -154,11 +154,11 @@ function OrderTableRow(props) {
           </div>
           {openOption ? (
             <div className="sub-more-menu">
-              <div className="sub-option" onClick={()=>window.location.href="/print/sepidar/"+order.cartNo}>
+              <div className="sub-option" onClick={()=>window.location.href="/print/sepidar/"+order.InvoiceID}>
                 
                 <p>پرینت سپیدار</p>
               </div>
-              <div className="sub-option" onClick={()=>window.location.href="/print/official/"+order.cartNo}>
+              <div className="sub-option" onClick={()=>window.location.href="/print/official/"+order.InvoiceID}>
                 
                 <p>پرینت رسمی</p>
               </div>
