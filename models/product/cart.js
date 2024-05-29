@@ -13,6 +13,9 @@ const CartSchema = new Schema({
     stockId:{type:String},
     description:{type:String},
     discount:{type:String},
-    totalPrice:{ type: String }
+    totalPrice:{ type: String },
+    taskStep:{ type: String },
+    query:{ type: String },
+    result:{ type: String }
 })
 module.exports = mongoose.model('cart',CartSchema);
