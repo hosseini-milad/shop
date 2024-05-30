@@ -1397,7 +1397,7 @@ input:checked + .switch-label:after {
   transition: opacity 248ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,
     transform 165ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
   top: 20px;
-  right: 60px;
+  left: 60px;
   transform-origin: 140px 0px 0px;
   color: rgb(33, 43, 54);
   transition: box-shadow 300ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
@@ -2879,13 +2879,20 @@ input:checked + .switch-label:after {
   white-space: nowrap;
   position: relative;
 }
+.dot-more-btn{
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
 .sub-more-menu {
   display: none;
   flex-direction: column;
   transition: opacity 248ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,
     transform 165ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
   top: 20px;
-  right: 40px;
+  left: 40px;
   transform-origin: 140px 0px 0px;
   color: rgb(33, 43, 54);
   transition: box-shadow 300ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
@@ -2907,7 +2914,7 @@ input:checked + .switch-label:after {
   user-select: none;
   vertical-align: middle;
   display: flex;
-  justify-content: flex-start;
+  justify-content: center;
   align-items: center;
   min-height: 48px;
   white-space: nowrap;

@@ -117,6 +117,7 @@
 }
 .accordion {
   cursor: pointer;
+  position: relative;
 }
 .inlineRow {
   flex-direction: row;
@@ -528,7 +529,7 @@ dialog {
 .add-card-btn {
   min-width: 68%;
   width: auto;
-  min-height:40px;
+  min-height: 40px;
 }
 .cancel-card-btn {
   width: 30%;
@@ -713,6 +714,10 @@ dialog {
 }
 .btn-crm-accept {
   background-color: lightgreen;
+}
+.btn-crm-official{
+  background-color: rgb(31, 31, 173);
+  color: white;
 }
 .btn-crm-cancel {
   background-color: lightsalmon;
@@ -936,6 +941,186 @@ dialog {
   width: 80px;
   margin: 0 10px;
 }
+/* official  print */
+.officialprint .hesabfaSection {
+  width: calc(100% / 3);
+  margin-block: auto 0;
+  display: flex;
+  flex-direction: column;
+
+  h1 {
+    font-size: 1.5rem;
+  }
+  small {
+    width: 50%;
+    margin: 0;
+    justify-content: space-between;
+
+    b {
+      margin-left: 0;
+      border-radius: 0;
+    }
+  }
+}
+
+.officialprint .hesabfaDate {
+  align-items: flex-end;
+}
+.officialprint .hesabfaTable {
+  width: 100%;
+
+  th {
+    text-align: center;
+    border: 1px solid black;
+    background-color: #b9b9b9;
+  }
+  .hesabfaItem {
+    padding-block: 0.6rem;
+  }
+  .site-link {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    p {
+      margin: 0;
+      direction: ltr;
+    }
+  }
+}
+.officialprint .hesabfaMainTable {
+  width: 100%;
+  margin: 0;
+  border-top: none;
+
+  th {
+    border-top: none;
+    background-color: transparent;
+    text-align: center;
+  }
+  td {
+    border-width: 2px;
+  }
+
+  .table-total {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-block: 0.5rem;
+
+    p {
+      margin: 0;
+    }
+  }
+}
+.officialprint .table-footer {
+  width: 100%;
+  border: 1px solid black;
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 5rem;
+
+  .footer-row {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    justify-content: center;
+
+    > * {
+      border: 1px solid black;
+      height: 100%;
+      display: flex;
+    }
+  }
+  .pay-col {
+    height: 100%;
+    width: 35%;
+    justify-content: space-between;
+    padding-left: 1rem;
+    padding-block: 0.5rem;
+
+    p {
+      margin: 0;
+    }
+
+    .pay-item {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 1rem;
+
+      p {
+        margin: 0;
+      }
+    }
+
+    .pay-checkbox {
+      display: block;
+      width: 25px;
+      height: 25px;
+      border: 2px solid black;
+    }
+  }
+  .bill-col {
+    width: 65%;
+    padding: 0.5rem 1rem;
+    display: flex;
+
+    p {
+      margin: 0;
+    }
+    span {
+      display: inline-block;
+      min-width: 150px;
+      text-align: center;
+    }
+  }
+  .bank-col {
+    width: 70%;
+    flex-direction: column;
+    padding: 1rem;
+  }
+  .info-col {
+    width: 30%;
+    min-height: 245px;
+    display: block;
+    position: relative;
+
+    .float-title{
+      position: absolute;
+      top: 0;
+      padding: 0.5rem;
+      border: 1px solid black;
+    }
+  }
+  .sign-col {
+    width: 50%;
+    
+  }
+}
+.officialprint .bank-col .account-wrapper {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+}
+.officialprint .bank-col .account-col {
+  display: flex;
+  flex-direction: column;
+
+  .account-item {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 1rem;
+
+    span {
+      font-weight: 600;
+      margin-right: 6px;
+    }
+  }
+}
+
 /* End Print */
 
 .formal-btn {
@@ -1011,7 +1196,6 @@ dialog {
     font-size: 12px !important;
     padding-right: 30px;
     width: 31%;
-    
   }
   .border-title i {
     font-size: inherit !important;
