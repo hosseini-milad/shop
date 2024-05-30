@@ -117,6 +117,7 @@
 }
 .accordion {
   cursor: pointer;
+  position: relative;
 }
 .inlineRow {
   flex-direction: row;
@@ -713,6 +714,10 @@ dialog {
 }
 .btn-crm-accept {
   background-color: lightgreen;
+}
+.btn-crm-official{
+  background-color: rgb(31, 31, 173);
+  color: white;
 }
 .btn-crm-cancel {
   background-color: lightsalmon;

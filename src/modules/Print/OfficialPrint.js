@@ -1,4 +1,5 @@
-import { normalPriceCount } from "../../env";
+import { normalPriceCalc, normalPriceCount } from "../../env";
+import Num2persian from 'num2persian';
 
 var token = JSON.parse(localStorage.getItem('token-lenz'));
 
@@ -31,63 +32,63 @@ function OfficialPrint(props){
                     <table className="hesabfaRow">
                       <tbody>
                         <tr>
-                          <td  className="hesabfaItem">
+                          <td colSpan={2}  className="hesabfaItem">
                             <span>نام شخص حقیقی/حقوقی :</span>
-                            <strong> {userInfo.username}</strong>
+                            <strong>روان کاران شریف</strong>
                           </td>
                           <td  className="hesabfaItem">
                             <span>شماره اقتصادي: </span>
-                            <strong> {userInfo.phone} </strong>
+                            <strong>14000090515</strong>
                           </td>
                           <td  className="hesabfaItem">
                             <span>شماره ثبت /شماره ملی: </span>
-                            <strong> {userInfo.phone} </strong>
+                            <strong>17878</strong>
                           </td>
                           <td  className="hesabfaItem">
                             <span>شناسه ملی: </span>
-                            <strong> {userInfo.phone} </strong>
+                            <strong>14000090515</strong>
                           </td>
                         </tr>
                         <tr>
-                          <td className="hesabfaItem">
+                          <td colSpan={2} className="hesabfaItem">
                             <span>نشانی: </span>
-                            <strong> {userInfo&&userInfo.State}</strong>
+                            <strong>کرج-جاده قزلحصار-خیابان پارس لانه بتن-پلاك 15</strong>
                           </td>
                           <td className="hesabfaItem">
                             <span>کدپستی: </span>
-                            <strong> {userInfo&&userInfo.PostalCode}</strong>
+                            <strong>3186848919</strong>
                           </td>
                           <td className="hesabfaItem">
                             <span>شماره فکس: </span>
-                            <strong> {userInfo&&userInfo.City}</strong>
+                            <strong></strong>
                           </td>
-                          <td colSpan={2} className="hesabfaItem">
+                          <td  className="hesabfaItem">
                             <span>شماره تلفن: </span>
-                            <strong> {userInfo&&userInfo.Address}</strong>
+                            <strong>026-34011002-9</strong>
                           </td>
                           
                         </tr>
                         <tr>
-                          <td className="hesabfaItem">
+                          <td colSpan={2} className="hesabfaItem">
                             <span>عاملیت فروش: </span>
-                            <strong> {userInfo&&userInfo.State}</strong>
+                            <strong>شرکت نفت بهران ، ایرانول ، پارس و سپاهان</strong>
                           </td>
                           <td className="hesabfaItem">
                             <div className="site-link">
                               <p>www.sharifoilco.com</p>
-                              <i class="fa-brands fa-internet-explorer"></i>
+                              <i className="fa-brands fa-internet-explorer"></i>
                             </div>
                           </td>
                           <td className="hesabfaItem">
                             <div className="site-link">
                               <p>@oilcosharif</p>
-                              <i class="fa-brands fa-instagram"></i>
-                              <i class="fa-brands fa-telegram"></i>
+                              <i className="fa-brands fa-instagram"></i>
+                              <i className="fa-brands fa-telegram"></i>
                             </div>
                           </td>
                           <td colSpan={2} className="hesabfaItem">
                             <span>شماره خط ویژه: </span>
-                            <strong> {userInfo&&userInfo.phone}</strong>
+                            <strong>026-33125</strong>
                           </td>
                           
                         </tr>
@@ -111,49 +112,49 @@ function OfficialPrint(props){
                           </td>
                           <td className="hesabfaItem">
                             <span>کد مشتری: </span>
-                            <strong> {userInfo.phone} </strong>
+                            <strong> {userInfo.CustomerID} </strong>
                           </td>
                           <td className="hesabfaItem">
                             <span>کد نقش: </span>
-                            <strong> {userInfo&&userInfo.State}</strong>
+                            <strong> {userInfo&&userInfo.roleId}</strong>
                           </td>
                           <td className="hesabfaItem">
                             <span>شماره اقتصادی: </span>
-                            <strong> {userInfo&&userInfo.City}</strong>
+                            <strong></strong>
                           </td>
                           <td className="hesabfaItem">
                             <span>شماره ثبت /شماره ملی: </span>
-                            <strong> {userInfo&&userInfo.PostalCode}</strong>
+                            <strong> {userInfo&&userInfo.meliCode}</strong>
                           </td>
                           
                         </tr>
                         <tr>
-                          <td className="hesabfaItem">
+                          <td colSpan={2} className="hesabfaItem">
                             <span>نشانی کامل استان : </span>
                             <strong> {userInfo&&userInfo.State}</strong>
                           </td>
                           <td className="hesabfaItem">
                             <span> کدپستی: </span>
-                            <strong> {userInfo&&userInfo.City}</strong>
-                          </td>
-                          <td className="hesabfaItem">
-                            <span>شهر:</span>
                             <strong> {userInfo&&userInfo.PostalCode}</strong>
+                          </td>
+                          <td colSpan={2} className="hesabfaItem">
+                            <span>شهر:</span>
+                            <strong> {userInfo&&userInfo.City}</strong>
                           </td>
                           
                         </tr>
                         <tr>
-                          <td className="hesabfaItem">
+                          <td colSpan={3} className="hesabfaItem">
                             <span>نشانی: </span>
-                            <strong> {userInfo&&userInfo.State}</strong>
+                            <strong>{userInfo&&userInfo.Address}</strong>
                           </td>
                           <td className="hesabfaItem">
                             <span> شماره تلفن: </span>
-                            <strong> {userInfo&&userInfo.City}</strong>
+                            <strong> {userInfo&&userInfo.phone}</strong>
                           </td>
                           <td className="hesabfaItem">
                             <span>شماره موبایل:</span>
-                            <strong> {userInfo&&userInfo.PostalCode}</strong>
+                            <strong> {userInfo&&userInfo.Mobile}</strong>
                           </td>
                           
                         </tr>
@@ -189,33 +190,34 @@ function OfficialPrint(props){
                 </tr>
                 {orderInfo&&orderInfo.InvoiceItems&&
                   orderInfo.InvoiceItems.map((items,i)=>(
+                    
                 <tr key={i}>
                   <td className="centerCell">{i+1}</td>
                   <td className="centerCell">-</td>
                   
                   <td>{items.itemDetail&&items.itemDetail.sku}</td>
                   <td>{items.itemDetail&&items.itemDetail.title}</td>
-                  <td className="centerCell">{items.Quantity}</td>
-                  <td className="centerCell">واحد</td>
+                  <td className="centerCell">{items.ProductPackQuantity}</td>
+                  <td className="centerCell">{items.ProductPackRef?items.ProductPackRef:"تعداد"}</td>
                   <td className="centerCell">{items.Quantity}</td>
                   <td>{normalPriceCount(items.Fee)}</td>
                   <td>{normalPriceCount(items.Price)}</td>
-                  <td>تخفیف</td>
-                  <td>اضافات</td>
-                  <td>جمعشون</td>
+                  <td>{normalPriceCount(items.Discount)}</td>
+                  <td>{normalPriceCalc(items.Addition,items.Price,items.Discount)}</td>
+                  <td></td>
                   <td>{normalPriceCount(items.Tax)}</td>
                   <td>{normalPriceCount(items.NetPrice)}</td>
                 </tr>))}
                 <tr>
                   <td colSpan={8}>
                     <div className="table-total">
-                      <p>سی و هفت میلیون و هشتصد و سی هزار ریال</p>
+                      <p>{Num2persian(normalPriceCount(orderInfo.NetPrice))}ریال</p>
                       <p>جمع کل</p>
                     </div>
                   </td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
+                  <td>{normalPriceCount(orderInfo.Price)}</td>
+                  <td>{normalPriceCount(orderInfo.Discount)}</td>
+                  <td>{normalPriceCount(orderInfo.Addition)}</td>
                   <td></td>
                   <td>{normalPriceCount(orderInfo.Tax)}</td>
                   <td>{normalPriceCount(orderInfo.NetPrice)}</td>
@@ -246,7 +248,7 @@ function OfficialPrint(props){
               <div className="footer-row">
                 <div className="bank-col">
                   <p className="title">شماره حسابهاي شرکت روان کاران شریف</p>
-                  <div class="account-wrapper">
+                  <div className="account-wrapper">
                     <div className="account-col">
                       <div className="account-item">
                         <p className="ac-name">حساب ملت :</p>

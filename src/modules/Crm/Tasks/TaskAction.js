@@ -64,6 +64,9 @@ function TaskAction(props){
             onClick={()=>window.location.href="/print/sepidar/"+data.result.InvoiceID}>
                 چاپ سپیدار
             </button>
+            <button type="button" className="btn-crm btn-crm-accept btn-crm-official"
+            onClick={()=>window.location.href="/print/official/"+data.result.InvoiceID}> چاپ رسمی
+            </button>
             <button type="button" className="btn-crm btn-crm-info"
                 onClick={()=>window.location.href="/orders/print/"+data.orderNo}>
                 <p>چاپ سفارش</p></button>
