@@ -80,7 +80,7 @@ function CustomerGeneral(props) {
     if (value) {
       setFormData((prevState) => ({
         ...prevState,
-        state: value.stateName,
+        state: value.label,
         stateId: value.value, // Store stateId to use for fetching cities
       }));
       fetchCities(value.value);
@@ -97,7 +97,8 @@ function CustomerGeneral(props) {
   const handleCityChange = (value) => {
     setFormData((prevState) => ({
       ...prevState,
-      city: value ? value.cityName : "",
+      city: value ? value.label : "",
+      cityId: value ? value.value : "",
     }));
   };
 
@@ -180,8 +181,7 @@ function CustomerGeneral(props) {
         {/* <CustomerAvatar /> */}
         <div className="info-box">
           <div className="info-wrapper">
-
-            <StyleInput
+             <StyleInput
               title={formtrans.name[props.lang]}
               direction={props.direction}
               defaultValue={userData.cName}
@@ -293,9 +293,10 @@ function CustomerGeneral(props) {
                 }))
               }
             />
-            <StyleSelect
+<StyleSelect
               title={formtrans.state[props.lang]}
               direction={props.direction}
+              defaultValue={userData.state || ""}
               // defaultValue={userData.state}
               class={"formInput"}
               options={states.map((state) => ({
@@ -309,6 +310,7 @@ function CustomerGeneral(props) {
             <StyleSelect
               title={formtrans.city[props.lang]}
               direction={props.direction}
+              defaultValue={userData.city || ""}
               class="formInput"
               options={cities.map((city) => ({
                 label: city.cityName,
@@ -318,7 +320,6 @@ function CustomerGeneral(props) {
               action={handleCityChange}
               disabled={!formData.stateId} // Disable if no state is selected
             />
-
             <span style={{ whiteSpace: "pre-wrap" }}></span>
 
             <div className="dense-btn">
@@ -330,7 +331,7 @@ function CustomerGeneral(props) {
                 className="switch-input"
                 type="checkbox"
                 id="view"
-                defaultChecked={userData.active === "true" ? true : false}
+                defaultChecked={userData.active === true ? true : false}
                 onClick={activityStatusHandler}
               />
               <label
