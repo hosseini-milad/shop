@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import Cookies from "universal-cookie";
 import CustomerTabs from "../CustomerComponent/CustomerTabs";
 import errortrans from "../../../translate/error";
 import tabletrans from "../../../translate/tables";
@@ -10,17 +11,25 @@ import CustomerSecurity from "./CustomerSecurity";
 import CustomerGeneral from "./CustomerGeneral";
 import CustomerSupplementary from "./CustomerSupplementary";
 import CustomerClass from "./CustomerClass";
+const cookies = new Cookies();
 
 function CustomerDetailHolder(props) {
+
   const url = window.location.pathname.split("/")[3];
   const direction = props.lang ? props.lang.dir : errortrans.defaultDir;
   const lang = props.lang ? props.lang.lang : errortrans.defaultLang;
   const [userData, setUserData] = useState();
   const [tabIndex, setTabIndex] = useState(0);
+  const token = cookies.get(env.cookieName);
+
   useEffect(() => {
     var postOptions = {
       method: "post",
-      headers: { "Content-Type": "application/json" },
+      headers: {
+        "Content-Type": "application/json",
+        "x-access-token": token && token.token,
+        userId: token && token.userId,
+      },
       body: JSON.stringify({ userId: url }),
     };
     fetch(env.siteApi + "/panel/user/fetch-customer", postOptions)
@@ -51,6 +60,7 @@ function CustomerDetailHolder(props) {
         {tabIndex === 0 ? (
           <CustomerGeneral
             direction={direction}
+            token={token}
             lang={lang}
             userData={userData}
           />
@@ -60,6 +70,7 @@ function CustomerDetailHolder(props) {
         {tabIndex === 1 ? (
           <CustomerSupplementary
             direction={direction}
+            token={token}
             lang={lang}
             userData={userData}
           />

@@ -85,6 +85,10 @@ const tabletrans ={
         english: "Order Number",
         persian: "شماره سفارش",
     },
+    mobileOrName: {
+        english: "Mobile or Name",
+        persian: "نام/تلفن",
+    },
     item:{
         english: "Item",
         persian: "کالا"
