@@ -8,6 +8,8 @@ import { useEffect } from "react";
 import { useState } from "react";
 import env from "../env";
 import tabletrans from "../translate/tables";
+import OrderTab from "../modules/Orders/OrderComponent/OrderTab";
+
 import {
   getFiltersFromUrl,
   updateUrlWithFilters,
@@ -99,6 +101,15 @@ function Orders(props) {
         </div>
       </div>
       <div className="list-container">
+      <StatusBar
+          lang={lang}
+          token={token}
+          filters={filters}
+          status={content.rxStatus}
+          setFilters={setFilters}
+        />
+        <OrderTab setFilters={handleFilterChange} filters={filters} />
+
         <OrderFilters
           lang={props.lang}
           setFilters={handleFilterChange}
