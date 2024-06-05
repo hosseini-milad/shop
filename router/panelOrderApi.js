@@ -93,8 +93,8 @@ router.post('/list',jsonParser,async (req,res)=>{
             { $sort: {"initDate":-1}}
             ])
         const filter1Report = data.customer?
-        reportList.filter(item=>item.userInfo[0]&&item.userInfo[0].cName&&
-            item.userInfo[0].cName.includes(data.customer)):reportList;
+        reportList.filter(item=>(item.userInfo[0]&&item.userInfo[0].cName&&
+            item.userInfo[0].cName.includes(data.customer))):reportList;
         const orderList = filter1Report.slice(offset,
             (parseInt(offset)+parseInt(pageSize)))  
         
