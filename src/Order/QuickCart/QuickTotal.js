@@ -41,7 +41,9 @@ function QuickTotal(props){
   const defAction=()=>{
     props.action({message:"acting"})
   }
-  return(
+  if(!qCart)
+    return(<div className="total-amount"></div>)
+  else return(
     <div className="total-amount">
       <div className="t-wrapper">
         <p>تعداد</p>

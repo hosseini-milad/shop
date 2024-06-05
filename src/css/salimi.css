@@ -5721,6 +5721,57 @@ table {
   font-size: 1rem;
   font-weight: 400;
 }
+.slidemenu {
+  background-color: rgba(99,99,99,.207);
+  display: flex;
+  font-family: arial,sans-serif;
+  max-width: 100%;
+  overflow: hidden;
+  position: relative;
+  z-index: 0;
+}
+.slidemenu label {
+  color: gray;
+  float: none;
+  opacity: 1;
+  position: relative;
+  width: 50%;
+  display: block;
+  float: left;
+  margin: 0;
+  text-align: center;
+}
+.slidemenu label, .slider .bar {
+  transition: all .5s ease-in-out;
+  -webkit-transition: all .5s ease-in-out;
+  -moz-transition: all .5s ease-in-out;
+}
+.slidemenu .slide-toggle:checked + label {
+  opacity: 1;
+}
+.slidemenu label span {
+  display: block;
+  padding: 10px;
+  color: #000;
+  position: inherit;
+  z-index: 5;
+}
+.sliderMenuSelect .sliderMenu {
+  background-color: #fff;
+  border-radius: 10px;
+  height: 32px;
+  margin: 5px auto !important;
+  opacity: 1 !important;
+  position: absolute;
+  right: 0;
+  top: 0;
+  transition: all .3s;
+  width: 100%;
+}
+.slide-toggle {
+  display: none;
+}
+
 .transfer-arrow{
   display: flex;
   align-items: center;

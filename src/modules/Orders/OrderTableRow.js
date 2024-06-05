@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import Status from "../Components/Status";
 import PayStatus from "../Components/PayStatus";
-import { normalPriceCount, rxFindCount } from "../../env";
+import { normalPriceCount, normalPriceRound, rxFindCount } from "../../env";
 import OrderQuickDetail from "./OrderComponent/OrderQuickDetail";
 import tabletrans from "../../translate/tables";
 import OrderQuickCart from "./OrderComponent/OrderQuickCart";
@@ -117,7 +117,7 @@ function OrderTableRow(props) {
 
         <td>
           <div className="order-price">
-            <p>{normalPriceCount(order.totalCart.totalPrice)}</p>
+            <p>{normalPriceRound(order.totalCart.totalPrice)}</p>
           </div>
         </td>
         <td>
