@@ -104,11 +104,11 @@ router.post('/list',jsonParser,async (req,res)=>{
         const cartListPage = filterCart.slice(offset,
             (parseInt(offset)+parseInt(pageSize))) 
         var showCart=[]
-        for(var i=0;i<cartList.length;i++){
-            var totalPrice=findCartSum(cartList[i].cartItems,
-                cartList[i].payValue)
+        for(var i=0;i<cartListPage.length;i++){
+            var totalPrice=findCartSum(cartListPage[i].cartItems,
+                cartListPage[i].payValue)
             
-            showCart.push({...cartList[i],totalCart:totalPrice})
+            showCart.push({...cartListPage[i],totalCart:totalPrice})
         }
         const brandUnique = [...new Set(filter1Report.map((item) => item.brand))];
        res.json({filter:orderList,brand:brandUnique, cartList:showCart,
