@@ -50,7 +50,7 @@ const Printofficial = (props)=>{
     }
     else
     return(
-        <div className="container">
+        <div className="print-container">
             {faktorList?<OfficialPrint orderData={faktorList} userInfo={userData}/>  :
             <main>در حال دریافت اطلاعات</main>}
         </div>
