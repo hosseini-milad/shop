@@ -672,8 +672,8 @@ router.post('/report-total',jsonParser,async(req,res)=>{
             }},
             { $match:data.manageId?{manageId:data.manageId}:{}},
             { $match:data.userId?{manageId:data.userId}:{}},
-            //{ $match:{initDate:{$gte:new Date(data.dateFrom)}}},
-            //{ $match:{initDate:{$lte:new Date(data.dateTo)}}},
+            { $match:{initDate:{$gte:new Date(data.dateFrom)}}},
+            { $match:{initDate:{$lte:new Date(data.dateTo)}}},
             { $sort: {"initDate":-1}},
      
             ])
