@@ -24,6 +24,9 @@ const NormalTax = require('../middleware/NormalTax');
 const openOrders = require('../models/orders/openOrders');
 const Filters = require('../models/product/Filters');
 const factory = require('../models/product/factory');
+const orders = require('../models/orders/orders');
+const faktor = require('../models/product/faktor');
+const cart = require('../models/product/cart');
 
 router.post('/fetch-service',jsonParser,async (req,res)=>{
     var serviceId = req.body.serviceId?req.body.serviceId:''
@@ -634,4 +637,69 @@ router.post('/edit-factory',jsonParser,async(req,res)=>{
     }
 })
 
+router.post('/report-total',jsonParser,async(req,res)=>{
+    var nowDate = new Date();
+    try{ 
+        const data = {
+            manageId:req.body.manageId,
+            userId:req.body.userId,
+            dateFrom:
+                req.body.dateFrom?req.body.dateFrom[0]+"/"+
+                req.body.dateFrom[1]+"/"+req.body.dateFrom[2]+" "+"00:00":
+                new Date().toISOString().slice(0, 10)+" 00:00",
+                //new Date(nowDate.setDate(nowDate.getDate() - 1)).toISOString().slice(0, 10)+" "+"00:00",
+            dateTo:
+                req.body.dateTo?req.body.dateTo[0]+"/"+
+                req.body.dateTo[1]+"/"+req.body.dateTo[2]+" 23:59":
+                new Date().toISOString().slice(0, 10)+" 23:59",
+            
+        }
+        const nowIso=nowDate.toISOString();
+        const nowParse = Date.parse(nowIso);
+        const now = new Date(nowParse)
+        var now2 = new Date();
+        var now3 = new Date();
+        const dateFromEn = new Date(now2.setDate(now.getDate()-(data.dateFrom?data.dateFrom:1)));
+        dateFromEn.setHours(0, 0, 0, 0)
+        const dateToEn = new Date(now3.setDate(now.getDate()-(data.dateTo?data.dateTo:0)));
+        dateToEn.setHours(23, 59, 0, 0)
+        const reportList = await cart.aggregate([
+            {$lookup:{
+                from : "customers", 
+                localField: "userId", 
+                foreignField: "_id", 
+                as : "userInfo"
+            }},
+            { $match:data.manageId?{manageId:data.manageId}:{}},
+            { $match:data.userId?{manageId:data.userId}:{}},
+            //{ $match:{initDate:{$gte:new Date(data.dateFrom)}}},
+            //{ $match:{initDate:{$lte:new Date(data.dateTo)}}},
+            { $sort: {"initDate":-1}},
+     
+            ])
+        var filterResult = ''
+        
+        var productList=[]
+        for(var i=0;i<(reportList&&reportList.length);i++){
+            var cartItems=reportList[i].cartItems
+            for(var j=0;j<(cartItems&&cartItems.length);j++){
+                var myItem = cartItems[j]
+                var index = productList.findIndex(item=>item.sku==myItem.sku)
+                if(index == -1){
+                    productList.push(myItem)
+                }
+                else{
+                    var cNumber = parseInt(productList[index].count)
+                    cNumber += myItem.count
+                    productList[index].count = cNumber
+                }
+            }
+        }
+        
+        res.json({data:productList,detail:reportList})
+    }
+    catch(error){
+        res.status(500).json({message: error.message})
+    }
+})
 module.exports = router;
