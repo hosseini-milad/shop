@@ -705,7 +705,8 @@ router.post('/report-total',jsonParser,async(req,res)=>{
             }
         }
         
-        res.json({data:productList,detail:reportList,marketList:managerList})
+        res.json({data:productList,marketList:managerList,
+            totalCount:totalCount,totalPrice:totalPrice})
     }
     catch(error){
         res.status(500).json({message: error.message})
