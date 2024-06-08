@@ -83,6 +83,31 @@ const menutrans ={
                 ]
         },
         {
+            english: "Sale Analyze",
+            persian: "آنالیز فروش",
+            index:4,
+            icon:"fa-tasks",
+            href:"#",
+            children:[
+                {
+                    english: "Visitor",
+                    persian: "ویزیتور",
+                    index:0,
+                    icon:"fa-users",
+                    href:"/visitor",
+                    url:"visitor"
+                },
+                {
+                    english: "Customer",
+                    persian: "مشتری",
+                    index:0,
+                    icon:"fa-users",
+                    href:"/customer",
+                    url:"customer"
+                },
+                ]
+        },
+        {
             english: "Products",
             persian: "محصولات و خدمات",
             index:3,

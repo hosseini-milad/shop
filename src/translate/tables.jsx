@@ -7,6 +7,10 @@ const tabletrans ={
         english: "Customer",
         persian: "مشتری"
     },
+    visitor:{
+        english: "Visitor",
+        persian: "ویزیتور"
+    },
     classes:{
         english: "Classes",
         persian: "کلاس ها"
@@ -40,6 +44,10 @@ const tabletrans ={
     name:{
         english: "Name",
         persian: "نام"
+    },
+    profile:{
+        english: "Profile",
+        persian: "پروفایل"
     },
     phoneNumber:{
         english: "Phone Number",

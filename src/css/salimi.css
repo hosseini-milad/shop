@@ -1327,7 +1327,7 @@ input:checked + .switch-label:after {
   display: flex;
   flex-direction: column;
   width: 100%;
-  border-bottom: 2px solid #f6f7f9;
+  
 }
 .user-list p {
   margin: 0;
@@ -1557,7 +1557,10 @@ input:checked + .switch-label:after {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 1rem;
+  padding: 0.5rem;
+  direction: ltr;
+  border-top: 2px solid #f6f7f9;
+  margin-top: auto;
 }
 .dense-btn {
   display: flex;
@@ -1952,8 +1955,21 @@ input:checked + .switch-label:after {
 }
 .od-header {
   display: flex;
-  align-items: center;
-  justify-content: space-between;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+}
+.search-wrapper{
+  width: 100%;
+  background-color: white;
+  margin-top: 1rem;
+  border-radius: 1rem;
+  .d-filter{
+    padding-block: 0;
+  }
+  .serach-input{
+    padding: 0;
+  }
 }
 .od-header-info {
   display: flex;
@@ -3121,12 +3137,6 @@ input:checked + .switch-label:after {
   margin-right: 16px;
 }
 
-.order-list-footer {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 1rem;
-}
 .dense-btn {
   display: flex;
   align-items: center;
