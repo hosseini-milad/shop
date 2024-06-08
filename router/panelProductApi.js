@@ -27,6 +27,7 @@ const factory = require('../models/product/factory');
 const orders = require('../models/orders/orders');
 const faktor = require('../models/product/faktor');
 const cart = require('../models/product/cart');
+const users = require('../models/auth/users');
 
 router.post('/fetch-service',jsonParser,async (req,res)=>{
     var serviceId = req.body.serviceId?req.body.serviceId:''
@@ -654,6 +655,7 @@ router.post('/report-total',jsonParser,async(req,res)=>{
                 new Date().toISOString().slice(0, 10)+" 23:59",
             
         }
+        const managerList = await users.find({access:"market"})
         const nowIso=nowDate.toISOString();
         const nowParse = Date.parse(nowIso);
         const now = new Date(nowParse)
@@ -680,9 +682,14 @@ router.post('/report-total',jsonParser,async(req,res)=>{
         var filterResult = ''
         
         var productList=[]
+        var totalPrice=0
+        var totalCount = 0
         for(var i=0;i<(reportList&&reportList.length);i++){
+            var payValue = reportList[i].payValue
             var cartItems=reportList[i].cartItems
             for(var j=0;j<(cartItems&&cartItems.length);j++){
+                var price = cartItems[j].price.find(item=>item.saleType == payValue)
+                if(price) price = parseInt(price.price)
                 var myItem = cartItems[j]
                 var index = productList.findIndex(item=>item.sku==myItem.sku)
                 if(index == -1){
@@ -693,10 +700,12 @@ router.post('/report-total',jsonParser,async(req,res)=>{
                     cNumber += myItem.count
                     productList[index].count = cNumber
                 }
+                totalPrice+= price
+                totalCount+= myItem.count
             }
         }
         
-        res.json({data:productList,detail:reportList})
+        res.json({data:productList,detail:reportList,marketList:managerList})
     }
     catch(error){
         res.status(500).json({message: error.message})
