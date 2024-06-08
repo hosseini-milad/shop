@@ -1,10 +1,14 @@
-import StyleInput from "../../components/Button/Input";
+import StyleSelect from "../../components/Button/AutoComplete";
 import tabletrans from "../../translate/tables";
 import StyleDatePicker from "../../components/Button/DatePicker";
+import { useEffect, useState } from "react";
+import env from "../../env";
 
 
 function VisitorFilter(props) {
-
+  const [userOptions,setUserOptions] = useState()
+  const [userSearch,setUserSearch] = useState()
+  const token = props.token
   const handleFilterChange = (property, value) => {
     const newValue = value ? (value._id ? value._id : value) : "";
     props.setFilters((prevState) => ({
@@ -14,13 +18,37 @@ function VisitorFilter(props) {
     // Update URL here
     props.updateUrlWithFilters({ ...props.currentFilters, [property]: newValue });
   };
-
+  useEffect(() => {
+    if(!userSearch||userSearch.length<4)return
+    const postOptions = {
+      method: "post",
+      headers: {
+        "Content-Type": "application/json",
+        "x-access-token": token && token.token,
+        userId: token && token.userId,
+      },
+      body: JSON.stringify({customer:userSearch}),
+    };
+    //console.log(postOptions);
+    fetch(env.siteApi + "/panel/user/list-customers", postOptions)
+      .then((res) => res.json())
+      .then(
+        (result) => {
+          setUserOptions(result.filter)
+        },
+        (error) => {
+          console.log(error);
+        }
+      );
+  }, [userSearch]);
   return (
     <div className="user-filter d-filter">
       <div className="serach-input">
-        <StyleInput
+        <StyleSelect
           title={tabletrans.customer[props.lang.lang]}
-          direction={props.lang.dir}
+          direction={props.lang.dir} options={userOptions}
+          label="username"
+          textChange={(e)=>setUserSearch(e)}
           action={(e) => props.setFilters((prevState) => ({
             ...prevState,
             userId: e,
