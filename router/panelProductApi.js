@@ -697,11 +697,11 @@ router.post('/report-total',jsonParser,async(req,res)=>{
                 }
                 else{
                     var cNumber = parseInt(productList[index].count)
-                    cNumber += myItem.count
+                    cNumber += parseInt(myItem.count)
                     productList[index].count = cNumber
                 }
                 totalPrice+= price
-                totalCount+= myItem.count
+                totalCount+= parseInt(myItem.count)
             }
         }
         
