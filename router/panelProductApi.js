@@ -691,6 +691,7 @@ router.post('/report-total',jsonParser,async(req,res)=>{
                 var price = cartItems[j].price.find(item=>item.saleType == payValue)
                 if(price) price = parseInt(price.price)
                 var myItem = cartItems[j]
+                myItem.totalPrice =price*myItem.count
                 var index = productList.findIndex(item=>item.sku==myItem.sku)
                 if(index == -1){
                     productList.push(myItem)
@@ -699,6 +700,10 @@ router.post('/report-total',jsonParser,async(req,res)=>{
                     var cNumber = parseInt(productList[index].count)
                     cNumber += parseInt(myItem.count)
                     productList[index].count = cNumber
+                    var cPrice = parseInt(productList[index].totalPrice)
+                    cPrice += parseInt(myItem.totalPrice)
+                    productList[index].totalPrice = cPrice
+
                 }
                 totalPrice+= price
                 totalCount+= parseInt(myItem.count)
