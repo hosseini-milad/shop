@@ -4,7 +4,7 @@ import VisitorTable from "../modules/visitor/VisitorTable";
 import OrderTable from "../modules/visitor/OrderTable";
 import Paging from "../modules/Components/Paging";
 import errortrans from "../translate/error";
-import env from "../env";
+import env, { normalPriceCount, normalPriceRound } from "../env";
 import tabletrans from "../translate/tables";
 import VisitorFilters from "../modules/visitor/VisitorFilters";
 
@@ -33,7 +33,7 @@ function Users(props) {
       // pageSize:filters.pageSize?filters.pageSize:"10",
       pageSize: filters.pageSize || "10",
 
-      customer: filters.customer,
+      userId: filters.userId?filters.userId._id:'',
       manageId: visitorID,
       status: filters.status,
       profile: filters.profile,
@@ -100,13 +100,14 @@ function Users(props) {
       <div className="od-header">
         <div className="od-header-info">
           <div className="od-header-name">
-            <p>{tabletrans.visitor[lang]}</p>
+            <p>{tabletrans.analyze[lang]}</p>
           </div>
           
         </div>
         <div class="search-wrapper">
           <VisitorFilters
             lang={props.lang}
+            token={token}
             //setFilters={handleFilterChange}
             options={content.access}
             profiles={content.profilesList}
@@ -115,7 +116,7 @@ function Users(props) {
             setFilters={setFilters}
           />
           <div class="total-wrapper">
-            <p>قیمت کل:{content.totalPrice}</p>
+            <p>قیمت کل:{normalPriceRound(content.totalPrice)}</p>
             <p>تعداد کل:{content.totalCount}</p>
           </div>
         </div>

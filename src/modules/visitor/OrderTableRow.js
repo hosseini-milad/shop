@@ -1,6 +1,7 @@
 import { useState } from "react"
 import tabletrans from "../../translate/tables"
 import Status from "../Components/Status"
+import { normalPriceCount} from "../../env";
 
 function DTableRow(props){
   const order =props.order
@@ -15,7 +16,7 @@ function DTableRow(props){
             <td>{order.title}</td>
             <td>{order.brand}</td>
             <td>{order.count}</td>
-            <td>{order.totalPrice}</td>
+            <td>{normalPriceCount(order.totalPrice)}</td>
           </tr>
     )
 }
