@@ -11,6 +11,10 @@ const tabletrans ={
         english: "Visitor",
         persian: "ویزیتور"
     },
+    analyze:{
+        english: "Sale Analyze",
+        persian: "آنالیز فروش"
+    },
     classes:{
         english: "Classes",
         persian: "کلاس ها"

@@ -1286,3 +1286,6 @@ dialog {
     color: black;
   }
 }
+.hover-tr{
+  background-color: rgb(244, 246, 248);
+}
