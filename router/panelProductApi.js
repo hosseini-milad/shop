@@ -705,7 +705,7 @@ router.post('/report-total',jsonParser,async(req,res)=>{
                     productList[index].totalPrice = cPrice
 
                 }
-                totalPrice+= price
+                totalPrice+= myItem.totalPrice
                 totalCount+= parseInt(myItem.count)
             }
         }
