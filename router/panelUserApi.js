@@ -61,6 +61,7 @@ router.post('/list',jsonParser,async (req,res)=>{
 })
 router.post('/update-user',jsonParser,async (req,res)=>{
     var userId = req.body._id
+    if(userId=="new")userId=''
     const data={
         username:req.body.username,
         cName:req.body.cName,
@@ -75,10 +76,9 @@ router.post('/update-user',jsonParser,async (req,res)=>{
         access:req.body.access,
     }
     try{
-        const userData = await user.updateOne({_id: ObjectID(userId)},
-        {$set:data})
-        if(!userData.matchedCount) await user.create(
-        {$set:data})
+        const userData = userId?await user.updateOne({_id: ObjectID(userId)},
+        {$set:data}):
+        await user.create({$set:data})
        res.json({data:userData,success:"تغییرات اعمال شدند"})
     }
     catch(error){
