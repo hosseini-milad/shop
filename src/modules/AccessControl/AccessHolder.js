@@ -30,57 +30,57 @@ function AccessHolder(props){
     console.log(content)
     return(
     <div className="profiles" style={{direction:direction}}>
-        <div className="create-profile">
-            <h4>Create profile</h4>
-            <div className="clone-input">
-            <label htmlFor="clone">Clone Form</label>
-            <div className="red-line"></div>
-            <select name="" id="clone">
-                <option value="">Vendor</option>
-                <option value="">Member</option>
-                <option value="">Admin</option>
-            </select>
-            </div>
-            <div className="name-input">
-            <label htmlFor="name">Name</label>
-            <input type="text" name="" id="name"/>
-            <div className="red-line"></div>
-            </div>
-            <div className="dec-input">
-            <label htmlFor="dec">Description</label>
-            <textarea name="" id="dec"></textarea>
-            </div>
-            <div className="type-input">
-            <label htmlFor="type">Profile Type</label>
-            <div className="red-line"></div>
-            <select name="" id="type">
-                <option value="">Team User</option>
-                <option value="">Client User</option>
-                <option value="">Vendor User</option>
-            </select>
-            </div>
-            <div className="checkbox-input">
-            <div className="checkbox">
-                <input type="checkbox" name="" id="team"/>
-                <label htmlFor="team">Add profile users to all the projects in the team.</label>
-            </div>
-            <div className="checkbox">
-                <input type="checkbox" name="" id="project"/>
-                <label htmlFor="project">Add profile users to all the sprints in the associated projects.</label>
-            </div>
-            </div>
-            <div className="create-btn-wrapper">
-            <div className="create-btn">
-                <p>Create</p>
-            </div>
-            <div className="c-and-p-btn">
-                <p>Create & permissions</p>
-            </div>
-            <div className="cancel-btn">
-                <p>Cancel</p>
-            </div>
-            </div>
-        </div>
+        {/*<div className="create-profile">*/}
+        {/*    <h4>Create profile</h4>*/}
+        {/*    <div className="clone-input">*/}
+        {/*    <label htmlFor="clone">Clone Form</label>*/}
+        {/*    <div className="red-line"></div>*/}
+        {/*    <select name="" id="clone">*/}
+        {/*        <option value="">Vendor</option>*/}
+        {/*        <option value="">Member</option>*/}
+        {/*        <option value="">Admin</option>*/}
+        {/*    </select>*/}
+        {/*    </div>*/}
+        {/*    <div className="name-input">*/}
+        {/*    <label htmlFor="name">Name</label>*/}
+        {/*    <input type="text" name="" id="name"/>*/}
+        {/*    <div className="red-line"></div>*/}
+        {/*    </div>*/}
+        {/*    <div className="dec-input">*/}
+        {/*    <label htmlFor="dec">Description</label>*/}
+        {/*    <textarea name="" id="dec"></textarea>*/}
+        {/*    </div>*/}
+        {/*    <div className="type-input">*/}
+        {/*    <label htmlFor="type">Profile Type</label>*/}
+        {/*    <div className="red-line"></div>*/}
+        {/*    <select name="" id="type">*/}
+        {/*        <option value="">Team User</option>*/}
+        {/*        <option value="">Client User</option>*/}
+        {/*        <option value="">Vendor User</option>*/}
+        {/*    </select>*/}
+        {/*    </div>*/}
+        {/*    <div className="checkbox-input">*/}
+        {/*    <div className="checkbox">*/}
+        {/*        <input type="checkbox" name="" id="team"/>*/}
+        {/*        <label htmlFor="team">Add profile users to all the projects in the team.</label>*/}
+        {/*    </div>*/}
+        {/*    <div className="checkbox">*/}
+        {/*        <input type="checkbox" name="" id="project"/>*/}
+        {/*        <label htmlFor="project">Add profile users to all the sprints in the associated projects.</label>*/}
+        {/*    </div>*/}
+        {/*    </div>*/}
+        {/*    <div className="create-btn-wrapper">*/}
+        {/*    <div className="create-btn">*/}
+        {/*        <p>Create</p>*/}
+        {/*    </div>*/}
+        {/*    <div className="c-and-p-btn">*/}
+        {/*        <p>Create & permissions</p>*/}
+        {/*    </div>*/}
+        {/*    <div className="cancel-btn">*/}
+        {/*        <p>Cancel</p>*/}
+        {/*    </div>*/}
+        {/*    </div>*/}
+        {/*</div>*/}
         <div className="profiles-header">
             <h5>{errortrans.profiles[lang]}</h5>
             <div className="add-profile-btn" onClick={()=>window.location.href="/access/detail/new"}>
