@@ -30,6 +30,14 @@ const menutrans ={
                 href:"/crm",
                 url:"crm"
             },
+            {
+                english: "Sale Analyze",
+                persian: "آنالیز فروش",
+                index:0,
+                icon:"fa-users",
+                href:"/visitor",
+                url:"visitor"
+            },
             ]
         },
         {
@@ -82,6 +90,7 @@ const menutrans ={
                 },
                 ]
         },
+        
         {
             english: "Products",
             persian: "محصولات و خدمات",

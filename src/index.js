@@ -43,6 +43,7 @@ import CRM from './pages/Crm';
 import CrmList from './modules/Crm/CRMList/crmList';
 import CRMAdd from './modules/Crm/CRMList/crmAdd';
 import Customers from './pages/Customers';
+import Visitor from './pages/Visitor';
 import CustomerDetailHolder from './modules/Customer/CustomerData/CustomerDetailHolder';
 import OrderHolder from './Order/OrderHolder';
 import FilterAdd from './modules/Filters/FilterAdd';
@@ -80,6 +81,7 @@ root.render(
         <OrderHolder lang={lang}/>:<Layout><Dashboard lang={lang}/></Layout>}/>
         <Route path="/login" element={<Layout><Profile lang={lang}/></Layout>}/>
         <Route path="/dashboard" element={<Layout><Dashboard lang={lang}/></Layout>}/>
+        <Route path="/visitor" element={<Layout><Visitor lang={lang}/></Layout>}/>
         <Route path="/customers" element={<Layout><Customers lang={lang}/></Layout>}/>
         <Route path="/customers/detail/:userId" element={<Layout><CustomerDetailHolder lang={lang}/></Layout>}/>
         <Route path="/crm" element={<Layout><CRM lang={lang}/></Layout>}/>

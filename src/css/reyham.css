@@ -96,7 +96,7 @@
   margin-right: 0;
 }
 .dense-btn {
-  width: 45%;
+  width: unset;
 }
 .sub-more-menu {
   display: inherit;
@@ -715,7 +715,7 @@ dialog {
 .btn-crm-accept {
   background-color: lightgreen;
 }
-.btn-crm-official{
+.btn-crm-official {
   background-color: rgb(31, 31, 173);
   color: white;
 }
@@ -943,11 +943,11 @@ dialog {
   margin: 0 10px;
 }
 /* official  print */
-.print-container{
+.print-container {
   width: 100%;
   padding-inline: 1rem;
 }
-.officialprint >*{
+.officialprint > * {
   font-size: 0.9rem;
 }
 .officialprint .hesabfaSection {
@@ -1039,7 +1039,7 @@ dialog {
       height: 100%;
       display: flex;
 
-      p{
+      p {
         font-size: 0.85rem;
       }
     }
@@ -1102,7 +1102,7 @@ dialog {
     display: block;
     position: relative;
 
-    .float-title{
+    .float-title {
       position: absolute;
       top: 0;
       padding: 0.5rem;
@@ -1112,7 +1112,6 @@ dialog {
   .sign-col {
     width: 50%;
     height: 50px;
-    
   }
 }
 .officialprint .bank-col .account-wrapper {
@@ -1235,4 +1234,58 @@ dialog {
   color: white;
   border-radius: 0.5rem;
   padding: 0.5rem 1rem;
+}
+
+.d-container{
+  width: 100%;
+  display: flex;
+  gap:1rem;
+}
+.visitor-list {
+  width: 30%;
+  overflow: hidden;
+  .cu-avatar {
+    min-width: unset;
+  }
+  th{
+    text-align: right;
+    padding-right: 0.5rem;
+  }
+}
+.Vorder-list{
+  width: 70%;
+  overflow: hidden;
+
+  th{
+    width: unset ;
+    min-width: 60px;
+    text-align: center !important;
+  }
+  td{
+    text-align: center;
+    min-width:60px;
+    max-width: 200px;
+    padding-inline: 0.5rem;
+  }
+}
+.visitor-list{
+  td{
+    padding-inline: 0.5rem;
+  }
+}
+.total-wrapper{
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 1rem;
+  padding:0.5rem 1rem;
+
+  p{
+    margin: 0;
+    color: black;
+  }
+}
+.hover-tr{
+  background-color: rgb(244, 246, 248);
 }
