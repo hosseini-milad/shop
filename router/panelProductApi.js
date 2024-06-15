@@ -689,10 +689,11 @@ router.post('/report-total',jsonParser,async(req,res)=>{
             var cartItems=reportList[i].cartItems
             for(var j=0;j<(cartItems&&cartItems.length);j++){
                 var price = cartItems[j].price
-                if(cartItems[j].price.length>1){
+                try{
                     price=cartItems[j].price.find(item=>item.saleType == payValue)
                     if(price) price = parseInt(price.price)
                 }
+                catch{}
                 var myItem = cartItems[j]
                 myItem.totalPrice =price*myItem.count
                 var index = productList.findIndex(item=>item.sku==myItem.sku)
