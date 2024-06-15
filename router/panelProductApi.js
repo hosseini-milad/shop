@@ -684,6 +684,7 @@ router.post('/report-total',jsonParser,async(req,res)=>{
         var productList=[]
         var totalPrice=0
         var totalCount = 0
+        var errorPrice=[]
         for(var i=0;i<(reportList&&reportList.length);i++){
             var payValue = reportList[i].payValue
             var cartItems=reportList[i].cartItems
@@ -693,7 +694,9 @@ router.post('/report-total',jsonParser,async(req,res)=>{
                     price=cartItems[j].price.find(item=>item.saleType == payValue)
                     if(price) price = parseInt(price.price)
                 }
-                catch{}
+                catch{
+                    errorPrice.push(price)
+                }
                 var myItem = cartItems[j]
                 myItem.totalPrice =price*myItem.count
                 var index = productList.findIndex(item=>item.sku==myItem.sku)
@@ -714,7 +717,7 @@ router.post('/report-total',jsonParser,async(req,res)=>{
             }
         }
         
-        res.json({data:productList,marketList:managerList,
+        res.json({data:productList,marketList:managerList,errorPrice:errorPrice,
             totalCount:totalCount,totalPrice:totalPrice})
     }
     catch(error){
