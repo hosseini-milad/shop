@@ -1289,3 +1289,31 @@ dialog {
 .hover-tr{
   background-color: rgb(244, 246, 248);
 }
+/* mini sidebar */
+.navbar-vertical.mini-sidebar{
+  max-width: 7rem !important;
+
+  .sidenav-header{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    img{
+      margin: 0;
+    }
+    span{
+      display: none;
+    }
+  }
+  .nav-item{
+    span{
+      display: none;
+    }
+  }
+}
+.mini-arrow{
+  position: absolute;
+  top: 0;
+  left: 5px;
+  font-size: 2rem;
+  cursor: pointer;
+}

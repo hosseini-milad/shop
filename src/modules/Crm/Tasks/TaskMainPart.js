@@ -6,6 +6,7 @@ import CheckList from "./CheckList"
 
 function TaskMainPart(props){
     const [showNote,setShowNote] = useState()
+    const [acShow,setacShow] = useState(false)
     const data = props.data
     const content = props.content
     const [checkList ,setCheckList ] = useState(data?data.checkList:[])
@@ -33,47 +34,34 @@ function TaskMainPart(props){
         </div>
         <CheckList checkList ={checkList} 
             setCheckList={setCheckList} taskId={data&&data._id}/>
-        <div className="assign-input">
-        <i className="fa-solid fa-user-plus avatar" style={{color: "#ffffff"}}></i>
-        <div className="assign-wrapper" style={{flexDirection: "initial"}}>
-            <StyleSelect title={"Profile To"}
-            options={content?content.profileList:[]} label="profileName" 
-            defaultValue={(content&&content.currentAssign)?
-                content.currentAssign:''}
-            direction={props.direction}
-            action={(e)=>props.setData(prevState => ({
-                ...prevState,
-                profile:e?e._id:''
-            }))}/>
-            <StyleSelect title={"Assigned To"}
-            options={content?content.user:[]} label="username" 
-            defaultValue={(content&&content.currentUser)?
-                content.currentUser:''}
-            direction={props.direction}
-            action={(e)=>props.setData(prevState => ({
-                ...prevState,
-                assign:e?e._id:''
-            }))}/>
-        </div>
-        {/*<div className="assign-menu">
-            <h6>Select Section</h6>
-            <input type="search" name="" id="" placeholder="Search..."/>
-            <p>To Do</p>
-            <p>Doing</p>
-            <p>QA</p>
-            <p>Done</p>
-        </div>*/}
-        </div>
-        {/*<div className="file-input">
-        <input type="file" name="" id="file"/>
-        <label for="file">
-            <i className="fa-solid fa-paperclip" style={{color: "#c0c0c0"}}></i>
-            <p>Add Attachment</p>
-        </label>
-    </div>*/}
-        <div className="nt-btn-wrapper">
-        <p> </p>
         
+        <div className="ac-wrapper">
+            <div className="ac-tabs">
+                <div onClick={()=>setacShow(false)} className={acShow?"tab-item":"tab-item active-tab"}>کامنت</div>
+                <div onClick={()=>setacShow(true)} className={acShow?"tab-item active-tab":"tab-item"}>فعالیت</div>
+            </div>
+            {acShow?
+            <div className="act-wrapper">
+                <div className="act-item">
+                    <div class="text-wrapper">
+                        <div className="user"><p>یوزر</p></div>
+                        <div className="text"><p>تست فعالیت</p></div>
+                    </div>
+                    <div className="date"><p>1345/02/30</p><p>11:30PM</p></div>
+                </div>
+            </div>
+            :<div className="com-wrapper">
+                <div className="com-item">
+                    <div className="user"><p>یوزر</p></div>
+                    <div className="text"><p>تست کامنت</p></div>
+                    <div className="date"><p>1345/02/30</p><p>11:30PM</p></div>
+                    <div className="reply">پاسخ</div>
+                </div>
+                <div className="com-new">
+                    <input placeholder="تایپ کنید....."/>
+                    <i class="fa-solid fa-arrow-left"></i>
+                </div>
+            </div>}
         </div>
     </div>
     )
