@@ -82,8 +82,16 @@ function ProductFilters(props){
         <StyleSelect
           title={"موجودی"}
           direction={props.lang.dir}
-          options={["موجود", "نمایش همه"]}
-          action={(e)=>handleFilterChange("exist", e)}
+          label="title"
+          options={[{title:"موجود",value:""},{title:"نمایش همه",value:"1"}]}
+          action={(e)=>handleFilterChange("exist", e.value)}
+
+        />
+        <StyleSelect
+          title={"برند"}
+          direction={props.lang.dir}
+          
+          action={(e)=>handleFilterChange("Brand", e)}
 
         />
         <StyleSelect
