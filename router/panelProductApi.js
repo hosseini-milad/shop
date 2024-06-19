@@ -707,6 +707,7 @@ router.post('/report-total',jsonParser,async(req,res)=>{
                 ])
                 var price = cartItems[j].price
                 cartItems[j].product = productDetail&&productDetail[0]
+                cartItems[j].brandData = cartItems[j].product&&cartItems[j].product.brandInfo[0]
                 try{
                     price=cartItems[j].price.find(item=>item.saleType == payValue)
                     if(price) price = parseInt(price.price)
