@@ -28,6 +28,7 @@ const orders = require('../models/orders/orders');
 const faktor = require('../models/product/faktor');
 const cart = require('../models/product/cart');
 const users = require('../models/auth/users');
+const products = require('../models/product/products');
 
 router.post('/fetch-service',jsonParser,async (req,res)=>{
     var serviceId = req.body.serviceId?req.body.serviceId:''
@@ -689,7 +690,9 @@ router.post('/report-total',jsonParser,async(req,res)=>{
             var payValue = reportList[i].payValue
             var cartItems=reportList[i].cartItems
             for(var j=0;j<(cartItems&&cartItems.length);j++){
+                const productDetail = await products.findOne({sku:cartItems[j].sku})
                 var price = cartItems[j].price
+                productList[index].product = productDetail
                 try{
                     price=cartItems[j].price.find(item=>item.saleType == payValue)
                     if(price) price = parseInt(price.price)

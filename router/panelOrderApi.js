@@ -107,7 +107,7 @@ router.post('/list',jsonParser,async (req,res)=>{
         for(var i=0;i<cartListPage.length;i++){
             var totalPrice=findCartSum(cartListPage[i].cartItems,
                 cartListPage[i].payValue)
-            
+             
             showCart.push({...cartListPage[i],totalCart:totalPrice})
         }
         const brandUnique = [...new Set(filter1Report.map((item) => item.brand))];
