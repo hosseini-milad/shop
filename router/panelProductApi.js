@@ -734,8 +734,12 @@ router.post('/report-total',jsonParser,async(req,res)=>{
                 totalCount+= parseInt(myItem.count)
             }
         }
-        
-        res.json({data:productList,marketList:managerList,errorPrice:errorPrice,
+        const sortList = productList.sort(function(a, b) {
+            var textA = a.sku.toUpperCase();
+            var textB = b.sku.toUpperCase();
+            return (textA < textB) ? -1 : (textA > textB) ? 1 : 0;
+        });
+        res.json({data:sortList,marketList:managerList,errorPrice:errorPrice,
             totalCount:totalCount,totalPrice:totalPrice})
     }
     catch(error){
