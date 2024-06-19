@@ -14,7 +14,7 @@ function DTableRow(props){
         <tr>
             <td>{order.sku}</td>
             <td>{order.title}</td>
-            <td>{order.brand}</td>
+            <td>{order.brandData.title}</td>
             <td>{order.count}</td>
             <td>{normalPriceCount(order.totalPrice)}</td>
           </tr>
