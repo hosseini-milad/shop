@@ -690,7 +690,21 @@ router.post('/report-total',jsonParser,async(req,res)=>{
             var payValue = reportList[i].payValue
             var cartItems=reportList[i].cartItems
             for(var j=0;j<(cartItems&&cartItems.length);j++){
-                const productDetail = await products.findOne({sku:cartItems[j].sku})
+                const productDetail = await products.aggregate([
+                    {$match:{sku:cartItems[j].sku}},
+                    {$lookup:{
+                        from : "brands", 
+                        localField: "brandId", 
+                        foreignField: "_id", 
+                        as : "brandInfo"
+                    }},
+                    {$lookup:{
+                        from : "category", 
+                        localField: "catId", 
+                        foreignField: "_id", 
+                        as : "categoryInfo"
+                    }},
+                ])
                 var price = cartItems[j].price
                 cartItems[j].product = productDetail
                 try{
