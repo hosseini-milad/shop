@@ -692,7 +692,7 @@ router.post('/report-total',jsonParser,async(req,res)=>{
             for(var j=0;j<(cartItems&&cartItems.length);j++){
                 const productDetail = await products.findOne({sku:cartItems[j].sku})
                 var price = cartItems[j].price
-                productList[index].product = productDetail
+                cartItems[j].product = productDetail
                 try{
                     price=cartItems[j].price.find(item=>item.saleType == payValue)
                     if(price) price = parseInt(price.price)
