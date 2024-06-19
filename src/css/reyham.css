@@ -672,6 +672,10 @@ dialog {
   right: 2px;
   top: 2px;
 }
+.col .blue-check{
+  position: unset;
+}
+
 .col small {
   overflow: hidden;
   width: 330px;
