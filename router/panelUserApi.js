@@ -630,7 +630,7 @@ router.post('/formal-customer', async (req,res)=>{
     const userInfo = req.body.userData
     const customerQuery = SepidarUser(userInfo)
     //console.log(customerQuery)
-    const sepidarResult = await sepidarPOST(customerQuery,"/api/Customers",'',"admin")
+    const sepidarResult = customerQuery&&await sepidarPOST(customerQuery,"/api/Customers",'',"admin")
     //console.log(sepidarResult)
     if(!sepidarResult||sepidarResult.Message){
         res.status(400).json({message:sepidarResult?sepidarResult.Message:"Error",
@@ -673,6 +673,8 @@ function normalNumber(number){
   }
 const SepidarUser=(data)=>{
     if(!data)return('')
+    if(!data.meliCode||!data.postalCode||(!data.phone&&!data.mobile))
+        return('')
     var max = 999999999999
     var min = 100000000000
     var query ={
