@@ -11,6 +11,7 @@ function OrderTable(props){
           
         <thead>
           <tr>
+            <th></th>
             <th>
               <p>{tabletrans.productCode[lang]}</p>
             </th>

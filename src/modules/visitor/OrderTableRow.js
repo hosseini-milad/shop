@@ -12,9 +12,10 @@ function DTableRow(props){
   
     return(
         <tr>
+          <td>{props.index+1}</td>
             <td>{order.sku}</td>
             <td>{order.title}</td>
-            <td>{order.brandData.title}</td>
+            <td>{order.brandData?order.brandData.title:''}</td>
             <td>{order.count}</td>
             <td>{normalPriceCount(order.totalPrice)}</td>
           </tr>
