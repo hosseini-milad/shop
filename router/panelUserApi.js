@@ -630,6 +630,11 @@ router.post('/formal-customer', async (req,res)=>{
     const userInfo = req.body.userData
     const customerQuery = SepidarUser(userInfo)
     //console.log(customerQuery)
+    if(!customerQuery){
+        res.status(400).json({message:"اطلاعات کافی نیست، کدملی، کدپستی و شماره تماس اجباری است",
+            error: "error occure"})
+        return
+    }
     const sepidarResult = customerQuery&&await sepidarPOST(customerQuery,"/api/Customers",'',"admin")
     //console.log(sepidarResult)
     if(!sepidarResult||sepidarResult.Message){
