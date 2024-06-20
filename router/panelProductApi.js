@@ -200,6 +200,7 @@ router.post('/list-product',jsonParser,async (req,res)=>{
             { $match:data.sku?{sku:new RegExp('.*' + data.sku + '.*')}:{}},
             { $match:data.category?{category:data.category}:{}},
             { $match:data.active?{active:true}:{}},
+            { $match:data.brand?{brandCode:data.brand}:{}},
             {$lookup:{from : "brands", 
             localField: "brandId", foreignField: "brandCode", as : "brandInfo"}},
             ])
@@ -238,9 +239,9 @@ router.post('/list-product',jsonParser,async (req,res)=>{
             
             const productList = newProduct.slice(offset,
                 (parseInt(offset)+parseInt(pageSize)))  
-            const typeUnique = [...new Set(productList.map((item) => item.category))];
-            
-           res.json({filter:productList,type:typeUnique,
+            const typeUnique = [...new Set(productList.map((item) => item.brand))];
+            const brandList = await BrandSchema.find()
+           res.json({filter:productList,brands:brandList,
             size:newProduct.length,exists:data.exists,
             quantity:quantity,price:price})
     }
