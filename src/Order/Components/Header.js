@@ -97,10 +97,10 @@ function OrderHeader(props){
             {customer.agent?<></>:
             <i className="fa-solid fa-check-circle" aria-hidden="true"></i>}</p>
             <div className="info-holder col">
-              {customer.meliCode?<span><i className="fa-solid fa-credit-card no-font id-icon" aria-hidden="true"></i>{customer.meliCode}</span>:<></>}
-              {customer.phone?<span><i className="fa-solid fa-phone no-font id-icon" aria-hidden="true"></i>{customer.phone}</span>:<></>}
-              {customer.roleID?<span><i className="fa-solid fa-certificate no-font id-icon" aria-hidden="true"></i>{customer.roleID}</span>:<></>}
-              {customer.PostalCode?<span><i className="fa-solid fa-location-arrow no-font id-icon" aria-hidden="true"></i>{customer.PostalCode}</span>:<></>}
+              <span><i className="fa-solid fa-credit-card no-font id-icon" aria-hidden="true"></i>{customer.meliCode?customer.meliCode:"........"}</span>
+              <span><i className="fa-solid fa-phone no-font id-icon" aria-hidden="true"></i>{customer.phone?customer.phone:"........"}</span>
+              <span><i className="fa-solid fa-certificate no-font id-icon" aria-hidden="true"></i>{customer.roleID?customer.roleID:"........"}</span>
+              <span><i className="fa-solid fa-location-arrow no-font id-icon" aria-hidden="true"></i>{customer.PostalCode?customer.PostalCode:"........"}</span>
             </div>
             <p className="bu-address">{customer.Address?
               customer.Address:'-'}</p>
