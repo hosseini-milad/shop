@@ -147,7 +147,7 @@ router.get('/sepidar-customer', async (req,res)=>{
                 sepidarResult[i].Addresses[0].CustomerAddressID:'',
             Address:(sepidarResult[i].Addresses&&sepidarResult[i].Addresses[0])?
                 sepidarResult[i].Addresses[0].Address:'',
-            PostalCode:(sepidarResult[i].Addresses&&sepidarResult[i].Addresses[0])?
+            postalCode:(sepidarResult[i].Addresses&&sepidarResult[i].Addresses[0])?
             sepidarResult[i].Addresses[0].ZipCode:''
         }})
         var modified = custResult.modifiedCount
