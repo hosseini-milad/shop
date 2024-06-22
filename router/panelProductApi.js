@@ -688,7 +688,6 @@ router.post('/report-total',jsonParser,auth,async(req,res)=>{
         var totalPrice=0
         var totalCount = 0
         var userList = []
-        var brandList=[]
         var errorPrice=[]
         for(var i=0;i<(reportList&&reportList.length);i++){
             var payValue = reportList[i].payValue
@@ -746,11 +745,9 @@ router.post('/report-total',jsonParser,auth,async(req,res)=>{
             }
             if(itemAdd){
                 var index = userList.findIndex(item=>item.id == reportList[i].userId)
-                var bndex = brandList.findIndex(item=>item._id == reportList[i].brandData&&reportList[i].brandData._id)
                 reportList[i].userInfo&& index==-1&&
                     userList.push({id:reportList[i].userId,
                         ...reportList[i].userInfo[0]})
-                bndex == -1&&brandList.push(reportList[i].brandData)
             }
         }
         const sortList = productList.sort(function(a, b) {
@@ -758,7 +755,7 @@ router.post('/report-total',jsonParser,auth,async(req,res)=>{
             var textB = b.sku.toUpperCase();
             return (textA < textB) ? -1 : (textA > textB) ? 1 : 0;
         });
-        //const brandList = [...new Set(sortList.map((item) => item.brandData._id))];
+        const brandList = await BrandSchema.find()
         res.json({data:sortList,marketList:managerList,
             errorPrice:errorPrice,userList,brandList,
             totalCount:totalCount,totalPrice:totalPrice})
