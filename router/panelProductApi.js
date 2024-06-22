@@ -755,7 +755,7 @@ router.post('/report-total',jsonParser,auth,async(req,res)=>{
             var textB = b.sku.toUpperCase();
             return (textA < textB) ? -1 : (textA > textB) ? 1 : 0;
         });
-        const brandList = [...new Set(sortList.map((item) => item.brandData))];
+        const brandList = [...new Set(sortList.map((item) => item.brandData._id))];
         res.json({data:sortList,marketList:managerList,
             errorPrice:errorPrice,userList,brandList,
             totalCount:totalCount,totalPrice:totalPrice})
