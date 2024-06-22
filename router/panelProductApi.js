@@ -715,7 +715,7 @@ router.post('/report-total',jsonParser,auth,async(req,res)=>{
                     if(cartItems[j].product&&
                         cartItems[j].product.brandId!=data.brand)
                         continue
-                else continue   
+                   
                 itemAdd=1
                 cartItems[j].brandData = cartItems[j].product&&cartItems[j].product.brandInfo[0]
                 try{
