@@ -6,6 +6,7 @@ import env from "../../env";
 
 
 function VisitorFilter(props) {
+  const brandOptions = props.brandOptions
   const [userOptions,setUserOptions] = useState()
   const [userSearch,setUserSearch] = useState()
   const token = props.token
@@ -52,6 +53,16 @@ function VisitorFilter(props) {
           action={(e) => props.setFilters((prevState) => ({
             ...prevState,
             userId: e,
+          }))}
+
+        />
+        <StyleSelect
+          title={tabletrans.brand[props.lang.lang]}
+          direction={props.lang.dir} options={brandOptions}
+          label="title"
+          action={(e) => props.setFilters((prevState) => ({
+            ...prevState,
+            brand: e?e.brandCode:'',
           }))}
 
         />

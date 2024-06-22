@@ -21,7 +21,7 @@ function Users(props) {
   const [filters, setFilters] = useState(getFiltersFromUrl());
   const [loading, setLoading] = useState(0);
   const [SaveD, setSaveD] = useState(0);
-  const [update, setUpdate] = useState(0);
+  const [brandOptions,setBrandOptions] = useState()
   //console.log(Dtable)
   const token = cookies.get(env.cookieName);
   useEffect(() => {
@@ -37,7 +37,7 @@ function Users(props) {
       manageId: visitorID,
       status: filters.status,
       profile: filters.profile,
-      brand: filters.brand,
+      brandId: filters.brand,
       dateFrom: filters.date && filters.date.dateFrom,
       dateTo: filters.date && filters.date.dateTo,
       access: filters.access,
@@ -58,6 +58,7 @@ function Users(props) {
         (result) => {
           setLoading(0);
           setContent("");
+          setBrandOptions(result.brandList)
           setTimeout(() => setContent(result), 200);
         },
         (error) => {
@@ -108,6 +109,7 @@ function Users(props) {
           <VisitorFilters
             lang={props.lang}
             token={token}
+            brandOptions={brandOptions}
             //setFilters={handleFilterChange}
             options={content.access}
             profiles={content.profilesList}

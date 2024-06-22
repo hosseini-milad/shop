@@ -1,10 +1,12 @@
 import { useState } from "react";
 import tabletrans from "../../translate/tables"
 import OrderTableRow from "./OrderTableRow"
+import { sortArray } from "../../env";
 
 function OrderTable(props){
   const orderList = props.content.data
   const lang=props.lang.lang;
+  var sort = ""
   const [detail,showDetail] = useState(-1)
     return( 
         <table>
@@ -33,7 +35,7 @@ function OrderTable(props){
           </tr>
         </thead>
         <tbody>
-          {(orderList)?orderList.map((object,i)=>(
+          {(orderList)?sortArray(orderList).map((object,i)=>(
             <OrderTableRow  
               order={object} index={i} key={i} lang={lang}
               
