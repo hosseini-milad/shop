@@ -669,6 +669,7 @@ router.post('/report-total',jsonParser,auth,async(req,res)=>{
         const dateToEn = new Date(now3.setDate(now.getDate()-(data.dateTo?data.dateTo:0)));
         dateToEn.setHours(23, 59, 0, 0)
         const reportList = await cart.aggregate([
+            { $addFields: { "userId": { "$toObjectId": "$userId" }}},
             {$lookup:{
                 from : "customers", 
                 localField: "userId", 
