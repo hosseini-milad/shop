@@ -746,7 +746,7 @@ router.post('/report-total',jsonParser,auth,async(req,res)=>{
             }
             if(itemAdd){
                 var index = userList.findIndex(item=>item.id == reportList[i].userId)
-                var bndex = brandList.findIndex(item=>item.brand == reportList[i].brandData)
+                var bndex = brandList.findIndex(item=>item == reportList[i].brandData)
                 reportList[i].userInfo&& index==-1&&
                     userList.push({id:reportList[i].userId,
                         ...reportList[i].userInfo[0]})
