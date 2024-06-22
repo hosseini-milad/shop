@@ -712,7 +712,7 @@ router.post('/report-total',jsonParser,auth,async(req,res)=>{
                 var price = cartItems[j].price
                 cartItems[j].product = productDetail&&productDetail[0]
                 if(data.brand)
-                    if(!cartItems[j].product||
+                    if(cartItems[j].product&&
                         cartItems[j].product.brandId!=data.brand)
                         continue
                 else continue   
