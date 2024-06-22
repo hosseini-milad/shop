@@ -134,6 +134,7 @@ router.post('/update-customer',jsonParser,async (req,res)=>{
     const data={
         cName:req.body.cName,
         sName:req.body.sName,
+        username:req.body.sName+" "+req.body.cName,
         email:req.body.email,
         phone:req.body.phone,
         mobile:req.body.mobile,
@@ -178,6 +179,7 @@ router.post('/update-customer',jsonParser,async (req,res)=>{
 router.post('/create-customer',jsonParser,async (req,res)=>{
     var agent = req.headers['userid']
     const data=req.body
+    data.username = data.sName+ " "+data.cName
     data.agent = agent
     try{
         const userData = await customer.create(data)

@@ -640,12 +640,13 @@ router.post('/edit-factory',jsonParser,async(req,res)=>{
     }
 })
 
-router.post('/report-total',jsonParser,async(req,res)=>{
+router.post('/report-total',jsonParser,auth,async(req,res)=>{
     var nowDate = new Date();
     try{ 
         const data = {
             manageId:req.body.manageId,
             userId:req.body.userId,
+            brand:req.body.brandId,
             dateFrom:
                 req.body.dateFrom?req.body.dateFrom[0]+"/"+
                 req.body.dateFrom[1]+"/"+req.body.dateFrom[2]+" "+"00:00":
@@ -686,10 +687,12 @@ router.post('/report-total',jsonParser,async(req,res)=>{
         var productList=[]
         var totalPrice=0
         var totalCount = 0
+        var userList = []
         var errorPrice=[]
         for(var i=0;i<(reportList&&reportList.length);i++){
             var payValue = reportList[i].payValue
             var cartItems=reportList[i].cartItems
+            var itemAdd = 0
             for(var j=0;j<(cartItems&&cartItems.length);j++){
                 const productDetail = await products.aggregate([
                     {$match:{sku:cartItems[j].sku}},
@@ -708,6 +711,12 @@ router.post('/report-total',jsonParser,async(req,res)=>{
                 ])
                 var price = cartItems[j].price
                 cartItems[j].product = productDetail&&productDetail[0]
+                if(data.brand)
+                    if(!cartItems[j].product||
+                        cartItems[j].product.brandId!=data.brand)
+                        continue
+                else continue   
+                itemAdd=1
                 cartItems[j].brandData = cartItems[j].product&&cartItems[j].product.brandInfo[0]
                 try{
                     price=cartItems[j].price.find(item=>item.saleType == payValue)
@@ -734,13 +743,20 @@ router.post('/report-total',jsonParser,async(req,res)=>{
                 totalPrice+= myItem.totalPrice
                 totalCount+= parseInt(myItem.count)
             }
+            if(itemAdd){
+                var index = userList.findIndex(item=>item.id == reportList[i].userId)
+                reportList[i].userInfo&& index==-1&&
+                    userList.push({id:reportList[i].userId,
+                        ...reportList[i].userInfo[0]})
+            }
         }
         const sortList = productList.sort(function(a, b) {
             var textA = a.sku.toUpperCase();
             var textB = b.sku.toUpperCase();
             return (textA < textB) ? -1 : (textA > textB) ? 1 : 0;
         });
-        res.json({data:sortList,marketList:managerList,errorPrice:errorPrice,
+        res.json({data:sortList,marketList:managerList,
+            errorPrice:errorPrice,userList:userList,
             totalCount:totalCount,totalPrice:totalPrice})
     }
     catch(error){
