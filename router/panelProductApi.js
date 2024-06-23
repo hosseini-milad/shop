@@ -190,7 +190,7 @@ router.post('/list-product',jsonParser,async (req,res)=>{
         title:req.body.title,
         sku:req.body.sku,
         exists: req.body.exist?1:0,
-        brand:req.body.brand,
+        brand:req.body.brandId,
         active:req.body.active,
         offset:req.body.offset,
         pageSize:pageSize
@@ -200,7 +200,7 @@ router.post('/list-product',jsonParser,async (req,res)=>{
             { $match:data.sku?{sku:new RegExp('.*' + data.sku + '.*')}:{}},
             { $match:data.category?{category:data.category}:{}},
             { $match:data.active?{active:true}:{}},
-            { $match:data.brand?{brandCode:data.brand}:{}},
+            { $match:data.brand?{brandId:data.brand}:{}},
             {$lookup:{from : "brands", 
             localField: "brandId", foreignField: "brandCode", as : "brandInfo"}},
             ])
