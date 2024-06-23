@@ -6,6 +6,7 @@ import { useState } from "react";
 
 function ProductFilters(props){
   const lang = props.lang
+  const brands = props.options
   const stock=[
     {
       "StockID": 5,
@@ -70,6 +71,7 @@ function ProductFilters(props){
       }
     };
   };
+  
   return (
     <div className="user-filter">
       <div className="serach-input">
@@ -90,8 +92,9 @@ function ProductFilters(props){
         <StyleSelect
           title={"برند"}
           direction={props.lang.dir}
-          
-          action={(e)=>handleFilterChange("Brand", e)}
+          label="title"
+          options={props.options}
+          action={(e)=>handleFilterChange("brandid", e.brandCode)}
 
         />
         <StyleSelect
