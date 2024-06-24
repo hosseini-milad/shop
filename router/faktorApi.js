@@ -1357,6 +1357,8 @@ const SepidarFunc=async(data,faktorNo)=>{
         "CustomerRef": toInt(data.userId),
         "AddressRef": toInt(data.userAddress)?toInt(data.userAddress):'',
         "CurrencyRef":1,
+        "Description":faktorNo,
+        "DescriptionRef":faktorNo,
         "SaleTypeRef": data.payValue?toInt(data.payValue):4,
         "Duty":0.0000,
         "Items": 
