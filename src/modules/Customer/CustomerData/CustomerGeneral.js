@@ -271,7 +271,7 @@ function CustomerGeneral(props) {
             <StyleInput
               title={formtrans.postalCode[props.lang]}
               direction={props.direction}
-              defaultValue={userData.postalCode}
+              defaultValue={userData.PostalCode}
               class={"formInput"}
               action={(e) =>
                 setFormData((prevState) => ({
