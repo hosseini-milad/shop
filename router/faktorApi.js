@@ -141,9 +141,9 @@ router.post('/find-products',auth, async (req,res)=>{
             as : "countData"
         }}])
         var searchProductResult=[]
-        const cartList = {}&&await cart.find(stockId?{stockId:stockId,}:{})
-        var currentCart = {}&&await FindCurrentCart(cartList)
-        const qCartList = {}&&await qCart.find(stockId?{stockId:stockId}:{})
+        const cartList = {}//await cart.find(stockId?{stockId:stockId,}:{})
+        var currentCart = {}//await FindCurrentCart(cartList)
+        const qCartList = {}//await qCart.find(stockId?{stockId:stockId}:{})
         var index = 0
         for(var i=0;i<searchProducts.length;i++){
             var count = (searchProducts[i].countData.find(item=>item.Stock==stockId))
