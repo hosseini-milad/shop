@@ -58,6 +58,30 @@ function TaskPopUp(props) {
         <div className="task-popup">
           <div className="nt-header">
             <h4>{props.title}</h4>
+            <div className="assign-input">
+              <i className="fa-solid fa-user-plus avatar" style={{color: "#ffffff"}}></i>
+              <div className="assign-wrapper" style={{flexDirection: "initial"}}>
+                  <StyleSelect title={"Profile To"}
+                  options={content?content.profileList:[]} label="profileName" 
+                  defaultValue={(content&&content.currentAssign)?
+                      content.currentAssign:''}
+                  direction={props.direction}
+                  action={(e)=>setData(prevState => ({
+                      ...prevState,
+                      profile:e?e._id:''
+                  }))}/>
+                  <StyleSelect title={"Assigned To"}
+                  options={content?content.user:[]} label="username" 
+                  defaultValue={(content&&content.currentUser)?
+                      content.currentUser:''}
+                  direction={props.direction}
+                  action={(e)=>setData(prevState => ({
+                      ...prevState,
+                      assign:e?e._id:''
+                  }))}/>
+              </div>
+            </div>
+
           </div>
           <div className="nt-wrapper">
             {content ? (
@@ -129,47 +153,9 @@ function TaskPopUp(props) {
                   }))
                 }
               />
-              {/*<div className="prob-wrapper">
-                    <i className="fa-solid fa-tag" style={{color: "#c0c0c0"}}></i>
-                    <div className="prob-title">
-                        <p>Tags</p>
-                        <p>No Tags added<span><i className="fa-solid fa-plus fa-2xs"></i></span></p>
-                    </div>
-                        </div>*/}
+              
             </div>
-            {/*    <div className="prob-wrapper">
-                    <i className="fa-regular fa-calendar" style={{color: "#c0c0c0"}}></i>
-                    <div className="prob-title">
-                        <p>Due date</p>
-                        <p>Not set yet<span><i className="fa-solid fa-angle-down fa-2xs"></i></span></p>
-                    </div>
-                    </div>
-                    <div className="prob-wrapper">
-                    <i className="fa-regular fa-clock" style={{color: "#c0c0c0"}}></i>
-                    <div className="prob-title">
-                        <p>Reminder</p>
-                        <p>Not set yet<span><i className="fa-solid fa-angle-down fa-2xs"></i></span></p>
-                    </div>
-                    </div>
-                    <div className="prob-wrapper">
-                    <i className="fa-solid fa-right-left rotate" style={{color: "#c0c0c0"}}></i>
-                    <div className="prob-title">
-                        <p>Priority</p>
-                        <p>None<span><i className="fa-solid fa-angle-down fa-2xs"></i></span></p>
-                    </div>
-                    </div>
-                    <div className="prob-wrapper">
-                    <i className="fa-solid fa-tag" style={{color: "#c0c0c0"}}></i>
-                    <div className="prob-title">
-                        <p>Tags</p>
-                        <p>No Tags added<span><i className="fa-solid fa-plus fa-2xs"></i></span></p>
-                    </div>
-                    </div>
-                    <div className="prob-wrapper">
-                    <i className="fa-solid fa-repeat" style={{color: "#c0c0c0"}}></i>
-                    <p>Repeat Task</p>
-                    </div>
-                </div>*/}
+            
           </div>
           <div className="nt-btn-wrapper">
             <div class="wrapper">

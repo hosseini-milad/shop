@@ -154,11 +154,11 @@ function OrderTableRow(props) {
           </div>
           {openOption ? (
             <div className="sub-more-menu">
-              <div className="sub-option" onClick={()=>window.location.href="/print/sepidar/"+order.InvoiceID}>
+              <div className="sub-option" onClick={()=>window.location.href="/print/sepidar/"+order.taskInfo[0].result.InvoiceID}>
                 
                 <p>پرینت سپیدار</p>
               </div>
-              <div className="sub-option" onClick={()=>window.location.href="/print/official/"+order.InvoiceID}>
+              <div className="sub-option" onClick={()=>window.location.href="/print/official/"+order.taskInfo[0].result.InvoiceID}>
                 
                 <p>پرینت رسمی</p>
               </div>
