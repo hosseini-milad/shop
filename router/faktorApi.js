@@ -190,10 +190,10 @@ router.post('/calc-count',auth, async (req,res)=>{
             foreignField: "ItemID", 
             as : "countData"
         }}])
-        const cartList = await cart.find(stockId?{stockId:stockId,}:{})
-        var currentCart = await FindCurrentCart(cartList)
-        const qCartList = await qCart.find(stockId?{stockId:stockId}:{})
+        const cartList = await tasks.find({taskStep:{$nin:['archive']}})
+        var currentCart = await FindCurrentCart(cartList.map(item=>item.orderNo))
         
+        const qCartList = await qCart.find(stockId?{stockId:stockId}:{})
         for(var i=0;i<searchProducts.length;i++){
             var count = searchProducts[i].countData.find(item=>(item.Stock==stockId))
             var desc = ''
@@ -221,7 +221,7 @@ const findCartCount=(item,cart)=>{
     var cartCount =0
     for(var i=0;i<cart.length;i++){
         var cartItem =cart[i].cartItems 
-        for(var c=0;c<cartItem.length;c++){
+        for(var c=0;c<(cartItem&&cartItem.length);c++){
             if(cartItem[c].sku === item){
                 cartCount=parseInt(cartCount)+parseInt(cartItem[c].count)
             }
