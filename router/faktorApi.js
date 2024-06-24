@@ -206,7 +206,7 @@ router.post('/calc-count', async (req,res)=>{
                 return
             }
             else{
-                res.json({quantity:0})
+                res.json({count:0,storeCount,orderCount})
                 return
             }
         }
