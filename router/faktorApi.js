@@ -167,8 +167,9 @@ router.post('/find-products',auth, async (req,res)=>{
         res.status(500).json({message: error.message})
     }
 })
-router.post('/calc-count', async (req,res)=>{
-    const stockId = req.body.StockId?req.body.StockId:"13"
+router.post('/calc-count',auth, async (req,res)=>{
+    const userData = await users.findOne({_id:req.headers['userid']})
+    const stockId = userData.StockId?userData.StockId:"13"
     const sku = req.body.sku
     if(!sku){
         res.status(400).json({message:"not found"})
