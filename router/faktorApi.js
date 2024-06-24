@@ -1062,12 +1062,14 @@ router.post('/quick-to-cart',jsonParser, async (req,res)=>{
         //const cartAll = await cart.find()
         const userData = await customers.findOne({_id:ObjectID(userId)})
         const qCartData = await quickCart.findOne({userId:userId})
+        
         data.payValue=qCartData&&qCartData.payValue
         data.description = qCartData&&qCartData.description
         data.discount = qCartData&&qCartData.discount
         const quickCartItems = qCartData&&qCartData.cartItems
         data.cartItems = quickCartItems
         const stockId = userData.StockId?userData.StockId:"5"
+        
         const availItems = await checkCart(quickCartItems,stockId,data.payValue)
         
         
@@ -1103,8 +1105,9 @@ const pureCartPrice=(cartItem,payValue)=>{
     return cartItems
 }
 const checkCart=async(cartItems,stockId,payValue)=>{
-    const cartList = await cart.find(stockId?{stockId:stockId,}:{})
-    var currentCart = await FindCurrentCart(cartList)
+    const cartList = await tasks.find({taskStep:{$nin:['archive']}})
+    var currentCart = await FindCurrentCart(cartList.map(item=>item.orderNo))
+        
     const qCartList = await qCart.find(stockId?{stockId:stockId}:{})
     var checkCart=''
     for(var i =0;i<cartItems.length;i++){

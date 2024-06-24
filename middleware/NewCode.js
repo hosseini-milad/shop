@@ -6,8 +6,8 @@ const NewCode=async(userNo,dateYear)=>{
         
         const foundRx = rxTemp&&await cart.findOne({cartNo:rxTemp});
         if(rxTemp&&!foundRx)break
-        else rxTemp="q"+
-            (Math.floor(Math.random() * 100000) + 10000)
+        else rxTemp=userNo+
+            (Math.floor(Math.random() * 10000) + 1000)
     }
     return(rxTemp)
 
