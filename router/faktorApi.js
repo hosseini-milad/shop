@@ -141,14 +141,14 @@ router.post('/find-products',auth, async (req,res)=>{
             as : "countData"
         }}])
         var searchProductResult=[]
-        const cartList = await cart.find(stockId?{stockId:stockId,}:{})
-        var currentCart = await FindCurrentCart(cartList)
-        const qCartList = await qCart.find(stockId?{stockId:stockId}:{})
+        const cartList = {}&&await cart.find(stockId?{stockId:stockId,}:{})
+        var currentCart = {}&&await FindCurrentCart(cartList)
+        const qCartList = {}&&await qCart.find(stockId?{stockId:stockId}:{})
         var index = 0
         for(var i=0;i<searchProducts.length;i++){
             var count = (searchProducts[i].countData.find(item=>item.Stock==stockId))
             var desc = ''
-            var cartCount = findCartCount(searchProducts[i].sku,currentCart.concat(qCartList),stockId)
+            var cartCount = 0&&findCartCount(searchProducts[i].sku,currentCart.concat(qCartList),stockId)
             if(count)count.quantity = parseInt(count.quantity)-parseInt(cartCount)
             if(count&&(count.quantity>0)){
                 index++
@@ -162,6 +162,55 @@ router.post('/find-products',auth, async (req,res)=>{
             }
         }
         try{    res.json({products:searchProductResult})
+    }
+    catch(error){
+        res.status(500).json({message: error.message})
+    }
+})
+router.post('/calc-count', async (req,res)=>{
+    const stockId = req.body.StockId?req.body.StockId:"13"
+    const sku = req.body.sku
+    if(!sku){
+        res.status(400).json({message:"not found"})
+        return
+    }
+    try{ 
+    const searchProducts = await productSchema.aggregate([
+        {$match:{sku:sku}},
+        {$lookup:{
+            from : "productprices", 
+            localField: "ItemID", 
+            foreignField: "ItemID", 
+            as : "priceData"
+        }},
+        {$lookup:{
+            from : "productcounts", 
+            localField: "ItemID", 
+            foreignField: "ItemID", 
+            as : "countData"
+        }}])
+        const cartList = await cart.find(stockId?{stockId:stockId,}:{})
+        var currentCart = await FindCurrentCart(cartList)
+        const qCartList = await qCart.find(stockId?{stockId:stockId}:{})
+        
+        for(var i=0;i<searchProducts.length;i++){
+            var count = searchProducts[i].countData.find(item=>(item.Stock==stockId))
+            var desc = ''
+            var cartCount = findCartCount(searchProducts[i].sku,currentCart.concat(qCartList),stockId)
+            //console.log(cartCount)
+            const storeCount =parseInt(count&&count.quantity)
+            const orderCount =parseInt(cartCount)
+            if(count){
+                count.quantity = storeCount-orderCount
+                res.json({count,storeCount,orderCount})
+                return
+            }
+            else{
+                res.json({quantity:0})
+                return
+            }
+        }
+            
     }
     catch(error){
         res.status(500).json({message: error.message})
