@@ -313,6 +313,8 @@ const SepidarFunc=async(data,faktorNo,user,stock)=>{
         "CurrencyRef":1,
         "SaleTypeRef": data.payValue?toInt(data.payValue):3,
         "Duty":0.0000,
+        "Description":faktorNo,
+        "DescriptionRef":faktorNo,
         "Discount": data.discount>100?toInt(data.discount):0.00,
         "Items": 
         notNullCartItem.map((item,i)=>{
@@ -321,7 +323,7 @@ const SepidarFunc=async(data,faktorNo,user,stock)=>{
             return({
             "ItemRef": toInt(item.id),
             "TracingRef": null,
-            "Description":item.title+"|"+item.sku,
+            "Description":item.description,//item.title+"|"+item.sku,
             "StockRef":stock,
             "Quantity": toInt(item.count),
             "Fee": toInt(price),
