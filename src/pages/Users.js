@@ -41,6 +41,26 @@ const Users = (props) => {
     search: filters.search,
   }; // Add any additional body parameters if required
 
+  // Fetch the list of users
+
+  const fetchUsers = async () => {
+    try {
+      const response = await fetch(`${env.siteApi}/panel/user/list`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "x-access-token": token && token.token,
+        },
+        body: JSON.stringify(body),
+      });
+      const data = await response.json();
+      setUsers(data.filter);
+      setAccess(data.access);
+    } catch (error) {
+      console.error("Error fetching users:", error);
+    }
+  };
+
   //selected user
 
   const fetchUser = async (userId) => {
@@ -118,30 +138,14 @@ const Users = (props) => {
         body: JSON.stringify(formData),
       });
       setShowCreatePanel(false);
+      // Refresh the list of users
+      fetchUsers();
     } catch (error) {
       console.error("Error updating user data:", error);
     }
   };
 
   useEffect(() => {
-    const fetchUsers = async () => {
-      try {
-        const response = await fetch(`${env.siteApi}/panel/user/list`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            "x-access-token": token && token.token,
-          },
-          body: JSON.stringify(body),
-        });
-        const data = await response.json();
-        setUsers(data.filter);
-        setAccess(data.access);
-      } catch (error) {
-        console.error("Error fetching users:", error);
-      }
-    };
-
     fetchUsers();
     fetchProfiles();
   }, []);

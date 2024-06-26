@@ -239,7 +239,8 @@ li.board-task {
   display: flex;
   flex-direction: column;
   border-radius: 8px;
-  overflow: hidden;
+  overflow-y: scroll;
+  overflow-x: hidden;
 }
 .fullPopUp .task-popup {
   max-height: calc(100% - 100px);
@@ -251,6 +252,9 @@ li.board-task {
   width: 100%;
   border-bottom: 1px solid #e6eaf0;
   padding: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
 }
 .nt-header h4 {
   font-size: 1.5rem;
@@ -258,6 +262,7 @@ li.board-task {
   color: #111;
   padding: 0;
   margin: 0;
+  width: 100%;
 }
 .nt-wrapper {
   display: flex;
@@ -407,7 +412,6 @@ li.board-task {
   align-items: center;
   justify-content: center;
   position: relative;
-  margin-bottom: 1.5em;
   gap: 0.5rem;
 }
 .avatar {
@@ -541,6 +545,120 @@ li.board-task {
   color: #ffffff;
   text-decoration: none;
 }
+.ac-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  width: 100%;
+  padding: 0.5rem 1rem;
+
+  .ac-tabs {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    border-bottom: 1px solid grey;
+    
+
+    .tab-item {
+      font-size: 1rem;
+      font-weight: 600;
+      color: grey;
+      padding: 0.2rem 1rem;
+    }
+    .active-tab {
+      color: black;
+      border-bottom:2px solid #268ae4;
+    }
+  }
+  .com-wrapper,.act-wrapper{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+
+    .com-item,.act-item{
+      width: 100%;
+      padding: 0.5rem 0 0;
+      border-bottom: 2px solid rgb(72, 72, 72);
+      position: relative;
+
+      .user{
+        display: block;
+        padding: 0;
+        p{
+          font-size: 1rem;
+          font-weight: 600;
+          color:  #268ae4;
+        }
+
+      }
+      .text{
+        padding: 0.2rem 0;
+        width: 100%;
+        p{
+          font-size: 1rem;
+          color: grey;
+        }
+
+      }
+      .date{
+        display: flex;
+        align-items: center;
+        justify-content: flex-start;
+        gap: 0.2rem;
+        p{
+          font-size: 0.7rem;
+          color: grey;
+        }
+      }
+      .reply{
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        font-weight: 600;
+      }
+      .reply:hover{
+        color: blue;
+      }
+      .text-wrapper{
+        display: flex;
+        gap: 0.5rem;
+        align-items: center ;
+        justify-content: flex-start;
+      }
+    }
+  }
+}
+.com-wrapper .com-new{
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 0.5rem 0;
+  border: 1px solid black;
+  border-radius: 0.5rem;
+  overflow: hidden;
+
+  input{
+    width: 100%;
+    border: none;
+    outline: none;
+    padding: 0.5rem;
+  }
+  i{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 37px;
+    aspect-ratio: 1;
+    margin: 0;
+    background-color: #268ae4;
+    color: white;
+  }
+}
 .nt-col-2 {
   width: 220px;
   background-color: #f4f4f6;
@@ -552,7 +670,7 @@ li.board-task {
   display: flex;
   gap: 10px;
   margin-bottom: 30px;
-  i{
+  i {
     font-size: 1.2rem;
   }
 }
@@ -830,6 +948,10 @@ li.board-task {
   .sidenav.fixed-end + .main-content {
     max-width: calc(100% - 17rem);
   }
+  .sidenav.fixed-end + .wide-main {
+    max-width: calc(100% - 8rem);
+    margin-right: 8.125rem;
+  }
 }
 .m-20 {
   margin: 20px 10px 0;
@@ -859,7 +981,7 @@ li.board-task {
 
 .checkInput {
   width: 82%;
-  max-height:30px;
+  max-height: 30px;
   min-height: auto;
   resize: none;
 }

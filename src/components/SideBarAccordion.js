@@ -22,11 +22,12 @@ function SideBarAccordion(props){
         <aside className={
             `sidenav navbar navbar-vertical navbar-expand-xs border-0 border-radius-xl my-3
             ${props.lang.dir==="rtl"?" fixed-end me-3 rotate-caret bg-gradient-dark ps ps__rtl":
-            " fixed-start ms-3  bg-gradient-dark"}`}
+            " fixed-start ms-3  bg-gradient-dark"} ${props.MiniMenu?"":"mini-sidebar"}`}
             id="sidenav-main">
             <div className="sidenav-header">
             <i className="serviceIcon fas fa-close position-absolute end-0 top-0 "
             onClick={()=>props.setPinMenu(0)}/>
+            {props.MiniMenu?<i onClick={()=>props.setMiniMenu(false)} className="fa-solid fa-caret-right mini-arrow"></i>:<i onClick={()=>props.setMiniMenu(true)} class="fa-solid fa-caret-left mini-arrow"></i>}
             <a className="navbar-brand m-0" href={menuList.title.href} target="_blank">
                 <i className={`serviceIcon fas ${menuList.title.icon}`}></i>
                 <span className="ms-1 font-weight-bold text-white">{menuList.title[props.lang.lang]}</span>

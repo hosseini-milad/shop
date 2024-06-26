@@ -259,4 +259,20 @@ export const findFPage=(user)=>{
   return("login")
 }
 
+export const sortArray=(array,sort,type)=>{
+  var sortArray = []
+  if(!sort) return(array)
+  if(type==1){
+    sortArray = array.sort(function(a, b) {
+      var textA = a[sort].toUpperCase();
+      var textB = b[sort].toUpperCase();
+      return (textA < textB) ? -1 : (textA > textB) ? 1 : 0;
+  })}
+  else{
+    sortArray = array.sort((a,b) => 
+    a[sort] - b[sort]);
+  }
+  return(sortArray)
+}
+
 export default env

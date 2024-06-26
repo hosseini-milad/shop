@@ -12,7 +12,7 @@ function PreOrderItem(props){
             onClick={()=>showDetail?setDetail(0):setDetail(1)}>
             <div className="bu-name">
               {data.userData?<div className="col">
-                <p>{data.userData?data.userData.username:'-'}</p>
+                <p>{data.userData?data.userData.username:'-'}{data.userData.agent?<></>:<i className="fa-solid fa-check-circle blue-check" aria-hidden="true"></i>}</p>
                 <span>{data.userData.meliCode?data.userData.meliCode:"----------"}
                   <i className="fa-solid fa-credit-card no-font" aria-hidden="true"></i>
                 </span>

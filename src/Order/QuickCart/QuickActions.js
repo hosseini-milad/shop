@@ -7,6 +7,7 @@ function QuickActions(props){
     const cart = props.cart
     //console.log(cart.discount)
     const [showDesc,setShowDesc] = useState(0)
+    const [showDescSale,setShowDescSale] = useState(0)
     const [description,setDescription] = useState(cart&&cart.description)
     const [showDisc,setShowDisc] = useState(0)
     const [discount,setDiscount] = useState()
@@ -103,6 +104,10 @@ function QuickActions(props){
         onClick={()=>setShowDesc(1)}>
             <p>توضیحات</p><i className="fa-solid fa-comment"></i>
         </button>
+        <button type="button" className="product-table-btn"
+        onClick={()=>setShowDescSale(1)}>
+            <p>توضیحات فروش</p><i className="fa-solid fa-comment"></i>
+        </button>
         {showDisc?<button type="button" className="product-table-btn">
             <input type="input" placeholder="تخفیف" value={disText}
                 onChange={(e)=>setDisText(e.target.value)}/>
@@ -114,20 +119,14 @@ function QuickActions(props){
             <p>تخفیف</p>
             <i className="fa-solid fa-percent"></i>
         </button>}
-        {/*<button type="button" className="product-table-btn">
-            <p>زمان تحویل</p><i className="fa-solid fa-calendar-days"></i>
-    </button>
-        <button type="button" className="product-table-btn hurry-btn">
-            <div className="fast-order">
-            <p>فوری</p><i className="fa-solid fa-truck-fast"></i>
-            </div>
-            <div className="slow-order display-on">
-            <p>عادی</p><i className="fa-solid fa-truck"></i>
-            </div>
-        </button>*/}
+        
         {showDesc?<DataModal action={(e)=>setDescription(e)}
             close={()=>setShowDesc(0)} color="darkblue"
             buttonText="ثبت توضیحات" def={description} title={"افزودن توضیحات"}/>:
+            <></>}
+        {showDescSale?<DataModal action={(e)=>setDescription(e)}
+            close={()=>setShowDescSale(0)} color="darkblue"
+            buttonText="ثبت توضیحات" def={description} title={"افزودن توضیحات فروش"}/>:
             <></>}
     </div>
     )

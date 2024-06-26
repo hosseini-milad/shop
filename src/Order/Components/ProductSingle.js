@@ -38,8 +38,8 @@ function ProductSingle(props){
               sku:data.sku,
               title:data.title,
               count:count + pack*perBox,
-              price:payValue(data&&data.priceData,props.payValue),
-              payValue:props.payValue}})
+              price:data&&data.priceData},//payValue(data&&data.priceData,props.payValue),
+              payValue:props.payValue})
     }
     console.log(postOptions)
   fetch(env.siteApi + "/panel/faktor/update-cart",postOptions)
@@ -66,7 +66,6 @@ function ProductSingle(props){
           console.log(error)
       })
   }
-  console.log(starStatus)
     return(
         <div className="product-wrapper">
         <div className="product-tile">
