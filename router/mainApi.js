@@ -27,6 +27,7 @@ const bankAccounts = require('../models/product/bankAccounts');
 const updateLog = require('../models/product/updateLog');
 const state = require('../models/main/state');
 const city = require('../models/main/city');
+const quickCart = require('../models/product/quickCart');
 const { ONLINE_URL} = process.env;
  
 router.get('/main', async (req,res)=>{
@@ -67,6 +68,19 @@ schedule.scheduleJob('5 */2 * * *', async() => {
     response = await fetch(ONLINE_URL+"/sepidar-customer",
         {method: 'GET'});
  })
+ schedule.scheduleJob('00 00 12 * * 0-6', async() => { 
+    response = await fetch(ONLINE_URL+"/delete-quick",
+    {method: 'GET'});
+ })
+ router.get('/delete-quick', async (req,res)=>{
+    try{
+        const deleteResult = await quickCart.deleteMany({})
+        res.json({message: deleteResult})
+    }
+    catch(error){
+        res.status(500).json({message: error.message})
+    }
+})
 router.get('/sepidar-product', async (req,res)=>{
     const url=req.body.url
     try{
