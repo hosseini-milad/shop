@@ -147,7 +147,8 @@ function OrderPopUp(props){
                 <div className="orderModalTitle">
                     {(props.customer&&props.customer[0])?
                         props.customer[0].username:"-"} 
-                    <sub>({props.creator?props.creator[0].username:"-"})</sub>
+                    <sub>({(props.creator&&props.creator[0])?
+                        props.creator[0].username:"-"})</sub>
                     <span> شماره سفارش: {data.orderNo}</span>
                     <div className="address-status">
                          آدرس:  

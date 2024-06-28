@@ -22,7 +22,7 @@ function ClassUser(props){
         body:JSON.stringify({userId:userSearch._id,class:content})
       }
     console.log(postOptions)
-  fetch(env.siteApi + "/panel/user/update-user-class",postOptions)
+  fetch(env.siteApi + "/panel/user/update-customer-class",postOptions)
   .then(res => res.json())
   .then(
     (result) => {
@@ -52,7 +52,7 @@ function ClassUser(props){
         body:JSON.stringify({customer:search})
       }
      
-  fetch(env.siteApi + "/panel/user/list",postOptions)
+  fetch(env.siteApi + "/panel/user/list-customers",postOptions)
   .then(res => res.json())
   .then(
     (result) => {
@@ -81,7 +81,7 @@ function ClassUser(props){
             <StyleSelect title={formtrans.customer[props.lang]} direction={props.direction} 
               //defaultValue={content?content.userInfo[0].cName:''} class={"formInput"}
               options={userSearch||[]}
-              label={"fullInfo"||''}
+              label={"username"||''}
               textChange={(e)=>setUserClass(e)}
               action={(e)=>setUserSearch(e)}/>
             <div className="addClassBtn" onClick={addUserToClass}>
