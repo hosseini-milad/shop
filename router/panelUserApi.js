@@ -134,7 +134,7 @@ router.post('/update-customer',jsonParser,async (req,res)=>{
     const data={
         cName:req.body.cName,
         sName:req.body.sName,
-        username:req.body.sName+" "+req.body.cName,
+        //username:req.body.sName+" "+req.body.cName,
         email:req.body.email,
         phone:req.body.phone,
         mobile:req.body.mobile,
@@ -167,6 +167,16 @@ router.post('/update-customer',jsonParser,async (req,res)=>{
     if(req.body.shopUrl1) data.shopUrl1 = req.body.shopUrl1
     if(req.body.shopUrl2) data.shopUrl2 = req.body.shopUrl2
     if(req.body.shopUrl3) data.shopUrl3 = req.body.shopUrl3
+    const userOld = await customer.updateOne({_id: ObjectID(userId)})
+    if(!userOld){
+        res.status(400).json({
+            error:"کاربر پیدا نشد"
+        })
+        return
+    }
+    if(!data.cName) data.cName = userOld.cName
+    if(!data.sName) data.sName = userOld.sName
+    data.username=data.sName+" "+data.cName;
     try{
         const userData = await customer.updateOne({_id: ObjectID(userId)},
         {$set:data})
