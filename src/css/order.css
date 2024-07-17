@@ -638,13 +638,19 @@
   width: 85px;
   text-align: center;
 }
-.sharif-order-main .admin-table-sec .input-tr input {
+.sharif-order-main .admin-table-sec .input-tr input,.sharif-order-main .admin-table-sec .input-tr select {
   outline: none;
   border: none;
   background-color: transparent;
 }
+.search-td{
+  display: flex !important;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 6px;
+}
 .sharif-order-main .admin-table-sec .input-tr .code-input-wrapper {
-  min-width: 120px !important;
+  min-width: 60px !important;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -652,8 +658,11 @@
   border-radius: 0.5rem;
   padding: 0.3rem 0.5rem;
 }
-.sharif-order-main .admin-table-sec .input-tr .code-input-wrapper input {
+.sharif-order-main .admin-table-sec .input-tr .code-input-wrapper input,.sharif-order-main .admin-table-sec .input-tr .code-input-wrapper select {
   width: 150%;
+}
+.anbar-select{
+  width: 25% !important;
 }
 .sharif-order-main .admin-table-sec .amount-input-wrapper {
   align-self: center;
@@ -1309,7 +1318,7 @@ input[type="number"] {
     text-align: center;
   }
   .sharif-order-main .admin-table-sec td .code-input-wrapper {
-    width: 100%;
+    width:50%;
   }
   .sharif-order-main .admin-table-sec td .product-title img {
     display: none;
