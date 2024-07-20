@@ -202,8 +202,9 @@ router.post('/calc-count',auth, async (req,res)=>{
             //console.log(cartCount)
             const storeCount =parseInt(count&&count.quantity)
             const orderCount =parseInt(cartCount)
-            if(count){
-                count.quantity = storeCount-orderCount
+            if(count||count3){
+                if(count)
+                    count.quantity = storeCount-orderCount
                 res.json({count,storeCount,orderCount,count3:count3?count3.quantity:0,
                     perBox:searchProducts[i].perBox?searchProducts[i].perBox:0})
                 return
