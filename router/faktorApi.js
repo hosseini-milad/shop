@@ -196,6 +196,7 @@ router.post('/calc-count',auth, async (req,res)=>{
         const qCartList = await qCart.find(stockId?{stockId:stockId}:{})
         for(var i=0;i<searchProducts.length;i++){
             var count = searchProducts[i].countData.find(item=>(item.Stock==stockId))
+            var count3 = searchProducts[i].countData.find(item=>(item.Stock=="9"))
             var desc = ''
             var cartCount = findCartCount(searchProducts[i].sku,currentCart.concat(qCartList),stockId)
             //console.log(cartCount)
@@ -203,7 +204,8 @@ router.post('/calc-count',auth, async (req,res)=>{
             const orderCount =parseInt(cartCount)
             if(count){
                 count.quantity = storeCount-orderCount
-                res.json({count,storeCount,orderCount})
+                res.json({count,storeCount,orderCount,count3:count3?count3.quantity:0,
+                    perBox:searchProducts[i].perBox?searchProducts[i].perBox:0})
                 return
             }
             else{
