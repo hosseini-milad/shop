@@ -623,6 +623,7 @@
   align-items: flex-start;
   justify-content: flex-start;
   gap: 0.2rem;
+  margin-top: 0.5rem;
 }
 .sharif-order-main .admin-table-sec .code-drop-menu .item-amount p {
   font-size: 0.75rem;
@@ -633,12 +634,22 @@
   width: 60px;
   white-space: nowrap;
 }
+.sharif-order-main .admin-table-sec .code-drop-menu .sec-amount p {
+  background-color: #8ca0b1;
+}
+
 .calcCount{
   width: 80px !important;
 }
 .sharif-order-main .admin-table-sec .code-drop-menu .item-amount p:first-child {
   background-color: var(--light-grey);
   color: #000000;
+  width: 85px;
+  text-align: center;
+}
+.sharif-order-main .admin-table-sec .code-drop-menu .sec-amount p:first-child {
+  background-color: var(--dark-blue-sec);
+  color:white;
   width: 85px;
   text-align: center;
 }
@@ -650,7 +661,7 @@
 .search-td{
   display: flex !important;
   align-items: center;
-  justify-content: flex-end;
+  /* justify-content: flex-end; */
   gap: 6px;
 }
 .sharif-order-main .admin-table-sec .input-tr .code-input-wrapper {

@@ -22,13 +22,13 @@ function QuickSearch(props){
             />
             <i className="fa-solid fa-angle-down"></i>
         </div>
-        <div className="code-input-wrapper anbar-select">
+        {/* <div className="code-input-wrapper anbar-select">
             <select className="dp-input">
                 <option value="">انبار1</option>
                 <option value="">انبار3</option>
             </select>
             
-        </div>
+        </div> */}
         {showDrop?
         <div className="code-drop-menu">
             {data?data.products&&data.products.map((item,i)=>(
