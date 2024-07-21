@@ -1123,8 +1123,9 @@ const checkCart=async(cartItems,stockId,payValue)=>{
     for(var i =0;i<cartItems.length;i++){
         var sku = cartItems[i].sku
         const count = await findItemBySku(sku,currentCart.concat(qCartList),stockId,cartItems[i])
+        const count3 = await findItemBySku(sku,currentCart.concat(qCartList),"9",cartItems[i])
         //console.log(count)
-        if(count<0) 
+        if(count<0&&count3<0) 
             checkCart+=`sku: ${sku}, value: ${count} || `
     }
     return(checkCart)
