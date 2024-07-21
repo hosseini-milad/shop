@@ -821,7 +821,7 @@ const checkAvailable= async(items,stockId)=>{
     if(!stockId) stockId="13"
     const existItem = await productcounts.findOne({ItemID:items.id,Stock:stockId})
     const existItem3 = await productcounts.findOne({ItemID:items.id,Stock:"9"})
-    if(!existItem||!existItem3) return('')
+    if(!existItem&&!existItem3) return('')
     var totalCount = parseInt(existItem&&existItem.quantity)+
                      parseInt(existItem3&&existItem3.quantity)
 
