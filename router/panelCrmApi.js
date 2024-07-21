@@ -324,7 +324,7 @@ const SepidarFunc=async(data,faktorNo,user,stock)=>{
             "ItemRef": toInt(item.id),
             "TracingRef": null,
             "Description":item.description,//item.title+"|"+item.sku,
-            "StockRef":stock,
+            "StockRef":data.cartItems[i].stock?data.cartItems[i].stock:stock,
             "Quantity": toInt(item.count),
             "Fee": toInt(price),
             "Price": normalPriceCount(price,item.count,1),
