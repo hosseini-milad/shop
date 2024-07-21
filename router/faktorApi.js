@@ -150,12 +150,12 @@ router.post('/find-products',auth, async (req,res)=>{
             var count3 = (searchProducts[i].countData.find(item=>item.Stock=="9"))
             var desc = ''
             var cartCount = 0&&findCartCount(searchProducts[i].sku,currentCart.concat(qCartList),stockId)
-            if(count||count3)count.quantity = parseInt(count.quantity)-parseInt(cartCount)
+            if(count)count.quantity = parseInt(count.quantity)-parseInt(cartCount)
             if(count&&(count.quantity>0)||count3){
                 index++
                 desc=searchProducts[i].title+
                 "("+searchProducts[i].sku+")"+
-                "___"+count.quantity
+                "___"+count&&count.quantity
             
                 searchProductResult.push({...searchProducts[i],
                     count:count,description:desc})
