@@ -820,10 +820,13 @@ router.post('/edit-cart',jsonParser, async (req,res)=>{
 const checkAvailable= async(items,stockId)=>{
     if(!stockId) stockId="13"
     const existItem = await productcounts.findOne({ItemID:items.id,Stock:stockId})
-    if(!existItem) return('')
+    const existItem3 = await productcounts.findOne({ItemID:items.id,Stock:"9"})
+    if(!existItem&&!existItem3) return('')
+    var totalCount = parseInt(existItem&&existItem.quantity)+
+                     parseInt(existItem3&&existItem3.quantity)
     //const currentOrder = await FindCurrentExist(items.id)
     //console.log(currentOrder)
-    return(compareCount(existItem&&existItem.quantity,items.count))
+    return(compareCount(totalCount,items.count))
 }
 const createCart=(cartData,cartItem)=>{
     var cartItemTemp=cartData?cartData:[]
