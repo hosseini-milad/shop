@@ -56,6 +56,9 @@ import Users from './pages/Users';
 import FaktorSitePrint from './modules/Print/PrintSiteHolder';
 import PrintSepidar from './modules/Print/PrintSepidar';
 import Printofficial from './modules/Print/Printofficial';
+import Discount from './pages/Discount';
+import OffCustomer from './pages/Offcustomer';
+
 
 
 const cookies = new Cookies();
@@ -119,7 +122,9 @@ root.render(
         <Route path="/policy/detail/:orderId" element={<Layout><PolicyDetailHolder lang={lang}/></Layout>}/>
 
         <Route path="users" element={<Layout><Users lang={lang}/></Layout>}/>
-        
+        <Route path="/Discount" element={<Layout><Discount lang={lang}/></Layout>}/>
+        <Route path="/offcustomer" element={<Layout><OffCustomer lang={lang}/></Layout>}/>
+
         <Route path="/config/sepidar" element={<Layout><Sepidar lang={lang}/></Layout>}/>
         <Route path="/sliders" element={<Layout><Sliders lang={lang}/></Layout>}/>
         <Route path="/sliders/detail/:orderId" element={<Layout><SliderDetailHolder lang={lang}/></Layout>}/>
