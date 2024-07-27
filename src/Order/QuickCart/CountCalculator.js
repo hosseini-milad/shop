@@ -49,9 +49,18 @@ function CountCalculator(props){
             <div className="item-amount">
                 <p>{sku}</p>
                 {findCount?<>
-                    <p>کارتن: {findBox({count:countValue})}</p>
+                    <p>کارتن: {findBox(countValue)}</p>
                     <p>تکی: {countValue.count&&countValue.count.quantity}</p>
                 </>:<p id="calcCount" className="calcCount" onClick={calcCountFunction}>محاسبه تعداد</p>
+                }
+                
+            </div>
+            <div className="item-amount sec-amount">
+                {findCount?<>
+                    <p>انبار3</p>
+                    <p>کارتن: - </p>
+                    <p>تکی: {countValue&&countValue.count3}</p>
+                </>:<></>
                 }
                 
             </div>

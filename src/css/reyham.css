@@ -1321,3 +1321,41 @@ dialog {
   font-size: 2rem;
   cursor: pointer;
 }
+.customer-header{
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+.discount-user-list{
+  width: 100%;
+}
+.discount-list{
+  width: 100%;
+}
+.table-tab {
+  .slidemenu {
+    border-radius: 1rem 1rem 0 0;
+    padding: 0 6px;
+  }
+}
+.discount-user-list {
+  .grey {
+    background-color: #dedede;
+    border-radius: 1rem 1rem 0 0;
+    height: 42.4px;
+  }
+}
+.discount-page {
+  .d-container {
+    display: flex;
+    flex-direction: row;
+    gap: .5rem;
+    width: 100%;
+  }
+}
+.discount-page .cu-avatar{
+  min-width: unset;
+}
+.discount-page .phone-num{
+  text-align: center;
+}

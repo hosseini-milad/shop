@@ -3,6 +3,8 @@ import Cookies from "universal-cookie";
 import StatusBar from "../modules/Components/StatusBar";
 import Paging from "../modules/Components/Paging";
 import errortrans from "../translate/error";
+import SMS from "../components/SMS";
+
 
 import env from "../env";
 import CustomerFilters from "../modules/Customer/CustomerComponent/CustomerFilters";
@@ -23,6 +25,7 @@ function Customers(props) {
   const [content, setContent] = useState("");
   const [filters, setFilters] = useState(getFiltersFromUrl());
   const [showSms, setShowSMS] = useState(0);
+  const [showPop, setShowPop] = useState(0);
   const [loading, setLoading] = useState(0);
   const [update, setUpdate] = useState(0);
   const token = cookies.get(env.cookieName);
@@ -134,7 +137,7 @@ function Customers(props) {
   };
   return (
     <div className="user" style={{ direction: direction }}>
-      <div className="od-header">
+      <div className="od-header customer-header">
         <div className="od-header-info">
           <div className="od-header-name">
             <p>{tabletrans.customers[lang]}</p>
@@ -144,6 +147,25 @@ function Customers(props) {
           <label className="edit-btn" onClick={() => setShowSMS(1)}>
             <i className="fa-solid fa-envelope-o"></i>
             {tabletrans.sendSms[lang]}
+          </label>
+          
+          <label className="edit-btn" onClick={() => setShowPop(1)}>
+          <i className="fa-solid fa-bell"></i>
+            {tabletrans.sendPop[lang]}
+          </label>
+          <label
+            className="edit-btn"
+            onClick={() => (window.location.href = "/Discount")}
+          >
+            <i className="fa-solid fa-percent"></i>
+            {tabletrans.discount[lang]}
+          </label>
+          <label
+            className="edit-btn"
+            onClick={() => (window.location.href = "/offcustomer")}
+          >
+            <i className="fa-solid fa-user"></i>
+            {tabletrans.newCu[lang]}
           </label>
           <label
             className="edit-btn"
@@ -174,7 +196,34 @@ function Customers(props) {
           lang={props.lang}
 
         />
+
       </div>
+      {showSms ? (
+        <SMS
+          title="ارسال پیامک"
+          close={setShowSMS}
+          text={`ارسال پیامک برای ${
+            content.filter && content.filter.length
+          } مشترک`}
+          lang={props.lang}
+          userList={content.filter}
+        />
+      ) : (
+        <></>
+      )}
+      {showPop ? (
+        <SMS
+          title="پاپ آپ"
+          close={setShowPop}
+          text={`ارسال پاپ آپ برای ${
+            content.filter && content.filter.length
+          } مشترک`}
+          lang={props.lang}
+          userList={content.filter}
+        />
+      ) : (
+        <></>
+      )}
     </div>
   );
 }
