@@ -3,6 +3,26 @@ const tabletrans ={
         english: "not entered",
         persian: "وارد نشده"
     },
+    sendPop:{
+        english:"Popups",
+        persian:"پاپ آپ"
+    },
+    newCu:{
+        english: "Non-official Customers",
+        persian: "مشتریان غیررسمی"
+    },
+    message:{
+        english:"Message",
+        persian:"متن پیام"
+    },
+    discounts:{
+        english: "Discounts",
+        persian: "تخفیفات"
+    },
+    credit:{
+        english: "Credit",
+        persian: "اعتبار"
+    },
     customer:{
         english: "Customer",
         persian: "مشتری"
