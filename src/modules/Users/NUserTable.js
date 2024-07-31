@@ -16,10 +16,6 @@ function NUserTable(props){
               <i></i>
             </th>
             <th>
-              <p>{tabletrans.credit[lang]}</p>
-              <i></i>
-            </th>
-            <th>
               <p>{tabletrans.classes[lang]}</p>
               <i></i>
             </th>
@@ -35,7 +31,7 @@ function NUserTable(props){
               <p>{tabletrans.action[lang]}</p>
               <i></i>
             </th>
-            <th></th>
+            
           </tr>
         </thead>
         <tbody>
