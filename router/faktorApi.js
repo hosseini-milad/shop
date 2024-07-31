@@ -822,7 +822,7 @@ const checkAvailable= async(items,stockId)=>{
 
     //console.log(stockId)
     if(!stockId) stockId="13"
-    const existItem = await productcounts.findOne({ItemID:items.id,Stock:"13"})
+    const existItem = await productcounts.findOne({ItemID:items.id,Stock:stockId})
     const existItem3 = await productcounts.findOne({ItemID:items.id,Stock:"9"})
     //console.log(existItem)
     //console.log(existItem3)
