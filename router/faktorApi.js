@@ -825,7 +825,7 @@ const checkAvailable= async(items,stockId)=>{
     var totalCount = existItem?parseInt(existItem.quantity):0
     totalCount += existItem3?parseInt(existItem3.quantity):0
 
-    console.log(totalCount)
+    //console.log(totalCount)
     //const currentOrder = await FindCurrentExist(items.id)
     //console.log(currentOrder)
     return(compareCount(totalCount,items.count))
