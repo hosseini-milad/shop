@@ -44,16 +44,16 @@ function NewUsers(props) {
         "x-access-token": token && token.token,
         userId: token && token.userId,
       },
-      body: JSON.stringify(body),
+      body: JSON.stringify({official:"official"}),
     };
     console.log(postOptions);
-    fetch(env.siteApi + "/panel/user/my-customer", postOptions)
+    fetch(env.siteApi + "/panel/user/list-customers", postOptions)
       .then((res) => res.json())
       .then(
         (result) => {
           setLoading(0);
           setContent("");
-          setTimeout(() => setContent(result.data), 200);
+          setTimeout(() => setContent(result.filter), 200);
         },
         (error) => {
           setLoading(0);
