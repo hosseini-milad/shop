@@ -51,7 +51,7 @@ const calcTasks=async(userId)=>{
 
     //if(userData&&userData.access!=="manager") limitTask= userData.profile
     const crmData = await crmlist.findOne()
-    const crmId = (crmData._id).toString()
+    const crmId = crmData&&(crmData._id).toString()
     taskList = await tasks.aggregate([
         //{$match:limitTask?{profile:limitTask}:{}},
         {$match:{crmId:crmId}},

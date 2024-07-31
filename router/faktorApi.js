@@ -336,6 +336,7 @@ const findCartFunction=async(userId,managerId)=>{
     var qCartDetail = ''
     var description = ''
    for(var c=0;c<(cartData&&cartData.length);c++){
+    
         try{
             for(var j=0;j<cartData[c].cartItems.length;j++){
                 try{var cartTemp = cartData[c].cartItems[j]
@@ -350,11 +351,11 @@ const findCartFunction=async(userId,managerId)=>{
         }
     catch{}
         
-        if(qCartData) {
-            qCartDetail =findQuickCartSum(qCartData.cartItems,
-            qCartData.payValue,qCartData.discount)
-        }
    }
+    if(qCartData) {
+        qCartDetail =findQuickCartSum(qCartData.cartItems,
+        qCartData.payValue,qCartData.discount)
+    }
     return({cart:cartData,cartDetail:cartDetail,userData:"userData",
         quickCart:qCartData,qCartDetail:qCartDetail,qCartAdmin:qCartAdmin})
         }
@@ -818,18 +819,23 @@ router.post('/edit-cart',jsonParser, async (req,res)=>{
     }
 })
 const checkAvailable= async(items,stockId)=>{
+
+    //console.log(stockId)
     if(!stockId) stockId="13"
-    const existItem = await productcounts.findOne({ItemID:items.id,Stock:stockId})
+    const existItem = await productcounts.findOne({ItemID:items.id,Stock:"13"})
     const existItem3 = await productcounts.findOne({ItemID:items.id,Stock:"9"})
+    //console.log(existItem)
+    //console.log(existItem3)
+
     if(!existItem&&!existItem3) return('')
     var totalCount = existItem?parseInt(existItem.quantity):0
     totalCount += existItem3?parseInt(existItem3.quantity):0
 
     //console.log(totalCount)
-    //const currentOrder = await FindCurrentExist(items.id)
+    const currentOrder = await FindCurrentExist(items.id)
     //console.log(currentOrder)
     return(compareCount(totalCount,items.count))
-}
+} 
 const createCart=(cartData,cartItem)=>{
     var cartItemTemp=cartData?cartData:[]
     var repeat = 0

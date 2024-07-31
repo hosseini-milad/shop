@@ -6,7 +6,6 @@ const FindCurrentExist=async(itemId)=>{
     
     var validOrder = []
     for(var i=0;i<currentTasks.length;i++){
-        console.log(currentTasks.length)
         const orderData = await cart.findOne({cartNo:currentTasks[i].orderNo})
         const cartItems = orderData.cartItems
         for(var j=0;j<cartItems.length;j++){
@@ -17,7 +16,7 @@ const FindCurrentExist=async(itemId)=>{
         
         validOrder.push(validOrder)
     }
-    return(validCarts)
+    return(validOrder)
     
     
 }
