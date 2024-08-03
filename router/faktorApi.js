@@ -830,11 +830,11 @@ const checkAvailable= async(items,stockId)=>{
     if(!existItem&&!existItem3) return('')
     var totalCount = existItem?parseInt(existItem.quantity):0
     totalCount += existItem3?parseInt(existItem3.quantity):0
-
+    
     //console.log(totalCount)
-    //const currentOrder = await FindCurrentExist(items.id)
-    //console.log(currentOrder)
-    return(compareCount(totalCount,items.count))
+    const currentOrder = await FindCurrentExist(items.id)
+    var minusCount = currentOrder + items.count
+    return(compareCount(totalCount,minusCount))
 } 
 const createCart=(cartData,cartItem)=>{
     var cartItemTemp=cartData?cartData:[]
