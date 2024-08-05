@@ -828,14 +828,14 @@ const checkAvailable= async(items,stockId)=>{
     if(!stockId) stockId="13"
     const existItem = await productcounts.findOne({ItemID:items.id,Stock:stockId})
     const existItem3 = await productcounts.findOne({ItemID:items.id,Stock:"9"})
-    //console.log(existItem)
-    //console.log(existItem3)
+    console.log(existItem)
+    console.log(existItem3)
 
     if(!existItem&&!existItem3) return('')
     var totalCount = existItem?parseFloat(existItem.quantity):0
     totalCount += existItem3?parseFloat(existItem3.quantity):0
     
-    //console.log(totalCount)
+    console.log(totalCount)
     const currentOrder = await FindCurrentExist(items.id)
     var minusCount = currentOrder + items.count
     return(compareCount(totalCount,minusCount))
