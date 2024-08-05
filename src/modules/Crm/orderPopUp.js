@@ -14,8 +14,8 @@ function OrderPopUp(props){
     const token = props.token
     const [payValue,setPayValue] = useState(defPay)
     const [content,setContent] = useState()
-    console.log(content)
     const [error,setError] = useState({message:'',color:"brown"})
+    console.log(error)
     useEffect(()=>{
         const postOptions={
             method:'post',

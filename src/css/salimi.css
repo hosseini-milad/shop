@@ -5305,7 +5305,7 @@ table {
   position: fixed;
   top: 20px;
   left: 20px;
-  z-index: 100;
+  z-index: 10000;
 }
 .popTitle {
   margin-top: 0;
