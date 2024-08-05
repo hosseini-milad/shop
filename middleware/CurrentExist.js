@@ -8,7 +8,7 @@ const FindCurrentExist=async(itemId)=>{
     var countOrder =0
     for(var i=0;i<currentTasks.length;i++){
         const orderData = await cart.findOne({cartNo:currentTasks[i].orderNo})
-        const cartItems = orderData.cartItems
+        const cartItems = orderData&&orderData.cartItems
         for(var j=0;j<cartItems.length;j++){
             if(cartItems[j].id === itemId){
                 //validOrder.push(cartItems[j]) 
