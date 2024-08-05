@@ -12,7 +12,7 @@ const FindCurrentExist=async(itemId)=>{
         for(var j=0;j<(cartItems&&cartItems.length);j++){
             if(cartItems[j].id === itemId){
                 //validOrder.push(cartItems[j]) 
-                countOrder+=cartItems[j].count
+                countOrder+=parseInt(cartItems[j].count)
             }
         }
         
