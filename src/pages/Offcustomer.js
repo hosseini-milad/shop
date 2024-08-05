@@ -19,23 +19,24 @@ function NewUsers(props) {
   const [showSms, setShowSMS] = useState(0);
   const [update, setUpdate] = useState(0);
   const token = cookies.get(env.cookieName);
+  function handleFilterChange(newFilters) {
+    setFilters(newFilters);
+    updateUrlWithFilters(newFilters);
+  }
+
   useEffect(() => {
     setLoading(1);
     const body = {
-      // offset:filters.offset?filters.offset:"0",
       offset: filters.offset || "0",
-
-      // pageSize:filters.pageSize?filters.pageSize:"10",
       pageSize: filters.pageSize || "10",
-
       customer: filters.customer,
       orderNo: filters.orderNo,
       status: filters.status,
-      profile: filters.profile,
       brand: filters.brand,
       dateFrom: filters.date && filters.date.dateFrom,
       dateTo: filters.date && filters.date.dateTo,
       access: filters.access,
+      official:"no"
     };
     const postOptions = {
       method: "post",
@@ -47,13 +48,13 @@ function NewUsers(props) {
       body: JSON.stringify(body),
     };
     console.log(postOptions);
-    fetch(env.siteApi + "/panel/user/my-customer", postOptions)
+    fetch(env.siteApi + "/panel/user/list-customers", postOptions)
       .then((res) => res.json())
       .then(
         (result) => {
           setLoading(0);
           setContent("");
-          setTimeout(() => setContent(result.data), 200);
+          setTimeout(() => setContent(result), 200);
         },
         (error) => {
           setLoading(0);
@@ -112,10 +113,6 @@ function NewUsers(props) {
   }
 
   // Function to handle filter changes
-  function handleFilterChange(newFilters) {
-    setFilters(newFilters);
-    updateUrlWithFilters(newFilters);
-  }
 
   return (
     <div className="user" style={{ direction: direction }}>
@@ -139,14 +136,14 @@ function NewUsers(props) {
         />
         <div className="user-list">
           <NUserTable
-            userList={content}
+            userList={content.filter}
             lang={props.lang}
             setSelectedUser={() => {}}
           />
         </div>
         <Paging
           content={content}
-          setFilters={setFilters}
+          setFilters={handleFilterChange}
           filters={filters}
           lang={props.lang}
           updateUrlWithFilters={updateUrlWithFilters} // Pass the function as a prop
