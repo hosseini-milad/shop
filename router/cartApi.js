@@ -431,7 +431,6 @@ const findNullCount=async(items,cart)=>{
         var count = findCartCount(items[i].sku,cart)
         count+=parseInt(items[i].count)
         var cmpr = compareCount(itemCount.quantity,count)
-        console.log(itemCount.quantity,count,cmpr)
 
     }
 }

@@ -607,7 +607,6 @@ const findNullCount=async(items,cart)=>{
         var count = findCartCount(items[i].sku,cart)
         count+=parseInt(items[i].count)
         var cmpr = compareCount(itemCount.quantity,count)
-        console.log(itemCount.quantity,count,cmpr)
 
     }
 }
@@ -735,7 +734,7 @@ router.post('/update-faktor',jsonParser, async (req,res)=>{
             faktorNo= await createfaktorNo("F","02","21")
             sepidarQuery[i] = await SepidarFunc(faktorDetail[i],faktorNo)
             addFaktorResult[i] = await sepidarPOST(sepidarQuery[i],"/api/invoices")
-            console.log(addFaktorResult[i])
+            
             if(!addFaktorResult[i]||addFaktorResult[0].Message||!addFaktorResult[i].Number){
                 res.status(400).json({error:addFaktorResult[0].Message?addFaktorResult[0].Message:"error occure",
                     query:sepidarQuery[i],status:"faktor"})

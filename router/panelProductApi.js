@@ -84,7 +84,7 @@ router.post('/list-seprate',jsonParser,async (req,res)=>{
                 if(serviceList[i].category==="Coating"){
                     var price={}
                     try{price =JSON.parse(serviceList[i].servicePrice)}catch{}
-                    console.log(price)
+                    
                     if(price[req.body.brand])
                         coating.push(serviceList[i])
                 }

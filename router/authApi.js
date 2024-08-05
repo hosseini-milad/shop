@@ -378,7 +378,6 @@ router.post('/find-users',auth,jsonParser, async (req,res)=>{
 })
 router.get('/find-users',auth,jsonParser, async (req,res)=>{
   try {
-      console.log(req.headers["userid"])
         const userOwner = await customers.findOne({_id:ObjectID(req.headers["userid"])});
         res.status(200).json({data:userOwner,message:"User Data"})
       } 
@@ -454,7 +453,6 @@ router.post('/change-password',auth,jsonParser, async (req,res)=>{
         confPass: req.body.confPass,
         date: Date.now()
       }
-      console.log(userId)
       if(!data.confPass||!data.newPass){
         res.status(400).json({error:"not enough",message:"اطلاعات کامل نیست"})
         return

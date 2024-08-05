@@ -109,7 +109,6 @@ router.get('/sepidar-product', async (req,res)=>{
             if(matched){ notUpdateProduct++}
             if(modified){updateProduct++}
             if(!matched){
-                console.log(sepidarResult[i].Code)
             const createResult = await products.create({
                 sku:sepidarResult[i].Code,
                 title:sepidarResult[i].Title,

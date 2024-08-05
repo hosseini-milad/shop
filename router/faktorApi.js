@@ -200,13 +200,17 @@ router.post('/calc-count',auth, async (req,res)=>{
             var count = searchProducts[i].countData.find(item=>(item.Stock==stockId))
             var count3 = searchProducts[i].countData.find(item=>(item.Stock=="9"))
             var desc = ''
+            count = count?count:0
+            count3 = count3?count3:0
             var cartCount = findCartCount(searchProducts[i].sku,currentCart.concat(qCartList),stockId)
             //console.log(cartCount)
-            const storeCount =parseInt(count&&count.quantity)
+            const storeCount =count?parseInt(count.quantity):0
             const orderCount =parseInt(cartCount)
             if(count||count3){
                 if(count)
                     count.quantity = storeCount-orderCount
+                else if(count3)
+                    count3.quantity = count3.quantity-orderCount 
                 res.json({count,storeCount,orderCount,count3:count3?count3.quantity:0,
                     perBox:searchProducts[i].perBox?searchProducts[i].perBox:0})
                 return
@@ -839,7 +843,7 @@ const checkAvailable= async(items,stockId)=>{
 const createCart=(cartData,cartItem)=>{
     var cartItemTemp=cartData?cartData:[]
     var repeat = 0
-    for(var i=0;i<cartItemTemp.length;i++){
+    for(var i=0;i<(cartItemTemp&&cartItemTemp.length);i++){
         if(cartItemTemp[i].id===cartItem.id){
             cartItemTemp[i].count=parseInt(cartItemTemp[i].count)+
                                   parseInt(cartItem.count)
@@ -874,7 +878,7 @@ var cartItemTemp=cartData.cartItems
 const editCart=(cartData,cartItem)=>{
     if(!cartData||!cartData.cartItems)return([])
 var cartItemTemp=cartData.cartItems
-    for(var i=0;i<cartItemTemp.length;i++){
+    for(var i=0;i<(cartItemTemp&&cartItemTemp.length);i++){
         if(cartItemTemp[i].id===cartItem.id){
             cartItemTemp[i].count = cartItem.count;
             if(cartItem.price)
@@ -924,7 +928,7 @@ router.post('/update-Item',jsonParser, async (req,res)=>{
         //const cartData = await cart.find({userId:data.userId})
         const qCartData = await quickCart.findOne({userId:data.userId})
         var oldCartItems = qCartData.cartItems
-        for(var i=0;i<oldCartItems.length;i++){
+        for(var i=0;i<(oldCartItems&&oldCartItems.length);i++){
             if(!data.changes)break
             if(oldCartItems[i].id==data.cartID){
                 
@@ -1704,7 +1708,7 @@ router.post('/sepidar-find',jsonParser, async (req,res)=>{
         var userId=""
          
         const OnlineFaktor = await sepidarFetch("data","/api/invoices/"+faktorId) 
-        console.log(OnlineFaktor)
+        
         const userDetail = await customerSchema.findOne({CustomerID:OnlineFaktor.CustomerRef,agent:{$exists:false}})
         const invoice = OnlineFaktor.InvoiceItems
         if(!invoice)
