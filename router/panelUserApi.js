@@ -715,7 +715,7 @@ const SepidarUser=(data)=>{
             "ZipCode": data.postalCode,
             "Latitude": "",//data.nif?data.nif.split(','||'|')[0]:"",
             "Longitude": "",//data.nif?data.nif.split(',')[0]:"",
-            "GUID": "3fa85f64-5717-4562-b3fc-2c"+data.postalCode
+            "GUID": "3fa85f64-5717-4562-b3fc-2c"+data.meliCode
                 }
             ]
         }
