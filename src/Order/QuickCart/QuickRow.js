@@ -87,6 +87,7 @@ function QuickRow(props){
     }
     const saveChanges=()=>{
         updateField(changes)
+        console.log(changes)
         setEditMode(0)
     }
     return(<>
@@ -144,6 +145,10 @@ function QuickRow(props){
                 onClick={()=>setEditMode(1)}></i>
                 <i className="fa-solid fa-comment"
                 onClick={()=>setShowDesc(1)}></i>
+                {data.stock?<i className="fa-solid fa-sign-out storeSelect"
+                onClick={()=>updateField({stock:""})}></i>:
+                <i className="fa-solid fa-sign-out"
+                    onClick={()=>updateField({stock:"9"})}></i>}
                 <i className="fa-solid fa-trash" style={{color: "red"}}
                 onClick={()=>setShowRemove(1)}></i>
             </div>}
