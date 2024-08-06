@@ -12,6 +12,9 @@
   cursor: pointer;
   top: 5px;
 }
+.storeSelect{
+  color:rgb(97, 12, 176)
+}
 .showPassRTL {
   position: absolute;
   left: 20px;

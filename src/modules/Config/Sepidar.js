@@ -79,9 +79,9 @@ function Sepidar(props){
                     <td><input type="button" value="بروزرسانی"
                     className="btn bg-gradient-info my-4 mb-2"
                     onClick={()=>updateSepidar(filter.enTitle)}/></td>
-                    <td>{updateTime&&
+                    <td>{updateTime&&updateTime[filter.enTitle]&&
                     new Date(updateTime[filter.enTitle].date).toLocaleDateString('fa')}<br/>
-                    <smal>{updateTime&&
+                    <smal>{updateTime&&updateTime[filter.enTitle]&&
                     new Date(updateTime[filter.enTitle].date).toLocaleTimeString('fa')}</smal></td>
                     <td>
                         <div className="profiles-icons">
