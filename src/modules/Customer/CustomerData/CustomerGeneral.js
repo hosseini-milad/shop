@@ -153,7 +153,11 @@ function CustomerGeneral(props) {
           if (result.result) {
             setError({ errorText: result.message, errorColor: "green" });
             setTimeout(() => window.location.reload(), 3000);
-          } else console.log(result);
+          }
+          if(result.error){
+            setError({errorText:result.message ,errorColor: "red"})
+            setTimeout(() => setError(0), 3000);
+          }
         },
         (error) => {
           console.log(error);

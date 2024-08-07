@@ -226,11 +226,13 @@
 .errorHandler {
   position: fixed;
   top: 20px;
-  left: 0;
-  background-color: rgba(255, 255, 255, 0.6);
+  left: 20px;
+  background-color: rgba(255, 255, 255);
   padding: 30px 100px;
   font-size: 20px;
   font-weight: bold;
+  border-radius: 1rem;
+  border: 1px solid black;
 }
 .add-btn {
   color: #333;
