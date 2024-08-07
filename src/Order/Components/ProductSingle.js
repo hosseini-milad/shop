@@ -1,5 +1,7 @@
 import { useState } from "react"
 import env, { payValue, stockValue } from "../../env"
+import CountCalculator from "../QuickCart/CountCalculator"
+import CountCalculatorProduct from "../QuickCart/CountCalculatorProduct"
 
 function ProductSingle(props){
   const [starStatus,setStarStatus] = useState(0)
@@ -57,7 +59,7 @@ function ProductSingle(props){
               setTimeout(()=>props.setError({message:'',
                   color:"brown"}),3000)
               //setItem('')
-              //setItemPrice('')
+              //setItemPrice('') 
               setCount(0)
               setPack(0)
           }
@@ -80,40 +82,8 @@ function ProductSingle(props){
             <div className="product-title">
               <p>{data.title}</p>
             </div>
-            <form className="product-option-num">
-              <div className={pack?"inputGroup selectedGroup":"inputGroup"}>
-                <input id={"radio"+props.id} name="radio" type="radio" 
-                  style={{display: "none"}} checked onChange={()=>{}}/>
-                <label htmlFor={"radio"+props.id}>
-                  <p>کارتن</p>
-                  <span>max:
-                    {parseInt(data&&data.countData/data.perBox)}X
-                    {data&&data.perBox}</span>
-                  <div className="input-wrapper">
-                    <i className="fa-solid fa-plus" onClick={()=>updateCount("pack",1)}></i>
-                    <input className="product-num-input" type="number"
-                      value={pack}
-                      onChange={()=>{}}/>
-                    <i className="fa-solid fa-minus" onClick={()=>updateCount("pack",-1)}></i>
-                  </div>
-                </label>
-
-              </div>
-              <div className={count?"inputGroup selectedGroup":"inputGroup"}>
-                <input id={"radios"+props.id} name="radio" type="radio" style={{display: "none"}} />
-                <label htmlFor={"radios"+props.id}>
-                  <p>تکی</p>
-                  <span>max:{data&&data.countData}</span>
-                  <div className="input-wrapper">
-                    <i className="fa-solid fa-plus" onClick={()=>updateCount("single",1)}></i>
-                    <input className="product-num-input" type="number" value={count}
-                    onChange={()=>{}}/>
-                    <i className="fa-solid fa-minus" onClick={()=>updateCount("single",-1)}></i>
-                  </div>
-                </label>
-
-              </div>
-            </form>
+            <CountCalculatorProduct pack={pack} data={data} 
+            updateCount={updateCount} count={count} token={token}/>
             <div className="product-btn-wrapper">
               <div className="product-price">
                 {payValue(data&&data.priceData,props.payValue)}</div>

@@ -1362,3 +1362,13 @@ dialog {
 .discount-page .phone-num{
   text-align: center;
 }
+.countCalculator{
+    background-color: #002a54;
+    border-radius: 5px;
+    text-align: center;
+    padding: 10px 0 5px;
+    color:#fff;
+    line-height: 2;
+    margin-bottom: 43px;
+    cursor: pointer;
+}
