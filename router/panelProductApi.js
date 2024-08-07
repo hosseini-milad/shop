@@ -201,7 +201,7 @@ router.post('/list-product',jsonParser,async (req,res)=>{
             { $match:data.category?{category:data.category}:{}},
             { $match:data.active?{active:true}:{}},
             { $match:data.brand?(data.brand=="unkown")?
-                {$OR:[{brandId:{$exists:false}},{brandId:''}]}:{brandId:data.brand}:{}},
+                {$or:[{brandId:{$exists:false}},{brandId:''}]}:{brandId:data.brand}:{}},
             {$lookup:{from : "brands", 
             localField: "brandId", foreignField: "brandCode", as : "brandInfo"}},
             ])
