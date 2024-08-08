@@ -56,6 +56,11 @@ function ProductTableRow(props){
               </td>
               <td>
                 <div className="order-price">
+                  <p></p>
+                </div>
+              </td>
+              <td>
+                <div className="order-price">
                   <p>{normalPriceCount(product.taxPrice&&product.taxPrice)}</p>
                 </div>
               </td>

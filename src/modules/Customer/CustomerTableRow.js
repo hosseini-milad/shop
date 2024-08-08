@@ -15,8 +15,8 @@ function CustomerTableRow(props){
               <div className="cu-avatar">
               <img src="/img/avatar/avatar_1.jpg" alt="avatar"/>
                 <div className="cu-name">
-                  <p className="name">{user.username?user.username:user.cName}</p>
-                  <p className="email">کد مشتری: {user.cCode}</p>
+                <p className="name">{user.cName} {user.sName}<span>(کد مشتری: {user.cCode})</span></p>
+                <p className="email">{user.Address}</p>
                 </div>
               </div>
             </td>

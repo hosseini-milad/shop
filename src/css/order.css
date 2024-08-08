@@ -241,6 +241,36 @@
   flex-wrap: wrap;
   width: 100%;
 }
+.sharif-order-header .tile-filter-wrapper .product-filter-tile-wrapper{
+  margin-right: 2rem;
+  position: relative;
+
+  .title{
+    position: absolute;
+    height:95.5%;
+    background-color:#c0c0c0;
+    right: -2.8rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    top: 2rem;
+    bottom: 1rem;
+    margin-block: auto;
+    border-radius: 1rem;
+    width: 40px;
+
+    p{
+      transform: rotate(90deg);
+      min-width:fit-content;
+      white-space: nowrap;
+      font-size: 1rem;
+      font-weight: 600;
+      text-align: center;
+      color:#24344d;
+      margin: 0;
+    }
+  }
+}
 .sharif-order-header .filter-tile {
   background-color: #b78428;
   border-radius: 0.3rem;

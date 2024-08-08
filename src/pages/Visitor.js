@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import Cookies from "universal-cookie";
-import VisitorTable from "../modules/visitor/VisitorTable";
+import VisitorCuTable from "../modules/visitor/VisitorCuTable";
 import OrderTable from "../modules/visitor/OrderTable";
 import Paging from "../modules/Components/Paging";
 import errortrans from "../translate/error";
@@ -22,6 +22,7 @@ function Users(props) {
   const [loading, setLoading] = useState(0);
   const [SaveD, setSaveD] = useState(0);
   const [brandOptions,setBrandOptions] = useState()
+  const [VisitorOption,setVisitorOption] = useState()
   //console.log(Dtable)
   const token = cookies.get(env.cookieName);
   useEffect(() => {
@@ -41,6 +42,7 @@ function Users(props) {
       dateFrom: filters.date && filters.date.dateFrom,
       dateTo: filters.date && filters.date.dateTo,
       access: filters.access,
+      // manageId: filters.manageId,
     };
     const postOptions = {
       method: "post",
@@ -59,6 +61,7 @@ function Users(props) {
           setLoading(0);
           setContent("");
           setBrandOptions(result.brandList)
+          setVisitorOption(result.marketList)
           setTimeout(() => setContent(result), 200);
         },
         (error) => {
@@ -110,12 +113,14 @@ function Users(props) {
             lang={props.lang}
             token={token}
             brandOptions={brandOptions}
+            VisitorOption={VisitorOption}
             //setFilters={handleFilterChange}
             options={content.access}
             profiles={content.profilesList}
             currentFilters={filters}
             updateUrlWithFilters={updateUrlWithFilters} // Pass the function as a prop
             setFilters={setFilters}
+            visitorid={setvisitorID}
           />
           <div class="total-wrapper">
             <p>قیمت کل:{normalPriceRound(content.totalPrice)}</p>
@@ -127,10 +132,9 @@ function Users(props) {
         <div className="list-container visitor-list">
           
           <div className="user-list">
-            <VisitorTable
+            <VisitorCuTable
               content={content}
               lang={props.lang}
-              visitorid={setvisitorID}
             />
           </div>
           <Paging

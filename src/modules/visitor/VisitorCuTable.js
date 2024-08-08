@@ -1,9 +1,9 @@
 import { useState } from "react";
 import tabletrans from "../../translate/tables"
-import VisitorTableRow from "./VisitorTableRow"
+import VisitorCuTableRow from "./VisitorCuTableRow"
 
 function VisitorTable(props){
-  const visitorList = props.content.marketList
+  const CuList = props.content.userList
   const lang=props.lang.lang;
     return( 
         <table>
@@ -18,10 +18,9 @@ function VisitorTable(props){
           </tr>
         </thead>
         <tbody>
-        {(visitorList)?visitorList.map((object,i)=>(
-            <VisitorTableRow  
+        {(CuList)?CuList.map((object,i)=>(
+            <VisitorCuTableRow  
               order={object} index={i} key={i} lang={lang}
-              visitorid={props.visitorid}
               
               />
           )):''}
