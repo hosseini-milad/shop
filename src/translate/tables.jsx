@@ -125,6 +125,10 @@ const tabletrans ={
         english: "Item",
         persian: "کالا"
     },
+    countanbar:{
+        english: "Count Anbar",
+        persian: "موجودی"
+    },
     status:{
         english: "Status",
         persian: "وضعیت"

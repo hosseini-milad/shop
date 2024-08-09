@@ -7,6 +7,8 @@ import env from "../../env";
 
 function VisitorFilter(props) {
   const brandOptions = props.brandOptions
+  const VisitorOption = props.VisitorOption
+  const visitorId = props.visitorid
   const [userOptions,setUserOptions] = useState()
   const [userSearch,setUserSearch] = useState()
   const token = props.token
@@ -46,6 +48,13 @@ function VisitorFilter(props) {
     <div className="user-filter d-filter">
       <div className="serach-input">
         <StyleSelect
+          title={tabletrans.visitor[props.lang.lang]}
+          direction={props.lang.dir} options={VisitorOption}
+          label="username"
+          action={(e) => visitorId(e._id)}
+
+        />
+        {/* <StyleSelect
           title={tabletrans.customer[props.lang.lang]}
           direction={props.lang.dir} options={userOptions}
           label="username"
@@ -55,7 +64,7 @@ function VisitorFilter(props) {
             userId: e,
           }))}
 
-        />
+        /> */}
         <StyleSelect
           title={tabletrans.brand[props.lang.lang]}
           direction={props.lang.dir} options={brandOptions}
@@ -66,6 +75,7 @@ function VisitorFilter(props) {
           }))}
 
         />
+        
         <StyleDatePicker
           title={tabletrans.selectDate[props.lang.lang]}
           class="filterComponent"

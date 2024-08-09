@@ -41,6 +41,7 @@ function OrderTableRow(props) {
   return (
     <React.Fragment>
       <tr className={activeAcc ? "activeAccordion" : "accordion"}>
+        <td>{props.index+1}</td>
         <td className="checkBoxStyle">
           <input
             type="checkbox"

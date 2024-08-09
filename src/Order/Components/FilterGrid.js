@@ -122,6 +122,9 @@ function FilterGrid(props){
     return(
     <div className="tile-filter-wrapper">
         <div className="product-filter-tile-wrapper">
+          <div className="title">
+            <p>برند ها</p>
+          </div>
           {brands&&brands.map((brand,i)=>(
           <div className={brandIndex===i?
             "filter-tile main-filter-btn oil-btn tile-active":
@@ -132,6 +135,9 @@ function FilterGrid(props){
           </div>))}
         </div>
         <div className="product-filter-tile-wrapper">
+          <div className="title">
+            <p>دسته بندی</p>
+          </div>
           {cat&&cat.map((category,i)=>(
           <div className={catIndex===i?
             "filter-tile main-filter-btn oil-btn tile-active":
@@ -142,6 +148,9 @@ function FilterGrid(props){
           </div>))}
         </div>
         <div className="product-filter-tile-wrapper">
+          {subCat&&subCat.children?<div className="title">
+            <p>زیرمجموعه</p>
+          </div>:<></>}
           {subCat&&subCat.children&&subCat.children.map((subCat,i)=>(
             <div className={subIndex===i?
                 "filter-tile acc-filter tile-active":"filter-tile acc-filter"} key={i}

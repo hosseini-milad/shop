@@ -13,6 +13,7 @@ function OrderTable(props){
         <table>
         <thead>
         <tr>
+          <th>ردیف</th>
           <th className="checkBoxStyle">
               <input type="checkbox" name="" id=""/></th>
             <th>
