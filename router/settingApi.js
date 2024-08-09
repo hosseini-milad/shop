@@ -119,4 +119,15 @@ router.post('/list-city',jsonParser, async (req,res)=>{
         res.status(500).json({message: error.message})
     }
 })
+
+router.post('/multi-sepidar',jsonParser, async (req,res)=>{
+    
+    try{
+        
+        res.json({data:"api not completed"})
+    }
+    catch(error){
+        res.status(500).json({message: error.message})
+    }
+})
 module.exports = router;

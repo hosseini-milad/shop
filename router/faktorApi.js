@@ -21,6 +21,8 @@ const bankAccounts = require('../models/product/bankAccounts');
 const sepidarFetch = require('../middleware/Sepidar');
 const products = require('../models/product/products');
 const tasks = require('../models/crm/tasks');
+const CheckSale = require('../middleware/CheckSale')
+const profiles = require('../models/auth/ProfileAccess');
 const CreateTask = require('../middleware/CreateTask');
 const NewCode = require('../middleware/NewCode');
 const customers = require('../models/auth/customers');
@@ -315,7 +317,7 @@ router.post('/cart',auth, async (req,res)=>{
     }
 })
 const findCartFunction=async(userId,managerId)=>{
-    
+    const isSale = await CheckSale(managerId)
     try{
         const cartData = await cart.find({manageId:managerId,
         result:{$exists:false}})
@@ -360,11 +362,11 @@ const findCartFunction=async(userId,managerId)=>{
         qCartDetail =findQuickCartSum(qCartData.cartItems,
         qCartData.payValue,qCartData.discount)
     }
-    return({cart:cartData,cartDetail:cartDetail,userData:"userData",
+    return({cart:cartData,cartDetail:cartDetail,userData:"userData",isSale,
         quickCart:qCartData,qCartDetail:qCartDetail,qCartAdmin:qCartAdmin})
         }
     catch{
-        return({cart:[],cartDetail:[],
+        return({cart:[],cartDetail:[],isSale,
             quickCart:'',qCartDetail:''})
     }
 }
@@ -1082,6 +1084,8 @@ router.post('/quick-to-cart',jsonParser, async (req,res)=>{
     }
     try{
         var status = "";
+        const isSale = await CheckSale(data.manageId)
+        data.isSale = isSale
         //const cartAll = await cart.find()
         const userData = await customers.findOne({_id:ObjectID(userId)})
         const qCartData = await quickCart.findOne({userId:userId})
@@ -1101,13 +1105,14 @@ router.post('/quick-to-cart',jsonParser, async (req,res)=>{
             return
         }
         //data.cartItems =pureCartPrice(quickCartItems,qCartData.payValue)
-        data.cartNo = await NewCode("d")
+        data.cartNo = await NewCode(isSale?"s":"d")
         data.stockId = qCartData&&qCartData.stockId
         cartLog.create({...data,ItemID:req.body.cartID,action:"quick to cart"})
         await cart.create(data)
             status = "create cart"
         await quickCart.deleteOne({userId:data.userId})
-        await CreateTask("border",data,userData)
+        if(!isSale)
+            await CreateTask("border",data,userData)
         const cartDetails = await findCartFunction(userId,req.headers['userid'])
         setTimeout(()=>res.json(cartDetails),3000)
         

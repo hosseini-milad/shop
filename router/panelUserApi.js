@@ -64,7 +64,7 @@ router.post('/update-user',jsonParser,async (req,res)=>{
     if(userId=="new")userId=''
     const data={
         username:req.body.username,
-        cName:req.body.cName,
+        cName:req.body.username,
         sName:req.body.sName,
         email:req.body.email,
         phone:req.body.phone,

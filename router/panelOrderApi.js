@@ -23,7 +23,8 @@ router.post('/list',jsonParser,async (req,res)=>{
     var pageSize = req.body.pageSize?req.body.pageSize:"10";
     var offset = req.body.offset?(parseInt(req.body.offset)):0;
     var nowDate = new Date();
-    try{const data={
+    try{
+        const data={
         orderNo:req.body.orderNo,
         status:req.body.status,
         customer:req.body.customer,
@@ -54,65 +55,108 @@ router.post('/list',jsonParser,async (req,res)=>{
     
     dateFromEn.setHours(0, 0, 0, 0)
     const dateToEn = new Date(now3.setDate(now.getDate()-(data.dateTo?data.dateTo:0)));
-    
+    const type= req.body.type
     dateToEn.setHours(23, 59, 0, 0)
-    const reportList = await orders.aggregate([
+    
+    var brandUnique=[]
+    var resultData = []
+    var fullSize = 0
+    var isSale = 0
+    var isWeb = 0
+    if(!type||type=="Visitor"){    
+        var showCart=[]
+        const cartList = await carts.aggregate([
+        { $addFields: { "userId": { "$toObjectId": "$userId" }}},
         {$lookup:{
             from : "customers", 
             localField: "userId", 
             foreignField: "_id", 
             as : "userInfo"
         }},
-        //{ $match:req.body.userId?{userId:ObjectID(req.body.userId)}:{}},
-        //{ $match:data.status?{status:new RegExp('.*' + data.status + '.*')}:{status:{$not:{$regex:/^initial.*/}}}},
-        { $match:data.orderNo?{rxOrderNo:new RegExp('.*' + data.orderNo + '.*')}:{}},
-        //{ $match:data.brand?{brand:data.brand}:{}},
-        { $match:!data.orderNo?{date:{$gte:new Date(data.dateFrom)}}:{}},
-        { $match:!data.orderNo?{date:{$lte:new Date(data.dateTo)}}:{}},
-        { $sort: {"date":-1}},
- 
-        ])
-        const cartList = await carts.aggregate([
-            { $addFields: { "userId": { "$toObjectId": "$userId" }}},
+        {$lookup:{
+            from : "tasks", 
+            localField: "cartNo", 
+            foreignField: "orderNo", 
+            as : "taskInfo"
+        }},
+        { $match:data.orderNo?{cartNo:new RegExp('.*' + data.orderNo + '.*')}:{}},
+        { $match: {$or:[{isSale:{$exists:false}},{isSale:"0"}]}},
+        { $match:!data.orderNo?{initDate:{$gte:new Date(data.dateFrom)}}:{}},
+        { $match:!data.orderNo?{initDate:{$lte:new Date(data.dateTo)}}:{}},
+        { $sort: {"initDate":-1}}
+        
+    ])
+    for(var i=0;i<(cartList&&cartList.length);i++){
+        var totalPrice=findCartSum(cartList[i].cartItems,
+            cartList[i].payValue)
+        showCart.push({...cartList[i],totalCart:totalPrice})
+    }
+    brandUnique = [...new Set(showCart&&
+        showCart.map((item) => item.brand))];
+
+    const orderList = showCart&&showCart.slice(offset,
+        (parseInt(offset)+parseInt(pageSize)))  
+    
+    resultData = orderList
+    }
+    if(type=="WebSite"){
+        isWeb = 1
+        const reportList = await orders.aggregate([
             {$lookup:{
                 from : "customers", 
                 localField: "userId", 
                 foreignField: "_id", 
                 as : "userInfo"
             }},
+            //{ $match:req.body.userId?{userId:ObjectID(req.body.userId)}:{}},
+            //{ $match:data.status?{status:new RegExp('.*' + data.status + '.*')}:{status:{$not:{$regex:/^initial.*/}}}},
+            { $match:data.orderNo?{rxOrderNo:new RegExp('.*' + data.orderNo + '.*')}:{}},
+            //{ $match:data.brand?{brand:data.brand}:{}},
+            { $match:!data.orderNo?{date:{$gte:new Date(data.dateFrom)}}:{}},
+            { $match:!data.orderNo?{date:{$lte:new Date(data.dateTo)}}:{}},
+            { $sort: {"date":-1}},
+        
+            ])
+        var filter1Report = data.customer?
+        reportList.filter(item=>(item.userInfo[0]&&item.userInfo[0].cName&&
+            item.userInfo[0].cName.includes(data.customer))):reportList;
+            
+        resultData = orderList
+    }
+    if(type=="Sale"){   
+        var isSale = 1
+        var showCart=[]
+        const openList = await carts.aggregate([
+            { $addFields: { "userId": { "$toObjectId": "$userId" }}},
             {$lookup:{
-                from : "tasks", 
-                localField: "cartNo", 
-                foreignField: "orderNo", 
-                as : "taskInfo"
-            }},
+                from : "customers", 
+                localField: "userId", 
+                foreignField: "_id", 
+                as : "userInfo"
+            }}, 
+            { $match: {result:{$exists:false}}},
+            { $match: {isSale:"1"}},
             { $match:data.orderNo?{cartNo:new RegExp('.*' + data.orderNo + '.*')}:{}},
         
             { $match:!data.orderNo?{initDate:{$gte:new Date(data.dateFrom)}}:{}},
             { $match:!data.orderNo?{initDate:{$lte:new Date(data.dateTo)}}:{}},
             { $sort: {"initDate":-1}}
             ])
-        const filter1Report = data.customer?
-        reportList.filter(item=>(item.userInfo[0]&&item.userInfo[0].cName&&
-            item.userInfo[0].cName.includes(data.customer))):reportList;
-        const orderList = filter1Report.slice(offset,
-            (parseInt(offset)+parseInt(pageSize)))  
-        
-        const filterCart = data.customer?
-        cartList.filter(item=>(item.userInfo[0]&&item.userInfo[0].username&&
-            item.userInfo[0].username.includes(data.customer))):cartList;
-        const cartListPage = filterCart.slice(offset,
-            (parseInt(offset)+parseInt(pageSize))) 
-        var showCart=[]
-        for(var i=0;i<cartListPage.length;i++){
-            var totalPrice=findCartSum(cartListPage[i].cartItems,
-                cartListPage[i].payValue)
-             
-            showCart.push({...cartListPage[i],totalCart:totalPrice})
+        for(var i=0;i<(openList&&openList.length);i++){
+            var totalPrice=findCartSum(openList[i].cartItems,
+                openList[i].payValue)
+            showCart.push({...openList[i],totalCart:totalPrice})
         }
-        const brandUnique = [...new Set(filter1Report.map((item) => item.brand))];
-       res.json({filter:orderList,brand:brandUnique, cartList:showCart,
-        size:filter1Report.length,cartSize:cartList.length})
+        brandUnique = [...new Set(showCart&&
+            showCart.map((item) => item.brand))];
+    
+        const orderList = showCart&&showCart.slice(offset,
+            (parseInt(offset)+parseInt(pageSize)))      
+        resultData = orderList
+    }
+
+       res.json({filter:resultData,brand:brandUnique, isSale,
+        size:filter1Report&&filter1Report.length}) 
     }
     catch(error){
         res.status(500).json({message: error.message})
