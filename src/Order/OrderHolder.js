@@ -4,10 +4,11 @@ import OrderHeader from "./Components/Header"
 import ProductList from "./Components/ProductList"
 import QuickCartHolder from "./QuickCart/QuickCartHolder"
 import PreOrderHolder from "./PreOrder/PreOrderList"
-import env, { defPay } from "../env"
+import env, { CheckAccess, defPay } from "../env"
 import Cookies from 'universal-cookie';
 import ShowError from "../components/Modal/ShowError"
 import PreQuickHolder from "./PreOrder/PreQuickList"
+import PreOrderSale from "./PreOrder/PreOrderSale"
 const cookies = new Cookies();
 var shopVar = JSON.parse(localStorage.getItem(env.shopExpert));
 
@@ -21,7 +22,8 @@ function OrderHolder(props){
   const [products , setProduct] = useState()
   const [payValue,setPayValue] = useState(defPay)
   const [error,setError] = useState({message:'',color:"brown"})
-  
+  const access = CheckAccess(token,"orders")
+
   useEffect(()=>{
     console.log(Math.random())
     const postOptions={
@@ -104,7 +106,7 @@ function OrderHolder(props){
             console.log(error)
         })
   },[appFilter])
-  
+  console.log(token.profileClass)
   return(
         
   <div className="sharif" style={{direction:"rtl"}}>
@@ -128,8 +130,11 @@ function OrderHolder(props){
         cartDetail={cart&&cart.qCartDetail}/>:<></>}
       <PreQuickHolder token={token} user={user}
         cart={cart}/>
+      {(cart&&cart.isSale)?
+      <PreOrderSale token={token} user={user}
+      cart={cart} access={access}/>:
       <PreOrderHolder token={token} user={user}
-        cart={cart}/>
+        cart={cart}/>}
     </main>
     {error&&error.message?
     <ShowError color={error.color} status={"سفارشات"} 

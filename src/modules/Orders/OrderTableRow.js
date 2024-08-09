@@ -13,7 +13,31 @@ function OrderTableRow(props) {
   const order = props.order;
   const lang = props.lang;
   const cart = props.cart;
-  console.log(order);
+  const updateCheckBox=(field,action)=>{
+    setCheckState(action?false:true)
+    if(!action){
+      if(props.selectedOrder){
+        var index = props.selectedOrder&&
+          props.selectedOrder.length
+        props.setSelectedOrder(existingItems => {
+          return [
+            ...existingItems.slice(0, index),
+            field,
+            ...existingItems.slice(index + 1),
+          ]
+        }) 
+      }
+      else{
+          props.setSelectedOrder([field])
+        
+      }
+    }
+    else{
+      //const cartNo = e.target.getAttribute("cartNo")
+      props.setSelectedOrder(l => 
+        l.filter(item => item.cartNo !== field.cartNo));
+    }
+  }
   return (
     <React.Fragment>
       <tr className={activeAcc ? "activeAccordion" : "accordion"}>
@@ -23,28 +47,17 @@ function OrderTableRow(props) {
             name=""
             id=""
             checked={checkState}
-            onChange={(e) => setCheckState(checkState ? false : true)}
+            onChange={(e) =>  updateCheckBox(order,checkState)}
           />
         </td>
         <td>
           <div className="order-id">
-            {cart ? (
-              <p
-                onClick={() =>
+            <p onClick={() =>
                   (window.location.href = "/orders/detail/" + order.cartNo)
-                }
-              >
+                }>
                 {order.cartNo}
               </p>
-            ) : (
-              <p
-                onClick={() =>
-                  (window.location.href = "/orders/detail/" + order.orderNo)
-                }
-              >
-                {order.orderNo}
-              </p>
-            )}
+            
           </div>
         </td>
         <td>
@@ -86,12 +99,10 @@ function OrderTableRow(props) {
           </div>
         </td>
         <td>
-          {cart ? (
             <div className="or-date">
               <p className="date">
                 {new Date(order.initDate).toLocaleDateString(
-                  props.lang === "persian" ? "fa" : "en"
-                )}
+                  "fa")}
               </p>
               <p className="time">
                 {new Date(order.initDate).toLocaleTimeString(
@@ -99,25 +110,13 @@ function OrderTableRow(props) {
                 )}
               </p>
             </div>
-          ) : (
-            <div className="or-date">
-              <p className="date">
-                {new Date(order.date).toLocaleDateString(
-                  props.lang === "persian" ? "fa" : "en"
-                )}
-              </p>
-              <p className="time">
-                {new Date(order.date).toLocaleTimeString(
-                  props.lang === "persian" ? "fa" : "en"
-                )}
-              </p>
-            </div>
-          )}
+          
         </td>
 
         <td>
           <div className="order-price">
-            <p>{normalPriceRound(order.totalCart.totalPrice)}</p>
+            <p>{normalPriceRound(order.totalCart&&
+              order.totalCart.totalPrice)}</p>
           </div>
         </td>
         <td>

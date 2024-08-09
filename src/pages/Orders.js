@@ -44,6 +44,7 @@ function Orders(props) {
       dateFrom: filters.date && filters.date.dateFrom,
       dateTo: filters.date && filters.date.dateTo,
       access: "manager",
+      type:filters.category
     };
     const postOptions = {
       method: "post",
@@ -54,7 +55,6 @@ function Orders(props) {
       },
       body: JSON.stringify(body),
     };
-    console.log(postOptions);
     fetch(env.siteApi + "/panel/order/list", postOptions)
       .then((res) => res.json())
       .then(
@@ -68,11 +68,11 @@ function Orders(props) {
           console.log(error);
         }
       );
-  }, [filters]);
+  }, [filters,tab]);
   //window.scrollTo(0, 270);},[pageNumber,filters,perPage,refreshTable])
   return (
     <div className="user" style={{ direction: direction }}>
-      <div className="od-header">
+      <div className="od-header odHeaderBtnHolder">
         <div className="od-header-info">
           {/* <input
             type="button"
@@ -82,13 +82,6 @@ function Orders(props) {
           <div className="od-header-name">
             <p>{errortrans.orders[lang]}</p>
           </div>
-          <button
-            className="switch-btn"
-            type="button"
-            onClick={() => setTab(tab ? 0 : 1)}
-          >
-            {tab ? "مشتری" : "ویزیتور"}
-          </button>
         </div>
         <div className="od-header-btn">
           <label
@@ -108,7 +101,8 @@ function Orders(props) {
           status={content.rxStatus}
           setFilters={setFilters}
         />
-        <OrderTab setFilters={handleFilterChange} filters={filters} />
+        <OrderTab setFilters={handleFilterChange} filters={filters} 
+        setTab={setTab} tab={tab}/>
 
         <OrderFilters
           lang={props.lang}
@@ -117,27 +111,16 @@ function Orders(props) {
           options={content.brand}
           filters={filters}
         />
-        {tab === 0 ? (
-          <div className="user-list">
-            {loading ? (
-              env.loader
-            ) : (
-              <OrderTable orders={content ? content.filter : {}} lang={lang} />
-            )}
-          </div>
-        ) : (
-          <div className="user-list">
-            {loading ? (
-              env.loader
-            ) : (
-              <OrderTable
-                orders={content ? content.cartList : {}}
-                lang={lang}
-                cart="1"
-              />
-            )}
-          </div>
-        )}
+        
+        <div className="user-list">
+          {loading ? (
+            env.loader
+          ) : (
+            <OrderTable orders={content ? content.filter : {}} lang={lang} 
+            isSale={content&&content.isSale} token={token}/>
+          )}
+        </div>
+      
         <Paging
           content={content}
           size={tab?content.cartSize:content.size}

@@ -1,40 +1,38 @@
 import { useState } from "react"
 
 function OrderTab(props){
-    const [tab,setTab] = useState(0)
+    //const [tab,setTab] = useState(0)
     return(
       <nav className="slidemenu">
 
       <input type="radio" name="slideItem" id="slide-item-1" className="slide-toggle" checked />
       <label htmlFor="slide-item-1" onClick={()=>{props.setFilters(prevState => ({
-                ...prevState, category:"RX"
-              }));setTab(0)}} className={tab===0?"sliderMenuSelect":"sliderMenu"}>
-        <span>RX</span>
+                ...prevState, category:"Visitor"
+              }));props.setTab(0)}} className={props.tab===0?"sliderMenuSelect":"sliderMenu"}>
+        <span>ویزیتور</span>
         <div className="sliderMenu"></div>
       </label>
 
       <input type="radio" name="slideItem" id="slide-item-2" className="slide-toggle" />
       <label htmlFor="slide-item-2" onClick={()=>{props.setFilters(prevState => ({
-                ...prevState, category:"Stock"
-              }));setTab(1)}} className={tab===1?"sliderMenuSelect":""}>
-        <span>Stock</span>
+                ...prevState, category:"Sale"
+              }));props.setTab(1)}} className={props.tab===1?"sliderMenuSelect":""}>
+        <span>فروشگاه مرکزی</span>
         <div className="sliderMenu"></div>
       </label>
 
       <input type="radio" name="slideItem" id="slide-item-3" className="slide-toggle" />
-      <label htmlFor="slide-item-3"
-        className={tab===2?"sliderMenuSelect":""}>
-        <span>Frame</span>
+      <label htmlFor="slide-item-3" onClick={()=>{props.setFilters(prevState => ({
+                ...prevState, category:"WebSite"
+              }));props.setTab(2)}} 
+        className={props.tab===2?"sliderMenuSelect":""}>
+        <span>وب سایت</span>
+        <div className="sliderMenu"></div>
       </label>
 
       <input type="radio" name="slideItem" id="slide-item-4" className="slide-toggle" />
       <label htmlFor="slide-item-4">
-        <span>Lens</span>
-      </label>
-
-      <input type="radio" name="slideItem" id="slide-item-5" className="slide-toggle" />
-      <label htmlFor="slide-item-5" className="">
-        <span>Services</span>
+        <span>رزرو</span>
       </label>
 
       {/*

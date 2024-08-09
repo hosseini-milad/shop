@@ -1,11 +1,12 @@
 import { useState } from "react"
 import OrderTableRow from "./OrderTableRow"
 import tabletrans from "../../translate/tables"
+import OrderMultiReg from "./OrderComponent/OrderMultiReg"
 
 function OrderTable(props){
   const orders = props.orders
-  console.log(orders)
   const lang=props.lang;
+  const [selectedOrder,setSelectedOrder] = useState()
   const [detail,showDetail] = useState(-1)
   if(!orders||!orders.length) return <main>waiting</main>
   else  return(
@@ -58,11 +59,14 @@ function OrderTable(props){
         <tbody>
           {orders?orders.map((order,i)=>(
             <OrderTableRow detail={detail} showDetail={showDetail} 
-              cart={props.cart}
+              cart={props.cart} setSelectedOrder={setSelectedOrder}
+              selectedOrder={selectedOrder}
               order={order} index={i} key={i} lang={lang}/>
           )):''}
           
         </tbody>
+        {props.isSale?
+        <OrderMultiReg orders={selectedOrder} token={props.token}/>:<></>}
       </table>
 
     )

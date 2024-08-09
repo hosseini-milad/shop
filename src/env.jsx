@@ -1,10 +1,10 @@
 
 const env={
-    // siteApi:'http://localhost:6090/api',
-    siteApi:'https://shopadmin.sharifoilco.com/api',
+    siteApi:'http://localhost:6090/api',
+    // siteApi:'https://shopadmin.sharifoilco.com/api',
     
-    // siteApiUrl:'http://localhost:6090',
-    siteApiUrl:'https://shopadmin.sharifoilco.com',
+    siteApiUrl:'http://localhost:6090',
+    // siteApiUrl:'https://shopadmin.sharifoilco.com',
     cookieName:'shop-login',
     //cookieName:'panel-login',
     //cookieName:'mehr-login',
@@ -77,6 +77,19 @@ export function normalPriceRound(priceText,count,tax){
     return(
         (rawPrice.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",").replace( /^\D+/g, ''))
     )
+}
+export function normalArrayRound(priceArray){
+  if(!priceArray||!priceArray.length) return("")
+
+  var rawPrice = 0
+  for(var i=0;i<priceArray.length;i++){
+    var price = priceArray[i].toString().split('.')[0]
+    rawPrice += parseInt(price.replace(/\D/g,''))
+  }
+  rawPrice = parseInt(Math.round(rawPrice/1000))*1000
+  return(
+      (rawPrice.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",").replace( /^\D+/g, ''))
+  )
 }
 export function notNull(array,item){
   var notNullArray = []
@@ -273,6 +286,13 @@ export const sortArray=(array,sort,type)=>{
     a[sort] - b[sort]);
   }
   return(sortArray)
+}
+export const CheckAccess=(token,pageUrl)=>{
+  if(!token) return('')
+  if(token.access=="manager")return("full")
+  var access= token.profile&&
+    token.profile.find(item=>item.title===pageUrl)
+  return(access?access.state:"")
 }
 
 export default env
