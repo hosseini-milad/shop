@@ -9,6 +9,8 @@ const users = require('../models/auth/users');
 const slider = require('../models/main/slider');
 const state = require('../models/main/state');
 const city = require('../models/main/city');
+const cart = require('../models/product/cart');
+const MergeOrder = require('../middleware/MergeOrder');
 
 router.post('/sliders', async (req,res)=>{
     try{
@@ -121,11 +123,12 @@ router.post('/list-city',jsonParser, async (req,res)=>{
 })
 
 router.post('/multi-sepidar',jsonParser, async (req,res)=>{
-    
+    const orderList = req.body.orderNo
     try{
-        
-        res.json({data:"api not completed"})
-    }
+        const orderDetails = await cart.find({cartNo:{$in:orderList}})
+        const mergeOrder = await MergeOrder(orderDetails.map(item=>item.cartItems))
+        res.json({data:mergeOrder,message:"api not completed"})
+    } 
     catch(error){
         res.status(500).json({message: error.message})
     }
