@@ -1,5 +1,4 @@
 const UpdateMarket=async(marketArray,user,count,price,brandArray,product)=>{
-    console.log(product.brandInfo)
     var index = marketArray.findIndex(item=>item.id==user)
     if(index == -1) return({marketArray,brandArray})
         

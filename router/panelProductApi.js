@@ -694,7 +694,8 @@ router.post('/report-total',jsonParser,auth,async(req,res)=>{
         var userList = []
         var errorPrice=[]
         var marketData = managerList.map(item=>(
-            {name:item.cName,id:item._id,count:0,price:0}))
+            {name:item.cName,username:item.username,
+                id:item._id,count:0,price:0}))
         var brandData = []
         for(var i=0;i<(reportList&&reportList.length);i++){
             var payValue = reportList[i].payValue
