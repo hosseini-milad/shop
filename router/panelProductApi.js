@@ -29,6 +29,7 @@ const faktor = require('../models/product/faktor');
 const cart = require('../models/product/cart');
 const users = require('../models/auth/users');
 const products = require('../models/product/products');
+const UpdateMarket = require('../middleware/UpdateMarket');
 
 router.post('/fetch-service',jsonParser,async (req,res)=>{
     var serviceId = req.body.serviceId?req.body.serviceId:''
@@ -196,7 +197,8 @@ router.post('/list-product',jsonParser,async (req,res)=>{
         pageSize:pageSize
     }
         const products = await ProductSchema.aggregate([
-            { $match:data.title?{title:new RegExp('.*' + data.title + '.*')}:{}},
+            { $match:data.title?{$or:[{title:new RegExp('.*' + data.title + '.*')},
+                {sku:new RegExp('.*' + data.title + '.*', "i")}]}:{}},
             { $match:data.sku?{sku:new RegExp('.*' + data.sku + '.*')}:{}},
             { $match:data.category?{category:data.category}:{}},
             { $match:data.active?{active:true}:{}},
@@ -691,9 +693,13 @@ router.post('/report-total',jsonParser,auth,async(req,res)=>{
         var totalCount = 0
         var userList = []
         var errorPrice=[]
+        var marketData = managerList.map(item=>(
+            {name:item.cName,id:item._id,count:0,price:0}))
+        var brandData = []
         for(var i=0;i<(reportList&&reportList.length);i++){
             var payValue = reportList[i].payValue
             var cartItems=reportList[i].cartItems
+            var manageId =reportList[i].manageId 
             var itemAdd = 0
             for(var j=0;j<(cartItems&&cartItems.length);j++){
                 const productDetail = await products.aggregate([
@@ -729,6 +735,10 @@ router.post('/report-total',jsonParser,auth,async(req,res)=>{
                 }
                 var myItem = cartItems[j]
                 myItem.totalPrice =price*myItem.count
+                resultData= await UpdateMarket(marketData,manageId,myItem.count,
+                    myItem.totalPrice,brandData,cartItems[j].product)
+                marketData = resultData.marketArray
+                brandData = resultData.brandArray
                 var index = productList.findIndex(item=>item.sku==myItem.sku)
                 if(index == -1){
                     productList.push(myItem)
@@ -760,7 +770,7 @@ router.post('/report-total',jsonParser,auth,async(req,res)=>{
         const brandList = await BrandSchema.find().sort({title:-1})
         res.json({data:sortList,marketList:managerList,
             errorPrice:errorPrice,userList,brandList,
-            totalCount:totalCount,totalPrice:totalPrice})
+            totalCount,totalPrice,marketData,brandData})
     }
     catch(error){
         res.status(500).json({message: error.message})

@@ -8,6 +8,7 @@ const orders = require('../models/orders/orders');
 const carts = require('../models/product/cart')
 const products = require('../models/product/products');
 const { findQuickCartSum } = require('./faktorApi');
+const users = require('../models/auth/users');
 const {TaxRate} = process.env
 
 router.post('/sku/find',jsonParser,async (req,res)=>{
@@ -51,19 +52,27 @@ router.post('/list',jsonParser,async (req,res)=>{
     var now2 = new Date();
     var now3 = new Date();
 
+    const adminData = await users.findOne({_id:ObjectID(req.headers["userid"])})
+
     const dateFromEn = new Date(now2.setDate(now.getDate()-(data.dateFrom?data.dateFrom:1)));
     
     dateFromEn.setHours(0, 0, 0, 0)
     const dateToEn = new Date(now3.setDate(now.getDate()-(data.dateTo?data.dateTo:0)));
     const type= req.body.type
     dateToEn.setHours(23, 59, 0, 0)
-    
+    if(!adminData){
+        res.status(400).json({error: "کاربر معتبر نیست"})
+        return
+    }
     var brandUnique=[]
     var resultData = []
     var fullSize = 0
     var isSale = 0
     var isWeb = 0
-    if(!type||type=="Visitor"){    
+    if(!type||type=="Visitor"){  
+        if(adminData.access=="sale"){
+            res.status(400).json({error: "دسترسی به این بخش ندارید"}) 
+        }  
         var showCart=[]
         const cartList = await carts.aggregate([
         { $addFields: { "userId": { "$toObjectId": "$userId" }}},
@@ -123,7 +132,10 @@ router.post('/list',jsonParser,async (req,res)=>{
             
         resultData = orderList
     }
-    if(type=="Sale"){   
+    if(type=="Sale"){     
+        if(adminData.access=="market"){
+            res.status(400).json({error: "دسترسی به این بخش ندارید"}) 
+        }  
         var isSale = 1
         var showCart=[]
         const openList = await carts.aggregate([
