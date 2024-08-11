@@ -5,7 +5,8 @@ const UpdateMarket=async(marketArray,user,count,price,brandArray,product)=>{
     marketArray[index].count += parseFloat(count)
     marketArray[index].price += parseFloat(price)
 
-    var bIndex = brandArray?brandArray.findIndex(item=>item.brandId==product.brandId):-1
+    var bIndex = brandArray?brandArray.findIndex(item=>
+        product.brandId?(item.brandId==product.brandId):item.brandId=="0"):-1
     if(bIndex == -1) {
         brandArray.push({
             name:(product.brandInfo&&product.brandInfo[0])?
