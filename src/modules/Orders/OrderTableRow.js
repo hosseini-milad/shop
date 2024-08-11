@@ -41,7 +41,6 @@ function OrderTableRow(props) {
         l.filter(item => item.cartNo !== field.cartNo));
     }
   }
-  console.log(props.selectedOrder)
   return (
     <React.Fragment>
       <tr className={activeAcc ? "activeAccordion" : "accordion"}>
