@@ -196,7 +196,7 @@ function Products(props) {
           {loading ? (
             env.loader
           ) : (
-            <ProductTable product={content} lang={lang} store={store}/>
+            <ProductTable product={content} lang={lang} store={store} token={token}/>
           )}
         </div>
         <Paging

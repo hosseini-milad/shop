@@ -6,9 +6,32 @@ import ProductQuickDetail from "./ProductComponent/ProductQuickDetail"
 function ProductTableRow(props){
   const [openOption,setOpenOption] = useState(0)
   const [checkState,setCheckState] = useState(false)
+  const [Count,setCount] = useState("")
   const activeAcc = props.index===props.detail
   const product=props.product
   const stockId=props.stockId
+  const token = props.token
+  const CalCount = (sku)=>{
+    const postOptions={
+      method: "post",
+      headers: {
+        "Content-Type": "application/json",
+        "x-access-token": token && token.token,
+        userId: token && token.userId,
+      },
+      body:JSON.stringify({sku:sku})
+  }
+  fetch(env.siteApi + "/panel/faktor/calc-count",postOptions)
+  .then(res => res.json())
+  .then(
+      (result) => {
+        setCount(result)
+      },
+      (error) => {
+          console.log(error)
+      })
+
+  }
   var newStockCount = (product.countTotal.length?product.countTotal:'')
   var stockIndex = stockId?product.countTotal.findIndex(item=>item.Stock==stockId.StockID):-1
   if(newStockCount&&stockIndex!==-1) newStockCount = newStockCount[stockIndex].quantity
@@ -55,8 +78,9 @@ function ProductTableRow(props){
                 </div>
               </td>
               <td>
-                <div className="order-price">
-                  <p></p>
+                <div className="order-num">
+                  {Count?<p>{Count.storeCount}</p>:
+                  <button className="cal-count" onClick={()=>CalCount(product.sku)}>محاسبه</button>}
                 </div>
               </td>
               <td>

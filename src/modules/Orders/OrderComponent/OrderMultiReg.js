@@ -30,7 +30,7 @@ function OrderMultiReg(props){
     }
     return(
       <tbody>
-          <tr>
+          {props.orders&&props.orders.length?<tr>
             <td></td>
             <td colSpan={3}>بانک ها</td>
             <td colSpan={2}>مبلغ کل: {totalPrice}</td>
@@ -38,7 +38,7 @@ function OrderMultiReg(props){
               <input type ="button" className="regSepidar"
               value="ثبت سپیدار" 
               onClick={setSepidarTotal}/></td>
-          </tr>
+          </tr>:<></>}
         </tbody>
     )
 }

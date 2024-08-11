@@ -47,7 +47,7 @@ function ProductTable(props){
         <tbody>
           {productList&&productList.filter?
             productList.filter.map((product,i)=>(
-            <ProductTableRow detail={detail} showDetail={showDetail} 
+            <ProductTableRow detail={detail} showDetail={showDetail} token={props.token}
             product={product} index={i} key={i} lang={lang} stockId={props.store}
             count={productList.quantity[i]} price={productList.price[i]}/>
           )):''}

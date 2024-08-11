@@ -1414,3 +1414,11 @@ dialog {
   border-radius: 4px;
   background-color: lightgreen;
 }
+.cal-count{
+  padding: 0.2rem 0.5rem;
+  border: none;
+  outline: none;
+  border-radius: 0.5rem;
+  background-color: #e53371;
+  color: white;
+}

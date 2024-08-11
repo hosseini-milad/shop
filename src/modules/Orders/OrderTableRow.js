@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react";
 import Status from "../Components/Status";
 import PayStatus from "../Components/PayStatus";
 import { normalPriceCount, normalPriceRound, rxFindCount } from "../../env";
@@ -8,11 +8,14 @@ import OrderQuickCart from "./OrderComponent/OrderQuickCart";
 
 function OrderTableRow(props) {
   const [openOption, setOpenOption] = useState(0);
-  const [checkState, setCheckState] = useState(false);
+  const [checkState, setCheckState] = useState(0);
   const activeAcc = props.index === props.detail;
   const order = props.order;
   const lang = props.lang;
   const cart = props.cart;
+  useEffect(()=>{
+    setCheckState(props.allcheck)
+  },[props.allcheck])
   const updateCheckBox=(field,action)=>{
     setCheckState(action?false:true)
     if(!action){
@@ -38,6 +41,7 @@ function OrderTableRow(props) {
         l.filter(item => item.cartNo !== field.cartNo));
     }
   }
+  console.log(props.selectedOrder)
   return (
     <React.Fragment>
       <tr className={activeAcc ? "activeAccordion" : "accordion"}>
