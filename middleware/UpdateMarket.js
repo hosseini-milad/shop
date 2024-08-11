@@ -8,9 +8,9 @@ const UpdateMarket=async(marketArray,user,count,price,brandArray,product)=>{
     var bIndex = brandArray?brandArray.findIndex(item=>item.brandId==product.brandId):-1
     if(bIndex == -1) {
         brandArray.push({
-            name:product.brandInfo&&product.brandInfo[0]&&
-                product.brandInfo[0].title,
-            brandId:product.brandId,
+            name:(product.brandInfo&&product.brandInfo[0])?
+                product.brandInfo[0].title:"نامشخص",
+            brandId:product.brandId?product.brandId:"0",
             count:count, 
             price:price
         }) 
