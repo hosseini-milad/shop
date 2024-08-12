@@ -24,9 +24,12 @@ function Orders(props) {
   const [content, setContent] = useState("");
   const [filters, setFilters] = useState(getFiltersFromUrl());
   const [loading, setLoading] = useState(0);
-  const [tab, setTab] = useState(0);
+  const [tab, setTab] = useState(localStorage.getItem("orderTab"));
+  const [Error, setError] = useState("");
   const token = cookies.get(env.cookieName);
-
+  useEffect(()=>{
+    localStorage.setItem("orderTab",tab)
+  },[tab])
   function handleFilterChange(newFilters) {
     setFilters(newFilters);
     updateUrlWithFilters(newFilters);
@@ -44,7 +47,8 @@ function Orders(props) {
       dateFrom: filters.date && filters.date.dateFrom,
       dateTo: filters.date && filters.date.dateTo,
       access: "manager",
-      type:filters.category
+      type:filters.category,
+      index:tab
     };
     const postOptions = {
       method: "post",
@@ -59,9 +63,14 @@ function Orders(props) {
       .then((res) => res.json())
       .then(
         (result) => {
+          if(result.error){
+            setLoading(0);
+            setError(result.error)
+          }else{
           setLoading(0);
           setContent("");
           setTimeout(() => setContent(result), 200);
+          }
         },
         (error) => {
           setLoading(0);
@@ -116,7 +125,7 @@ function Orders(props) {
           {loading ? (
             env.loader
           ) : (
-            <OrderTable orders={content ? content.filter : {}} lang={lang} 
+            Error?<p>دسترسی ندارید</p>:<OrderTable orders={content ? content.filter : {}} lang={lang} 
             isSale={content&&content.isSale} token={token}/>
           )}
         </div>
