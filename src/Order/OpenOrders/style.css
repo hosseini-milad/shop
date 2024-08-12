@@ -1,0 +1,31 @@
+.wrapper-open-orders {
+  margin-top: 30px;
+}
+.wrapper-open-orders__header {
+  font-size: 20px;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.selected {
+  width: 5%;
+}
+.customer {
+  width: 10%;
+}
+.register-date,
+.count,
+.price {
+  width: 10%;
+}
+.action {
+  width: 15%;
+}
+.icon-color {
+  color: #84a1bf;
+}
+.remove-single-order {
+  margin-left: 10px;
+}

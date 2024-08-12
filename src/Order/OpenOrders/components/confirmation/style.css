@@ -1,0 +1,26 @@
+.wrapper-confirmation-dialog {
+  width: 400px;
+
+  padding: 10px;
+}
+.confirm-title {
+  padding-bottom: 5px;
+}
+.seperator {
+  border-color: #706e6e;
+}
+.confirm-description {
+  font-size: 14px;
+  margin-top: 10px;
+}
+.confirm-actions {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 15px;
+  margin-top: 20px;
+}
+
+.persian-font {
+  font-family: "vazir";
+}

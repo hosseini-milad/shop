@@ -5,7 +5,6 @@ import Paging from "../modules/Components/Paging";
 import errortrans from "../translate/error";
 import SMS from "../components/SMS";
 
-
 import env from "../env";
 import CustomerFilters from "../modules/Customer/CustomerComponent/CustomerFilters";
 import CustomerTable from "../modules/Customer/CustomerTable";
@@ -148,9 +147,9 @@ function Customers(props) {
             <i className="fa-solid fa-envelope-o"></i>
             {tabletrans.sendSms[lang]}
           </label>
-          
+
           <label className="edit-btn" onClick={() => setShowPop(1)}>
-          <i className="fa-solid fa-bell"></i>
+            <i className="fa-solid fa-bell"></i>
             {tabletrans.sendPop[lang]}
           </label>
           <label
@@ -194,9 +193,7 @@ function Customers(props) {
           updateUrlWithFilters={updateUrlWithFilters} // Pass the function as a prop
           filters={filters}
           lang={props.lang}
-
         />
-
       </div>
       {showSms ? (
         <SMS
