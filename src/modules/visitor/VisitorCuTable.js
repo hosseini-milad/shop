@@ -23,11 +23,10 @@ function VisitorTable(props){
               order={object} index={i} key={i} lang={lang}
               
               />
-          )):''}
-          
-        </tbody>
-      </table>
-
-    )
+            ))
+          : ""}
+      </tbody>
+    </table>
+  );
 }
-export default VisitorTable
+export default VisitorTable;

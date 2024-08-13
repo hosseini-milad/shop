@@ -104,22 +104,20 @@
       color: rgb(87, 85, 85);
     }
 
-    .info-holder{
+    .info-holder {
       display: flex;
       align-items: flex-start;
       flex-wrap: wrap;
       gap: 6px;
 
-      span{
+      span {
         width: 40%;
         display: flex;
         align-items: center;
         justify-content: center;
         font-size: 0.65rem;
-        
-        
       }
-      .id-icon{
+      .id-icon {
         color: black !important;
         margin: 0;
         padding: 0 0.2rem 0;
@@ -668,7 +666,7 @@
   background-color: #8ca0b1;
 }
 
-.calcCount{
+.calcCount {
   width: 80px !important;
 }
 .sharif-order-main .admin-table-sec .code-drop-menu .item-amount p:first-child {
@@ -679,16 +677,17 @@
 }
 .sharif-order-main .admin-table-sec .code-drop-menu .sec-amount p:first-child {
   background-color: var(--dark-blue-sec);
-  color:white;
+  color: white;
   width: 85px;
   text-align: center;
 }
-.sharif-order-main .admin-table-sec .input-tr input,.sharif-order-main .admin-table-sec .input-tr select {
+.sharif-order-main .admin-table-sec .input-tr input,
+.sharif-order-main .admin-table-sec .input-tr select {
   outline: none;
   border: none;
   background-color: transparent;
 }
-.search-td{
+.search-td {
   display: flex !important;
   align-items: center;
   /* justify-content: flex-end; */
@@ -703,10 +702,11 @@
   border-radius: 0.5rem;
   padding: 0.3rem 0.5rem;
 }
-.sharif-order-main .admin-table-sec .input-tr .code-input-wrapper input,.sharif-order-main .admin-table-sec .input-tr .code-input-wrapper select {
+.sharif-order-main .admin-table-sec .input-tr .code-input-wrapper input,
+.sharif-order-main .admin-table-sec .input-tr .code-input-wrapper select {
   width: 150%;
 }
-.anbar-select{
+.anbar-select {
   width: 25% !important;
 }
 .sharif-order-main .admin-table-sec .amount-input-wrapper {
@@ -1136,7 +1136,7 @@
   justify-content: center;
   gap: 0.2rem;
 
-  p{
+  p {
     font-size: 0.85rem;
   }
 }
@@ -1363,7 +1363,7 @@ input[type="number"] {
     text-align: center;
   }
   .sharif-order-main .admin-table-sec td .code-input-wrapper {
-    width:50%;
+    width: 50%;
   }
   .sharif-order-main .admin-table-sec td .product-title img {
     display: none;
@@ -1495,4 +1495,20 @@ input[type="number"] {
     flex-direction: row;
     gap: 1rem;
   }
+}
+
+.view-open-order {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  user-select: none;
+  border-radius: 8px;
+  background-color: #8598b6;
+  width: 105px;
+  height: 40px;
+  font-size: 15px;
+  margin-left: 10px;
+  color: #fff;
+  outline: unset;
 }

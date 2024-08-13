@@ -1422,3 +1422,7 @@ dialog {
   background-color: #e53371;
   color: white;
 }
+.css-1lbgfbl-MuiResponsiveChart-container{
+  width: 350px !important;
+  height: 300px !important;
+}
