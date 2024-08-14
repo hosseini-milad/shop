@@ -173,15 +173,15 @@ function Users(props) {
           
           <Grid item xs={12}>
             <PieChart
-              width={500}
-              height={400}
+              width={350}
+              height={300}
               series={[
                 {
                   arcLabel: (item) => `${item.name} `,
                   arcLabelMinAngle: 30,
                   data: brands,
                   innerRadius: 20,
-                  outerRadius: 200,
+                  outerRadius: 120,
                   paddingAngle: 0,
                   cornerRadius: 10,
                   startAngle: -180,
@@ -205,15 +205,15 @@ function Users(props) {
           <Grid item xs={12}>
             {visitorList.length > 0 && (
               <PieChart
-                width={500}
-                height={400}
+                width={350}
+                height={300}
                 series={[
                   {
                     arcLabel: (item) => `${item.username} (${item.value})`,
                     arcLabelMinAngle: 30,
                     data: visitorList,
-                    innerRadius: 30,
-                    outerRadius: 200,
+                    innerRadius: 20,
+                    outerRadius: 120,
                     paddingAngle: 0,
                     cornerRadius: 10,
                     startAngle: -180,
