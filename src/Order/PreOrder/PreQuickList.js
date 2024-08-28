@@ -2,7 +2,7 @@ import PreQuickItem from "./PreQuickItem"
 
 function PreQuickHolder(props){
   const cart= props.cart&&props.cart.qCartAdmin
-  console.log(cart)
+  //console.log(cart)
   if(!cart||cart.length<=1) return(<></>)
   else return(
       <section className="orders-sec">

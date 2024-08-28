@@ -4,7 +4,8 @@ import OrderHeader from "./Components/Header";
 import ProductList from "./Components/ProductList";
 import QuickCartHolder from "./QuickCart/QuickCartHolder";
 import PreOrderHolder from "./PreOrder/PreOrderList";
-import env, { defPay } from "../env";
+import PreOrderSale from "./PreOrder/PreOrderSale"
+import env, {CheckAccess, defPay } from "../env";
 import Cookies from "universal-cookie";
 import ShowError from "../components/Modal/ShowError";
 import PreQuickHolder from "./PreOrder/PreQuickList";
@@ -21,6 +22,7 @@ function OrderHolder(props) {
   const [products, setProduct] = useState();
   const [payValue, setPayValue] = useState(defPay);
   const [error, setError] = useState({ message: "", color: "brown" });
+  const access = CheckAccess(token,"orders")
 
   useEffect(() => {
     console.log(Math.random());
@@ -107,7 +109,7 @@ function OrderHolder(props) {
         }
       );
   }, [appFilter]);
-
+  console.log(cart)
   return (
     <div className="sharif" style={{ direction: "rtl" }}>
       <header className="sharif-order-header">
@@ -158,7 +160,12 @@ function OrderHolder(props) {
           <></>
         )}
         <PreQuickHolder token={token} user={user} cart={cart} />
-        <PreOrderHolder token={token} user={user} cart={cart} />
+        
+        {(cart&&cart.isSale)?
+      <PreOrderSale token={token} user={user}
+      cart={cart} access={access}/>:
+      <PreOrderHolder token={token} user={user}
+        cart={cart}/>}
       </main>
       {error && error.message ? (
         <ShowError

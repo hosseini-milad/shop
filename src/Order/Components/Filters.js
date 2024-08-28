@@ -8,7 +8,6 @@ function OrderFilters(props) {
   const brands =
     filters && filters.brands ? notNull(filters.brands, "title") : [];
   const cat = filters && filters.cats;
-  console.log(brands);
   const updateFilter = (kind, value) => {
     //console.log(kind ,value)
     props.setFilters((prevState) => ({
