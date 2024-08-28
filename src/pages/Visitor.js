@@ -10,6 +10,7 @@ import VisitorFilters from "../modules/visitor/VisitorFilters";
 import { PieChart, pieArcLabelClasses } from "@mui/x-charts/PieChart";
 import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
+import CustomerTable from "../modules/visitor/customers/CustomerTable";
 const cookies = new Cookies();
 
 function Users(props) {
@@ -25,6 +26,7 @@ function Users(props) {
   const [sample, setSample] = useState([]);
   const [brands, setBrands] = useState([]);
   const [visitorList, setVisitorList] = useState([]);
+  const [customers, setCustomers] = useState([]);
   //console.log(Dtable)
   const token = cookies.get(env.cookieName);
   useEffect(() => {
@@ -65,6 +67,7 @@ function Users(props) {
           setContent(result);
           handelVisitorInformation(result);
           handlerBrand(result.brandData);
+          setCustomers(result.userList);
           // setTimeout(() => setContent(result), 200);
         },
         (error) => {
@@ -160,108 +163,117 @@ function Users(props) {
           </div>
         </div>
       </div>
-      <Box sx={{ flexGrow: 1 }}>
+      <Box>
         <Grid container spacing={2}>
-          <Grid item xs={4}>
-            <PieChart
-              width={500}
-              height={400}
-              series={[
-                {
-                  arcLabel: (item) => `${item.name} `,
-                  arcLabelMinAngle: 30,
-                  data: brands,
-                  innerRadius: 20,
-                  outerRadius: 200,
-                  paddingAngle: 0,
-                  cornerRadius: 10,
-                  startAngle: -180,
-                  endAngle: 180,
-                },
-              ]}
-              sx={{
-                [`& .${pieArcLabelClasses.root}`]: {
-                  fill: "white",
-                  fontSize: "12px",
-                },
-              }}
-              slotProps={{
-                legend: { hidden: true },
-              }}
-              onItemClick={(event, pieItemIdentifier, item) =>
-                selectedSingleBrand(event, pieItemIdentifier, item)
-              }
-            />
-          </Grid>
-          <Grid item xs={8}>
-            <div
-              className="list-container visitor-list"
-              style={{ width: "100%" }}
-            >
-              <div className="user-list">
-                <OrderTable lang={props.lang} content={content} />
+          <Grid item xs={12} md={6}>
+            <Grid item xs={12} md={12} className="wrapper-visitor-chart">
+              {brands.length > 0 && (
+                <PieChart
+                  width={500}
+                  height={400}
+                  series={[
+                    {
+                      arcLabel: (item) => `${item.name} `,
+                      arcLabelMinAngle: 30,
+                      data: brands,
+                      innerRadius: 20,
+                      outerRadius: 200,
+                      paddingAngle: 0,
+                      cornerRadius: 10,
+                      startAngle: -180,
+                      endAngle: 180,
+                    },
+                  ]}
+                  sx={{
+                    [`& .${pieArcLabelClasses.root}`]: {
+                      fill: "white",
+                      fontSize: "12px",
+                    },
+                  }}
+                  slotProps={{
+                    legend: { hidden: true },
+                  }}
+                  onItemClick={(event, pieItemIdentifier, item) =>
+                    selectedSingleBrand(event, pieItemIdentifier, item)
+                  }
+                />
+              )}
+            </Grid>
+            <Grid item xs={12} md={12}>
+              <div
+                className="list-container visitor-list"
+                style={{ width: "100%" }}
+              >
+                <div className="user-list">
+                  {/* <OrderTable lang={props.lang} content={content} /> */}
+                  <CustomerTable lang={props.lang} userList={customers} />
+                </div>
               </div>
-            </div>
+            </Grid>
           </Grid>
-        </Grid>
-      </Box>
+          <Grid item xs={12} md={6}>
+            <Grid item xs={12} md={12} className="wrapper-visitor-chart">
+              {/* ${item.username} */}
+              {visitorList.length > 0 && (
+                <PieChart
+                  width={500}
+                  height={400}
+                  series={[
+                    {
+                      arcLabel: (item) => `(${item.value})`,
+                      arcLabelMinAngle: 30,
+                      data: visitorList,
+                      innerRadius: 30,
+                      outerRadius: 200,
+                      paddingAngle: 0,
+                      cornerRadius: 10,
+                      startAngle: -180,
+                      endAngle: 180,
+                    },
+                  ]}
+                  sx={{
+                    [`& .${pieArcLabelClasses.root}`]: {
+                      fill: "white",
+                      fontWeight: "bold",
+                      fontSize: "12px",
+                    },
+                  }}
+                  // slotProps={{
+                  //   legend: { hidden: true },
+                  // }}
+                  onItemClick={(event, pieItemIdentifier, item) =>
+                    selectedVisitor(event, pieItemIdentifier, item)
+                  }
+                />
+              )}
+            </Grid>
 
-      <Box sx={{ flexGrow: 1 }}>
-        <Grid container spacing={2}>
-          <Grid item xs={4}>
-            {visitorList.length > 0 && (
-              <PieChart
-                width={500}
-                height={400}
-                series={[
-                  {
-                    arcLabel: (item) => `${item.username} (${item.value})`,
-                    arcLabelMinAngle: 30,
-                    data: visitorList,
-                    innerRadius: 30,
-                    outerRadius: 200,
-                    paddingAngle: 0,
-                    cornerRadius: 10,
-                    startAngle: -180,
-                    endAngle: 180,
-                  },
-                ]}
-                sx={{
-                  [`& .${pieArcLabelClasses.root}`]: {
-                    fill: "white",
-                    fontWeight: "bold",
-                    fontSize: "12px",
-                  },
-                }}
-                slotProps={{
-                  legend: { hidden: true },
-                }}
-                onItemClick={(event, pieItemIdentifier, item) =>
-                  selectedVisitor(event, pieItemIdentifier, item)
-                }
+            <Grid item xs={12} md={12}>
+              <div
+                className="list-container visitor-list"
+                style={{ width: "100%" }}
+              >
+                <div className="user-list">
+                  <OrderTable lang={props.lang} content={content} />
+                </div>
+              </div>
+              <Paging
+                content={content}
+                setFilters={setFilters}
+                filters={filters}
+                lang={props.lang}
+                updateUrlWithFilters={updateUrlWithFilters} // Pass the function as a prop
               />
-            )}
-          </Grid>
-
-          <Grid item xs={8}>
-            <div
-              className="list-container visitor-list"
-              style={{ width: "100%" }}
-            >
-              <div className="user-list">
-                <OrderTable lang={props.lang} content={content} />
-              </div>
-            </div>
-            <Paging
-              content={content}
-              setFilters={setFilters}
-              filters={filters}
-              lang={props.lang}
-              updateUrlWithFilters={updateUrlWithFilters} // Pass the function as a prop
-            />
+            </Grid>
           </Grid>
         </Grid>
       </Box>
+
+      {/* <Box>
+        <Grid container spacing={2}>
+          
+        </Grid>
+      </Box> */}
 
       <div class="d-container" style={{ display: "none" }}>
         <div className="list-container visitor-list">
