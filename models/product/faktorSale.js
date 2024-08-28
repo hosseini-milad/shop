@@ -14,5 +14,5 @@ const FaktorSale = new Schema({
     totalPrice:{ type: String },
     InvoiceID:{ type: String },
     totalCount:{ type: String }
-})
+}) 
 module.exports = mongoose.model('faktorSale',FaktorSale);

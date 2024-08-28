@@ -72,6 +72,7 @@ router.post('/list',jsonParser,async (req,res)=>{
     if(!type||type=="Visitor"){  
         if(adminData.access=="sale"){
             res.status(400).json({error: "دسترسی به این بخش ندارید"}) 
+            return
         }  
         var showCart=[]
         const cartList = await carts.aggregate([
@@ -106,7 +107,7 @@ router.post('/list',jsonParser,async (req,res)=>{
     const orderList = showCart&&showCart.slice(offset,
         (parseInt(offset)+parseInt(pageSize)))  
     
-    resultData = orderList
+    resultData = orderList 
     }
     if(type=="WebSite"){
         isWeb = 1
@@ -133,8 +134,10 @@ router.post('/list',jsonParser,async (req,res)=>{
         resultData = orderList
     }
     if(type=="Sale"){     
+        console.log(adminData)
         if(adminData.access=="market"){
-            res.status(400).json({error: "دسترسی به این بخش ندارید"}) 
+            res.status(400).json({error: "دسترسی به این بخش ندارید"})
+            return 
         }  
         var isSale = 1
         var showCart=[]

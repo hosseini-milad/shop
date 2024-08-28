@@ -318,7 +318,7 @@ router.post('/cart',auth, async (req,res)=>{
 })
 const findCartFunction=async(userId,managerId)=>{
     const isSale = await CheckSale(managerId)
-    try{
+    try{ 
         const cartData = await cart.find({manageId:managerId,
         result:{$exists:false}})
         .sort({"initDate":-1}).limit(10).lean()

@@ -74,7 +74,8 @@ router.post('/update-user',jsonParser,async (req,res)=>{
         classess:req.body.classes,
         profile:req.body.profile,
         access:req.body.access,
-    }
+        password:req.body.password
+    } 
     try{
         const userData = userId?await user.updateOne({_id: ObjectID(userId)},
         {$set:data}):
