@@ -342,8 +342,6 @@ const findCartFunction=async(userId,managerId)=>{
     var qCartDetail = ''
     var description = ''
    for(var c=0;c<(cartData&&cartData.length);c++){
-        var canEdit = 0
-        if(cartData[c].status == "inprogress") canEdit = 1
         
         try{
             for(var j=0;j<cartData[c].cartItems.length;j++){
@@ -354,7 +352,7 @@ const findCartFunction=async(userId,managerId)=>{
                 catch{}
             }
             const userData = await customers.findOne({_id:ObjectID(cartData[c].userId)})
-            cartData[c] = {...cartData[c],userData:userData,canEdit}
+            cartData[c] = {...cartData[c],userData:userData}
             cartDetail.push(findCartSum(cartData[c].cartItems))
         }
     catch{}
@@ -640,6 +638,9 @@ router.post('/cart-find', async (req,res)=>{
             as : "managerData"
         }}])
         const cartData =cartList&&cartList[0] 
+        var canEdit = 0
+        if(cartList.status == "inprogress") canEdit = 1
+        
         if(!cartData){
             res.status(400).json({error:"error",message:"آیتم ها با مشکل مواجه شدند"})
              return
@@ -653,7 +654,7 @@ router.post('/cart-find', async (req,res)=>{
         var orderData=findQuickCartSum(cartItems,cartData.payValue,
             cartData.discount)
         
-        res.json({cart:cartList,orderData:orderData})
+        res.json({cart:cartList,orderData:orderData,canEdit})
     }
     catch(error){
         res.status(500).json({message: error.message})
