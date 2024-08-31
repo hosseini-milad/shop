@@ -342,7 +342,8 @@ const findCartFunction=async(userId,managerId)=>{
     var qCartDetail = ''
     var description = ''
    for(var c=0;c<(cartData&&cartData.length);c++){
-    
+        if(cartData[c].status == "inprogress") cartData[c].canEdit = 1
+        else cartData[c].canEdit = 0
         try{
             for(var j=0;j<cartData[c].cartItems.length;j++){
                 try{var cartTemp = cartData[c].cartItems[j]
