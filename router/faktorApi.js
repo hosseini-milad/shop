@@ -29,7 +29,7 @@ const customers = require('../models/auth/customers');
 const brand = require('../models/product/brand');
 const FindCurrentCart = require('../middleware/CurrentCart');
 const FindCurrentExist = require('../middleware/CurrentExist');
-const OrderToCart = require('../middleware/OrderToCart');
+const OrderToTask = require('../middleware/OrderToTask');
 const {TaxRate} = process.env
 
 router.post('/products', async (req,res)=>{
@@ -640,8 +640,8 @@ router.post('/cart-find', async (req,res)=>{
         }}])
         const cartData =cartList&&cartList[0] 
         var canEdit = 0
-        var taskData = await OrderToCart(cartData.cartNo)
-        if(taskData&&taskData.status== "inprogress") 
+        var taskData = await OrderToTask(cartData.cartNo)
+        if(taskData&&taskData.taskStep== "inprogress") 
             canEdit = 1
         
         if(!cartData){
