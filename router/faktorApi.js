@@ -342,8 +342,9 @@ const findCartFunction=async(userId,managerId)=>{
     var qCartDetail = ''
     var description = ''
    for(var c=0;c<(cartData&&cartData.length);c++){
-        if(cartData[c].status == "inprogress") cartData[c].canEdit = 1
-        else cartData[c].canEdit = 0
+        var canEdit = 0
+        if(cartData[c].status == "inprogress") canEdit = 1
+        
         try{
             for(var j=0;j<cartData[c].cartItems.length;j++){
                 try{var cartTemp = cartData[c].cartItems[j]
@@ -353,7 +354,7 @@ const findCartFunction=async(userId,managerId)=>{
                 catch{}
             }
             const userData = await customers.findOne({_id:ObjectID(cartData[c].userId)})
-            cartData[c] = {...cartData[c],userData:userData}
+            cartData[c] = {...cartData[c],userData:userData,canEdit}
             cartDetail.push(findCartSum(cartData[c].cartItems))
         }
     catch{}
