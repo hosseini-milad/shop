@@ -29,6 +29,7 @@ const customers = require('../models/auth/customers');
 const brand = require('../models/product/brand');
 const FindCurrentCart = require('../middleware/CurrentCart');
 const FindCurrentExist = require('../middleware/CurrentExist');
+const OrderToCart = require('../middleware/OrderToCart');
 const {TaxRate} = process.env
 
 router.post('/products', async (req,res)=>{
@@ -639,7 +640,9 @@ router.post('/cart-find', async (req,res)=>{
         }}])
         const cartData =cartList&&cartList[0] 
         var canEdit = 0
-        if(cartData.status == "inprogress") canEdit = 1
+        var taskData = await OrderToCart(cartData.cartNo)
+        if(taskData&&taskData.status== "inprogress") 
+            canEdit = 1
         
         if(!cartData){
             res.status(400).json({error:"error",message:"آیتم ها با مشکل مواجه شدند"})
