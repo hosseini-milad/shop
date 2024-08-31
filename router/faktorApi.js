@@ -657,7 +657,7 @@ router.post('/cart-find', async (req,res)=>{
         var orderData=findQuickCartSum(cartItems,cartData.payValue,
             cartData.discount)
         
-        res.json({cart:cartList,orderData:orderData,canEdit})
+        res.json({cart:cartList,orderData:orderData,canEdit,taskData})
     }
     catch(error){
         res.status(500).json({message: error.message})
