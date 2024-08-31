@@ -48,8 +48,9 @@ router.post('/list',jsonParser,async (req,res)=>{
             { $match:data.access?{access:data.access}:{}},
         ])
         const filter1Report = data.customer?
-        reportList.filter(item=>item&&item.cName&&
-            item.cName.includes(data.customer)):reportList;
+        reportList.filter(item=>item&&item.userInfo[0]&&
+            item.userInfo[0].cName&&
+            item.userInfo[0].cName.includes(data.customer)):reportList;
         const orderList = filter1Report.slice(offset,
             (parseInt(offset)+parseInt(pageSize)))  
         const accessUnique = [...new Set(filter1Report.map((item) => item.access))];
