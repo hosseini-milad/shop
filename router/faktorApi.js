@@ -639,7 +639,7 @@ router.post('/cart-find', async (req,res)=>{
         }}])
         const cartData =cartList&&cartList[0] 
         var canEdit = 0
-        if(cartList.status == "inprogress") canEdit = 1
+        if(cartData.status == "inprogress") canEdit = 1
         
         if(!cartData){
             res.status(400).json({error:"error",message:"آیتم ها با مشکل مواجه شدند"})
