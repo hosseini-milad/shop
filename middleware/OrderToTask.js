@@ -1,7 +1,7 @@
 const tasks = require("../models/crm/tasks");
 
 const OrderToTask=async(orderNo)=>{
-    const taskData = await tasks.findOne({taskId:orderNo})
+    const taskData = await tasks.findOne({orderNo:orderNo})
     return (taskData)
 }
 
