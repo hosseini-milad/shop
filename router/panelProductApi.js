@@ -30,6 +30,7 @@ const cart = require('../models/product/cart');
 const users = require('../models/auth/users');
 const products = require('../models/product/products');
 const UpdateMarket = require('../middleware/UpdateMarket');
+const crmlist = require('../models/crm/crmlist');
 
 router.post('/fetch-service',jsonParser,async (req,res)=>{
     var serviceId = req.body.serviceId?req.body.serviceId:''
@@ -642,7 +643,16 @@ router.post('/edit-factory',jsonParser,async(req,res)=>{
         res.status(500).json({message: error.message})
     }
 })
-
+router.get('/list-status',jsonParser,async(req,res)=>{
+    try{ 
+        var crmData = await crmlist.findOne({crmCode:"main"})
+        
+        res.json({data:crmData&&crmData.crmSteps})
+    }
+    catch(error){
+        res.status(500).json({message: error.message})
+    }
+})
 router.post('/report-total',jsonParser,auth,async(req,res)=>{
     var nowDate = new Date();
     try{ 

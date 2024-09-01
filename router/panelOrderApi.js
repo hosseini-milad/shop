@@ -69,6 +69,7 @@ router.post('/list',jsonParser,async (req,res)=>{
     var fullSize = 0
     var isSale = 0
     var isWeb = 0
+    var size = 0
     if(!type||type=="Visitor"){  
         if(adminData.access=="sale"){
             res.status(400).json({error: "دسترسی به این بخش ندارید"}) 
@@ -97,13 +98,18 @@ router.post('/list',jsonParser,async (req,res)=>{
         
     ])
     for(var i=0;i<(cartList&&cartList.length);i++){
+        var cartTask = cartList[i].taskInfo&&cartList[i].taskInfo[0]
+        if(data.status){
+            if(cartTask.taskStep !== data.status)
+                continue 
+        }
         var totalPrice=findCartSum(cartList[i].cartItems,
             cartList[i].payValue)
         showCart.push({...cartList[i],totalCart:totalPrice})
-    }
+    } 
     brandUnique = [...new Set(showCart&&
         showCart.map((item) => item.brand))];
-
+    size = showCart&&showCart.length
     const orderList = showCart&&showCart.slice(offset,
         (parseInt(offset)+parseInt(pageSize)))  
     
@@ -134,7 +140,6 @@ router.post('/list',jsonParser,async (req,res)=>{
         resultData = orderList
     }
     if(type=="Sale"){     
-        console.log(adminData)
         if(adminData.access=="market"){
             res.status(400).json({error: "دسترسی به این بخش ندارید"})
             return 
@@ -164,14 +169,14 @@ router.post('/list',jsonParser,async (req,res)=>{
         }
         brandUnique = [...new Set(showCart&&
             showCart.map((item) => item.brand))];
-    
+        size = showCart&&showCart.length
         const orderList = showCart&&showCart.slice(offset,
             (parseInt(offset)+parseInt(pageSize)))      
         resultData = orderList
     }
 
        res.json({filter:resultData,brand:brandUnique, isSale,
-        size:filter1Report&&filter1Report.length}) 
+        size}) 
     }
     catch(error){
         res.status(500).json({message: error.message})
