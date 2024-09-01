@@ -30,6 +30,7 @@ const brand = require('../models/product/brand');
 const FindCurrentCart = require('../middleware/CurrentCart');
 const FindCurrentExist = require('../middleware/CurrentExist');
 const OrderToTask = require('../middleware/OrderToTask');
+const IsToday = require('../middleware/IsToday');
 const {TaxRate} = process.env
 
 router.post('/products', async (req,res)=>{
@@ -322,7 +323,7 @@ const findCartFunction=async(userId,managerId)=>{
     try{ 
         const cartData = await cart.find({manageId:managerId,
         result:{$exists:false}})
-        .sort({"initDate":-1}).limit(10).lean()
+        .sort({"initDate":-1}).lean()
     const qCartData = await qCart.findOne({userId:userId})
     const qCartAdmin = await qCart.aggregate([
         {$match:{manageId:managerId}},
@@ -343,7 +344,9 @@ const findCartFunction=async(userId,managerId)=>{
     var qCartDetail = ''
     var description = ''
    for(var c=0;c<(cartData&&cartData.length);c++){
-        
+        if(IsToday(cartData[c].date)!==1){
+            continue
+        }
         try{
             for(var j=0;j<cartData[c].cartItems.length;j++){
                 try{var cartTemp = cartData[c].cartItems[j]
