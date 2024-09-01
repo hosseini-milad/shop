@@ -2,9 +2,10 @@
 const IsToday=(date)=>{
     var today = new Date()
     var date = new Date(date)
-    console.log(today)
-    console.log(date)
-    return(1)
+    if(today.getDate() === date.getDate())
+        return(1)
+    else
+        return(0)
 }
 
 module.exports =IsToday

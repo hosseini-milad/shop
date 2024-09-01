@@ -342,9 +342,10 @@ const findCartFunction=async(userId,managerId)=>{
     
     var cartDetail = []
     var qCartDetail = ''
-    var description = ''
+    var description = '' 
    for(var c=0;c<(cartData&&cartData.length);c++){
-        if(IsToday(cartData[c].date)!==1){
+    
+        if(IsToday(cartData[c].initDate)!==1){
             continue
         }
         try{
