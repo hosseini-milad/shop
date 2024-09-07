@@ -53,8 +53,10 @@ router.post('/list',jsonParser,async (req,res)=>{
             item.userInfo[0].cName.includes(data.customer)):reportList;
         const orderList = filter1Report.slice(offset,
             (parseInt(offset)+parseInt(pageSize)))  
+        const storeList=StoreList()
         const accessUnique = [...new Set(filter1Report.map((item) => item.access))];
-       res.json({filter:orderList,size:filter1Report.length,access:accessUnique})
+       res.json({filter:orderList,size:filter1Report.length,
+        access:accessUnique,storeList})
     }
     catch(error){
         res.status(500).json({message: error.message})
@@ -75,7 +77,10 @@ router.post('/update-user',jsonParser,async (req,res)=>{
         classess:req.body.classes,
         profile:req.body.profile,
         access:req.body.access,
-        password:req.body.password
+        password:req.body.password,
+        StockId:req.body.StockId,
+        CustomerID:req.body.CustomerID,
+
     } 
     try{
         const userData = userId?await user.updateOne({_id: ObjectID(userId)},
@@ -87,6 +92,53 @@ router.post('/update-user',jsonParser,async (req,res)=>{
         res.status(500).json({message: error.message})
     } 
 })
+
+const StoreList=()=>{
+    return ([
+        {
+            "StockID": 5,
+            "Code": 1,
+            "Title": "انبار مرکزی",
+            "IsActive": true
+        },
+        {
+            "StockID": 6,
+            "Code": 2,
+            "Title": "انبار فروشگاه ",
+            "IsActive": true
+        },
+        {
+            "StockID": 9,
+            "Code": 3,
+            "Title": "انبار 3",
+            "IsActive": true
+        },
+        {
+            "StockID": 12,
+            "Code": 4,
+            "Title": "انبار غیر قابل فروش",
+            "IsActive": true
+        },
+        {
+            "StockID": 13,
+            "Code": 5,
+            "Title": "انبار فروشگاه جایگاه",
+            "IsActive": true
+        },
+        {
+            "StockID": 17,
+            "Code": 6,
+            "Title": "انبار پخش",
+            "IsActive": true
+        },
+        {
+            "StockID": 21,
+            "Code": 7,
+            "Title": "انبار سایت",
+            "IsActive": true
+        }
+    ])
+}
 
 /*Customers*/
 router.post('/fetch-customer',jsonParser,async (req,res)=>{

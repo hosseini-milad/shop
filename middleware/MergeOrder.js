@@ -13,7 +13,7 @@ const MergeOrder=async(orderDetail)=>{
                 index = cart.findIndex(item=>item.sku == orderSku)
             if(index==-1)
                 cart.push(orderData[j])
-            else{
+            else{ 
                 cart[index].count = pureSum(cart[index].count,
                     orderData[j].count
                 )

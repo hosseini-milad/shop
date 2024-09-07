@@ -10,7 +10,10 @@ const slider = require('../models/main/slider');
 const state = require('../models/main/state');
 const city = require('../models/main/city');
 const cart = require('../models/product/cart');
+var ObjectID = require('mongodb').ObjectID;
 const MergeOrder = require('../middleware/MergeOrder');
+const CartToSepidar = require('../middleware/CartToSepidar');
+const sepidarPOST = require('../middleware/SepidarPost');
 
 router.post('/sliders', async (req,res)=>{
     try{
@@ -122,12 +125,20 @@ router.post('/list-city',jsonParser, async (req,res)=>{
     }
 })
 
-router.post('/multi-sepidar',jsonParser, async (req,res)=>{
+router.post('/multi-sepidar',jsonParser,auth, async (req,res)=>{
     const orderList = req.body.orderNo
+    const manageId = req.headers['userid']
     try{
         const orderDetails = await cart.find({cartNo:{$in:orderList}})
         const mergeOrder = await MergeOrder(orderDetails.map(item=>item.cartItems))
-        res.json({data:mergeOrder,message:"api not completed"})
+        const adminData = await users.findOne({_id:ObjectID(manageId)})
+        const faktorNo= "F321"+orderDetails[0].cartNo
+        var sepidarQuery = await CartToSepidar(mergeOrder,faktorNo,
+                adminData,adminData.StockId)
+        console.log(sepidarQuery) 
+        var sepidarResult = await sepidarPOST(sepidarQuery,"/api/invoices",adminData._id)
+            
+        res.json({data:sepidarResult,message:"orders process"})
     } 
     catch(error){
         res.status(500).json({message: error.message})

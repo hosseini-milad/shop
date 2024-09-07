@@ -198,19 +198,19 @@ router.post('/calc-count',auth, async (req,res)=>{
         }}])
         const cartList = await tasks.find({taskStep:{$nin:['archive']}})
         var currentCart = await FindCurrentCart(cartList.map(item=>item.orderNo))
-        
+        console.log(stockId)
         const qCartList = await qCart.find(stockId?{stockId:stockId}:{})
         for(var i=0;i<searchProducts.length;i++){
             var count = searchProducts[i].countData.find(item=>(item.Stock==stockId))
             var count3 = searchProducts[i].countData.find(item=>(item.Stock=="9"))
-            var desc = ''
-            count = count?count:0
+            var desc = '' 
+            count = count?count:0 
             count3 = count3?count3:0
             var cartCount = findCartCount(searchProducts[i].sku,currentCart.concat(qCartList),stockId)
             //console.log(cartCount)
             const storeCount =count?parseInt(count.quantity):0
             const orderCount =parseInt(cartCount)
-            if(count||count3){
+            if(count||count3){ 
                 if(count)
                     count.quantity = storeCount-orderCount
                 else if(count3)
@@ -407,7 +407,6 @@ const findCartItemDetail=(cartItem,payValue)=>{
         total:totalPrice,discount:discount})
 }
 const findCartData=async(cartNo)=>{
-    
     try{
         const cartData = await cart.findOne({cartNo:cartNo})
         var cartDetail = ''
