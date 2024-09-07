@@ -23,8 +23,9 @@ const CreateTask=async(type,data,user)=>{
         customer: data.userId,
         taskStep:step.enTitle,
         orderNo:data.cartNo,
-        date:data.date,
+        //date:data.date,
         prior:1,
+        date:Date.now(),
         type:type,
     })
     return({message:"Task Created"})
