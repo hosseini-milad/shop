@@ -100,8 +100,8 @@ router.post('/list',jsonParser,async (req,res)=>{
     for(var i=0;i<(cartList&&cartList.length);i++){
         if(data.customer){
             if(cartList[i].userInfo[0]){
-                var userSimilar = cartList[i].userInfo[0].cName&&
-                cartList[i].userInfo[0].cName.includes(data.customer)
+                var userSimilar = cartList[i].userInfo[0].username&&
+                cartList[i].userInfo[0].username.includes(data.customer)
                 var phoneSimilar = cartList[i].userInfo[0].phone&&
                 cartList[i].userInfo[0].phone.includes(data.customer)
                 if(!userSimilar&&!phoneSimilar)
