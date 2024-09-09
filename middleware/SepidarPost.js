@@ -9,7 +9,7 @@ const sepidarPOST=async(data,action,user,admin)=>{
     const userDetail = user&&await users.findOne({_id:user})
     
     if(userDetail&&userDetail.group === "bazaryab")
-        header = SEPIDAR_HEADER_Bazaryab
+        header = SEPIDAR_HEADER_Bazaryab 
     else if(userDetail&&userDetail.StockId==="6")
         header = SEPIDAR_HEADER_HESARAK
     var response = ''; 

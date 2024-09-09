@@ -343,11 +343,13 @@ const findCartFunction=async(userId,managerId)=>{
     var cartDetail = []
     var qCartDetail = ''
     var description = '' 
+    var todayCartData=[]
    for(var c=0;c<(cartData&&cartData.length);c++){
     
         if(IsToday(cartData[c].initDate)!==1){
             continue
         }
+        todayCartData.push(cartData[c])
         try{
             for(var j=0;j<cartData[c].cartItems.length;j++){
                 try{var cartTemp = cartData[c].cartItems[j]
@@ -367,7 +369,7 @@ const findCartFunction=async(userId,managerId)=>{
         qCartDetail =findQuickCartSum(qCartData.cartItems,
         qCartData.payValue,qCartData.discount)
     }
-    return({cart:cartData,cartDetail:cartDetail,userData:"userData",isSale,
+    return({cart:todayCartData,cartDetail:cartDetail,userData:"userData",isSale,
         quickCart:qCartData,qCartDetail:qCartDetail,qCartAdmin:qCartAdmin})
         }
     catch{
