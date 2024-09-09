@@ -103,14 +103,14 @@ function TaskAction(props){
                 <p>چاپ سفارش</p></button>
             <button type="button" className="btn-crm btn-crm-cancel"
                 onClick={()=>setShowRemove(data.orderNo)}>
-                <p>حذف سفارش</p></button>
+                <p>لغو سفارش</p></button>
             {data&&data.taskStep==="prepare"?
                 <button type="button" className="btn-crm btn-crm-info"
                 onClick={()=>window.location.href="/orders/invoice/"+data.orderNo}>
                 <p>حواله خروج</p></button>:<></>}
             {showRemove?
-                <ErrorAction status={"DELETE"} title={"حذف سفارش"} 
-                text={"سفارش حذف خواهد شد. آیا مطمئن هستید؟"} linkText={""} style={{direction:"rtl"}}
+                <ErrorAction status={"DELETE"} title={"لغو سفارش"} 
+                text={"سفارش لغو خواهد شد. آیا مطمئن هستید؟"} linkText={""} style={{direction:"rtl"}}
                 buttonText="حذف" close={()=>setShowRemove(0)}
                 color="red" action={()=>deleteOrder(showRemove)}/>:
             <></>}

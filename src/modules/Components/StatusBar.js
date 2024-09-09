@@ -5,9 +5,9 @@ import Status from "./Status"
 
 function StatusBar(props){
   const lang = props.lang
-  const content = props.status
   const token=props.token
-  /*useEffect(() => {
+  const [content,setContent]=useState("")
+  useEffect(() => {
     const postOptions={
         method:'post',
         headers: {'Content-Type': 'application/json',
@@ -15,7 +15,7 @@ function StatusBar(props){
         body:JSON.stringify({filters:props.filters,date:props.filters.date})
       }
       console.log(postOptions)
-   fetch(env.siteApi + "/panel/order/rxStatus",postOptions)
+   fetch(env.siteApi + "/panel/product/list-status",postOptions)
   .then(res => res.json())
   .then(
     (result) => {
@@ -27,7 +27,7 @@ function StatusBar(props){
     }
     
 )},[props.filters])
-  */
+  
     return(
         <div className="user-statue">
           {content&&content.map((status,i)=>(status.count?
