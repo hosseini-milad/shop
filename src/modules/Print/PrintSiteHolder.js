@@ -13,6 +13,9 @@ const FaktorSitePrint = (props)=>{
     const [faktorList,setFaktorList] = useState() 
     
     const token=cookies.get('faktor-login')
+    const printNow = () => {
+        window.print();
+      };
     console.log(faktorList)
     useEffect(()=>{
         //console.log(search)
@@ -51,6 +54,9 @@ const FaktorSitePrint = (props)=>{
                 <PrintInvoice orderData={faktorList} 
                 userInfo={''} url={url}/> :
             <main>در حال دریافت اطلاعات</main>}
+            <div className="btn-wrapper">
+                <button className="print-btn" onClick={()=>printNow()}>چاپ A4</button>
+            </div>
         </div>
     )
 }

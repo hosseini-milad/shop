@@ -1422,3 +1422,8 @@ dialog {
   background-color: #e53371;
   color: white;
 }
+.printArea .btn-wrapper{
+  width: 90%;
+  margin: 0 auto;
+  
+}
