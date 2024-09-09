@@ -169,6 +169,7 @@ function OrderPopUp(props){
                         regCart={(e)=>regSepidar(e)}
                         cart={content.cart&&content.cart[0]} 
                         setCart={(e)=>setContent(e)}
+                        canEdit={content&&content.canEdit}
                         cartDetail={content.orderData?content.orderData:content.cartDetail} 
                         setError={setError}/>:
                         <div>{env.loader}</div>}

@@ -1414,6 +1414,14 @@ dialog {
   border-radius: 4px;
   background-color: lightgreen;
 }
+.existSmall{
+  position: relative;
+}
+.store3Small{
+  position: absolute;
+  left:-15px;
+  bottom: -20px;
+}
 .cal-count{
   padding: 0.2rem 0.5rem;
   border: none;

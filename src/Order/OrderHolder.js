@@ -23,7 +23,7 @@ function OrderHolder(props) {
   const [payValue, setPayValue] = useState(defPay);
   const [error, setError] = useState({ message: "", color: "brown" });
   const access = CheckAccess(token,"orders")
-
+  console.log(access)
   useEffect(() => {
     console.log(Math.random());
     const postOptions = {
@@ -109,7 +109,6 @@ function OrderHolder(props) {
         }
       );
   }, [appFilter]);
-  console.log(cart)
   return (
     <div className="sharif" style={{ direction: "rtl" }}>
       <header className="sharif-order-header">
@@ -149,6 +148,7 @@ function OrderHolder(props) {
           <QuickCartHolder
             token={token}
             user={user}
+            canEdit={1}
             payValue={payValue}
             setPayValue={setPayValue}
             cart={cart && cart.quickCart}

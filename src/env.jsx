@@ -1,9 +1,11 @@
 
 const env={
     // siteApi:'http://localhost:6090/api',
+    //siteApi:'https://testadmin.sharifoilco.com/api',
     siteApi:'https://shopadmin.sharifoilco.com/api',
     
     // siteApiUrl:'http://localhost:6090',
+    //siteApiUrl:'https://testadmin.sharifoilco.com',
     siteApiUrl:'https://shopadmin.sharifoilco.com',
     cookieName:'shop-login',
     //cookieName:'panel-login',
@@ -287,11 +289,12 @@ export const sortArray=(array,sort,type)=>{
   }
   return(sortArray)
 }
-export const CheckAccess=(token,pageUrl)=>{
+export const CheckAccess=(token,pageUrlRaw)=>{
   if(!token) return('')
+  var pageUrl = pageUrlRaw&&pageUrlRaw.toLowerCase()
   if(token.access=="manager")return("full")
   var access= token.profile&&
-    token.profile.find(item=>item.title===pageUrl)
+    token.profile.find(item=>(item.title).toLowerCase()===pageUrl)
   return(access?access.state:"")
 }
 

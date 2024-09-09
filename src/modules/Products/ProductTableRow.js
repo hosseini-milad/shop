@@ -78,8 +78,10 @@ function ProductTableRow(props){
                 </div>
               </td>
               <td>
-                <div className="order-num">
-                  {Count?<p>{Count.storeCount}</p>:
+                <div className="order-num existSmall">
+                  {Count?<p>{Count.storeCount-Count.orderCount}
+                    {Count.count3?<small className="store3Small">انبار3: {Count.count3}</small>:<></>}
+                  </p>:
                   <button className="cal-count" onClick={()=>CalCount(product.sku)}>محاسبه</button>}
                 </div>
               </td>

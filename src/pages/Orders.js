@@ -70,6 +70,7 @@ function Orders(props) {
           setLoading(0);
           setContent("");
           setTimeout(() => setContent(result), 200);
+          setError('')
           }
         },
         (error) => {

@@ -22,6 +22,7 @@ const Users = (props) => {
   const [showCreatePanel, setShowCreatePanel] = useState(false);
   const [accessList, setAccess] = useState(null);
   const [profiles, setProfiles] = useState([]);
+  const [storeList, setStoreList] = useState([]);
   const [formData, setFormData] = useState({
     _id: "",
     profile: "",
@@ -56,6 +57,7 @@ const Users = (props) => {
       const data = await response.json();
       setUsers(data.filter);
       setAccess(data.access);
+      setStoreList(data.storeList)
     } catch (error) {
       console.error("Error fetching users:", error);
     }
@@ -208,8 +210,6 @@ const Users = (props) => {
               }));
             }}
           />
-          <label htmlFor="role">{formtrans.profile[lang]}</label>
-
           <StyleSelect
             title={formtrans.profile[lang]}
             direction={direction}
@@ -224,6 +224,34 @@ const Users = (props) => {
               setFormData((prevState) => ({
                 ...prevState,
                 profile: e ? e._id : "",
+              }));
+            }}
+          />
+          <StyleSelect
+            title={formtrans.store[lang]}
+            direction={direction}
+            class={"formInput"}
+            defaultValue={storeList.find(
+              (store) => store.Code == userData.StockId
+            )}
+            options={storeList}
+            label={"Title"}
+            action={(e) => {
+              setFormData((prevState) => ({
+                ...prevState,
+                StockId: e ? e.Code : "",
+              }));
+            }}
+          />
+          <StyleInput
+            title={formtrans.customercode[lang]}
+            direction={direction}
+            class={"formInput"}
+            defaultValue={userData.CustomerID}
+            action={(e) => {
+              setFormData((prevState) => ({
+                ...prevState,
+                CustomerID: e,
               }));
             }}
           />

@@ -46,7 +46,7 @@ function QuickTable(props){
               <QuickRow data={item} key={i} index={i+1} payValue={props.payValue?props.payValue:"4"}
               action={props.delete} setError={props.setError}
               token={props.token} user={props.user} setCart={props.setCart}
-              cartNo={props.cartNo}/>
+              cartNo={props.cartNo} canEdit={props.canEdit}/>
             ))}
           </tbody>
         </table>

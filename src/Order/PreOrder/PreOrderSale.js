@@ -20,7 +20,8 @@ function PreOrderSale(props){
             total={total} index={i}/>
         ))}
         {(access=="edit"||access=="full")?<div className="orderButtonHolder">
-        <input type="button" className="orderButton" value={"ثبت سپیدار"}/>
+        <input type="button" className="orderButton" value={"ثبت سپیدار"}
+        />
         </div>:<></>}
         
       </section>

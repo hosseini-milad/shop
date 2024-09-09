@@ -3,9 +3,11 @@ import StyleInput from "../../components/Button/Input"
 import Switch from "react-switch";
 import ImageUserHolder from "./ImageUserHolder";
 import CustomerXtra from "./CustomerXtra";
+import GeoLocation from "./GeoLocation";
 
 function UserForm(props){
     const [userTab,setUserTab] = useState(0)
+    const [geo,setGeo] = useState(0)
     const def = props.def
     //console.log(def)
     return(<>
@@ -62,12 +64,12 @@ function UserForm(props){
                   roleId:e
                 }))}/>
                 <StyleInput title={"موقعیت مکانی"} direction={"rtl"} 
-                class="userInput"  defaultValue={def?def.nif:''}
-                action={(e)=>props.setData(prevState => ({
-                  ...prevState,
-                  nif:e
-                }))}/>
-                
+                class="userInput"  value={def?def.nif:''}
+                />
+                <div className="placeHolder">
+                  {geo?<GeoLocation update={props.setData}/>:
+                  <i className="fa fa-eye" onClick={()=>setGeo(1)}/>}
+                </div>
                 <StyleInput title={"آدرس"} direction={"rtl"} 
                 class="userInput fullRow"  defaultValue={def?def.Address:''}
                 action={(e)=>props.setData(prevState => ({

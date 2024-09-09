@@ -7,6 +7,10 @@ const formtrans ={
         english: "Cloth Size",
         persian: "سایز لباس"
     },
+    store:{
+        english: "Store",
+        persian: "انبار"
+    },
     hse:{
         english: "HSE",
         persian: "HSE"

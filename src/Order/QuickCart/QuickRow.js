@@ -141,8 +141,8 @@ function QuickRow(props){
                 onClick={()=>setEditMode(0)}></i>
                 </div>:
                 <div className="more-btn">
-                <i className="fa-solid fa-pen"
-                onClick={()=>setEditMode(1)}></i>
+                {props.canEdit?<i className="fa-solid fa-pen"
+                onClick={()=>setEditMode(1)}></i>:<></>}
                 <i className="fa-solid fa-comment"
                 onClick={()=>setShowDesc(1)}></i>
                 {data.stock?<i className="fa-solid fa-sign-out storeSelect"
