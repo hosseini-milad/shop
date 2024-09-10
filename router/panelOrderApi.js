@@ -9,6 +9,7 @@ const carts = require('../models/product/cart')
 const products = require('../models/product/products');
 const { findQuickCartSum } = require('./faktorApi');
 const users = require('../models/auth/users');
+const Invoice = require('../models/product/Invoice');
 const {TaxRate} = process.env
 
 router.post('/sku/find',jsonParser,async (req,res)=>{
@@ -167,7 +168,7 @@ router.post('/list',jsonParser,async (req,res)=>{
                 foreignField: "_id", 
                 as : "userInfo"
             }}, 
-            { $match: {result:{$exists:false}}},
+            { $match: {InvoiceID:{$exists:false}}},
             { $match: {isSale:"1"}},
             { $match:data.orderNo?{cartNo:new RegExp('.*' + data.orderNo + '.*')}:{}},
         
@@ -182,6 +183,36 @@ router.post('/list',jsonParser,async (req,res)=>{
         }
         brandUnique = [...new Set(showCart&&
             showCart.map((item) => item.brand))];
+        size = showCart&&showCart.length
+        const orderList = showCart&&showCart.slice(offset,
+            (parseInt(offset)+parseInt(pageSize)))      
+        resultData = orderList
+    }
+    if(type=="Invoice"){     
+        if(adminData.access=="market"){
+            res.status(400).json({error: "دسترسی به این بخش ندارید"})
+            return 
+        }  
+        var showCart=[]
+        const invoiceList = await Invoice.aggregate([
+            {$lookup:{
+                from : "customers", 
+                localField: "CustomerRef", 
+                foreignField: "CustomerID", 
+                as : "userInfo"
+            }}, 
+            {$lookup:{
+                from : "invoiceitems", 
+                localField: "InvoiceID", 
+                foreignField: "InvoiceID", 
+                as : "invoiceItems"
+            }},
+            { $sort: {"Date":-1}}
+            ])
+        for(var i=0;i<(invoiceList&&invoiceList.length);i++){
+            var totalPrice=findCartSum(invoiceList[i].cartItems,3)
+            showCart.push({...invoiceList[i],totalCart:totalPrice})
+        }
         size = showCart&&showCart.length
         const orderList = showCart&&showCart.slice(offset,
             (parseInt(offset)+parseInt(pageSize)))      

@@ -6,28 +6,28 @@ const CartToSepidar=async(data,faktorNo,user,stock)=>{
             data[i].count?
             notNullCartItem.push(data[i]):''
         var query ={
-            "GUID": "124ab075-fc79-417f-b8cf-1a"+faktorNo,
+            "GUID": "124ab075-fc79-417f-b8cf-1"+faktorNo,
             "CustomerRef": toInt(user.CustomerID),
-            "AddressRef": 1,
+            //"AddressRef": 1,
             "CurrencyRef":1,
             "SaleTypeRef": 3,
             "Duty":0.0000,
-            "Description":faktorNo,
-            "DescriptionRef":faktorNo,
+            "Description":"faktorNo",
+            "DescriptionRef":"faktorNo",
             "Discount": 0.00,
             "Items": 
             notNullCartItem.map((item,i)=>{
                 const price = findPayValuePrice(item.price,3)
-                const discount =0//item.discount?normalPriceDiscount(price,item.discount,1):0
+                const discount =0.00//item.discount?normalPriceDiscount(price,item.discount,1):0
                 return({
                 "ItemRef": toInt(item.id),
                 "TracingRef": null,
-                "Description":item.description,//item.title+"|"+item.sku,
-                "StockRef":data[i].stock?data[i].stock:3,
+                "Description":"item.description",//item.title+"|"+item.sku,
+                "StockRef":stock?stock:3,
                 "Quantity": toInt(item.count),
                 "Fee": toInt(price),
                 "Price": normalPriceCount(price,item.count,1),
-                "Discount": discount?normalPriceCount(discount,item.count,1):0,
+                "Discount": discount?normalPriceCount(discount,item.count,1):0.0000,
                 "Tax": normalPriceCount(price-discount,item.count,TaxRate),
                 "Duty": 0.0000,
                 "Addition": 0.0000

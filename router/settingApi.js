@@ -14,6 +14,8 @@ var ObjectID = require('mongodb').ObjectID;
 const MergeOrder = require('../middleware/MergeOrder');
 const CartToSepidar = require('../middleware/CartToSepidar');
 const sepidarPOST = require('../middleware/SepidarPost');
+const Invoice = require('../models/product/Invoice');
+const InvoiceItems = require('../models/product/InvoiceItems');
 
 router.post('/sliders', async (req,res)=>{
     try{
@@ -134,10 +136,21 @@ router.post('/multi-sepidar',jsonParser,auth, async (req,res)=>{
         const adminData = await users.findOne({_id:ObjectID(manageId)})
         const faktorNo= "F321"+orderDetails[0].cartNo
         var sepidarQuery = await CartToSepidar(mergeOrder,faktorNo,
-                adminData,adminData.StockId)
-        console.log(sepidarQuery) 
+                adminData,adminData.StockId) 
+        //console.log(sepidarQuery) 
         var sepidarResult = await sepidarPOST(sepidarQuery,"/api/invoices",adminData._id)
-            
+        if(sepidarResult&&sepidarResult.InvoiceID){
+            await Invoice.create({...sepidarResult,manageId:adminData._id})
+            var invoiceItems = sepidarResult.InvoiceItems
+            for(var i=0;i<invoiceItems.length;i++)
+                await InvoiceItems.create({...invoiceItems[i],
+                    InvoiceID:sepidarResult.InvoiceID})
+        
+        await cart.updateMany({cartNo:{$in:orderList}},{$set:{
+            Number:sepidarResult.Number,
+            InvoiceID:sepidarResult.InvoiceID
+        }})
+        }
         res.json({data:sepidarResult,message:"orders process"})
     } 
     catch(error){

@@ -17,6 +17,8 @@ const CartSchema = new Schema({
     taskStep:{ type: String },
     query:{ type: String },
     result:{ type: String },
-    isSale:{type:String}
+    isSale:{type:String},
+    Number:{type:String},
+    InvoiceID:{type:String}
 })
 module.exports = mongoose.model('cart',CartSchema);

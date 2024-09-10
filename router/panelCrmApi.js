@@ -141,7 +141,7 @@ router.post('/update-tasks-status',auth,jsonParser,async (req,res)=>{
     var index = crmSteps.findIndex(item=>item.enTitle===taskStatus)
     var nextStep = findNext(index,status)
     newStatus = crmSteps[nextStep]
-    try{
+    
         var sepidarAccept = 1
         var sepidarQuery = ''
         var sepidarResult = ''
@@ -150,10 +150,12 @@ router.post('/update-tasks-status',auth,jsonParser,async (req,res)=>{
         if(status==="sepidar"){
             const faktorNo= "F123"+taskData.orderNo
             const cartData = await cart.findOne({cartNo:taskData.orderNo})
-            userData = await customers.findOne({_id:ObjectID(cartData.userId)})
-            adminData = await user.findOne({_id:ObjectID(cartData.manageId)})
+            userData = cartData.userId&&await customers.findOne({_id:ObjectID(cartData.userId)})
+            adminData = cartData.manageId&&await user.findOne({_id:ObjectID(cartData.manageId)})
             sepidarQuery = await SepidarFunc(cartData,faktorNo,
                 userData.CustomerID?userData:adminData,adminData.StockId)
+            
+
             sepidarResult = await sepidarPOST(sepidarQuery,"/api/invoices",adminData._id)
             
             if(sepidarResult.Message)
@@ -170,7 +172,8 @@ router.post('/update-tasks-status',auth,jsonParser,async (req,res)=>{
          
         const userId=req.headers["userid"]
         const tasksList = await calcTasks(userId)
-       res.json({taskData:tasksList,message:taskId?"Task Updated":"Task Created",
+    try{
+            res.json({taskData:tasksList,message:taskId?"Task Updated":"Task Created",
         result:sepidarResult,sepidarQuery:sepidarQuery,userData:adminData})
     }
     catch(error){
