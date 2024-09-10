@@ -232,14 +232,14 @@ const Users = (props) => {
             direction={direction}
             class={"formInput"}
             defaultValue={storeList.find(
-              (store) => store.Code == userData.StockId
+              (store) => store.StockID == userData.StockId
             )}
             options={storeList}
             label={"Title"}
             action={(e) => {
               setFormData((prevState) => ({
                 ...prevState,
-                StockId: e ? e.Code : "",
+                StockId: e ? e.StockID : "",
               }));
             }}
           />

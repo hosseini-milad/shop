@@ -23,16 +23,20 @@ function OrderTab(props){
 
       <input type="radio" name="slideItem" id="slide-item-3" className="slide-toggle" />
       <label htmlFor="slide-item-3" onClick={()=>{props.setFilters(prevState => ({
-                ...prevState, category:"WebSite"
+                ...prevState, category:"Invoice"
               }));props.setTab(2)}} 
         className={props.tab===2?"sliderMenuSelect":""}>
-        <span>وب سایت</span>
+        <span>فاکتورها</span>
         <div className="sliderMenu"></div>
       </label>
 
       <input type="radio" name="slideItem" id="slide-item-4" className="slide-toggle" />
-      <label htmlFor="slide-item-4">
-        <span>رزرو</span>
+      <label htmlFor="slide-item-4" onClick={()=>{props.setFilters(prevState => ({
+                ...prevState, category:"WebSite"
+              }));props.setTab(3)}} 
+        className={props.tab===3?"sliderMenuSelect":""}>
+        <span>وب سایت</span>
+        <div className="sliderMenu"></div>
       </label>
 
       {/*
