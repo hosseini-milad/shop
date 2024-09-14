@@ -6,7 +6,7 @@ import { useState } from "react";
 
 function OrderFilters(props) {
   const category = props.filters && props.filters.category;
-
+  
   const handleFilterChange = (property, value) => {
     const newValue = value ? (value._id ? value._id : value) : "";
     props.setFilters((prevState) => ({
@@ -43,6 +43,13 @@ function OrderFilters(props) {
           direction={props.lang.dir}
           action={(e) => handleFilterChange("customer", e)}
         />
+        <StyleSelect
+            title={tabletrans.status[props.lang.lang]}
+            direction={props.lang.dir}
+            options={props.StatusList}
+            label="title"
+            action={(e) => handleFilterChange("status",e?e.enTitle:"")}
+          />
 
         <StyleDatePicker
           title={tabletrans.selectDate[props.lang.lang]}

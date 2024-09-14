@@ -13,7 +13,6 @@ function OrderQuickRow(props){
             headers: {'Content-Type': 'application/json'},
             body:JSON.stringify(body)
           }
-          console.log(postOptions)
       fetch(env.siteApi + "/product/getProduct",postOptions)
       .then(res => res.json())
       .then(

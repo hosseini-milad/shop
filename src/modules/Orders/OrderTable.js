@@ -2,6 +2,7 @@ import { useState } from "react"
 import OrderTableRow from "./OrderTableRow"
 import tabletrans from "../../translate/tables"
 import OrderMultiReg from "./OrderComponent/OrderMultiReg"
+import OrderMultiDone from "./OrderComponent/OrderMultiDone"
 
 function OrderTable(props){
   const orders = props.orders
@@ -9,6 +10,7 @@ function OrderTable(props){
   const [selectedOrder,setSelectedOrder] = useState()
   const [detail,showDetail] = useState(-1)
   const [AllCheck,setAllCheck] = useState(0)
+  console.log(selectedOrder)
   if(!orders||!orders.length) return <main>waiting</main>
   else  return(
         <table>
@@ -70,7 +72,8 @@ function OrderTable(props){
           
         </tbody>
         {props.isSale?
-        <OrderMultiReg orders={selectedOrder} token={props.token}/>:<></>}
+        <OrderMultiReg orders={selectedOrder} token={props.token}/>:
+        <OrderMultiDone orders={selectedOrder} token={props.token}/>}
       </table>
 
     )

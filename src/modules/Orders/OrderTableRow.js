@@ -16,6 +16,7 @@ function OrderTableRow(props) {
   useEffect(()=>{
     setCheckState(props.allcheck)
   },[props.allcheck])
+  
   const updateCheckBox=(field,action)=>{
     setCheckState(action?false:true)
     if(!action){
@@ -40,19 +41,19 @@ function OrderTableRow(props) {
       props.setSelectedOrder(l => 
         l.filter(item => item.cartNo !== field.cartNo));
     }
+    console.log(props.selectedOrder)
   }
   return (
     <React.Fragment>
       <tr className={activeAcc ? "activeAccordion" : "accordion"}>
         <td>{props.index+1}</td>
         <td className="checkBoxStyle">
-          <input
+          {order.taskInfo&&order.taskInfo[0]&&
+          order.taskInfo[0].taskStep=="done"?<input
             type="checkbox"
-            name=""
-            id=""
             checked={checkState}
             onChange={(e) =>  updateCheckBox(order,checkState)}
-          />
+          />:<></>}
         </td>
         <td>
           <div className="order-id">

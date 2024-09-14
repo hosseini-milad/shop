@@ -14,7 +14,6 @@ function StatusBar(props){
         "x-access-token":token&&token.token,"userId":token&&token.userId},
         body:JSON.stringify({filters:props.filters,date:props.filters.date})
       }
-      console.log(postOptions)
    fetch(env.siteApi + "/panel/product/list-status",postOptions)
   .then(res => res.json())
   .then(

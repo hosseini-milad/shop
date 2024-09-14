@@ -24,6 +24,7 @@ function Orders(props) {
   const [content, setContent] = useState("");
   const [filters, setFilters] = useState(getFiltersFromUrl());
   const [loading, setLoading] = useState(0);
+  const [StatusList, setStatusList] = useState("");
   const [tab, setTab] = useState(localStorage.getItem("orderTab"));
   const [Error, setError] = useState("");
   const token = cookies.get(env.cookieName);
@@ -79,6 +80,25 @@ function Orders(props) {
         }
       );
   }, [filters,tab]);
+  useEffect(() => {
+    const postOptions={
+        method:'get',
+        headers: {'Content-Type': 'application/json',
+        "x-access-token":token&&token.token,"userId":token&&token.userId},
+        body:JSON.stringify()
+      }
+   fetch(env.siteApi + "/panel/product/list-status",postOptions)
+  .then(res => res.json())
+  .then(
+    (result) => {
+      setStatusList(result.data)
+    },
+    (error) => {
+      console.log(error);
+    }
+    
+)},[])
+
   //window.scrollTo(0, 270);},[pageNumber,filters,perPage,refreshTable])
   return (
     <div className="user" style={{ direction: direction }}>
@@ -120,6 +140,7 @@ function Orders(props) {
           updateUrlWithFilters={updateUrlWithFilters} // Pass the function as a prop
           options={content.brand}
           filters={filters}
+          StatusList={StatusList}
         />
         
         <div className="user-list">
