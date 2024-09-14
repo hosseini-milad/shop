@@ -105,9 +105,9 @@ function OrderHeader(props) {
           ></i>
         </div>
       )}
-      <button onClick={() => gotToOpenOrders()} className="view-open-order">
+      {/*<button onClick={() => gotToOpenOrders()} className="view-open-order">
         سفارشهای باز
-      </button>
+      </button>*/}
       <div className="view-btn-wrapper">
         <label
           htmlFor="list-view"
