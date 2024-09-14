@@ -16,6 +16,8 @@ const {TaxRate} = process.env
 const cart = require('../models/product/cart');
 const sepidarPOST = require('../middleware/SepidarPost');
 const customers = require('../models/auth/customers');
+const { error } = require('console');
+const SepidarOrder = require('../middleware/SepidarOrder');
 
 router.post('/fetch-crm',jsonParser,async (req,res)=>{
     const userId=req.body.userId?req.body.userId:req.headers['userid']
@@ -149,22 +151,9 @@ router.post('/update-tasks-status',auth,jsonParser,async (req,res)=>{
         var adminData = ''
         if(status==="sepidar"){
             const faktorNo= "F123"+taskData.orderNo
-            const cartData = await cart.findOne({cartNo:taskData.orderNo})
-            userData = cartData.userId&&await customers.findOne({_id:ObjectID(cartData.userId)})
-            adminData = cartData.manageId&&await user.findOne({_id:ObjectID(cartData.manageId)})
-            sepidarQuery = await SepidarFunc(cartData,faktorNo,
-                userData.CustomerID?userData:adminData,adminData.StockId)
-            
-
-            sepidarResult = await sepidarPOST(sepidarQuery,"/api/invoices",adminData._id)
-            
+            var sepidarResult = await SepidarOrder(orderNo)
             if(sepidarResult.Message)
-                sepidarAccept =1
-        }
-        //console.log(sepidarResult)
-        //console.log(sepidarQuery)
-        if(sepidarAccept){ 
-            await tasks.updateOne({_id:ObjectID(taskId)},
+                await tasks.updateOne({_id:ObjectID(taskId)},
             {$set:{taskStep:newStatus.enTitle,query:sepidarQuery,
                 result:sepidarResult,progressDate:Date.now()}})
         }
@@ -179,6 +168,27 @@ router.post('/update-tasks-status',auth,jsonParser,async (req,res)=>{
     catch(error){
         res.status(500).json({message: error.message})
     } 
+})
+router.post('/update-bulk',auth,jsonParser,async (req,res)=>{
+    const orderList = req.body.orders
+    const status = req.body.status
+    if(!orderList||!orderList.length){
+        res.status(400).json({error:true,message:"سفارش وارد نشده است"})
+    }
+    var result = []
+    for(var i=0;i<orderList.length;i++){
+        const orderData = await cart.findOne({cartNo:orderList[i].orderNo})
+        const taskData = await tasks.findOne({taskNo:orderList[i].orderNo})
+        if(taskData&&taskData.taskStep =="done"){
+        const sepidarResult = await SepidarOrder(orderList[i])
+        result.push(sepidarResult)
+        }
+        else{
+            result.push({orderNo:orderList[i].orderNo,message:"وضعیت درست ارسال نشده است"})
+        }
+        
+    }
+    res.json({data:result,message:"بروزرسانی تجمعی"})
 })
 const findNext=(index,status)=>{
     if(status=="accept"){

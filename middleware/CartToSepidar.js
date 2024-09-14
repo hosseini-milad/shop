@@ -1,7 +1,6 @@
 const {TaxRate} = process.env
 const CartToSepidar=async(data,faktorNo,user,stock)=>{
         const notNullCartItem = []
-    
         for(var i=0;i<data.length;i++)
             data[i].count?
             notNullCartItem.push(data[i]):''
