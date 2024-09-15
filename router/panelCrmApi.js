@@ -18,6 +18,8 @@ const sepidarPOST = require('../middleware/SepidarPost');
 const customers = require('../models/auth/customers');
 const { error } = require('console');
 const SepidarOrder = require('../middleware/SepidarOrder');
+const MergeOrder = require('../middleware/MergeOrder');
+const MergeCarts = require('../middleware/MergeCarts');
 
 router.post('/fetch-crm',jsonParser,async (req,res)=>{
     const userId=req.body.userId?req.body.userId:req.headers['userid']
@@ -183,7 +185,7 @@ router.post('/update-bulk',auth,jsonParser,async (req,res)=>{
         const sepidarResult = await SepidarOrder(orderList[i])
         result.push(sepidarResult)
         }
-        else{
+        else{ 
             result.push({orderNo:orderList[i].orderNo,message:"وضعیت درست ارسال نشده است"})
         }
         
@@ -202,6 +204,21 @@ const findNext=(index,status)=>{
         return(1)
     }
 }
+router.post('/find-bulk',auth,jsonParser,async (req,res)=>{
+    var orderList = req.body.orders
+    const status = req.body.status
+    if(!orderList||!orderList.length){
+        var orderListTemp = await tasks.find({taskStep:status})
+        orderList = orderListTemp.map(item=>item.orderNo)
+
+    }
+    var result = []
+    const orderData = await cart.find({cartNo:{$in:orderList}})
+    const taskData = await tasks.find({orderNo:{$in:orderList}})
+    const mergeValue = await MergeCarts(orderData)
+    res.json({data:mergeValue,message:"اطلاعات تجمعی"})
+})
+
 router.post('/update-checkList',auth,jsonParser,async (req,res)=>{
     const taskId = req.body._id?req.body._id:""
     const body = req.body
