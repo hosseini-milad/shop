@@ -85,7 +85,7 @@ router.post('/update-user',jsonParser,async (req,res)=>{
     try{
         const userData = userId?await user.updateOne({_id: ObjectID(userId)},
         {$set:data}):
-        await user.create({$set:data})
+        await user.create(data)
        res.json({data:userData,success:"تغییرات اعمال شدند"})
     }
     catch(error){
