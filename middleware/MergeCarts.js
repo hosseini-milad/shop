@@ -1,5 +1,6 @@
 const users = require("../models/auth/users")
 const profiles = require("../models/auth/ProfileAccess")
+const prod = require("../models/auth/ProfileAccess")
 var ObjectID = require('mongodb').ObjectID;
 
 const MergeCarts=async(orderDetail)=>{
@@ -8,6 +9,7 @@ const MergeCarts=async(orderDetail)=>{
         const orderData = orderDetail[i].cartItems
         for(var j=0;j<orderData.length;j++){
             var orderSku = orderData[j].sku
+            const productData = await products
             var index = -1
             if(cart&&cart.length)
                 index = cart.findIndex(item=>item.sku == orderSku)

@@ -309,7 +309,7 @@ router.post('/update-category',jsonParser,auth, async (req,res)=>{
 })
 
 router.post('/cart',auth, async (req,res)=>{
-    const userId =req.body.userId?req.body.userId:req.headers['userid'];
+    const userId =req.body.userId
     try{
         const cartDetails = await findCartFunction(userId,req.headers['userid'])
         res.json(cartDetails)
@@ -321,10 +321,14 @@ router.post('/cart',auth, async (req,res)=>{
 const findCartFunction=async(userId,managerId)=>{
     const isSale = await CheckSale(managerId)
     try{ 
-        const cartData = await cart.find({manageId:managerId,
-        result:{$exists:false}})
-        .sort({"initDate":-1}).lean()
-    const qCartData = await qCart.findOne({userId:userId})
+        const cartData = await cart.aggregate([
+            {$match:{manageId:managerId}},
+            {$match:userId?{userId:userId}:{}},
+            {$match:{result:{$exists:false}}},
+            {$sort:{"initDate":-1}}
+        ])
+    
+    const qCartData = await qCart.findOne({userId:userId?userId:managerId})
     const qCartAdmin = await qCart.aggregate([
         {$match:{manageId:managerId}},
         
