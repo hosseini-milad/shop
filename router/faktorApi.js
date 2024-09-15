@@ -350,7 +350,7 @@ const findCartFunction=async(userId,managerId)=>{
     var todayCartData=[]
    for(var c=0;c<(cartData&&cartData.length);c++){
     
-        if(IsToday(cartData[c].initDate)!==1){
+        if(!userId&&IsToday(cartData[c].initDate)!==1){
             continue
         }
         todayCartData.push(cartData[c])
