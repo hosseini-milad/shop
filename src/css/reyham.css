@@ -12,8 +12,8 @@
   cursor: pointer;
   top: 5px;
 }
-.storeSelect{
-  color:rgb(97, 12, 176)
+.storeSelect {
+  color: rgb(97, 12, 176);
 }
 .showPassRTL {
   position: absolute;
@@ -553,6 +553,58 @@ dialog {
   width: 48%;
   margin-bottom: 15px !important;
 }
+.geo-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+.geo-input.geo-input {
+  height: 40px;
+  background-color: #c0c0c0;
+  border: 1px solid black;
+  padding: 8px 14px;
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-start;
+  position: relative;
+
+  div {
+    font-size: 1rem;
+    color: black;
+    white-space: nowrap;
+    margin: 0 !important;
+  }
+  i {
+    margin: 0 !important;
+    font-size: 1rem;
+    color: black;
+  }
+  span {
+    line-height: 0.8rem;
+    color: rgba(0, 0, 0, 0.5);
+    font-family: vazir;
+    font-size: 1rem;
+    overflow: initial;
+    background: #fff;
+    background-color: transparent;
+    padding: 0 6px;
+    max-width: calc(133% - 32px);
+    position: absolute;
+    left: 0;
+    top: -8px;
+    font-size: 0.8rem;
+  }
+}
+.geo {
+  position: absolute;
+  left: 0;
+  font-size: 1rem;
+
+  i {
+    color: black !important;
+  }
+}
 .fullRow {
   width: 100%;
 }
@@ -677,7 +729,7 @@ dialog {
   right: 2px;
   top: 2px;
 }
-.col .blue-check{
+.col .blue-check {
   position: unset;
 }
 
@@ -1245,10 +1297,10 @@ dialog {
   padding: 0.5rem 1rem;
 }
 
-.d-container{
+.d-container {
   width: 100%;
   display: flex;
-  gap:1rem;
+  gap: 1rem;
 }
 .visitor-list {
   width: 30%;
@@ -1256,85 +1308,85 @@ dialog {
   .cu-avatar {
     min-width: unset;
   }
-  th{
+  th {
     text-align: right;
     padding-right: 0.5rem;
   }
 }
-.Vorder-list{
+.Vorder-list {
   width: 70%;
   overflow: hidden;
 
-  th{
-    width: unset ;
+  th {
+    width: unset;
     min-width: 60px;
     text-align: center !important;
   }
-  td{
+  td {
     text-align: center;
-    min-width:60px;
+    min-width: 60px;
     max-width: 200px;
     padding-inline: 0.5rem;
   }
 }
-.visitor-list{
-  td{
+.visitor-list {
+  td {
     padding-inline: 0.5rem;
   }
 }
-.total-wrapper{
+.total-wrapper {
   width: 100%;
   display: flex;
   align-items: center;
   justify-content: flex-end;
   gap: 1rem;
-  padding:0.5rem 1rem;
+  padding: 0.5rem 1rem;
 
-  p{
+  p {
     margin: 0;
     color: black;
   }
 }
-.hover-tr{
+.hover-tr {
   background-color: rgb(244, 246, 248);
 }
 /* mini sidebar */
-.navbar-vertical.mini-sidebar{
+.navbar-vertical.mini-sidebar {
   max-width: 7rem !important;
 
-  .sidenav-header{
+  .sidenav-header {
     display: flex;
     align-items: center;
     justify-content: center;
-    img{
+    img {
       margin: 0;
     }
-    span{
+    span {
       display: none;
     }
   }
-  .nav-item{
-    span{
+  .nav-item {
+    span {
       display: none;
     }
   }
 }
-.mini-arrow{
+.mini-arrow {
   position: absolute;
   top: 0;
   left: 5px;
   font-size: 2rem;
   cursor: pointer;
 }
-.customer-header{
+.customer-header {
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
 }
-.discount-user-list{
+.discount-user-list {
   width: 100%;
 }
-.discount-list{
+.discount-list {
   width: 100%;
 }
 .table-tab {
@@ -1354,29 +1406,29 @@ dialog {
   .d-container {
     display: flex;
     flex-direction: row;
-    gap: .5rem;
+    gap: 0.5rem;
     width: 100%;
   }
 }
-.discount-page .cu-avatar{
+.discount-page .cu-avatar {
   min-width: unset;
 }
-.discount-page .phone-num{
+.discount-page .phone-num {
   text-align: center;
 }
-.countCalculator{
-    background-color: #002a54;
-    border-radius: 5px;
-    text-align: center;
-    padding: 10px 0 5px;
-    color:#fff;
-    line-height: 2;
-    margin-bottom: 43px;
-    cursor: pointer;
+.countCalculator {
+  background-color: #002a54;
+  border-radius: 5px;
+  text-align: center;
+  padding: 10px 0 5px;
+  color: #fff;
+  line-height: 2;
+  margin-bottom: 43px;
+  cursor: pointer;
 }
-.orderCheck{
+.orderCheck {
   padding: 5px;
-  margin:5px;
+  margin: 5px;
   font-size: 20px;
   border-radius: 50%;
   width: 44px;
@@ -1387,32 +1439,31 @@ dialog {
   background-color: #fff;
   box-shadow: 1px 1px 3px #333;
 }
-.activeCheck{
+.activeCheck {
   color: #fff;
   background-color: green;
 }
-.orderButtonHolder{
+.orderButtonHolder {
   width: 100%;
   direction: ltr;
   margin: 10px 0;
 }
-.orderButton{
+.orderButton {
   background-color: #002a54;
   color: #fff;
   border: none;
   padding: 5px 35px;
   border-radius: 5px;
-
 }
-.odHeaderBtnHolder{
+.odHeaderBtnHolder {
   flex-direction: initial;
   justify-content: space-between;
 }
-.bold-td.bold-td{
+.bold-td.bold-td {
   font-weight: 600 !important;
   font-size: 1.3rem;
 }
-.regSepidar input{
+.regSepidar input {
   width: 200px;
   height: 45px;
   outline: 0;
@@ -1422,15 +1473,15 @@ dialog {
   border-radius: 8px;
   font-weight: 500;
 }
-.existSmall{
+.existSmall {
   position: relative;
 }
-.store3Small{
+.store3Small {
   position: absolute;
-  left:-15px;
+  left: -15px;
   bottom: -20px;
 }
-.cal-count{
+.cal-count {
   padding: 0.2rem 0.5rem;
   border: none;
   outline: none;
@@ -1438,8 +1489,7 @@ dialog {
   background-color: #e53371;
   color: white;
 }
-.printArea .btn-wrapper{
+.printArea .btn-wrapper {
   width: 90%;
   margin: 0 auto;
-  
 }

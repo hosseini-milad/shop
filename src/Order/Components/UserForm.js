@@ -7,7 +7,7 @@ import GeoLocation from "./GeoLocation";
 
 function UserForm(props){
     const [userTab,setUserTab] = useState(0)
-    const [geo,setGeo] = useState(0)
+    const [ChangeGeo,setChangeGeo] = useState(1)
     const def = props.def
     //console.log(def)
     return(<>
@@ -63,13 +63,33 @@ function UserForm(props){
                   ...prevState,
                   roleId:e
                 }))}/>
-                <StyleInput title={"موقعیت مکانی"} direction={"rtl"} 
-                class="userInput"  value={def?def.nif:''}
-                />
-                <div className="placeHolder">
+                {
+                ChangeGeo&&def.nif?
+                <div className="geo-wrapper userInput">
+                  <StyleInput
+                  title={"موقعیت مکانی"} 
+                  direction={"rtl"} 
+
+                  defaultValue={def.nif} 
+                  action={(e)=>props.setData(prevState => ({
+                    ...prevState,
+                    nif:e
+                  }))}
+                  />
+                  <div className="geo">
+                    <i class="fa fa-pencil-square-o" aria-hidden="true" onClick={()=>setChangeGeo(0)}></i>
+                  </div>
+                </div>:
+                <div class="userInput geo-input">
+                  <GeoLocation update={props.setData}/>
+                  <span>موقعیت مکانی</span>
+                </div>
+                }
+                
+                {/* <div className="placeHolder">
                   {geo?<GeoLocation update={props.setData}/>:
                   <i className="fa fa-eye" onClick={()=>setGeo(1)}/>}
-                </div>
+                </div> */}
                 <StyleInput title={"آدرس"} direction={"rtl"} 
                 class="userInput fullRow"  defaultValue={def?def.Address:''}
                 action={(e)=>props.setData(prevState => ({

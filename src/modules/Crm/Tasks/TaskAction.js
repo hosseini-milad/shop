@@ -6,7 +6,9 @@ function TaskAction(props){
     const token = props.token
     const data = props.data
     const [showRemove,setShowRemove] = useState(0)
+    const [Loader,setLoader] = useState(0)
     const updateTask=(action)=>{
+        setLoader(1)
         const postOptions={
             method:'post',
             headers: {'Content-Type': 'application/json',
@@ -23,8 +25,9 @@ function TaskAction(props){
             }
             else{
 
-                setTimeout(()=>props.close(),3000)
+                setTimeout(()=>props.close(),500)
                 props.setBoard(result.taskData)
+                setLoader(0)
             }
         },
         (error) => {
@@ -88,12 +91,19 @@ function TaskAction(props){
     else
     return(
         <div className="taskAction">
-            {data&&data.taskStep==="done"?
+            {Loader?
+            <button
+            type="button" 
+            className="btn-crm btn-crm-accept"
+            onClick={()=>updateTask("accept")}>
+            <p>درحال پردازش</p>
+            </button>:
+                    (data&&data.taskStep==="done"?
                 <button type="button" className="btn-crm btn-crm-accept"
                     onClick={()=>updateTask("sepidar")}><p>ثبت سپیدار</p></button>:
                 <button type="button" className="btn-crm btn-crm-accept"
                     onClick={()=>updateTask("accept")}>
-                    <p>تایید سفارش</p></button>}
+                    <p>تایید سفارش</p></button>)}
     
             <button type="button" className="btn-crm btn-crm-edit"
                 onClick={()=>updateTask("edit")}>
@@ -101,9 +111,9 @@ function TaskAction(props){
             <button type="button" className="btn-crm btn-crm-info"
                 onClick={()=>window.location.href="/orders/print/"+data.orderNo}>
                 <p>چاپ سفارش</p></button>
-            <button type="button" className="btn-crm btn-crm-cancel"
+            {data&&data.taskStep==="done"||data.taskStep==="edit"?<button type="button" className="btn-crm btn-crm-cancel"
                 onClick={()=>setShowRemove(data.orderNo)}>
-                <p>لغو سفارش</p></button>
+                <p>لغو سفارش</p></button>:<></>}
             {data&&data.taskStep==="prepare"?
                 <button type="button" className="btn-crm btn-crm-info"
                 onClick={()=>window.location.href="/orders/invoice/"+data.orderNo}>
