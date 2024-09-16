@@ -1,5 +1,6 @@
 import { useState } from "react"
 import ErrorAction from "../../../components/Modal/ErrorAction"
+import ShowError from "../../../components/Modal/ShowError"
 import env from "../../../env"
 
 function TaskAction(props){
@@ -7,6 +8,8 @@ function TaskAction(props){
     const data = props.data
     const [showRemove,setShowRemove] = useState(0)
     const [Loader,setLoader] = useState(0)
+    const [ShowAlert,setShowAlert] = useState(0)
+    
     const updateTask=(action)=>{
         setLoader(1)
         const postOptions={
@@ -25,8 +28,10 @@ function TaskAction(props){
             }
             else{
 
-                setTimeout(()=>props.close(),500)
+                setTimeout(()=>props.close(),2000)
                 props.setBoard(result.taskData)
+                setShowAlert(result.message)
+                setTimeout(()=>setShowAlert(0),2000)
                 setLoader(0)
             }
         },
@@ -124,6 +129,9 @@ function TaskAction(props){
                 buttonText="حذف" close={()=>setShowRemove(0)}
                 color="red" action={()=>deleteOrder(showRemove)}/>:
             <></>}
+            {ShowAlert?<ShowError status={"SECCESS"} title={"Message"} 
+        text={ShowAlert} icon={"check-circle-o"} style={{direction:"rtl"}}
+        color="green"/>:<></>}
         </div>
     )
 }
