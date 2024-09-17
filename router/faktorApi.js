@@ -310,7 +310,7 @@ router.post('/update-category',jsonParser,auth, async (req,res)=>{
 
 router.post('/cart',auth, async (req,res)=>{
     const userId =req.body.userId
-    try{
+    try{ 
         const cartDetails = await findCartFunction(userId,req.headers['userid'])
         res.json(cartDetails)
     }
@@ -353,7 +353,6 @@ const findCartFunction=async(userId,managerId)=>{
         if(!userId&&IsToday(cartData[c].initDate)!==1){
             continue
         }
-        todayCartData.push(cartData[c])
         try{
             for(var j=0;j<cartData[c].cartItems.length;j++){
                 try{var cartTemp = cartData[c].cartItems[j]
@@ -367,6 +366,7 @@ const findCartFunction=async(userId,managerId)=>{
             cartDetail.push(findCartSum(cartData[c].cartItems))
         }
     catch{}
+    todayCartData.push(cartData[c])
         
    }
     if(qCartData) {
