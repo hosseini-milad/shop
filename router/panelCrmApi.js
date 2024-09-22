@@ -20,6 +20,7 @@ const { error } = require('console');
 const SepidarOrder = require('../middleware/SepidarOrder');
 const MergeOrder = require('../middleware/MergeOrder');
 const MergeCarts = require('../middleware/MergeCarts');
+const ClassifyOrder = require('../middleware/ClassifyOrder');
 
 router.post('/fetch-crm',jsonParser,async (req,res)=>{
     const userId=req.body.userId?req.body.userId:req.headers['userid']
@@ -213,10 +214,19 @@ router.post('/find-bulk',auth,jsonParser,async (req,res)=>{
 
     }
     var result = []
-    const orderData = await cart.find({cartNo:{$in:orderList}})
+    const orderData = await cart.aggregate([
+        {$match:{cartNo:{$in:orderList}}},
+        {$lookup:{
+            from : "product", 
+            localField: "sku", 
+            foreignField: "sku", 
+            as : "productDetail"
+        }}
+    ])
     const taskData = await tasks.find({orderNo:{$in:orderList}})
     const mergeValue = await MergeCarts(orderData)
-    res.json({data:mergeValue,message:"اطلاعات تجمعی"})
+    const classOrder = await ClassifyOrder(mergeValue)
+    res.json({data:mergeValue,classOrder,message:"اطلاعات تجمعی"})
 })
 
 router.post('/update-checkList',auth,jsonParser,async (req,res)=>{

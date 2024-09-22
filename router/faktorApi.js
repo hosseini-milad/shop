@@ -31,6 +31,7 @@ const FindCurrentCart = require('../middleware/CurrentCart');
 const FindCurrentExist = require('../middleware/CurrentExist');
 const OrderToTask = require('../middleware/OrderToTask');
 const IsToday = require('../middleware/IsToday');
+const NewQuote = require('../middleware/NewQuote');
 const {TaxRate} = process.env
 
 router.post('/products', async (req,res)=>{
@@ -853,9 +854,9 @@ const checkAvailable= async(items,stockId)=>{
     totalCount += existItem3?parseFloat(existItem3.quantity):0
     
     const currentOrder = await FindCurrentExist(items.id)
-    console.log("total: ",totalCount, "- order: ",currentOrder,
+    /*console.log("total: ",totalCount, "- order: ",currentOrder,
         "- req: ",items.count
-    )
+    )*/
     var minusCount = currentOrder + items.count
     return(compareCount(totalCount,minusCount))
 } 
@@ -1099,9 +1100,55 @@ router.post('/quick-to-cart',jsonParser, async (req,res)=>{
         progressDate:Date.now()
     }
     try{
-        var status = "";
+        data.isQuote = req.body.isQuote;
         const isSale = await CheckSale(data.manageId)
         data.isSale = isSale
+        //const cartAll = await cart.find()
+        const userData = await customers.findOne({_id:ObjectID(userId)})
+        const qCartData = await quickCart.findOne({userId:userId})
+        
+        data.payValue=qCartData&&qCartData.payValue
+        data.description = qCartData&&qCartData.description
+        data.discount = qCartData&&qCartData.discount
+        const quickCartItems = qCartData&&qCartData.cartItems
+        data.cartItems = quickCartItems
+        const stockId = userData.StockId?userData.StockId:"5"
+        
+        const availItems = !data.isQuote?
+            await checkCart(quickCartItems,stockId,data.payValue):0
+        
+        
+        if(availItems){
+            res.status(400).json({error:availItems}) 
+            return
+        }
+        //data.cartItems =pureCartPrice(quickCartItems,qCartData.payValue)
+        data.cartNo = await NewCode(isSale?"s":"d")
+        data.stockId = qCartData&&qCartData.stockId
+        cartLog.create({...data,ItemID:req.body.cartID,action:"quick to cart"})
+        await cart.create(data)
+            status = "create cart"
+        await quickCart.deleteOne({userId:data.userId})
+        if(!isSale)
+            await CreateTask("border",data,userData)
+        const cartDetails = await findCartFunction(userId,req.headers['userid'])
+        setTimeout(()=>res.json(cartDetails),3000)
+        
+    }
+    catch(error){
+        res.status(500).json({message: error.message})
+    }
+})
+router.post('/quick-to-quote',jsonParser, async (req,res)=>{
+    const userId=req.body.userId?req.body.userId:req.headers['userid']
+    const data={ 
+        userId:userId,
+        manageId:req.headers['userid'],
+        date:req.body.date,
+        progressDate:Date.now()
+    }
+    try{
+        var status = "";
         //const cartAll = await cart.find()
         const userData = await customers.findOne({_id:ObjectID(userId)})
         const qCartData = await quickCart.findOne({userId:userId})
@@ -1121,14 +1168,14 @@ router.post('/quick-to-cart',jsonParser, async (req,res)=>{
             return
         }
         //data.cartItems =pureCartPrice(quickCartItems,qCartData.payValue)
-        data.cartNo = await NewCode(isSale?"s":"d")
+        data.cartNo = await NewQuote("q")
         data.stockId = qCartData&&qCartData.stockId
-        cartLog.create({...data,ItemID:req.body.cartID,action:"quick to cart"})
-        await cart.create(data)
+        cartLog.create({...data,ItemID:req.body.cartID,action:"quick to quote"})
+        await quote.create(data)
             status = "create cart"
         await quickCart.deleteOne({userId:data.userId})
         if(!isSale)
-            await CreateTask("border",data,userData)
+            await CreateTask("bquote",data,userData)
         const cartDetails = await findCartFunction(userId,req.headers['userid'])
         setTimeout(()=>res.json(cartDetails),3000)
         
