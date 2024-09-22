@@ -28,6 +28,7 @@ function Column(props){
         }
       )
     }
+    console.log(props.column)
     return(
         <div className="board-item c">
             <h2 className="board-title">
@@ -37,6 +38,9 @@ function Column(props){
             {(props.column.index=="1")?
             <i className="fa fa-plus addTask" 
                 onClick={()=>setTaskPop(1)}></i>:<></>}
+            {props.column.enTitle=="prepare"?
+            <button className="print-btn" onClick={()=>window.location.href="/PrintStore"}>تجمع سفارشات</button>:
+            <></>}
             </h2>
             
             <Droppable droppableId={props.column.enTitle}>

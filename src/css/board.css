@@ -96,6 +96,18 @@ h3,
   font-weight: bold;
   padding: 15px;
   border-radius: 8px;
+  position: relative;
+
+  .print-btn{
+    font-size: 0.8rem;
+    white-space: nowrap;
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    margin-block: auto;
+    padding: 3px 6px;
+  }
 }
 .board-item:first-child .board-title {
   color: #5382ff;

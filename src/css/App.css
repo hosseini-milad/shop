@@ -28922,8 +28922,6 @@ pre[class*="language-"] {
     left: 10px;
   }
   .visitor-list {
-    overflow-x: scroll;
+    overflow-x: scrol
   }
 }
-
-

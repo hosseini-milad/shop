@@ -55,7 +55,7 @@ import PrintSepidar from "./modules/Print/PrintSepidar";
 import Printofficial from "./modules/Print/Printofficial";
 import Discount from "./pages/Discount";
 import OffCustomer from "./pages/Offcustomer";
-
+import PrintStore from "./modules/Crm/PrintStore";
 const cookies = new Cookies();
 const style = document.getElementById("style-direction");
 var lang = JSON.parse(localStorage.getItem(env.cookieLang));
@@ -137,6 +137,14 @@ root.render(
             <Layout>
               <CRM lang={lang} />
             </Layout>
+          }
+        />
+        <Route
+          path="/PrintStore"
+          element={
+            
+              <PrintStore lang={lang} />
+            
           }
         />
         <Route
