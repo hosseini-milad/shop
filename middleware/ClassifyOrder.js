@@ -1,7 +1,7 @@
 const MultiplySum = require("./MultiplySum")
 
 const ClassifyOrder=(totalData,newItems)=>{
-    //console.log(classResult)
+    return(totalData)
     const bIndex = totalData.findIndex(item=>item.brand==newItems.brand)
     
     var classResult = totalData
