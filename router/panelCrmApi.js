@@ -217,7 +217,7 @@ router.post('/find-bulk',auth,jsonParser,async (req,res)=>{
     const orderData = await cart.aggregate([
         {$match:{cartNo:{$in:orderList}}},
         {$lookup:{
-            from : "product", 
+            from : "products", 
             localField: "sku", 
             foreignField: "sku", 
             as : "productDetail"
