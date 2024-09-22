@@ -11,6 +11,7 @@ const MergeCarts=async(orderDetail)=>{
         for(var j=0;j<orderData.length;j++){
             var orderSku = orderData[j].sku
             const productData = await products.findOne({sku:orderSku})
+            orderData[j].productData = productData
             var index = -1
             if(cart&&cart.length)
                 index = cart.findIndex(item=>item.sku == orderSku)
