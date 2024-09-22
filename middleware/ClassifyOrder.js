@@ -24,7 +24,7 @@ const ClassifyOrder=async(totalData,newItems)=>{
                 data:[{
                     count:newItems.count,
                     price:newItems.sumPrice,
-                    data:[newItems]
+                    ...newItems
                 }
             ]}
             ]
@@ -41,7 +41,7 @@ const ClassifyOrder=async(totalData,newItems)=>{
                     data:[{
                         count:newItems.count,
                         price:newItems.sumPrice,
-                        data:[newItems]
+                        ...newItems
                     }
                 ]})
             }
