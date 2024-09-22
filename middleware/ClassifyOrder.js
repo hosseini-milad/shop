@@ -31,7 +31,7 @@ const ClassifyOrder=async(totalData,newItems)=>{
         })
     }
     else{
-        const bIndex = totalData[cIndex].data.findIndex(item=>item.brand==newItems.brandId)
+        const bIndex = totalData[cIndex].data.findIndex(item=>item.brand==brandId)
         //console.log(totalData[bIndex])
         //console.log(bIndex,iIndex)
         if(bIndex==-1){

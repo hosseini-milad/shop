@@ -635,7 +635,7 @@ router.post('/cart-find', async (req,res)=>{
         const cartList = await cart.aggregate
         ([{$match:{cartNo:cartNo}},
         { $addFields: { "manageId": { "$toObjectId": "$manageId" }}},
-        { $addFields: { "`  `": { "$toObjectId": "$userId" }}},
+        { $addFields: { "userId": { "$toObjectId": "$userId" }}},
         {$lookup:{
             from : "customers", 
             localField: "userId", 
