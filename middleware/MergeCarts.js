@@ -2,6 +2,8 @@ const users = require("../models/auth/users")
 const profiles = require("../models/auth/ProfileAccess")
 const prod = require("../models/auth/ProfileAccess");
 const products = require("../models/product/products");
+const brands = require("../models/product/brand");
+const category = require("../models/product/category");
 var ObjectID = require('mongodb').ObjectID;
 
 const MergeCarts=async(orderDetail)=>{
@@ -11,7 +13,12 @@ const MergeCarts=async(orderDetail)=>{
         for(var j=0;j<orderData.length;j++){
             var orderSku = orderData[j].sku
             const productData = await products.findOne({sku:orderSku})
+            const brandDetail = productData&&await brands.findOne({brandCode:productData.brandId})
+            const catDetail = productData&&await category.findOne({brandCode:productData.catId})
             orderData[j].productData = productData
+            orderData[j].brand = brandDetail
+            orderData[j].category = catDetail
+            orderData[j].price = ''
             var index = -1
             if(cart&&cart.length)
                 index = cart.findIndex(item=>item.sku == orderSku)
