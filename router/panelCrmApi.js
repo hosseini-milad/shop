@@ -214,13 +214,20 @@ router.post('/find-bulk',auth,jsonParser,async (req,res)=>{
 
     }
     var result = []
+    var classOrder=[]
     const orderData = await cart.aggregate([
         {$match:{cartNo:{$in:orderList}}}
     ])
-    const taskData = await tasks.find({orderNo:{$in:orderList}})
-    const mergeValue = await MergeCarts(orderData)
-    const classOrder = await ClassifyOrder(mergeValue)
-    res.json({data:mergeValue,classOrder,message:"اطلاعات تجمعی"})
+    //const taskData = await tasks.find({orderNo:{$in:orderList}})
+    for(var i=0;i<orderData.length;i++){
+        var orderItems = orderData[i].cartItems
+        for(var j=0;j<orderItems.length;j++){
+            classOrder = await ClassifyOrder(classOrder,orderItems[j])
+        }
+    }
+    //const mergeValue = await MergeCarts(orderData)
+    
+    res.json({data:classOrder,message:"اطلاعات تجمعی"})
 })
 
 router.post('/update-checkList',auth,jsonParser,async (req,res)=>{

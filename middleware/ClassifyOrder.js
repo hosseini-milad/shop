@@ -1,15 +1,25 @@
+const products = require("../models/product/products")
 const MultiplySum = require("./MultiplySum")
 
-const ClassifyOrder=(totalData,newItems)=>{
-    return(totalData)
-    const bIndex = totalData.findIndex(item=>item.brand==newItems.brand)
-    
+const ClassifyOrder=async(totalData,newItems)=>{
+    newItems.price = ''
+
+    const productData = await products.findOne({sku:newItems.sku})
+    //console.log(productData)
+    var catId = productData.catId
+    var brandId = productData.brandId
+    const brandDetail = brandId&&await brands.findOne({brandCode:brandId})
+    const catDetail = catId&&await category.findOne({catCode:catId})
+
+    const cIndex = totalData.findIndex(item=>item.cat==catId)
+    console.log(cIndex)
     var classResult = totalData
-    if(bIndex == -1){
-        classResult.push({brand:newItems.brand,
-            data:[{index:newItems.index,
+    if(cIndex == -1){
+        classResult.push({cat:catId,
+            catData:catDetail,
+            data:[{brand:brandId,
+                brandData:brandDetail,
                 data:[{
-                    material:newItems.material,
                     count:newItems.count,
                     price:newItems.sumPrice,
                     data:[newItems]
@@ -19,14 +29,14 @@ const ClassifyOrder=(totalData,newItems)=>{
         })
     }
     else{
-        const iIndex = totalData[bIndex].data.findIndex(item=>item.index==newItems.index)
+        const bIndex = totalData[cIndex].data.findIndex(item=>item.brand==newItems.brandId)
         //console.log(totalData[bIndex])
         //console.log(bIndex,iIndex)
-        if(iIndex==-1){
-            classResult[bIndex].data.push(
-                {index:newItems.index,
+        if(bIndex==-1){
+            classResult[cIndex].data.push(
+                {brand:brandId,
+                    brandData:brandDetail,
                     data:[{
-                        material:newItems.material,
                         count:newItems.count,
                         price:newItems.sumPrice,
                         data:[newItems]
@@ -34,30 +44,18 @@ const ClassifyOrder=(totalData,newItems)=>{
                 ]})
             }
         else{
-            const mIndex = totalData[bIndex].data[iIndex].data.findIndex(item=>item.material==newItems.material)
-            
-            if(mIndex==-1){
-                classResult[bIndex].data[iIndex].data.push(
-                    {
-                        material:newItems.material,
-                        count:newItems.count,
-                        price:newItems.sumPrice,
-                        data:[newItems]
-                    })
-                }
-            else{
 
-                classResult[bIndex].data[iIndex].data[mIndex].data.push(newItems)
-                classResult[bIndex].data[iIndex].data[mIndex].count=
-                MultiplySum(classResult[bIndex].data[iIndex].data[mIndex].count,
+                classResult[cIndex].data[bIndex].data.push(newItems)
+                classResult[cIndex].data[bIndex].count=
+                MultiplySum(classResult[cIndex].data[bIndex].count,
                     newItems.count)
-                classResult[bIndex].data[iIndex].data[mIndex].price = 
-                MultiplySum(classResult[bIndex].data[iIndex].data[mIndex].price,
+                classResult[cIndex].data[bIndex].price = 
+                MultiplySum(classResult[cIndex].data[bIndex],
                     newItems.sumPrice)
-            }
+            
         }
     }
-    
+    return(totalData)
     return(classResult)
 }
 
