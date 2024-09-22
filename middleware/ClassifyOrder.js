@@ -6,8 +6,8 @@ const ClassifyOrder=async(totalData,newItems)=>{
 
     const productData = await products.findOne({sku:newItems.sku})
     //console.log(productData)
-    var catId = productData.catId
-    var brandId = productData.brandId
+    var catId = productData&&productData.catId
+    var brandId = productData&&productData.brandId
     const brandDetail = brandId&&await brands.findOne({brandCode:brandId})
     const catDetail = catId&&await category.findOne({catCode:catId})
 
