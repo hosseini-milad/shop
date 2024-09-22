@@ -1,4 +1,6 @@
 const products = require("../models/product/products")
+const brands = require("../models/product/brand")
+const category = require("../models/product/category")
 const MultiplySum = require("./MultiplySum")
 
 const ClassifyOrder=async(totalData,newItems)=>{
