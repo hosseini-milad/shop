@@ -14,7 +14,7 @@ const MergeCarts=async(orderDetail)=>{
             var orderSku = orderData[j].sku
             const productData = await products.findOne({sku:orderSku})
             const brandDetail = productData&&await brands.findOne({brandCode:productData.brandId})
-            const catDetail = productData&&await category.findOne({brandCode:productData.catId})
+            const catDetail = productData&&await category.findOne({catCode:productData.catId})
             orderData[j].productData = productData
             orderData[j].brand = brandDetail
             orderData[j].category = catDetail
