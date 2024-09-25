@@ -7,7 +7,7 @@ const CartToSepidar=async(data,faktorNo,user,stock)=>{
         var query ={
             "GUID": "124ab075-fc79-417f-b8cf-1"+faktorNo,
             "CustomerRef": toInt(user.CustomerID),
-            //"AddressRef": 1,
+            "AddressRef": user.AddressID?user.AddressID:'',
             "CurrencyRef":1,
             "SaleTypeRef": 3,
             "Duty":0.0000,
@@ -17,12 +17,12 @@ const CartToSepidar=async(data,faktorNo,user,stock)=>{
             "Items": 
             notNullCartItem.map((item,i)=>{
                 const price = findPayValuePrice(item.price,3)
-                const discount =0.00//item.discount?normalPriceDiscount(price,item.discount,1):0
+                const discount =item.discount?normalPriceDiscount(price,item.discount,1):0
                 return({
                 "ItemRef": toInt(item.id),
                 "TracingRef": null,
-                "Description":"item.description",//item.title+"|"+item.sku,
-                "StockRef":stock?stock:3,
+                "Description":item.title+"|"+item.sku,
+                "StockRef":item.stock?item.stock:3,
                 "Quantity": toInt(item.count),
                 "Fee": toInt(price),
                 "Price": normalPriceCount(price,item.count,1),

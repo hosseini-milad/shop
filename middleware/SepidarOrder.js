@@ -18,10 +18,16 @@ const SepidarOrder=async(orderNo)=>{
     
 
     var sepidarResult = await sepidarPOST(sepidarQuery,"/api/invoices",adminData._id)
-    if(sepidarResult&&!sepidarResult.Message)
+    if(sepidarResult&&!sepidarResult.Message){
         await tasks.updateOne({orderNo:orderNo},
     {$set:{taskStep:"archive",query:sepidarQuery,
         result:sepidarResult,progressDate:Date.now()}})
+    }
+    else{
+        await tasks.updateOne({orderNo:orderNo},
+    {$set:{query:sepidarQuery,progressDate:Date.now()}})
+
+    }
     return(sepidarResult)
 }
 

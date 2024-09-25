@@ -95,6 +95,12 @@ const calcTasks=async(userId)=>{
     //console.log(columns)
     const tasksToShow=[]
     for(var c=0;c<taskList.length;c++){ 
+        if(taskList[c].result){
+            var Number = taskList[c].result.Number
+            var InvoiceID = taskList[c].result.InvoiceID
+            var Message = taskList[c].result.Message
+            taskList[c].result = {Number,InvoiceID,Message}
+        }
         var taskStep = taskList[c].taskStep
         var yesterday = new Date(Date.now() - 86400000); // that is: 24 * 60 * 60 * 1000
         var taskDate = taskList[c].progressDate?taskList[c].progressDate:
@@ -154,13 +160,16 @@ router.post('/update-tasks-status',auth,jsonParser,async (req,res)=>{
         var adminData = ''
         if(status==="sepidar"){
             const faktorNo= "F123"+taskData.orderNo
-            var sepidarResult = await SepidarOrder(orderNo)
+            var sepidarResult = await SepidarOrder(taskData.orderNo)
             if(sepidarResult.Message)
                 await tasks.updateOne({_id:ObjectID(taskId)},
             {$set:{taskStep:newStatus.enTitle,query:sepidarQuery,
                 result:sepidarResult,progressDate:Date.now()}})
         }
-
+        else{
+            await tasks.updateOne({_id:ObjectID(taskId)},
+            {$set:{taskStep:newStatus.enTitle,progressDate:Date.now()}})
+        }
          
         const userId=req.headers["userid"]
         const tasksList = await calcTasks(userId)
