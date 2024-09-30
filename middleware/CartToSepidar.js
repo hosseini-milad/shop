@@ -11,8 +11,8 @@ const CartToSepidar=async(data,faktorNo,user,stock)=>{
             "CurrencyRef":1,
             "SaleTypeRef": 3,
             "Duty":0.0000,
-            "Description":"faktorNo",
-            "DescriptionRef":"faktorNo",
+            "Description":faktorNo,
+            "DescriptionRef":faktorNo,
             "Discount": 0.00,
             "Items": 
             notNullCartItem.map((item,i)=>{
@@ -22,7 +22,7 @@ const CartToSepidar=async(data,faktorNo,user,stock)=>{
                 "ItemRef": toInt(item.id),
                 "TracingRef": null,
                 "Description":item.title+"|"+item.sku,
-                "StockRef":item.stock?item.stock:3,
+                "StockRef":item.stock?item.stock:stock,
                 "Quantity": toInt(item.count),
                 "Fee": toInt(price),
                 "Price": normalPriceCount(price,item.count,1),
