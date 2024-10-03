@@ -189,8 +189,8 @@ router.post('/update-bulk',auth,jsonParser,async (req,res)=>{
     }
     var result = []
     for(var i=0;i<orderList.length;i++){
-        const orderData = await cart.findOne({cartNo:orderList[i].orderNo})
-        const taskData = await tasks.findOne({orderNo:orderList[i].orderNo})
+        const orderData = await cart.findOne({cartNo:orderList[i]})
+        const taskData = await tasks.findOne({orderNo:orderList[i]})
         if(taskData&&taskData.taskStep =="done"){
         const sepidarResult = await SepidarOrder(orderList[i])
         result.push(sepidarResult)
