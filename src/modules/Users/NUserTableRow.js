@@ -1,4 +1,6 @@
-import { useState } from "react"
+import React ,{ useState,useRef,useEffect } from "react"
+import ErrorAction from "../Components/PopUps/ErrorAction"
+import env from "../../env"
 import UserClassInTable from "./UserComponent/UserClassInTable"
 import tabletrans from "../../translate/tables"
 import Status from "../Components/Status"
@@ -6,6 +8,9 @@ import Status from "../Components/Status"
 function NUserTableRow(props){ 
   const [openOption,setOpenOption] = useState(0)
   const [checkState,setCheckState] = useState(false)
+  const [Alert,setAlert]=useState(false)
+  let menuRef = useRef();
+  console.log(menuRef)
   const activeAcc = props.index===props.detail
   const user=props.user
   const selectUser=()=>{
@@ -37,8 +42,52 @@ function NUserTableRow(props){
                 user:e
               }))*/
   }
+  useEffect(() => {
+    let handler = (e)=>{
+      if(!menuRef.current.contains(e.target)){
+        setOpenOption(false);
+        console.log(menuRef.current);
+      }      
+    };
+
+    document.addEventListener("mousedown", handler);
+    
+
+    return() =>{
+      document.removeEventListener("mousedown", handler);
+    }
+
+  });
+
+  const deleteNews=()=>{
+    //if(newCustomer) {
+      var postOptions={
+          method:'post',
+          headers: {'Content-Type': 'application/json'},
+          body:JSON.stringify()
+        }
+       //console.log(postOptions)
+    fetch(env.siteApi + "/setting/delete-news",postOptions)
+    .then(res => res.json())
+    .then(
+      (result) => {
+        if(result.error){
+          console.log(result.error)
+        }
+          else{
+
+            setTimeout(()=>window.location.href="/news",2000)
+          }
+          
+      },
+      (error) => {
+        console.log(error);
+      }
+    )
+  }
+
   console.log(props.selectedUser)
-    return(
+    return(<>
         <tr>
             <td className="checkBoxStyle">
               <input type="checkbox" name="" id="" checked={checkState}
@@ -67,26 +116,39 @@ function NUserTableRow(props){
                 <Status text={user.lock!=="3"?"فعال":"قفل شده"} />
               </div>
             </td>
-            <td>
+            <td className="p-r">
               <div className="more-btn">
-                <i className="tableIcon fas fa-edit" onClick={()=>
-                  window.location.href="/customers/detail/"+user._id}></i>
-                {/* <i className="tableIcon fas fa-ellipsis-v" 
-                  onClick={()=>setOpenOption(openOption?0:1)}></i> */}
+                {/* <i className="tableIcon fas fa-edit" onClick={()=>
+                  window.location.href="/customers/detail/"+user._id}></i> */}
+                <i className="tableIcon fas fa-ellipsis-v" 
+                  onClick={()=>setOpenOption(openOption?0:1)}></i>
               </div>
-              {/* {openOption?<div className={props.direction==="rtl"?
-                "sub-more-menu":"sub-more-menu sub-more-rtl"}>
-                <div className="sub-option sub-delete">
+              <div className={openOption==true?"sub-more-menu sub-active":"sub-more-menu"} ref={menuRef}>
+                <div className="sub-option sub-delete" onClick={()=>setAlert(true)}>
                 <i className="tableIcon fas fa-remove" style={{color: "#ff0000"}}></i>
-                  <p>{tabletrans.delete[props.lang]}</p>
+                  <p>Delete</p>
                 </div>
-                <div className="sub-option sub-edit">
+                <div className="sub-option sub-edit" onClick={()=>
+                  window.location.href="/customers/detail/"+user._id}>
                   <i className="tableIcon fas fa-edit"></i>
-                  <p>{tabletrans.edit[props.lang]}</p>
+                  <p>Edit</p>
                 </div>
-              </div>:<></>} */}
+              </div>
             </td>
           </tr>
+          {Alert?
+            <ErrorAction 
+            status={"DELETE"} 
+            title={"حذف آیتم"} 
+            text={"آیتم انتخاب شده حذف خواهد شد. آیا مطمئن هستید؟"} 
+            linkText={""} 
+            style={{direction:"rtl"}}
+            buttonText="حذف" 
+            close={()=>setAlert()}
+            action={deleteNews}
+            />:
+            <></>}
+            </>
     )
 }
 export default NUserTableRow

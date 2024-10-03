@@ -46,7 +46,7 @@ function QuickCartHolder(props){
           user={props.user} action={props.addToCart}
           delete={props.deleteFromCart} setError={props.setError}
           search={search} setSearch={setSearch}
-          cartNo={props.cartNo} payValue={props.payValue}/>
+          cartNo={props.cartNo} payValue={props.payValue} setLoading={props.setLoading}/>
         <div className="product-table-btn-wrapper"> 
           <QuickActions cart={props.cart} setCart={props.setCart}
           action={props.addToCart} cartNo={props.cartNo}

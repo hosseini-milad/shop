@@ -64,13 +64,13 @@ function UserForm(props){
                   roleId:e
                 }))}/>
                 {
-                ChangeGeo&&def.nif?
+                ChangeGeo&&def&&def.nif?
                 <div className="geo-wrapper userInput">
                   <StyleInput
                   title={"موقعیت مکانی"} 
                   direction={"rtl"} 
 
-                  defaultValue={def.nif} 
+                  defaultValue={def?def.nif:""} 
                   action={(e)=>props.setData(prevState => ({
                     ...prevState,
                     nif:e

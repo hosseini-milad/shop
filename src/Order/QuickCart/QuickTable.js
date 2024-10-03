@@ -38,7 +38,7 @@ function QuickTable(props){
               payValue={props.payValue?props.payValue:"4"} setCart={props.setCart}
               user={props.user} action={props.action} setError={props.setError}
               search={props.search} setSearch={props.setSearch}
-              setReload={setReload}/>:
+              setReload={setReload} setLoading={props.setLoading}/>:
               <tr className="input-tr">
               <td colSpan={5}><p>در حال ثبت</p></td>
             </tr>}

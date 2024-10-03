@@ -1519,20 +1519,19 @@ dialog {
   width: 80%;
   margin: 0 auto;
   margin-bottom: 6px;
-  border: 2px solid black;
-  border-radius: 0.5rem;
+  
 }
 .Print-store .table-wrapper .header,.Print-store .table-wrapper .main{
   display: flex;
   align-items: center;
-  justify-content: flex-start;
+  justify-content: space-between;
   width: 100%;
 
   .header-item,.main-item{
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 100%;
+    width: calc(100%/2.1);
     border-bottom: 1px solid black;
     height: 45px;
 
@@ -1544,30 +1543,46 @@ dialog {
       text-align: center;
       color: black;
       padding: 0.5rem 0;
-      border-left: 1px solid black;
+      
     }
     p:nth-child(2){
       width: 100%;
       font-size: 0.8rem;
+      border: 1px solid black;
+      border-top: 0;
+      border-bottom: 0;
     }
-    p:nth-child(3){
-      border-width: 2px;
-    }
+    
+  }
+  .header-item{
+    border: 2px solid black;
+    border-radius: 1rem 1rem 0 0;
   }
   .main-item{
-    width: calc(100%/2);
+    border: 2px solid black;
+    border-top: 0;
   }
   .header-item p{
     font-size: 14px;
     font-weight: 600;
   }
-  .header-item:nth-child(2n),.main-item:nth-child(2n){
-    p:last-child{
-      border-left: 0;
-    }
-  }
+  
 }
 .Print-store .table-wrapper .main{
   flex-wrap: wrap;
-  justify-content: flex-start;
+  justify-content: space-between;
 }
+.p-r{
+  position: relative;
+}
+.fa-ellipsis-v{
+  width: 20px;
+  cursor: pointer;
+}
+.sub-more-menu{
+  display: none !important;
+  left: 50px !important;
+}
+.sub-active{
+  display: flex !important;
+} 

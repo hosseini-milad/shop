@@ -124,14 +124,14 @@ function NewUsers(props) {
         </div>
       </div>
       <div className="list-container">
-        <StatusBar />
+        {/* <StatusBar /> */}
         <UserFilters
           lang={props.lang}
           setFilters={handleFilterChange}
           // setFilters={setFilters}
           options={content.access}
           profiles={content.profilesList}
-          currentFilters={filters}
+          filters={filters}
           updateUrlWithFilters={updateUrlWithFilters} // Pass the function as a prop
         />
         <div className="user-list">

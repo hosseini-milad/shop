@@ -12,6 +12,7 @@ import TaskAction from "./Tasks/TaskAction"
 function OrderPopUp(props){
     const data =props.data
     const token = props.token
+    const [Loading,setLoading]=useState(1)
     const [payValue,setPayValue] = useState(defPay)
     const [content,setContent] = useState()
     //console.log(content)
@@ -35,7 +36,7 @@ function OrderPopUp(props){
         (error) => {
           console.log(error);
         })
-    },[])
+    },[Loading])
     console.log(data)
     const updateTotal =()=>{
         const postOptions={
@@ -117,6 +118,7 @@ function OrderPopUp(props){
                 console.log(error)
             })
     }
+    console.log(Loading)
     const regSepidar =()=>{
         const postOptions={
             method:'post',
@@ -171,7 +173,9 @@ function OrderPopUp(props){
                         setCart={(e)=>setContent(e)}
                         canEdit={content&&content.canEdit}
                         cartDetail={content.orderData?content.orderData:content.cartDetail} 
-                        setError={setError}/>:
+                        setError={setError}
+                        setLoading={setLoading}
+                        />:
                         <div>{env.loader}</div>}
                     </main>
                 </div>

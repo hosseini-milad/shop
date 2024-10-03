@@ -35,13 +35,14 @@ function QuickRow(props){
                     props.setError({message:result.error,color:"brown"})
                     setTimeout(()=>props.setError({message:'',
                         color:"brown"}),3000)
+                    
                 }
                 else{
                     props.setCart(result) 
                     props.setError({message:result.message,color:"orange"})
                     setTimeout(()=>props.setError({message:'',
                         color:"brown"}),3000)
-
+                        
                 }
             },
             (error) => {

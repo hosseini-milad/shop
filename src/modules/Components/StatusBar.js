@@ -7,6 +7,7 @@ function StatusBar(props){
   const lang = props.lang
   const token=props.token
   const [content,setContent]=useState("")
+  
   useEffect(() => {
     const postOptions={
         method:'post',
