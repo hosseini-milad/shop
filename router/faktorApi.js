@@ -1030,7 +1030,12 @@ router.post('/update-Item-cart',jsonParser, async (req,res)=>{
                 {cartNo:data.cartNo},{$set:{cartItems:oldCartItems}})
             status = "update cart"
         const cartDetails = await findCartData(data.cartNo)
-        res.json({...cartDetails,message:"آیتم بروز شد."})
+        var canEdit = 0
+        var taskData = await OrderToTask(data.cartNo)
+        if(taskData&&(
+            taskData.taskStep== "initial"||taskData.taskStep=="edit")) 
+            canEdit = 1
+        res.json({...cartDetails,message:"آیتم بروز شد.",canEdit})
     }
     catch(error){
         res.status(500).json({message: error.message})
