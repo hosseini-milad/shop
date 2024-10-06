@@ -208,7 +208,8 @@ router.post('/calc-count',auth, async (req,res)=>{
             var desc = '' 
             count = count?count:0 
             count3 = count3?count3:0
-            var cartCount = findCartCount(searchProducts[i].sku,currentCart.concat(qCartList),stockId)
+            var countData = findCartCount(searchProducts[i].sku,currentCart.concat(qCartList),stockId)
+            var cartCount = countData&&countData.count
             //console.log(cartCount)
             const storeCount =count?parseInt(count.quantity):0
             const orderCount =parseInt(cartCount)
@@ -218,7 +219,8 @@ router.post('/calc-count',auth, async (req,res)=>{
                 else if(count3)
                     count3.quantity = count3.quantity-orderCount 
                 res.json({count,storeCount,orderCount,count3:count3?count3.quantity:0,
-                    perBox:searchProducts[i].perBox?searchProducts[i].perBox:0,cartIds})
+                    perBox:searchProducts[i].perBox?searchProducts[i].perBox:0,
+                    orderData:countData.data})
                 return
             }
             else{
@@ -239,13 +241,13 @@ const findCartCount=(item,cart)=>{
         var cartItem =cart[i].cartItems 
         for(var c=0;c<(cartItem&&cartItem.length);c++){
             if(cartItem[c].sku === item){
-                inOrder.push(cart[i].cartNo)
+                inOrder.push({orderNo:cart[i].cartNo,count:cartItem[c].count})
                 cartCount=parseInt(cartCount)+parseInt(cartItem[c].count)
             }
         }
     }
-    console.log(inOrder)
-    return(cartCount)
+    //console.log(inOrder)
+    return({count:cartCount,data:inOrder})
     
 }
 router.post('/update-product',jsonParser,auth, async (req,res)=>{
@@ -1088,7 +1090,8 @@ const findNullCount=async(items,cart)=>{
     //console.log(items)
     for(var i=0;i<items.length;i++){
         const itemCount = await productCount.findOne({ItemID:items[i].id,Stock:'13'})
-        var count = findCartCount(items[i].sku,cart)
+        var countData = findCartCount(items[i].sku,cart)
+        var count = countData&&countData.count
         count+=parseInt(items[i].count)
         var cmpr = compareCount(itemCount.quantity,count)
         //console.log(itemCount.quantity,count,cmpr)
@@ -1222,7 +1225,8 @@ const findItemBySku=async(sku,cartItems,stockId,item)=>{
     const searchProducts = await productCount.find({ItemID:ItemID})
     var countSep = (searchProducts.find(item=>item.Stock==stockId))
     countSep = countSep?countSep.quantity:0
-    var countCart = findCartCount(sku,cartItems,stockId)
+    var countData = findCartCount(sku,cartItems,stockId)
+    var countCart = countData&&countData.count
     return(countSep-countCart)
 
 }
