@@ -198,6 +198,7 @@ router.post('/calc-count',auth, async (req,res)=>{
             as : "countData"
         }}])
         const cartList = await tasks.find({taskStep:{$nin:['archive']}})
+        var cartIds = cartList.map(item=>item.orderNo)
         var currentCart = await FindCurrentCart(cartList.map(item=>item.orderNo))
         console.log(stockId)
         const qCartList = await qCart.find(stockId?{stockId:stockId}:{})
@@ -217,7 +218,7 @@ router.post('/calc-count',auth, async (req,res)=>{
                 else if(count3)
                     count3.quantity = count3.quantity-orderCount 
                 res.json({count,storeCount,orderCount,count3:count3?count3.quantity:0,
-                    perBox:searchProducts[i].perBox?searchProducts[i].perBox:0})
+                    perBox:searchProducts[i].perBox?searchProducts[i].perBox:0,cartIds})
                 return
             }
             else{
