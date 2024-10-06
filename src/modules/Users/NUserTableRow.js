@@ -64,10 +64,10 @@ function NUserTableRow(props){
       var postOptions={
           method:'post',
           headers: {'Content-Type': 'application/json'},
-          body:JSON.stringify()
+          body:JSON.stringify({userId:user._id})
         }
        //console.log(postOptions)
-    fetch(env.siteApi + "/setting/delete-news",postOptions)
+    fetch(env.siteApi + "/panel/user/delete-customer",postOptions)
     .then(res => res.json())
     .then(
       (result) => {
@@ -75,8 +75,8 @@ function NUserTableRow(props){
           console.log(result.error)
         }
           else{
-
-            setTimeout(()=>window.location.href="/news",2000)
+            console.log(result)
+            setTimeout(()=>window.location.href="/news",5000)
           }
           
       },

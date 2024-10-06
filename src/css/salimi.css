@@ -6960,12 +6960,14 @@ table {
   align-items: center;
   justify-content: center;
   gap: 8px;
-  border: 1px solid #c4c4c4;
-  background: #fff;
+  border:none;
   border-radius: 2px;
   cursor: pointer;
   text-shadow: 1px 1px 0 rgba(0, 0, 0, 0.2);
-  padding: 2px 15px;
+  padding: 0 15px !important;
+  font-size: 0.85rem;
+  border-radius: 6px;
+  background-color: lightgrey;
 }
 
 .profiles-header {

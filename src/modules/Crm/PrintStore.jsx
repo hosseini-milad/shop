@@ -30,33 +30,43 @@ const PrintStore = (props) => {
     <div className="Print-store">
       <div className="tables-container">
         {List&&List.data.map((Category,i)=>(
-          <>
-            <h4 className="category">{Category.catData&&Category.catData.title?Category.catData.title:"-"}</h4>
-            {Category.data&&Category.data.map((Brand,i)=>(
-              <div className="table-wrapper" key={i}>
-                <div className="header">
-                  <div className="header-item">
-                    <p>{Brand.brandData.title}</p>
-                    <p>نام محصول</p>
-                    <p>تعداد</p>
-                  </div>
-                  <div className="header-item">
-                    <p>{Brand.brandData.title}</p>
-                    <p>نام محصول</p>
-                    <p>تعداد</p>
-                  </div>
-                </div>
-              <div className="main">
-                  {Brand.data&&Brand.data.map((Item,i)=>
-                    (<div className="main-item" key={i}>
-                      <p>{i+1}</p>
-                      <p>{Item.title}</p>
-                      <p>{Item.count}</p>
-                    </div>)
-                  )}
+          
+            <>
+            {Category.data&&Category.data.map((Brand,i)=>(<>
+              <h4 className="category">
+                {(Category.catData&&Category.catData.title?Category.catData.title:"-")+"-"+(Brand.brandData.title)}
+              </h4>
+              <table className="hesabfaMainTable" key={i}>
                 
-              </div>
-            </div>
+              <tbody>
+                <tr>
+                  <th></th>
+                  <th>#</th>
+                  <th>کد کالا</th>
+                  <th>برند</th>
+                  <th>عنوان کالا</th>
+                  <th>کارتن</th>
+                  <th>تعداد</th>
+                  <th>تعداد کل</th>
+                  <th>توضیحات</th>
+                </tr>
+                {Brand.data&&Brand.data.map((Item,i)=>
+                  (<tr key={i}>
+                    <td></td>
+                    <td>{i+1}</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                  </tr>)
+                )}
+                
+              </tbody>
+            </table>
+            </>
             ))
               }
           </>
