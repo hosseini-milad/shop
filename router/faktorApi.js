@@ -234,14 +234,17 @@ router.post('/calc-count',auth, async (req,res)=>{
 })
 const findCartCount=(item,cart)=>{
     var cartCount =0
+    var inOrder=[]
     for(var i=0;i<cart.length;i++){
         var cartItem =cart[i].cartItems 
         for(var c=0;c<(cartItem&&cartItem.length);c++){
             if(cartItem[c].sku === item){
+                inOrder.push(cart[i].cartNo)
                 cartCount=parseInt(cartCount)+parseInt(cartItem[c].count)
             }
         }
     }
+    console.log(inOrder)
     return(cartCount)
     
 }
