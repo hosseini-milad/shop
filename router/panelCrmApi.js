@@ -225,7 +225,25 @@ router.post('/find-bulk',auth,jsonParser,async (req,res)=>{
     var result = []
     var classOrder=[]
     const orderData = await cart.aggregate([
-        {$match:{cartNo:{$in:orderList}}}
+        {$match:{cartNo:{$in:orderList}}},
+        {$addFields:{userId: { "$toObjectId": "$userId" }}},
+        {
+                from: 'customers',
+                localField: 'userId',
+                foreignField:'_id',
+                as: "customers"       
+          },
+          {
+            $addFields: {
+                customerName: { $min: "$customers.cName", },
+                customerLastName: { $min: "$customers.sName", }
+            }
+          },
+          {
+            $project: {
+                customers:0
+            }
+          },  
     ])
     //const taskData = await tasks.find({orderNo:{$in:orderList}})
     for(var i=0;i<orderData.length;i++){

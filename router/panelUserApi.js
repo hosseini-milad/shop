@@ -496,7 +496,7 @@ userId
           message: `مشتری دارای سفارشی با شماره ${order.orderNo} می باشد`,
         });
     const cart = await cart.findOne({ userId });
-    if (cart)
+    if (cart) 
       return res
         .status(400)
         .json({
