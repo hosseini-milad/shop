@@ -197,7 +197,7 @@ router.post('/calc-count',auth, async (req,res)=>{
             foreignField: "ItemID", 
             as : "countData"
         }}])
-        const cartList = await tasks.find({taskStep:{$nin:['archive']}})
+        const cartList = await tasks.find({taskStep:{$nin:['archive','cancel']}})
         var cartIds = cartList.map(item=>item.orderNo)
         var currentCart = await FindCurrentCart(cartList.map(item=>item.orderNo))
         console.log(stockId)
