@@ -23,9 +23,7 @@ function OrderHolder(props) {
   const [payValue, setPayValue] = useState(defPay);
   const [error, setError] = useState({ message: "", color: "brown" });
   const access = CheckAccess(token,"orders")
-  console.log(access)
   useEffect(() => {
-    console.log(Math.random());
     const postOptions = {
       method: "post",
       headers: {
@@ -82,6 +80,16 @@ function OrderHolder(props) {
           console.log(error);
         }
       );
+    if(token.profileCode == "sale") 
+      setUser(
+      {"_id":"66128faa5820d102747ed259",
+        "username":"مصرف کننده نهایی",
+        "cName":"مصرف کننده نهایی",
+        "phone":"09121697421",
+        "cCode":"12124",
+        "CustomerID":"2753"
+      },
+    )
   }, []);
   useEffect(() => {
     if (!appFilter) return;

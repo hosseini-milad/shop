@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import env from "../../env";
 import ManageUser from "./ManageUser";
 import { useNavigate } from "react-router-dom";
@@ -23,10 +23,11 @@ function OrderHeader(props) {
           env.shopExpert,
           JSON.stringify({
             grid: value,
-          })
+          }) 
         );
   };
   const [customers, setCustomers] = useState();
+  
   const findCustomer = (search) => {
     if (search.length < 3) {
       //setShowPop(0)
@@ -57,9 +58,6 @@ function OrderHeader(props) {
           console.log(error);
         }
       );
-  };
-  const gotToOpenOrders = () => {
-    navigate("/orders/open");
   };
   return (
     <div className="nav-bar">
@@ -186,7 +184,7 @@ function OrderHeader(props) {
       ) : (
         <></>
       )}
-      <ManageUser show={showUsers} close={() => setShowUsers(0)} />
+      {showUsers?<ManageUser show={showUsers} close={() => setShowUsers(0)} />:<></>}
     </div>
   );
 }

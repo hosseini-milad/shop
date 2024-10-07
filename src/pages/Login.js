@@ -56,20 +56,20 @@ fetch(env.siteApi + "/panel/user/allow-menu",postOptions)
   (result) => {
     if(!result.error)
     {
-      console.log(user)
       var user = userLogin?userLogin:result
               const cookies = new Cookies();
               const cookieData = {
                   userId:user._id,
                   access:user.access,
                   profile:result.access,
+                  profileCode:user.profileCode,
+                  profileName:user.profileName,
                   profileClass:user.profile,
                   name:user.cName+" "+user.sName,
                   date:user.date,
                   token:user.token,
                   username:(user.cName+" "+result.sName)
               }
-              //console.log(cookieData)
               cookies.set(env.cookieName,cookieData, { path: '/' });
               window.location.href=("/")
       //setAllowMenu(result.data)
