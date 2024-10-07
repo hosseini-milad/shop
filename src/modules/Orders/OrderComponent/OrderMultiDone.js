@@ -1,11 +1,15 @@
+import WaitingBtn from "../../../components/Button/waitingBtn"
 import env, { normalArrayRound } from "../../../env"
+import { useState } from "react"
 
 function OrderMultiDone(props){
     const token = props.token
     const orders = props.orders
+    const [Loader,setLoader]=useState("")
     // const totalPrice = normalArrayRound(orders&&
     //   orders.map(item=>(item.totalCart&&item.totalCart.totalPrice)))
     const setSepidar=()=>{
+      setLoader(1)
       if(!orders||!orders.length)
         return('no order selected')
       const body={
@@ -24,11 +28,15 @@ function OrderMultiDone(props){
     .then(
       (result) => {
         console.log(result)
+        setLoader(0)
       },
       (error) => {
         console.log(error);
+        setLoader(0)
       })
+      
     }
+    console.log(Loader)
     return(
       <tbody>
           {props.orders&&props.orders.length?<tr>
@@ -36,9 +44,10 @@ function OrderMultiDone(props){
             <td colSpan={7}></td>
             <td colSpan={2} className="bold-td">تعداد کل: {orders.length}</td>
             <td colSpan={3} className="regSepidar">
-              <input type ="button" className="regSepidar"
-              value="ثبت سپیدار" 
-              onClick={setSepidar}/></td>
+              {Loader?<div ><p>درحال پردازش</p></div>:<div className="regSepidar"
+              onClick={setSepidar} style={{cursor:"pointer"}}><p>ثبت سپیدار</p>
+              </div>}
+              </td>
           </tr>:<></>}
         </tbody>
     )

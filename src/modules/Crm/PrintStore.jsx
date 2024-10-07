@@ -58,8 +58,8 @@ const PrintStore = (props) => {
                     <td className="meduim-td">{Item.sku}</td>
                     <td className="small-td">{Brand.brandData.title}</td>
                     <td className="larg-td">{Item.title}</td>
-                    <td className="count-td"></td>
-                    <td className="count-td"></td>
+                    <td className="count-td">{Item.box}</td>
+                    <td className="count-td">{Item.single}</td>
                     <td className="count-td">{Item.count}</td>
                     <td></td>
                   </tr>)
