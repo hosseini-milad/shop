@@ -57,6 +57,8 @@ const ClassifyOrder = async (totalData, newItems) => {
         else {
             const sku = totalData[cIndex].data.find(item => item.brand == brandId).data.find(x => x.sku === newItems.sku)
             if (!sku) {
+                newItems.single=1
+                newItems.box = 2
                 classResult[cIndex].data[bIndex].data.push(newItems)
                 classResult[cIndex].data[bIndex].count =
                     MultiplySum(classResult[cIndex].data[bIndex].count,
