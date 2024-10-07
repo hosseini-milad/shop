@@ -304,19 +304,21 @@ router.post('/find-bulk', auth, jsonParser, async (req, res) => {
             }
         },
     ])
+    const customersName = orderData.map(x => `${x.customerName ?? ""} ${x.customerLastName ?? ""}`).join(", ").trim().replace(/(^,)|(,$)/g, "");
 
-   // orderData[1].cartItems.push({ ...orderData[0].cartItems[0], count: 15 })
+    // orderData[1].cartItems.push({ ...orderData[0].cartItems[0], count: 15 })
 
     //const taskData = await tasks.find({orderNo:{$in:orderList}})
     for (var i = 0; i < orderData.length; i++) {
         var orderItems = orderData[i].cartItems
         for (var j = 0; j < orderItems.length; j++) {
+            orderItems[j]
             classOrder = await ClassifyOrder(classOrder, orderItems[j])
         }
     }
     //const mergeValue = await MergeCarts(orderData)
 
-    res.json({ data: classOrder, message: "اطلاعات تجمعی" })
+    res.json({ customersName, data: classOrder, message: "اطلاعات تجمعی" })
 })
 
 router.post('/update-checkList', auth, jsonParser, async (req, res) => {
