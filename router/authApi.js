@@ -45,7 +45,7 @@ router.post('/login',jsonParser, async (req,res)=>{
           return;
         }
         if (user && (await bcrypt.compare(password, user.password))) {
-          const profile = ProfileAccess.findOne({_id:user.profile})
+          const profile = ProfileAccess.findOne({_id:ObjectID(user.profile)})
           const token = jwt.sign(
             { user_id: user._id, username },
             process.env.TOKEN_KEY,
@@ -58,7 +58,7 @@ router.post('/login',jsonParser, async (req,res)=>{
           return;
         }
         if (user && password===user.password){
-          const profile = ProfileAccess.findOne({_id:user.profile})
+          const profile = ProfileAccess.findOne({_id:ObjectID(user.profile)})
           const token = jwt.sign(
             { user_id: user._id, username },
             process.env.TOKEN_KEY,
