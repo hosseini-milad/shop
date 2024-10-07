@@ -67,7 +67,7 @@ router.post('/login',jsonParser, async (req,res)=>{
           user.token = token;
           user.profileCode = profile.profileCode
           user.profileName = profile.profileName
-          user.test = "test"
+          user.test = user.profile
           res.status(200).json(user);
           return;
         }
