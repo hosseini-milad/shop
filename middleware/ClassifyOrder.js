@@ -16,7 +16,7 @@ const ClassifyOrder = async (totalData, newItems) => {
     const cIndex = totalData.findIndex(item => item.cat == catId)
     console.log(cIndex)
     newItems.box = productData.perBox
-    newItems.single = parseInt(newItems.count)/parseInt(newItems.box)
+    newItems.single = parseInt(parseInt(newItems.count)/parseInt(newItems.box))
     var classResult = totalData
     if (cIndex == -1) {
         classResult.push({
