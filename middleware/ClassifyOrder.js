@@ -25,6 +25,8 @@ const ClassifyOrder = async (totalData, newItems) => {
                 brandData: brandDetail,
                 data: [{
                     count: newItems.count,
+                    box:3,
+                    single:2,
                     price: newItems.sumPrice,
                     ...newItems
                 }
@@ -44,6 +46,8 @@ const ClassifyOrder = async (totalData, newItems) => {
                     brandData: brandDetail,
                     data: [{
                         count: newItems.count,
+                        box:3,
+                        single:2,
                         price: newItems.sumPrice,
                         ...newItems
                     }
