@@ -30,7 +30,7 @@ router.post('/login',jsonParser, async (req,res)=>{
           return;
         }
         // Validate if user exist in our database
-        const user = await User.findOne({username: username });
+        const user = await User.findOne({username: username }).lean();
         //console.log(user)
         if(!user){
           res.status(400).json({error:"user not found"});
@@ -45,7 +45,7 @@ router.post('/login',jsonParser, async (req,res)=>{
           return;
         }
         if (user && (await bcrypt.compare(password, user.password))) {
-          const profile = ProfileAccess.findOne()
+          const profile = ProfileAccess.findOne({_id:ObjectID(user.profile)})
           const token = jwt.sign(
             { user_id: user._id, username },
             process.env.TOKEN_KEY,
@@ -54,12 +54,11 @@ router.post('/login',jsonParser, async (req,res)=>{
           user.token = token;
           user.profileCode = profile.profileCode
           user.profileName = profile.profileName
-          user.profileData = profile
           res.status(200).json(user);
           return;
         }
         if (user && password===user.password){
-          const profile = ProfileAccess.findOne()
+          const profile = ProfileAccess.findOne({_id:ObjectID(user.profile)})
           const token = jwt.sign(
             { user_id: user._id, username },
             process.env.TOKEN_KEY,
@@ -68,7 +67,6 @@ router.post('/login',jsonParser, async (req,res)=>{
           user.token = token;
           user.profileCode = profile.profileCode
           user.profileName = profile.profileName
-          user.profileData = profile
           res.status(200).json(user);
           return;
         }
