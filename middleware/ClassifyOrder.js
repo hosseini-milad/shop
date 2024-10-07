@@ -15,6 +15,8 @@ const ClassifyOrder = async (totalData, newItems) => {
 
     const cIndex = totalData.findIndex(item => item.cat == catId)
     console.log(cIndex)
+    newItems.box = productData.perBox
+    newItems.single = parseInt(newItems.count)/parseInt(newItems.box)
     var classResult = totalData
     if (cIndex == -1) {
         classResult.push({
@@ -25,8 +27,8 @@ const ClassifyOrder = async (totalData, newItems) => {
                 brandData: brandDetail,
                 data: [{
                     count: newItems.count,
-                    box:3,
-                    single:2,
+                    box:newItems.box,
+                    single:newItems.single,
                     price: newItems.sumPrice,
                     ...newItems
                 }
@@ -46,8 +48,8 @@ const ClassifyOrder = async (totalData, newItems) => {
                     brandData: brandDetail,
                     data: [{
                         count: newItems.count,
-                        box:3,
-                        single:2,
+                        box:newItems.box,
+                        single:newItems.single,
                         price: newItems.sumPrice,
                         ...newItems
                     }
@@ -57,8 +59,6 @@ const ClassifyOrder = async (totalData, newItems) => {
         else {
             const sku = totalData[cIndex].data.find(item => item.brand == brandId).data.find(x => x.sku === newItems.sku)
             if (!sku) {
-                newItems.single=1
-                newItems.box = 2
                 classResult[cIndex].data[bIndex].data.push(newItems)
                 classResult[cIndex].data[bIndex].count =
                     MultiplySum(classResult[cIndex].data[bIndex].count,
