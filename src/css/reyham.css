@@ -1588,3 +1588,27 @@ dialog {
 .sub-active{
   display: flex !important;
 } 
+
+.Print-store .hesabfaMainTable{
+  th,td{
+    color: black;
+    height: 32px;
+    white-space: nowrap;
+  }
+  .x-small-td{
+    width: 32px;
+  }
+  .small-td{
+    width: 100px;
+  }
+  .meduim-td{
+    width: 150px;
+  }
+  .larg-td{
+    width: 50%;
+  }
+  .count-td{
+    width: 60px;
+  }
+
+}

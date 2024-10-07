@@ -32,34 +32,35 @@ const PrintStore = (props) => {
         {List&&List.data.map((Category,i)=>(
           
             <>
-            {Category.data&&Category.data.map((Brand,i)=>(<>
-              <h4 className="category">
-                {(Category.catData&&Category.catData.title?Category.catData.title:"-")+"-"+(Brand.brandData.title)}
+            <h4 className="category">
+                {(Category.catData&&Category.catData.title?Category.catData.title:"---")}
               </h4>
+            {Category.data&&Category.data.map((Brand,i)=>(<>
+              
               <table className="hesabfaMainTable" key={i}>
                 
               <tbody>
                 <tr>
-                  <th></th>
-                  <th>#</th>
-                  <th>کد کالا</th>
-                  <th>برند</th>
-                  <th>عنوان کالا</th>
-                  <th>کارتن</th>
-                  <th>تعداد</th>
-                  <th>تعداد کل</th>
+                  <th className="x-small-td"></th>
+                  <th className="x-small-td">#</th>
+                  <th className="meduim-td">کد کالا</th>
+                  <th className="small-td">برند</th>
+                  <th className="larg-td">عنوان کالا</th>
+                  <th className="count-td">کارتن</th>
+                  <th className="count-td">تعداد</th>
+                  <th className="count-td">تعداد کل</th>
                   <th>توضیحات</th>
                 </tr>
                 {Brand.data&&Brand.data.map((Item,i)=>
                   (<tr key={i}>
-                    <td></td>
-                    <td>{i+1}</td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
+                    <td className="x-small-td"></td>
+                    <td className="x-small-td">{i+1}</td>
+                    <td className="meduim-td">{Item.sku}</td>
+                    <td className="small-td">{Brand.brandData.title}</td>
+                    <td className="larg-td">{Item.title}</td>
+                    <td className="count-td"></td>
+                    <td className="count-td"></td>
+                    <td className="count-td">{Item.count}</td>
                     <td></td>
                   </tr>)
                 )}

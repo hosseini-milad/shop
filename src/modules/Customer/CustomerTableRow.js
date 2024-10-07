@@ -43,7 +43,7 @@ function CustomerTableRow(props){
         }
           else{
             console.log(result)
-            setTimeout(()=>window.location.href="/news",5000)
+            setTimeout(()=>window.location.reload(),5000)
           }
           
       },

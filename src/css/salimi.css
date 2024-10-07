@@ -7086,6 +7086,34 @@ table {
 }
 .profile-table tr:hover .profiles-icons {
   display: flex;
+  
 }
 
 /* end of profile css  -----------------------------------------*/
+
+/* Visitor POP UP */
+.visitor-popup{
+  background-color: white;
+  width: 500px;
+  padding:1.5rem 1rem;
+  border-radius: 0.5rem;
+  position: relative;
+
+  .fa-close{
+    position: absolute;
+    top: 5px;
+    left: 5px;
+    font-size: 1.2rem;
+  }
+}
+.visitor-popup table{
+  margin-top: 0.5rem;
+  th,td{
+    text-align: center;
+    font-size: 1rem;
+  }
+  th{
+    font-weight: 600;
+    
+  }
+}
