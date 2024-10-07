@@ -17,6 +17,7 @@ const customers = require('../models/auth/customers');
 var Kavenegar = require('kavenegar');
 const address = require('../models/auth/address');
 const orders = require('../models/orders/orders');
+const ProfileAccess = require('../models/auth/ProfileAccess');
 var api = Kavenegar.KavenegarApi({
   apikey: process.env.SMS_API
 });
@@ -44,22 +45,28 @@ router.post('/login',jsonParser, async (req,res)=>{
           return;
         }
         if (user && (await bcrypt.compare(password, user.password))) {
+          const profile = ProfileAccess.findOne({_id:user.profile})
           const token = jwt.sign(
             { user_id: user._id, username },
             process.env.TOKEN_KEY,
             {expiresIn: "72h",}
           );
           user.token = token;
+          user.profileCode = profile.profileCode
+          user.profileName = profile.profileName
           res.status(200).json(user);
           return;
         }
         if (user && password===user.password){
+          const profile = ProfileAccess.findOne({_id:user.profile})
           const token = jwt.sign(
             { user_id: user._id, username },
             process.env.TOKEN_KEY,
             {expiresIn: "48h",}
           );
           user.token = token;
+          user.profileCode = profile.profileCode
+          user.profileName = profile.profileName
           res.status(200).json(user);
           return;
         }
