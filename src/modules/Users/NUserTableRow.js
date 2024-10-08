@@ -4,11 +4,14 @@ import env from "../../env"
 import UserClassInTable from "./UserComponent/UserClassInTable"
 import tabletrans from "../../translate/tables"
 import Status from "../Components/Status"
+import ErrorShow from "../../components/Button/ErrorShow"
 
 function NUserTableRow(props){ 
   const [openOption,setOpenOption] = useState(0)
   const [checkState,setCheckState] = useState(false)
   const [Alert,setAlert]=useState(false)
+  const [Massege,setMassege]=useState(false)
+
   let menuRef = useRef();
   console.log(menuRef)
   const activeAcc = props.index===props.detail
@@ -76,7 +79,8 @@ function NUserTableRow(props){
         }
           else{
             console.log(result)
-            setTimeout(()=>window.location.href="/news",5000)
+            setMassege(result.message)
+            setTimeout(()=>window.location.reload(),5000)
           }
           
       },
@@ -112,9 +116,9 @@ function NUserTableRow(props){
             </td>
             
             <td>
-              <div className="pen-status order-status">
-                <Status text={user.lock!=="3"?"فعال":"قفل شده"} />
-              </div>
+              
+                <Status class={"order-status"} status={user.active==true?"true":"false"} text={user.active==true?"فعال":"غیرفعال"}/>
+              
             </td>
             <td className="p-r">
               <div className="more-btn">
@@ -148,6 +152,7 @@ function NUserTableRow(props){
             action={deleteNews}
             />:
             <></>}
+            {Massege?<ErrorShow message={Massege} color={"red"}/>:<></>}
             </>
     )
 }
