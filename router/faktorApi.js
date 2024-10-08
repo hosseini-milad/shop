@@ -176,6 +176,7 @@ router.post('/find-products',auth, async (req,res)=>{
 })
 router.post('/calc-count',auth, async (req,res)=>{
     const userData = await users.findOne({_id:req.headers['userid']})
+    var allOrder = req.body.allOrder
     const stockId = userData.StockId?userData.StockId:"13"
     const sku = req.body.sku
     if(!sku){
@@ -197,7 +198,8 @@ router.post('/calc-count',auth, async (req,res)=>{
             foreignField: "ItemID", 
             as : "countData"
         }}])
-        const cartList = await tasks.find({taskStep:{$nin:['archive','cancel']}})
+        const cartList = await tasks.find({taskStep:{$nin:
+            allOrder?['cancel']:['archive','cancel']}})
         var cartIds = cartList.map(item=>item.orderNo)
         var currentCart = await FindCurrentCart(cartList.map(item=>item.orderNo))
         console.log(stockId)
