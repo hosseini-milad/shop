@@ -253,7 +253,7 @@ const findCartCount=async(item,cart)=>{
                 inOrder.push({
                     orderNo:cart[i].cartNo,
                     count:cartItem[c].count,
-                    cName:userData&&userData.cName,
+                    cName:userData?userData.cName:cart[i].customer,
                     date:cart[i].initDate
                 })
                 cartCount=parseInt(cartCount)+parseInt(cartItem[c].count)
