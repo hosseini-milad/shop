@@ -201,10 +201,11 @@ router.post('/calc-count',auth, async (req,res)=>{
     ])
     var date = new Date(Date.now())
     var today = date.toISOString().slice(0, 10)+" 00:00"
+    var finalDate = new Date(today)
         const cartList = await tasks.aggregate([
             {$match:{taskStep:{$nin:
             allOrder?['cancel']:['archive','cancel']}}},
-            { $match:allOrder?{initDate:{$gte:new Date(today)}}:{}}
+            { $match:allOrder?{initDate:{$gte:finalDate}}:{}}
             ])
         var cartIds = cartList.map(item=>item.orderNo)
         var currentCart = await FindCurrentCart(cartList.map(item=>item.orderNo))
@@ -228,7 +229,7 @@ router.post('/calc-count',auth, async (req,res)=>{
                     count3.quantity = count3.quantity-orderCount 
                 res.json({count,storeCount,orderCount,count3:count3?count3.quantity:0,
                     perBox:searchProducts[i].perBox?searchProducts[i].perBox:0,
-                    orderData:countData.data,today,date})
+                    orderData:countData.data,today:finalDate,date})
                 return
             }
             else{
