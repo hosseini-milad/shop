@@ -247,14 +247,14 @@ const findCartCount=async(item,cart)=>{
     var inOrder=[]
     for(var i=0;i<cart.length;i++){
         var cartItem =cart[i].cartItems 
-        var userData = await customers.findOne({_id:ObjectID(cart[i].customer)})
-        console.log(cart[i])
+        var userData = await customers.findOne({_id:ObjectID(cart[i].userId)})
+        console.log(cart[i].userId)
         for(var c=0;c<(cartItem&&cartItem.length);c++){
             if(cartItem[c].sku === item){
                 inOrder.push({
                     orderNo:cart[i].cartNo,
                     count:cartItem[c].count,
-                    cName:userData?userData.cName:cart[i].customer,
+                    cName:userData?userData.cName:cart[i].userId,
                     date:cart[i].initDate
                 })
                 cartCount=parseInt(cartCount)+parseInt(cartItem[c].count)
