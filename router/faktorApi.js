@@ -1603,7 +1603,8 @@ router.post('/customer-find', async (req,res)=>{
                     {username:{$regex: search, $options : 'i'}},
                     {Code:{$regex: search, $options : 'i'}}
                 ]}
-            }])
+            },
+            {$match:{active:true}}])
         //}
         const allUser = searchCustomer.concat(searchUser)  
         //logger.warn("main done")
