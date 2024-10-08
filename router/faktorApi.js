@@ -227,7 +227,7 @@ router.post('/calc-count',auth, async (req,res)=>{
                     count3.quantity = count3.quantity-orderCount 
                 res.json({count,storeCount,orderCount,count3:count3?count3.quantity:0,
                     perBox:searchProducts[i].perBox?searchProducts[i].perBox:0,
-                    orderData:countData.data})
+                    orderData:countData.data,today})
                 return
             }
             else{
