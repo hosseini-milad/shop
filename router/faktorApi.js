@@ -199,7 +199,7 @@ router.post('/calc-count',auth, async (req,res)=>{
             as : "countData"
         }}
     ])
-    var today = new Date(new Date().now().toISOString().slice(0, 10)+" 00:00")
+    var today = new Date(new Date().toISOString().slice(0, 10)+" 00:00")
         const cartList = await tasks.aggregate([
             {$match:{taskStep:{$nin:
             allOrder?['cancel']:['archive','cancel']}}},
