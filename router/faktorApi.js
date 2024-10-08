@@ -250,7 +250,11 @@ const findCartCount=(item,cart)=>{
         var cartItem =cart[i].cartItems 
         for(var c=0;c<(cartItem&&cartItem.length);c++){
             if(cartItem[c].sku === item){
-                inOrder.push({orderNo:cart[i].cartNo,count:cartItem[c].count})
+                inOrder.push({
+                    orderNo:cart[i].cartNo,
+                    count:cartItem[c].count,
+                    date:cart[i].initDate
+                })
                 cartCount=parseInt(cartCount)+parseInt(cartItem[c].count)
             }
         }
