@@ -1504,7 +1504,20 @@ dialog {
   display: flex;
   align-items: flex-start;
   justify-content: center;
+  flex-direction: column;
   direction: rtl;
+
+  .customer-container{
+    width: 90%;
+    margin: 0.5rem auto;
+    
+    p{
+      font-size: 1rem;
+      color: black;
+      width: 100%;
+
+    }
+  }
 
   .tables-container{
     width: 100%;

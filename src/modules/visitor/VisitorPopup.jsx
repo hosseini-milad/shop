@@ -18,7 +18,7 @@ function VisitorPopup(props){
         "x-access-token": token && token.token,
         userId: token && token.userId,
       },
-      body: JSON.stringify({sku:orderNum}),
+      body: JSON.stringify({sku:orderNum,allOrder:"true"}),
     };
     
     fetch(env.siteApi + "/panel/faktor/calc-count", postOptions)
@@ -36,26 +36,30 @@ function VisitorPopup(props){
     return(
     <div className="delete-modal">
       <div className="modal-backdrop show-modal">
-        
+      
         <div className="visitor-popup">
-          <i className="fa-solid fa-close" onClick={()=>props.setVpop("")}></i>
+          <i className="fa-solid fa-close close-visit" onClick={()=>props.setVpop("")}></i>
           <table>
-            <tr>
-              <th>#</th>
-              <th>کد سفارش</th>
-              <th>نام مشتری</th>
-              <th>تعداد</th>
-            </tr>
-            {
-              Order&&Order.map((item,i)=>(
-                <tr key={i}>
-                  <td>{i+1}</td>
-                  <td>{item.orderNo?item.orderNo:"-"}</td>
-                  <td>{item.cName?item.cName:"-"}</td>
-                  <td>{item.count?item.count:"-"}</td>
-                </tr>
-              ))
-            }
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>کد سفارش</th>
+                <th>نام مشتری</th>
+                <th>تعداد</th>
+              </tr>
+            </thead>
+            <tbody>
+              {
+                Order&&Order.map((item,i)=>(
+                  <tr key={i}>
+                    <td>{i+1}</td>
+                    <td>{item.orderNo?item.orderNo:"-"}</td>
+                    <td>{item.cName?item.cName:"-"}</td>
+                    <td>{item.count?item.count:"-"}</td>
+                  </tr>
+                ))
+              }
+            </tbody>
           </table>
         </div>
       </div>
