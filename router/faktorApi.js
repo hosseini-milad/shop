@@ -217,7 +217,7 @@ router.post('/calc-count',auth, async (req,res)=>{
             var desc = '' 
             count = count?count:0 
             count3 = count3?count3:0
-            var countData = findCartCount(searchProducts[i].sku,currentCart.concat(qCartList),stockId)
+            var countData = await findCartCount(searchProducts[i].sku,currentCart.concat(qCartList),stockId)
             var cartCount = countData&&countData.count
             //console.log(cartCount)
             const storeCount =count?parseInt(count.quantity):0
@@ -243,16 +243,18 @@ router.post('/calc-count',auth, async (req,res)=>{
         res.status(500).json({message: error.message})
     }
 })
-const findCartCount=(item,cart)=>{
+const findCartCount=async(item,cart)=>{
     var cartCount =0
     var inOrder=[]
     for(var i=0;i<cart.length;i++){
         var cartItem =cart[i].cartItems 
+        var userData = await customers.findOne({_id:ObjectID(cart[i].userId)})
         for(var c=0;c<(cartItem&&cartItem.length);c++){
             if(cartItem[c].sku === item){
                 inOrder.push({
                     orderNo:cart[i].cartNo,
                     count:cartItem[c].count,
+                    cName:userData&&userData.cName,
                     date:cart[i].initDate
                 })
                 cartCount=parseInt(cartCount)+parseInt(cartItem[c].count)
