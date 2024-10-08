@@ -180,7 +180,7 @@ router.post("/list-customers", jsonParser, async (req, res) => {
                     ? data.official == "official"
                         ? { agent: { $exists: false } }
                         : { agent: { $exists: true } }
-                    : {},
+                    : {}, 
             },
             {
                 $match: data.customer
