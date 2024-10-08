@@ -7092,22 +7092,28 @@ table {
 /* end of profile css  -----------------------------------------*/
 
 /* Visitor POP UP */
+
 .visitor-popup{
   background-color: white;
   width: 500px;
   padding:1.5rem 1rem;
   border-radius: 0.5rem;
   position: relative;
-
+  max-height: 600px;
+  overflow-y: auto;
   .fa-close{
-    position: absolute;
+    position: fixed;
     top: 5px;
     left: 5px;
-    font-size: 1.2rem;
+    font-size: 2rem;
+    color: white;
+    cursor: pointer;
   }
 }
 .visitor-popup table{
   margin-top: 0.5rem;
+  max-height: 600px;
+  
   th,td{
     text-align: center;
     font-size: 1rem;
