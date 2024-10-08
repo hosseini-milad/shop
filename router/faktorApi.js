@@ -199,7 +199,7 @@ router.post('/calc-count',auth, async (req,res)=>{
             as : "countData"
         }}
     ])
-    var date = new Date("2024-10-06T20:30:00.000")
+    var date = new Date(Date.now())
     var today = date.toISOString().slice(0, 10)+" 00:00"
     var finalDate = new Date(today)
         const cartList = await tasks.aggregate([
@@ -229,7 +229,7 @@ router.post('/calc-count',auth, async (req,res)=>{
                     count3.quantity = count3.quantity-orderCount 
                 res.json({count,storeCount,orderCount,count3:count3?count3.quantity:0,
                     perBox:searchProducts[i].perBox?searchProducts[i].perBox:0,
-                    orderData:countData.data,today:finalDate,date})
+                    orderData:countData.data,today:finalDate,cartList})
                 return
             }
             else{
