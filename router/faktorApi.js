@@ -197,12 +197,14 @@ router.post('/calc-count',auth, async (req,res)=>{
             localField: "ItemID", 
             foreignField: "ItemID", 
             as : "countData"
-        }},
-        { $match:allOrder?{initDate:{$gte:new Date(
-            new Date().toISOString().slice(0, 10)+" 00:00")}}:{}}
+        }}
     ])
-        const cartList = await tasks.find({taskStep:{$nin:
-            allOrder?['cancel']:['archive','cancel']}})
+        const cartList = await tasks.aggregate([
+            {$match:{taskStep:{$nin:
+            allOrder?['cancel']:['archive','cancel']}}},
+            { $match:allOrder?{initDate:{$gte:new Date(
+                new Date().toISOString().slice(0, 10)+" 00:00")}}:{}}
+            ])
         var cartIds = cartList.map(item=>item.orderNo)
         var currentCart = await FindCurrentCart(cartList.map(item=>item.orderNo))
         console.log(stockId)
