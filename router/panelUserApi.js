@@ -230,6 +230,7 @@ router.post("/update-customer", jsonParser, async (req, res) => {
         about: req.body.about,
         roleId: req.body.roleId,
         nif: req.body.nif,
+        perBox: req.body.perBox,
         active: req.body.active,
         official: req.body.official,
 
