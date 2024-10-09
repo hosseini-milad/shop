@@ -1604,7 +1604,11 @@ router.post('/customer-find', async (req,res)=>{
                     {Code:{$regex: search, $options : 'i'}}
                 ]}
             },
-            {$match:{active:true}}])
+            {$match:{$or:[
+                {active:true},
+                {active:{$exists:false}}
+            ]}}
+        ])
         //}
         const allUser = searchCustomer.concat(searchUser)  
         //logger.warn("main done")
