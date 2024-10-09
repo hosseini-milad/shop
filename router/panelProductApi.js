@@ -263,6 +263,7 @@ router.post('/editProduct',jsonParser,async(req,res)=>{
             brandId: req.body.brandId,
             sharifId: req.body.sharifId,
             type:req.body.type,
+            perBox:req.body.perBox,
             filters:req.body.filters,
             value:req.body.value,
             enTitle:req.body.enTitle,
