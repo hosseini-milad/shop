@@ -35,6 +35,12 @@ function ProductSKU(props){
                     ...prevState,
                     sku:e
                   }))}/>
+                <StyleInput title={tabletrans.perBox[props.lang]} direction={props.direction}
+                 class={"formInput"} defaultValue={def?def.perBox:''} 
+                 action={(e)=>props.setProductChange(prevState => ({
+                    ...prevState,
+                    perBox:e
+                  }))}/>
                   <div className="edit-btn autoFilter" onClick={autoFetch}>
                       Auto Filter</div>
                 {/*<StyleInput title={tabletrans.quantity[props.lang]} direction={props.direction}

@@ -340,6 +340,10 @@ const tabletrans ={
         english:"Product SKU",
         persian:"شناسه محصول"
     },
+    perBox:{
+        english:"Per Box",
+        persian:"تعداد در هر جعبه"
+    },
     category:{
         english:"Category",
         persian:"دسته بندی"
