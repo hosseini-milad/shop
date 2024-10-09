@@ -274,6 +274,7 @@ router.post("/create-customer", jsonParser, async (req, res) => {
     const data = req.body;
     data.username = data.sName + " " + data.cName;
     data.agent = agent;
+    data.active=true
     try {
         const userData = await customer.create(data);
         res.json({ data: userData, success: "مشتری اضافه شد" });
