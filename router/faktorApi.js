@@ -1605,8 +1605,7 @@ router.post('/customer-find', async (req,res)=>{
                 ]}
             },
             {$match:{$or:[
-                {active:true},
-                {active:{$exists:false}}
+                {active:true}
             ]}}
         ])
         //}
