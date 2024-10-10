@@ -277,7 +277,6 @@ router.post('/find-bulk', auth, jsonParser, async (req, res) => {
     if (!orderList || !orderList.length) {
         var orderListTemp = await tasks.find({ taskStep: status })
         orderList = orderListTemp.map(item => item.orderNo)
-
     }
     var result = []
     var classOrder = []
@@ -304,22 +303,44 @@ router.post('/find-bulk', auth, jsonParser, async (req, res) => {
             }
         },
     ])
+
+    // Sorting orders alphabetically by customerName, assuming Persian names
+    orderData.sort((a, b) => {
+        const nameA = `${a.customerName ?? ""} ${a.customerLastName ?? ""}`.toLowerCase();
+        const nameB = `${b.customerName ?? ""} ${b.customerLastName ?? ""}`.toLowerCase();
+        return nameA.localeCompare(nameB, 'fa-IR');  // Sort by customer name alphabetically, explicitly using Persian locale
+    });
+
+    // Prepare customer names as a string
     const customersName = orderData.map(x => `${x.customerName ?? ""} ${x.customerLastName ?? ""}`).join(", ").trim().replace(/(^,)|(,$)/g, "");
 
-    // orderData[1].cartItems.push({ ...orderData[0].cartItems[0], count: 15 })
-
-    //const taskData = await tasks.find({orderNo:{$in:orderList}})
     for (var i = 0; i < orderData.length; i++) {
-        var orderItems = orderData[i].cartItems
+        var orderItems = orderData[i].cartItems;
+
+        // Sort order items by brandName alphabetically (in Persian) and then by productCode numerically
+        orderItems.sort((a, b) => {
+            // Provide default value for undefined brandName
+            const brandA = a.brandName ?? "";
+            const brandB = b.brandName ?? "";
+
+            // First sort by brandName alphabetically, using Persian locale
+            const brandComparison = brandA.localeCompare(brandB, 'fa-IR');
+            if (brandComparison !== 0) return brandComparison;
+
+            // If brandName is the same, sort by productCode numerically
+            return (a.productCode ?? 0) - (b.productCode ?? 0);  // Handle undefined productCode by providing default value
+        });
+
         for (var j = 0; j < orderItems.length; j++) {
-            orderItems[j]
-            classOrder = await ClassifyOrder(classOrder, orderItems[j])
+            orderItems[j];
+            classOrder = await ClassifyOrder(classOrder, orderItems[j]);
         }
     }
-    //const mergeValue = await MergeCarts(orderData)
 
-    res.json({ customersName, data: classOrder, message: "اطلاعات تجمعی" })
+    res.json({ customersName, data: classOrder, message: "اطلاعات تجمعی" });
 })
+
+
 
 router.post('/update-checkList', auth, jsonParser, async (req, res) => {
     const taskId = req.body._id ? req.body._id : ""
