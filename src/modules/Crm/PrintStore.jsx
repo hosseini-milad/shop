@@ -28,10 +28,10 @@ const PrintStore = (props) => {
   console.log(List)
   return (
     <div className="Print-store">
-      <div className="customer-container">
+      {List.customersName?<div className="customer-container">
         <h4>نام مشتریان</h4>
         <p>{List.customersName}</p>
-      </div>
+      </div>:<></>}
       <div className="tables-container">
         {List&&List.data.map((Category,i)=>(
           

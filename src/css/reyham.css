@@ -1515,7 +1515,9 @@ dialog {
       font-size: 1rem;
       color: black;
       width: 100%;
-
+      border: 2px solid #333;
+      padding: 1rem;
+      border-radius: 0.5rem;
     }
   }
 
