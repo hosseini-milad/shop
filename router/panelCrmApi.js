@@ -304,7 +304,7 @@ router.post('/find-bulk', auth, jsonParser, async (req, res) => {
             }
         },
     ])
-    const customersName = orderData.map(x => `${x.customerName ?? ""} ${x.customerLastName ?? ""}`)
+    const customersName = orderData.map(x => `${x.customerName ?? ""} ${x.customerLastName ?? ""}`);
 
     // orderData[1].cartItems.push({ ...orderData[0].cartItems[0], count: 15 })
 
