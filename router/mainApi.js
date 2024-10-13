@@ -103,6 +103,7 @@ router.get('/sepidar-product', async (req,res)=>{
             },{$set:{
                 sku:sepidarResult[i].Code,
                 title:sepidarResult[i].Title,
+                unitID:sepidarResult[i].UnitRef,
                 date:new Date()}})
             var modified = productResult.modifiedCount
             var matched = productResult.matchedCount
@@ -113,6 +114,7 @@ router.get('/sepidar-product', async (req,res)=>{
                 sku:sepidarResult[i].Code,
                 title:sepidarResult[i].Title,
                 ItemID:sepidarResult[i].ItemID,
+                unitID:sepidarResult[i].UnitRef,
                 date:new Date()})
                 newProduct.push(sepidarResult[i].Code)
             }
