@@ -9,6 +9,7 @@ const ProductSchema = new Schema({
     description:String,
     ItemID:{ type: String , unique: true},
     brandId:String,
+    unitID:String,
     catId:String,
     config:String,
     filters:{type:Object,default:{}},
