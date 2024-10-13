@@ -272,14 +272,17 @@ const findNext = (index, status) => {
     }
 }
 router.post('/find-bulk', auth, jsonParser, async (req, res) => {
-    var orderList = req.body.orders
-    const status = req.body.status
+    var orderList = req.body.orders;
+    const status = req.body.status;
+
     if (!orderList || !orderList.length) {
-        var orderListTemp = await tasks.find({ taskStep: status })
-        orderList = orderListTemp.map(item => item.orderNo)
+        var orderListTemp = await tasks.find({ taskStep: status });
+        orderList = orderListTemp.map(item => item.orderNo);
     }
-    var result = []
-    var classOrder = []
+
+    var result = [];
+    var classOrder = [];
+
     const orderData = await cart.aggregate([
         { $match: { cartNo: { $in: orderList } } },
         { $addFields: { userId: { "$toObjectId": "$userId" } } },
@@ -293,8 +296,8 @@ router.post('/find-bulk', auth, jsonParser, async (req, res) => {
         },
         {
             $addFields: {
-                customerName: { $min: "$customers.cName", },
-                customerLastName: { $min: "$customers.sName", }
+                customerName: { $min: "$customers.cName" },
+                customerLastName: { $min: "$customers.sName" }
             }
         },
         {
@@ -302,34 +305,19 @@ router.post('/find-bulk', auth, jsonParser, async (req, res) => {
                 customers: 0
             }
         },
-    ])
+    ]);
 
-    // Sorting orders alphabetically by customerName, assuming Persian names
+    // Sort by customer name alphabetically using Persian locale
     orderData.sort((a, b) => {
-        const nameA = `${a.customerName ?? ""} ${a.customerLastName ?? ""}`.toLowerCase();
-        const nameB = `${b.customerName ?? ""} ${b.customerLastName ?? ""}`.toLowerCase();
-        return nameA.localeCompare(nameB, 'fa-IR');  // Sort by customer name alphabetically, explicitly using Persian locale
+        const nameA = `${a.customerName ?? ""}`.toLowerCase();
+        const nameB = `${b.customerName ?? ""}`.toLowerCase();
+        return nameA.localeCompare(nameB, 'fa-IR');
     });
 
-    // Prepare customer names as a string
     const customersName = orderData.map(x => `${x.customerName ?? ""} ${x.customerLastName ?? ""}`).join(", ").trim().replace(/(^,)|(,$)/g, "");
 
     for (var i = 0; i < orderData.length; i++) {
         var orderItems = orderData[i].cartItems;
-
-        // Sort order items by brandName alphabetically (in Persian) and then by productCode numerically
-        orderItems.sort((a, b) => {
-            // Provide default value for undefined brandName
-            const brandA = a.brandName ?? "";
-            const brandB = b.brandName ?? "";
-
-            // First sort by brandName alphabetically, using Persian locale
-            const brandComparison = brandA.localeCompare(brandB, 'fa-IR');
-            if (brandComparison !== 0) return brandComparison;
-
-            // If brandName is the same, sort by productCode numerically
-            return (a.productCode ?? 0) - (b.productCode ?? 0);  // Handle undefined productCode by providing default value
-        });
 
         for (var j = 0; j < orderItems.length; j++) {
             orderItems[j];
@@ -337,8 +325,57 @@ router.post('/find-bulk', auth, jsonParser, async (req, res) => {
         }
     }
 
+    // Sort by `catData.title` alphabetically using Persian locale
+    classOrder.sort((a, b) => {
+        const titleA = (a.catData && a.catData.title) ? a.catData.title.toLowerCase() : '';
+        const titleB = (b.catData && b.catData.title) ? b.catData.title.toLowerCase() : '';
+        return titleA.localeCompare(titleB, 'fa-IR');
+    });
+
+    // Sort nested data by brandData.title, then by SKU (alphabetically and numerically)
+    classOrder.forEach(category => {
+        if (category.data && category.data.length) {
+            // Sort brands by `brandData.title` alphabetically in Persian
+            category.data.sort((a, b) => {
+                const brandTitleA = (a.brandData && a.brandData.title) ? a.brandData.title.toLowerCase() : '';
+                const brandTitleB = (b.brandData && b.brandData.title) ? b.brandData.title.toLowerCase() : '';
+                return brandTitleA.localeCompare(brandTitleB, 'fa-IR');
+            });
+
+            // Sort each brand's inner `data` by `sku`
+            category.data.forEach(brand => {
+                if (brand.data && brand.data.length) {
+                    brand.data.sort((a, b) => {
+                        const [alphaA, numA] = splitSku(a.sku);
+                        const [alphaB, numB] = splitSku(b.sku);
+
+                        // First, compare alphabetically
+                        const alphaCompare = alphaA.localeCompare(alphaB, 'fa-IR');
+                        if (alphaCompare !== 0) return alphaCompare;
+
+                        // Then, compare numerically
+                        return numA - numB;
+                    });
+                }
+            });
+        }
+    });
+
     res.json({ customersName, data: classOrder, message: "اطلاعات تجمعی" });
-})
+});
+
+// Helper function to split SKU into alphabetic part and numeric part
+function splitSku(sku) {
+    const alphaPart = sku.match(/^[a-zA-Z]+/);
+    const numPart = sku.match(/\d+/);
+
+    return [
+        alphaPart ? alphaPart[0] : '',
+        numPart ? parseInt(numPart[0], 10) : 0
+    ];
+}
+
+
 
 
 
