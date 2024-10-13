@@ -308,11 +308,7 @@ router.post('/find-bulk', auth, jsonParser, async (req, res) => {
     ]);
 
     // Sort by customer name alphabetically using Persian locale
-    orderData.sort((a, b) => {
-        const nameA = `${a.customerName ?? ""}`.toLowerCase();
-        const nameB = `${b.customerName ?? ""}`.toLowerCase();
-        return nameA.localeCompare(nameB, 'fa-IR');
-    });
+    orderData.sort((a, b) => localCompare(a.customerName, b.customerName));
 
     const customersName = orderData.map(x => `${x.customerName ?? ""} ${x.customerLastName ?? ""}`).join(", ").trim().replace(/(^,)|(,$)/g, "");
 
@@ -320,29 +316,20 @@ router.post('/find-bulk', auth, jsonParser, async (req, res) => {
         var orderItems = orderData[i].cartItems;
 
         for (var j = 0; j < orderItems.length; j++) {
-            orderItems[j];
             classOrder = await ClassifyOrder(classOrder, orderItems[j]);
         }
     }
 
-    // Sort by `catData.title` alphabetically using Persian locale
-    classOrder.sort((a, b) => {
-        const titleA = (a.catData && a.catData.title) ? a.catData.title.toLowerCase() : '';
-        const titleB = (b.catData && b.catData.title) ? b.catData.title.toLowerCase() : '';
-        return titleA.localeCompare(titleB, 'fa-IR');
-    });
+    // Sort by catData.title alphabetically using Persian locale
+    classOrder.sort((a, b) => localCompare(a.catData?.title, b.catData?.title));
 
     // Sort nested data by brandData.title, then by SKU (alphabetically and numerically)
     classOrder.forEach(category => {
         if (category.data && category.data.length) {
-            // Sort brands by `brandData.title` alphabetically in Persian
-            category.data.sort((a, b) => {
-                const brandTitleA = (a.brandData && a.brandData.title) ? a.brandData.title.toLowerCase() : '';
-                const brandTitleB = (b.brandData && b.brandData.title) ? b.brandData.title.toLowerCase() : '';
-                return brandTitleA.localeCompare(brandTitleB, 'fa-IR');
-            });
+            // Sort brands by brandData.title alphabetically in Persian
+            category.data.sort((a, b) => localCompare(a.brandData?.title, b.brandData?.title));
 
-            // Sort each brand's inner `data` by `sku`
+            // Sort each brand's inner data by sku
             category.data.forEach(brand => {
                 if (brand.data && brand.data.length) {
                     brand.data.sort((a, b) => {
@@ -350,7 +337,7 @@ router.post('/find-bulk', auth, jsonParser, async (req, res) => {
                         const [alphaB, numB] = splitSku(b.sku);
 
                         // First, compare alphabetically
-                        const alphaCompare = alphaA.localeCompare(alphaB, 'fa-IR');
+                        const alphaCompare = localCompare(alphaA, alphaB);
                         if (alphaCompare !== 0) return alphaCompare;
 
                         // Then, compare numerically
@@ -364,6 +351,7 @@ router.post('/find-bulk', auth, jsonParser, async (req, res) => {
     res.json({ customersName, data: classOrder, message: "اطلاعات تجمعی" });
 });
 
+
 // Helper function to split SKU into alphabetic part and numeric part
 function splitSku(sku) {
     const alphaPart = sku.match(/^[a-zA-Z]+/);
@@ -373,6 +361,11 @@ function splitSku(sku) {
         alphaPart ? alphaPart[0] : '',
         numPart ? parseInt(numPart[0], 10) : 0
     ];
+}
+function localCompare(fieldA, fieldB, locale = 'fa-IR') {
+    const valueA = fieldA?.toLowerCase() || '';
+    const valueB = fieldB?.toLowerCase() || '';
+    return valueA.localeCompare(valueB, locale);
 }
 
 
