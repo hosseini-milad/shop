@@ -311,7 +311,7 @@ router.post('/find-bulk', auth, jsonParser, async (req, res) => {
     orderData.sort((a, b) => localCompare(a.customerName, b.customerName));
 
     const customersName = orderData.map(x => `${x.customerName ?? ""} ${x.customerLastName ?? ""}`).join(", ").trim().replace(/(^,)|(,$)/g, "");
-
+ 
     for (var i = 0; i < orderData.length; i++) {
         var orderItems = orderData[i].cartItems;
 
