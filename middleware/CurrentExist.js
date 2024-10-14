@@ -7,6 +7,7 @@ const FindCurrentExist=async(itemId)=>{
     //var validOrder = []
     var countOrder =0
     for(var i=0;i<currentTasks.length;i++){
+        if(currentTasks.isQuote) continue;
         const orderData = await cart.findOne({cartNo:currentTasks[i].orderNo})
         const cartItems = orderData&&orderData.cartItems
         for(var j=0;j<(cartItems&&cartItems.length);j++){
