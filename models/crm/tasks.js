@@ -11,6 +11,7 @@ const taskSchema = new mongoose.Schema({
   creator:{type:String},
   customer:{type:String},
   orderNo:{type:String},
+  isQuote:{type:Boolean,default:false},
 
   checkList:{type:Array,default:[]},
   dueDate:{ type: Object},

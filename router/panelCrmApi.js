@@ -272,15 +272,17 @@ const findNext = (index, status) => {
     }
 }
 router.post('/find-bulk', auth, jsonParser, async (req, res) => {
-    var orderList = req.body.orders
-    const status = req.body.status
-    if (!orderList || !orderList.length) {
-        var orderListTemp = await tasks.find({ taskStep: status })
-        orderList = orderListTemp.map(item => item.orderNo)
+    var orderList = req.body.orders;
+    const status = req.body.status;
 
+    if (!orderList || !orderList.length) {
+        var orderListTemp = await tasks.find({ taskStep: status });
+        orderList = orderListTemp.map(item => item.orderNo);
     }
-    var result = []
-    var classOrder = []
+
+    var result = [];
+    var classOrder = [];
+
     const orderData = await cart.aggregate([
         { $match: { cartNo: { $in: orderList } } },
         { $addFields: { userId: { "$toObjectId": "$userId" } } },
@@ -294,8 +296,8 @@ router.post('/find-bulk', auth, jsonParser, async (req, res) => {
         },
         {
             $addFields: {
-                customerName: { $min: "$customers.cName", },
-                customerLastName: { $min: "$customers.sName", }
+                customerName: { $min: "$customers.cName" },
+                customerLastName: { $min: "$customers.sName" }
             }
         },
         {
@@ -303,23 +305,77 @@ router.post('/find-bulk', auth, jsonParser, async (req, res) => {
                 customers: 0
             }
         },
+<<<<<<< HEAD
     ])
     const customersName = orderData.map(x => `${x.customerName ?? ""} ${x.customerLastName ?? ""}`);
+=======
+    ]);
 
-    // orderData[1].cartItems.push({ ...orderData[0].cartItems[0], count: 15 })
+    // Sort by customer name alphabetically using Persian locale
+    orderData.sort((a, b) => localCompare(a.customerName, b.customerName));
+>>>>>>> ab42138384cb48dc08560be323d8cd0c5e9e3081
 
-    //const taskData = await tasks.find({orderNo:{$in:orderList}})
+    const customersName = orderData.map(x => `${x.customerName ?? ""} ${x.customerLastName ?? ""}`).join(", ").trim().replace(/(^,)|(,$)/g, "");
+
     for (var i = 0; i < orderData.length; i++) {
-        var orderItems = orderData[i].cartItems
+        var orderItems = orderData[i].cartItems;
+
         for (var j = 0; j < orderItems.length; j++) {
-            orderItems[j]
-            classOrder = await ClassifyOrder(classOrder, orderItems[j])
+            classOrder = await ClassifyOrder(classOrder, orderItems[j]);
         }
     }
-    //const mergeValue = await MergeCarts(orderData)
 
-    res.json({ customersName, data: classOrder, message: "اطلاعات تجمعی" })
-})
+    // Sort by catData.title alphabetically using Persian locale
+    classOrder.sort((a, b) => localCompare(a.catData?.title, b.catData?.title));
+
+    // Sort nested data by brandData.title, then by SKU (alphabetically and numerically)
+    classOrder.forEach(category => {
+        if (category.data && category.data.length) {
+            // Sort brands by brandData.title alphabetically in Persian
+            category.data.sort((a, b) => localCompare(a.brandData?.title, b.brandData?.title));
+
+            // Sort each brand's inner data by sku
+            category.data.forEach(brand => {
+                if (brand.data && brand.data.length) {
+                    brand.data.sort((a, b) => {
+                        const [alphaA, numA] = splitSku(a.sku);
+                        const [alphaB, numB] = splitSku(b.sku);
+
+                        // First, compare alphabetically
+                        const alphaCompare = localCompare(alphaA, alphaB);
+                        if (alphaCompare !== 0) return alphaCompare;
+
+                        // Then, compare numerically
+                        return numA - numB;
+                    });
+                }
+            });
+        }
+    });
+
+    res.json({ customersName, data: classOrder, message: "اطلاعات تجمعی" });
+});
+
+
+// Helper function to split SKU into alphabetic part and numeric part
+function splitSku(sku) {
+    const alphaPart = sku.match(/^[a-zA-Z]+/);
+    const numPart = sku.match(/\d+/);
+
+    return [
+        alphaPart ? alphaPart[0] : '',
+        numPart ? parseInt(numPart[0], 10) : 0
+    ];
+}
+function localCompare(fieldA, fieldB, locale = 'fa-IR') {
+    const valueA = fieldA?.toLowerCase() || '';
+    const valueB = fieldB?.toLowerCase() || '';
+    return valueA.localeCompare(valueB, locale);
+}
+
+
+
+
 
 router.post('/update-checkList', auth, jsonParser, async (req, res) => {
     const taskId = req.body._id ? req.body._id : ""
