@@ -310,7 +310,7 @@ router.post('/find-bulk', auth, jsonParser, async (req, res) => {
     // Sort by customer name alphabetically using Persian locale
     orderData.sort((a, b) => localCompare(a.customerName, b.customerName));
 
-    const customersName = orderData.map(x => `${x.customerName ?? ""} ${x.customerLastName ?? ""}`).join(", ").trim().replace(/(^,)|(,$)/g, "");
+    const customersName = orderData.map(x => `${x.customerName ?? ""} ${x.customerLastName ?? ""}`)
  
     for (var i = 0; i < orderData.length; i++) {
         var orderItems = orderData[i].cartItems;
