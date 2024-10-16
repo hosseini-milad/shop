@@ -1508,17 +1508,27 @@ dialog {
   direction: rtl;
 
   .customer-container{
-    width: 90%;
+    width: 95%;
     margin: 0.5rem auto;
     
+    .customer-wrapper{
+      display: flex;
+      align-items: flex-start;
+      justify-content: flex-start;
+      flex-wrap: wrap;
+      gap: 0;
+    }
+
     p{
       font-size: 1rem;
       color: black;
-      width: 100%;
+      width:calc(100%/6);
       border: 2px solid #333;
-      padding: 1rem;
-      border-radius: 0.5rem;
+      padding: 0.2rem;
+      text-align: center;
+      margin: 0;
     }
+    
   }
 
   .tables-container{
@@ -1527,7 +1537,7 @@ dialog {
     flex-direction: column;
   }
   .category{
-    width: 90%;
+    width: 95%;
     margin:20px auto 0;
     font-size: 1.3rem;
   }
@@ -1609,12 +1619,16 @@ dialog {
 } 
 
 .Print-store .hesabfaMainTable{
+  width: 95%;
   th,td{
     color: black;
     height: 32px;
-    white-space: nowrap;
+    
     overflow: hidden;
     min-width:0;
+  }
+  th{
+    white-space: nowrap;
   }
   .x-small-td{
     width:3%;

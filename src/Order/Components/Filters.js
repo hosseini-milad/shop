@@ -56,11 +56,11 @@ function OrderFilters(props) {
                 }));
               }}
             />
-            <StyleSelect
+            {/* <StyleSelect
               title={"زیر دسته بندی"}
               direction={"rtl"}
               options={
-                props.filters && props.filters.category
+                props.filters && props.filters.cats
                   ? props.filters.category.subCats
                   : []
               }
@@ -72,7 +72,7 @@ function OrderFilters(props) {
                   subCat: e,
                 }))
               }
-            />
+            /> */}
           </div>
         </div>
       ) : (
