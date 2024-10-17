@@ -310,8 +310,8 @@ router.post('/find-bulk', auth, jsonParser, async (req, res) => {
     // Sort by customer name alphabetically using Persian locale
     orderData.sort((a, b) => localCompare(a.customerName, b.customerName));
 
-    const customersName = orderData.map(x => `${x.customerName ?? ""} ${x.customerLastName ?? ""}`)
- 
+    const customersName = orderData.map(x => `${x.customerName ?? ""} ${x.customerLastName ?? ""}`);
+
     for (var i = 0; i < orderData.length; i++) {
         var orderItems = orderData[i].cartItems;
 
@@ -348,8 +348,51 @@ router.post('/find-bulk', auth, jsonParser, async (req, res) => {
         }
     });
 
-    res.json({ customersName, data: classOrder, message: "اطلاعات تجمعی" });
+    // Initialize variables for calculations
+    let totalCount = 0;
+    let totalBox = 0;
+    let totalUnitCount = 0;
+    let unitIdCounts = {};
+
+    // Calculate totals and count unitId repetitions
+    classOrder.forEach(category => {
+        category.data?.forEach(brand => {
+            brand.data?.forEach(item => {
+                const count = item.count ?? 0;
+                const box = item.box ?? 0;
+                const unitId = item.unitId ?? null;
+
+                totalCount += count;              // Sum the count
+                totalBox += box;                  // Sum the box
+                const unitCount = box * count;    // Calculate unitCount
+                totalUnitCount += unitCount;      // Sum the unitCount
+
+                // Optionally store the unitCount in the item for debugging/verification
+                item.unitCount = unitCount;
+
+                // Count occurrences of unitId
+                if (unitId !== null) {
+                    if (!unitIdCounts[unitId]) {
+                        unitIdCounts[unitId] = 1;
+                    } else {
+                        unitIdCounts[unitId]++;
+                    }
+                }
+            });
+        });
+    });
+
+    // Add the total objects to the response
+    const total = {
+        count: totalCount,
+        box: totalBox,
+        unitCount: totalUnitCount,
+        unitId: unitIdCounts
+    };
+
+    res.json({ customersName, data: classOrder, total, message: "اطلاعات تجمعی" });
 });
+
 
 
 // Helper function to split SKU into alphabetic part and numeric part
