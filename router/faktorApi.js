@@ -378,7 +378,7 @@ const findCartFunction=async(userId,managerId)=>{
         try{
             for(var j=0;j<cartData[c].cartItems.length;j++){
                 try{var cartTemp = cartData[c].cartItems[j]
-                const productData = await products.findOne({sku:cartData[c].sku})
+                const productData = await products.findOne({sku:cartTemp.sku})
                 const cartItemDetail = findCartItemDetail(cartTemp,cartData[c].payValue)
                 cartData[c].cartItems[j].total = cartItemDetail
                 cartData[c].cartItems[j].productData=productData
