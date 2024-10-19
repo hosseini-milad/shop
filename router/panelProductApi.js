@@ -248,7 +248,7 @@ router.post('/list-product',jsonParser,async (req,res)=>{
             const brandList = await BrandSchema.find()
            res.json({filter:productList,brands:brandList,
             size:newProduct.length,exists:data.exists,
-            quantity:quantity,price:price,stockId,userData})
+            quantity:quantity,price:price,stockId})
     }
     catch(error){
         res.status(500).json({message: error.message})

@@ -371,15 +371,17 @@ const findCartFunction=async(userId,managerId)=>{
     var description = '' 
     var todayCartData=[]
    for(var c=0;c<(cartData&&cartData.length);c++){
-    
+        
         if(!userId&&IsToday(cartData[c].initDate)!==1){
             continue
         }
         try{
             for(var j=0;j<cartData[c].cartItems.length;j++){
                 try{var cartTemp = cartData[c].cartItems[j]
+                const productData = await products.findOne({sku:cartData[c].sku})
                 const cartItemDetail = findCartItemDetail(cartTemp,cartData[c].payValue)
                 cartData[c].cartItems[j].total = cartItemDetail
+                cartData[c].cartItems[j].productData=productData
                 }
                 catch{}
             }
