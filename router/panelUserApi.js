@@ -180,7 +180,7 @@ router.post("/list-customers", jsonParser, async (req, res) => {
                     ? data.official == "official"
                         ? { agent: { $exists: false } }
                         : { agent: { $exists: true } }
-                    : {}, 
+                    : {},
             },
             {
                 $match: data.customer
@@ -275,7 +275,7 @@ router.post("/create-customer", jsonParser, async (req, res) => {
     const data = req.body;
     data.username = data.sName + " " + data.cName;
     data.agent = agent;
-    data.active=true
+    data.active = true
     try {
         const userData = await customer.create(data);
         res.json({ data: userData, success: "مشتری اضافه شد" });

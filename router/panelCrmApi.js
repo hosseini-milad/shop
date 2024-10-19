@@ -311,7 +311,7 @@ router.post('/find-bulk', auth, jsonParser, async (req, res) => {
     orderData.sort((a, b) => localCompare(a.customerName, b.customerName));
 
     const customersName = orderData.map(x => `${x.customerName ?? ""} ${x.customerLastName ?? ""}`)
- 
+
     for (var i = 0; i < orderData.length; i++) {
         var orderItems = orderData[i].cartItems;
 
@@ -409,22 +409,33 @@ router.post('/list-crm', jsonParser, async (req, res) => {
 
 router.post('/change-state', jsonParser, async (req, res) => {
     try {
-        const taskId = req.body.taskId
+        const taskId = req.body.taskId;
+        const newState = req.body.state;
+
+        const task = await tasks.findOne({ _id: taskId });
+        if (!task) {
+            return res.status(404).json({ message: "Task not found" });
+        }
+
+        if (task.taskStep === 'archive' && newState === 'done') {
+            return res.status(400).json({ message: "Task cannot be updated to 'done' state from 'archive'" });
+        }
+
         const body = {
-            taskStep: req.body.state,
+            taskStep: newState,
             prior: req.body.prior,
             progressDate: Date.now()
-        }
-        const task = await tasks.findOne({ _id: taskId })
-        const taskUpdate = await tasks.updateOne({ _id: taskId },
-            { $set: { ...body } })
+        };
 
-        res.json({ task: task, filter: taskUpdate, message: "task Updated" })
+        const taskUpdate = await tasks.updateOne({ _id: taskId }, { $set: { ...body } });
+
+        res.json({ task: task, filter: taskUpdate, message: "Task updated successfully" });
+    } catch (error) {
+        res.status(500).json({ message: error.message });
     }
-    catch (error) {
-        res.status(500).json({ message: error.message })
-    }
-})
+});
+
+
 router.post('/update-crm', auth, jsonParser, async (req, res) => {
     var crmId = req.body.crmId
     if (crmId === "new") crmId = ""
