@@ -461,7 +461,7 @@ router.post('/change-state', jsonParser, async (req, res) => {
         }
 
         if (task.taskStep === 'archive' && newState === 'done') {
-            return res.status(400).json({ message: "Task cannot be updated to 'done' state from 'archive'" });
+            return res.status(400).json({ message: "!وضعیت نمیتواند از آرشیو به انجام شده تغییر کند" });
         }
 
         const body = {
