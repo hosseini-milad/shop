@@ -51,6 +51,15 @@ function ProductFilters(props){
       "IsActive": true
     }
   ]
+  const stockStore=[
+    
+    {
+      "StockID": 13,
+      "Code": 5,
+      "Title": "انبار فروشگاه جایگاه",
+      "IsActive": true
+    },
+  ]
   const handleFilterChange = (property, value) => {
     const newValue = value ? (value._id ? value._id : value) : "";
     props.setFilters((prevState) => ({
@@ -112,7 +121,7 @@ function ProductFilters(props){
 
         />
         <StyleSelect title={"انبار"} direction={props.lang.dir} 
-              options={stock} label="Title" 
+              options={props.token.profileCode == "sale"?stockStore:stock} label="Title"
               
               action={(e)=>handleFilterChange("store", e)}/>
         <i className="tableIcon fas fa-ellipsis-v"></i>

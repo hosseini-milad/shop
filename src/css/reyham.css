@@ -1499,7 +1499,7 @@ dialog {
   width: 90%;
   margin: 0 auto;
 }
-.Print-store{
+.Print-store {
   width: 100%;
   display: flex;
   align-items: flex-start;
@@ -1507,42 +1507,44 @@ dialog {
   flex-direction: column;
   direction: rtl;
 
-  .customer-container{
+  .customer-container {
     width: 95%;
     margin: 0.5rem auto;
-    
-    .customer-wrapper{
-      display: flex;
-      align-items: flex-start;
-      justify-content: flex-start;
-      flex-wrap: wrap;
-      gap: 0;
+
+    .customer-wrapper {
+      display: grid;
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      grid-template-rows: 1fr;
+      grid-column-gap: 5px;
+      grid-row-gap: 5px;
     }
 
-    p{
+    p {
       font-size: 1rem;
       color: black;
-      width:calc(100%/6);
+      width:100%;
       border: 2px solid #333;
       padding: 0.2rem;
       text-align: center;
       margin: 0;
+      white-space: nowrap;
+      border-radius: 0.5rem;
     }
-    
   }
 
-  .tables-container{
+  .tables-container {
     width: 100%;
     display: flex;
     flex-direction: column;
   }
-  .category{
+  .category {
     width: 95%;
-    margin:20px auto 0;
+    margin: 20px auto 0;
     font-size: 1.3rem;
   }
 }
-.Print-store .table-wrapper{
+.Print-store .table-wrapper {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -1550,23 +1552,24 @@ dialog {
   width: 80%;
   margin: 0 auto;
   margin-bottom: 6px;
-  
 }
-.Print-store .table-wrapper .header,.Print-store .table-wrapper .main{
+.Print-store .table-wrapper .header,
+.Print-store .table-wrapper .main {
   display: flex;
   align-items: center;
   justify-content: space-between;
   width: 100%;
 
-  .header-item,.main-item{
+  .header-item,
+  .main-item {
     display: flex;
     align-items: center;
     justify-content: center;
-    width: calc(100%/2.1);
+    width: calc(100% / 2.1);
     border-bottom: 1px solid black;
     height: 45px;
 
-    p{
+    p {
       margin: 0;
       height: 100%;
       width: 50px;
@@ -1574,76 +1577,73 @@ dialog {
       text-align: center;
       color: black;
       padding: 0.5rem 0;
-      
     }
-    p:nth-child(2){
+    p:nth-child(2) {
       width: 100%;
       font-size: 0.8rem;
       border: 1px solid black;
       border-top: 0;
       border-bottom: 0;
     }
-    
   }
-  .header-item{
+  .header-item {
     border: 2px solid black;
     border-radius: 1rem 1rem 0 0;
   }
-  .main-item{
+  .main-item {
     border: 2px solid black;
     border-top: 0;
   }
-  .header-item p{
+  .header-item p {
     font-size: 14px;
     font-weight: 600;
   }
-  
 }
-.Print-store .table-wrapper .main{
+.Print-store .table-wrapper .main {
   flex-wrap: wrap;
   justify-content: space-between;
 }
-.p-r{
+.p-r {
   position: relative;
 }
-.fa-ellipsis-v{
+.fa-ellipsis-v {
   width: 20px;
   cursor: pointer;
 }
-.sub-more-menu{
+.sub-more-menu {
   display: none !important;
   left: 50px !important;
 }
-.sub-active{
+.sub-active {
   display: flex !important;
-} 
+}
 
-.Print-store .hesabfaMainTable{
+.Print-store .hesabfaMainTable {
   width: 95%;
-  th,td{
+  th,
+  td {
     color: black;
     height: 32px;
-    
+
     overflow: hidden;
-    min-width:0;
+    min-width: 0;
   }
-  th{
+  th {
     white-space: nowrap;
   }
-  .x-small-td{
-    width:3%;
+  .x-small-td {
+    width: 3%;
   }
-  .small-td{
+  .small-td {
     width: 8%;
   }
-  .meduim-td{
+  .meduim-td {
     width: 10%;
   }
-  .larg-td{
+  .larg-td {
     width: 50%;
   }
-  .count-td{
+  .count-td {
     width: 6%;
   }
-
 }

@@ -47,25 +47,27 @@ function QuickTotal(props){
     return(<div className="total-amount"></div>)
   else return(
     <div className="total-amount">
-      <div className="t-wrapper">
-        <p>تعداد</p>
-        <p>{qCart.totalCount}</p>
-      </div>
-      <div className="t-wrapper">
-        <p>مجموع فاکتور</p>
-        <p>{normalPriceCount(qCart.totalFee,1)}</p>
-      </div>
-      <div className="t-wrapper">
-        <p>تخفیف</p>
-        <p>{normalPriceRound(qCart.totalDiscount,1)||"-"}</p>
-      </div>
-      <div className="t-wrapper">
-        <p>مالیات</p>
-        <p>{normalPriceRound(qCart.totalTax)}</p>
-      </div>
-      <div className="t-wrapper">
-        <p>مبلغ کل </p>
-        <p>{normalPriceRound(qCart.totalPrice)}</p>
+      <div class="table">
+        <div className="t-wrapper">
+          <p>تعداد</p>
+          <p>{qCart.totalCount}</p>
+        </div>
+        <div className="t-wrapper">
+          <p>مجموع فاکتور</p>
+          <p>{normalPriceCount(qCart.totalFee,1)}</p>
+        </div>
+        <div className="t-wrapper">
+          <p>تخفیف</p>
+          <p>{normalPriceRound(qCart.totalDiscount,1)||"-"}</p>
+        </div>
+        <div className="t-wrapper">
+          <p>مالیات</p>
+          <p>{normalPriceRound(qCart.totalTax)}</p>
+        </div>
+        <div className="t-wrapper">
+          <p>مبلغ کل </p>
+          <p>{normalPriceRound(qCart.totalPrice)}</p>
+        </div>
       </div>
       <label  htmlFor="Quote" 
       className={`product-table-btn temp-btn label-btn ${isQuote?"green-btn":""}`}>

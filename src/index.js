@@ -42,6 +42,7 @@ import Customers from "./pages/Customers";
 import Visitor from "./pages/Visitor";
 import CustomerDetailHolder from "./modules/Customer/CustomerData/CustomerDetailHolder";
 import OrderHolder from "./Order/OrderHolder";
+import OrderHolderNew from "./Order/OrderHolderNew";
 import OpenOrders from "./Order/OpenOrders";
 import FilterAdd from "./modules/Filters/FilterAdd";
 import FilterHolder from "./modules/Filters/FilterHolder";
@@ -201,6 +202,14 @@ root.render(
           element={
             <Layout>
               <Orders lang={lang} />
+            </Layout>
+          }
+        />
+        <Route
+          path="/setOrders"
+          element={
+            <Layout>
+              <OrderHolderNew lang={"fa"} />
             </Layout>
           }
         />

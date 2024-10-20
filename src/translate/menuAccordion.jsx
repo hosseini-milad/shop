@@ -23,8 +23,8 @@ const menutrans ={
                 url:""
             },
             {
-                english: "Tasks",
-                persian: "وظایف و پیگیری",
+                english: "orders Managment",
+                persian: "مدیریت سفارشات",
                 index:1,
                 icon:"fa-bar-chart",
                 href:"/crm",
@@ -79,6 +79,14 @@ const menutrans ={
                     icon:"fa-tasks",
                     href:"/orders",
                     url:"orders"
+                },
+                {
+                    english: "ُSet Order",
+                    persian: "ثبت سفارش",
+                    index:0,
+                    icon:"fa-tasks",
+                    href:"/setOrders",
+                    url:"setOrders"
                 },
                 {
                     english: "Transactions",
