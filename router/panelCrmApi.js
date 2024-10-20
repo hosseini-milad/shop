@@ -271,6 +271,7 @@ const findNext = (index, status) => {
         return (1)
     }
 }
+
 router.post('/find-bulk', auth, jsonParser, async (req, res) => {
     var orderList = req.body.orders;
     const status = req.body.status;
@@ -307,10 +308,9 @@ router.post('/find-bulk', auth, jsonParser, async (req, res) => {
         },
     ]);
 
-    // Sort by customer name alphabetically using Persian locale
     orderData.sort((a, b) => localCompare(a.customerName, b.customerName));
 
-    const customersName = orderData.map(x => `${x.customerName ?? ""} ${x.customerLastName ?? ""}`);
+    const customersName = orderData.map(x => `${x.customerName ?? ""} ${x.customerLastName ?? ""}`)
 
     for (var i = 0; i < orderData.length; i++) {
         var orderItems = orderData[i].cartItems;
@@ -320,27 +320,21 @@ router.post('/find-bulk', auth, jsonParser, async (req, res) => {
         }
     }
 
-    // Sort by catData.title alphabetically using Persian locale
     classOrder.sort((a, b) => localCompare(a.catData?.title, b.catData?.title));
 
-    // Sort nested data by brandData.title, then by SKU (alphabetically and numerically)
     classOrder.forEach(category => {
         if (category.data && category.data.length) {
-            // Sort brands by brandData.title alphabetically in Persian
             category.data.sort((a, b) => localCompare(a.brandData?.title, b.brandData?.title));
 
-            // Sort each brand's inner data by sku
             category.data.forEach(brand => {
                 if (brand.data && brand.data.length) {
                     brand.data.sort((a, b) => {
                         const [alphaA, numA] = splitSku(a.sku);
                         const [alphaB, numB] = splitSku(b.sku);
 
-                        // First, compare alphabetically
                         const alphaCompare = localCompare(alphaA, alphaB);
                         if (alphaCompare !== 0) return alphaCompare;
 
-                        // Then, compare numerically
                         return numA - numB;
                     });
                 }
@@ -348,46 +342,41 @@ router.post('/find-bulk', auth, jsonParser, async (req, res) => {
         }
     });
 
-    // Initialize variables for calculations
     let totalCount = 0;
     let totalBox = 0;
     let totalUnitCount = 0;
-    let unitIdCounts = {};
+    let unitIDCounts = {};
 
-    // Calculate totals and count unitId repetitions
     classOrder.forEach(category => {
         category.data?.forEach(brand => {
             brand.data?.forEach(item => {
                 const count = item.count ?? 0;
                 const box = item.box ?? 0;
-                const unitId = item.unitId ?? null;
+                const unitID = item.unitID ?? null;
 
-                totalCount += count;              // Sum the count
-                totalBox += box;                  // Sum the box
-                const unitCount = box * count;    // Calculate unitCount
-                totalUnitCount += unitCount;      // Sum the unitCount
+                totalCount += count;
+                totalBox += box;
+                const unitCount = box * count;
+                totalUnitCount += unitCount;
 
-                // Optionally store the unitCount in the item for debugging/verification
                 item.unitCount = unitCount;
 
-                // Count occurrences of unitId
-                if (unitId !== null) {
-                    if (!unitIdCounts[unitId]) {
-                        unitIdCounts[unitId] = 1;
+                if (unitID !== null) {
+                    if (!unitIDCounts[unitID]) {
+                        unitIDCounts[unitID] = 1;
                     } else {
-                        unitIdCounts[unitId]++;
+                        unitIDCounts[unitID]++;
                     }
                 }
             });
         });
     });
 
-    // Add the total objects to the response
     const total = {
         count: totalCount,
-        box: totalBox,
-        unitCount: totalUnitCount,
-        unitId: unitIdCounts
+        box: totalBox || null,
+        unitCount: totalUnitCount || null,
+        unitID: Object.keys(unitIDCounts).length ? unitIDCounts : null
     };
 
     res.json({ customersName, data: classOrder, total, message: "اطلاعات تجمعی" });
