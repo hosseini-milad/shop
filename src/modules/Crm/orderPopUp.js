@@ -118,7 +118,6 @@ function OrderPopUp(props){
                 console.log(error)
             })
     }
-    console.log(Loading)
     const regSepidar =()=>{
         const postOptions={
             method:'post',
@@ -162,7 +161,7 @@ function OrderPopUp(props){
                     onClick={props.close}></i>
                 <div className="sharif" style={{padding: "70px 10px 10px"}}>
                     <main className="sharif-order-main">
-                        {content?<QuickCartHolder token={token} 
+                        {content?<QuickCartHolder OrderPop={props.OrderPop} token={token} 
                         user={content.cart&&content.cart.userId}
                         payValue={payValue} setPayValue={setPayValue}
                         cartNo={data?data.orderNo:''} access={props.access}

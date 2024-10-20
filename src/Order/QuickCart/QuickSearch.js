@@ -14,7 +14,7 @@ function QuickSearch(props){
     const [showCustomers,setShowCustomers] = useState(0)
     return(<>
         <div className="code-input-wrapper">
-            <input className="dp-input" type="text" name="" id=""
+            <input className="dp-input" type="text" placeholder="شرح کالا"
                 onChange={(e)=>setQuery(e.target.value)}
             onFocus={()=>setShowDrop(1)}
             //onClick={()=>setShowDrop(1)}
@@ -29,7 +29,7 @@ function QuickSearch(props){
             </select>
             
         </div> */}
-        {showDrop?
+        {query?
         <div className="code-drop-menu">
             {data?data.products&&data.products.map((item,i)=>(
                <CountCalculator item={item} setShowDrop={setShowDrop} 

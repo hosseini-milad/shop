@@ -31,13 +31,13 @@ function OrderHolder(props) {
         "x-access-token": token && token.token,
         userId: token && token.userId,
       },
-      body: JSON.stringify({
-        userId: user
-          ? user.Code
-            ? user.Code
-            : user._id
-          : token && token.userId,
-      }),
+      body: JSON.stringify(
+        {
+          
+          userId:(
+            (token.profileCode == "sale")?"66128faa5820d102747ed259"
+            :user? user.Code? user.Code: user._id: token && token.userId)
+        }),
     };
     fetch(env.siteApi + "/panel/faktor/cart", postOptions)
       .then((res) => res.json())
@@ -83,11 +83,7 @@ function OrderHolder(props) {
     if(token.profileCode == "sale") 
       setUser(
       {"_id":"66128faa5820d102747ed259",
-        "username":"مصرف کننده نهایی",
-        "cName":"مصرف کننده نهایی",
-        "phone":"09121697421",
-        "cCode":"12124",
-        "CustomerID":"2753"
+
       },
     )
   }, []);
@@ -154,6 +150,7 @@ function OrderHolder(props) {
         )}
         {user ? (
           <QuickCartHolder
+            OrderPop={true}
             token={token}
             user={user}
             canEdit={1}

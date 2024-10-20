@@ -82,7 +82,7 @@ const menutrans ={
                 },
                 {
                     english: "ُSet Order",
-                    persian: "ثبت سفارش",
+                    persian: "ثبت فاکتور",
                     index:0,
                     icon:"fa-tasks",
                     href:"/setOrders",

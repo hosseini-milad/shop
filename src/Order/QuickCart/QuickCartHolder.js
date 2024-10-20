@@ -53,7 +53,7 @@ function QuickCartHolder(props){
           token={token} setError={props.setError} user={props.user}
           setPayValue={props.setPayValue} payValue={props.payValue}
           />
-          <QuickTotal data={props.cartDetail} token={token}
+          <QuickTotal OrderPop={props.OrderPop} data={props.cartDetail} token={token}
           setCart={props.setCart} action={props.regCart}
             user={props.user} setError={props.setError}
             access={props.access}/>

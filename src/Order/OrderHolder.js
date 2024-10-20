@@ -154,6 +154,7 @@ function OrderHolder(props) {
         )}
         {user ? (
           <QuickCartHolder
+            OrderPop={true}
             token={token}
             user={user}
             canEdit={1}
