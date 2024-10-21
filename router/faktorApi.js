@@ -446,6 +446,7 @@ const findCartFunction = async (userId, managerId) => {
                     for (var j = 0; j < qCartData[c].cartItems.length; j++) {
                         try {
                             var cartTemp = qCartData[c].cartItems[j]
+                            console.log(cartTemp.sku)
                             const productData = await products.findOne({ sku: cartTemp.sku })
                             qCartData[c].cartItems[j].productData = productData
                         }
