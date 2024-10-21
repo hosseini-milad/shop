@@ -442,6 +442,7 @@ const findCartFunction = async (userId, managerId) => {
         }
         if (qCartData) {
             for (var c = 0; c < qCartData.length; c++) {
+                console.log("qCartData.length",qCartData.length)
                 try {
                     for (var j = 0; j < qCartData[c].cartItems.length; j++) {
                         try {
