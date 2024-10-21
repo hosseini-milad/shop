@@ -440,6 +440,7 @@ const findCartFunction = async (userId, managerId) => {
             todayCartData.push(cartData[c])
 
         }
+        console.log("qCartData.length",qCartData)
         if (qCartData) {
             for (var c = 0; c < qCartData.length; c++) {
                 console.log("qCartData.length",qCartData.length)
