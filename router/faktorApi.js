@@ -773,7 +773,17 @@ router.post('/cart-find', async (req, res) => {
         var cartItems = cartData.cartItems
         if (cartItems)
             for (var i = 0; i < cartItems.length; i++) {
-                cartList[0].cartItems[i].total = findCartItemDetail(cartItems[i], cartData.payValue)
+                    try {
+                        var cartTemp = cartItems[j]
+                        const productData = await products.findOne({ sku: cartTemp.sku })
+                        cartList[0].cartItems[i].productData = productData
+                    }
+                    catch { }
+                            
+                    cartList[0].cartItems[i].total = findCartItemDetail(cartItems[i], cartData.payValue)
+    
+                
+                
 
             }
         var orderData = findQuickCartSum(cartItems, cartData.payValue,
