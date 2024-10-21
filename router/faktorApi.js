@@ -444,15 +444,11 @@ const findCartFunction = async (userId, managerId) => {
             for (var j = 0; j < qCartData.cartItems.length; j++) {
                 try {
                     var cartTemp = qCartData.cartItems[j]
-                    console.log(cartTemp.sku)
                     const productData = await products.findOne({ sku: cartTemp.sku })
                     qCartData.cartItems[j].productData = productData
                 }
                 catch { }
             }
-            
-    
-            
             qCartDetail = findQuickCartSum(qCartData.cartItems,
                 qCartData.payValue, qCartData.discount)
         }
