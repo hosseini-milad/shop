@@ -372,13 +372,18 @@ router.post('/find-bulk', auth, jsonParser, async (req, res) => {
         });
     });
 
+    const unitIDCountArray = Object.keys(unitIDCounts).map(unitID => {
+        return { unitId: unitID, count: unitIDCounts[unitID] };
+    });
+
     const total = {
         count: totalCount,
         box: totalBox || null,
         unitCount: totalUnitCount || null,
-        unitID: Object.keys(unitIDCounts).length ? unitIDCounts : null
+        unitID: unitIDCountArray.length ? unitIDCountArray : null // Replace object with array format
     };
 
+    // Send response with updated unitID array format
     res.json({ customersName, data: classOrder, total, message: "اطلاعات تجمعی" });
 });
 
