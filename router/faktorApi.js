@@ -128,7 +128,8 @@ router.get('/get-sub-cats', async (req, res) => {
 router.get('/list-filters', async (req, res) => {
     try {
         const brandData = await brand.find()
-        const catData = await category.find({ parent: { $exists: false } })
+        const catData = await category.find({ $or:[{parent: { $exists: false }},
+            {parent:''}]} )
         for (var i = 0; i < catData.length; i++) {
             var subCat = await category.find(
                 { "parent._id": (catData[i]._id).toString() })
