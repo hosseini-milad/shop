@@ -130,7 +130,7 @@ router.get('/list-filters', async (req, res) => {
         const brandData = await brand.find()
         const catData = await category.aggregate([{$match: {$or:[
             {parent: { $exists: false }},
-            {parent:''}]}} ])
+            {parent:null}]}} ])
         /*for (var i = 0; i < catData.length; i++) {
             var subCat = await category.find(
                 { "parent._id": (catData[i]._id).toString() })
