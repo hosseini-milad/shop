@@ -1647,3 +1647,10 @@ dialog {
     width: 6%;
   }
 }
+.username-icon{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  flex-direction: row-reverse;
+}

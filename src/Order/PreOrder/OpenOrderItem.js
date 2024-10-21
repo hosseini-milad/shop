@@ -1,6 +1,6 @@
 import { useState } from "react"
 import { PriceDiscountTax, TAX, normalPriceCount, normalPriceRound } from "../../env"
-
+import env from "../../env"
 function OpenOrderItem(props){
     const data = props.data
     const total=props.total&&props.total[props.index]
@@ -105,7 +105,7 @@ function OpenOrderItem(props){
                   </td>
                   <td data-cell="شرح کالا">
                     <div className="product-title">
-                      <img src="/img/business/oil1.png" alt="avatar"/>
+                      <img src={(item.productData.imageUrl)?(env.siteApiUrl+item.productData.imageUrl):("/img/business/oil1.png")} alt="product"/>
                       <div className="product-name">
                         <p className="name">{item.title}</p>
                         <p className="email">{item.sku}</p>

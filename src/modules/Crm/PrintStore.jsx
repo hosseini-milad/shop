@@ -8,6 +8,7 @@ const PrintStore = (props) => {
 
   const token=cookies.get(env.cookieName)
   const [List , setList] = useState("")
+  const [Total , setTotal] = useState("")
 
   const UnitList={
     1:{
@@ -65,12 +66,13 @@ const PrintStore = (props) => {
     .then(
         (result) => {
           setList(result)
+          setTotal(result.total)
         },
         (error) => {
             console.log(error)
         })
 },[])
-  console.log(List)
+  console.log(UnitList[1])
   return (
     <div className="Print-store">
       {List.customersName?<div className="customer-container">
@@ -128,6 +130,16 @@ const PrintStore = (props) => {
         ))
         }
       </div>
+      {Total?<div className="customer-container">
+        <h4>جمع کل</h4>
+        <div className="customer-wrapper" >
+          {Total.unitID&&Total.unitID.map((unit,i)=>(
+
+              <p key={i}>{UnitList[unit.unitId].Title+" : "+unit.count}</p>
+
+          ))}
+        </div>
+      </div>:<></>}
     </div>
   )
 }

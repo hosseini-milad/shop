@@ -1,14 +1,14 @@
 import { useState } from "react"
 import env, { normalPriceCount, normalPriceRound } from "../../env"
-
+import ErrorAction from "../../components/Modal/ErrorAction"
 function QuickTotal(props){
   const token = props.token
   const qCart = props.data
   const user = props.user
-  const [loading ,setLoading]=useState(0) 
-  const [isQuote ,setQuote]=useState(false) 
+  const [loading ,setLoading]=useState(0)  
+  const [PopUp ,setPopUp]=useState("") 
   //console.log(qCart)
-  const SetOrder=()=>{
+  const SetOrder=(isQuote)=>{
     setLoading(1)
       const postOptions={
           method:'post',
@@ -39,7 +39,7 @@ function QuickTotal(props){
               console.log(error)
           })
   }
-  console.log(isQuote)
+  
   const defAction=()=>{
     props.action({message:"acting"})
   }
@@ -47,7 +47,7 @@ function QuickTotal(props){
     return(<div className="total-amount"></div>)
   else return(
     <div className="total-amount">
-      <div class="table">
+      <div className="table">
         <div className="t-wrapper">
           <p>تعداد</p>
           <p>{qCart.totalCount}</p>
@@ -69,22 +69,27 @@ function QuickTotal(props){
           <p>{normalPriceRound(qCart.totalPrice)}</p>
         </div>
       </div>
-      {props.OrderPop?<label  htmlFor="Quote" 
-      className={`product-table-btn temp-btn label-btn ${isQuote?"green-btn":""}`}>
-        <p>پیش فاکتور</p>
-        <input id="Quote" type="checkbox" checked={isQuote} onChange={(e)=>setQuote(!isQuote)}/>
-        {isQuote?
-        <i class="fa fa-check" aria-hidden="true"></i>:
-        <i class="fa fa-times" aria-hidden="true"></i>}
-      </label>:<></>}
-      
       {props.action?<></>:
-      !0?<button type="button" className="product-table-btn temp-btn"
-      onClick={SetOrder}>
-        <p>ثبت سفارش</p>
-      </button>:<button type="button" className="product-table-btn temp-btn">
-        <p>در حال ثبت...</p>
-      </button>}
+      <div className="total-btn-wrapper">
+        <button type="button" className="product-table-btn temp-btn"
+        onClick={()=>setPopUp({action:"false",title:"ثبت فاکتور"})}>
+          <p>ثبت فاکتور</p>
+        </button>
+        <button type="button" className="product-table-btn temp-btn"
+        onClick={()=>setPopUp({action:"true",title:"ثبت پیش فاکتور"})}>
+          <p>ثبت پیش فاکتور</p>
+        </button>
+      </div>}
+      {PopUp?<ErrorAction
+        status={"DELETE"}
+        title={PopUp.title}
+        text={"آیا از ثبت سفارش مطمئن هستید؟"} 
+        buttonText="تایید" 
+        close={()=>setPopUp(0)}
+        color="orange" 
+        action={()=>SetOrder(PopUp.action)}/>:<></>
+
+      }
     </div>
     )
 }
