@@ -156,7 +156,7 @@ const calcTasks = async (userId) => {
         if (!taskList[c].progressDate) {
             yesterday = new Date(Date.now() - 166400000)
         }
-        if (taskStep == "archive")
+        if (taskStep == "archive" || taskStep == "cancel")
             if (taskDate < yesterday)
                 continue
         try {
