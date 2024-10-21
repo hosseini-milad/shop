@@ -441,6 +441,20 @@ const findCartFunction = async (userId, managerId) => {
 
         }
         if (qCartData) {
+            for (var c = 0; c < qCartData.length; c++) {
+                try {
+                    for (var j = 0; j < qCartData[c].cartItems.length; j++) {
+                        try {
+                            var cartTemp = qCartData[c].cartItems[j]
+                            const productData = await products.findOne({ sku: cartTemp.sku })
+                            qCartData[c].cartItems[j].productData = productData
+                        }
+                        catch { }
+                    }
+                }
+                catch { }
+    
+            }
             qCartDetail = findQuickCartSum(qCartData.cartItems,
                 qCartData.payValue, qCartData.discount)
         }
