@@ -111,14 +111,14 @@ router.post('/list-products', async (req, res) => {
 router.get('/get-sub-cats', async (req, res) => {
     try {
         const title = req.query.title;
-        const catData = await category.find({ title: title }, { title: 1, catCode: 1, link: 1, _id: 1 });
-        for (var i = 0; i < catData.length; i++) {
+        const catData = await category.findOne({ catCode: title }, { title: 1, catCode: 1, link: 1, _id: 1 });
+        //for (var i = 0; i < catData.length; i++) {
             var subCat = await category.find(
-                { "parent.title": title }, { title: 1, catCode: 1, link: 1, _id: 1 }
-            );
-            catData[i].children = subCat;
-        }
-        res.send(catData);
+                { parent: catData._id }, { title: 1, catCode: 1, link: 1, _id: 1 })
+        //    );
+            //catData[i].children = subCat;
+        //}
+        res.send(subCat);
     } catch (error) {
         res.status(500).json({ message: error.message });
     }
