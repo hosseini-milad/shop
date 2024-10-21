@@ -774,7 +774,7 @@ router.post('/cart-find', async (req, res) => {
         if (cartItems)
             for (var i = 0; i < cartItems.length; i++) {
                     try {
-                        var cartTemp = cartItems[j]
+                        var cartTemp = cartItems[i]
                         const productData = await products.findOne({ sku: cartTemp.sku })
                         cartList[0].cartItems[i].productData = productData
                     }
