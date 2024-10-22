@@ -34,7 +34,7 @@ function QuickTable(props){
             </tr>
           </thead>
           <tbody>
-            {reload?<QuickNew data={props.data} token={props.token}
+            {reload?<QuickNew data={props.data} setdata={props.setdata} token={props.token}
               payValue={props.payValue?props.payValue:"4"} setCart={props.setCart}
               user={props.user} action={props.action} setError={props.setError}
               search={props.search} setSearch={props.setSearch}

@@ -11,7 +11,6 @@ function QuickSearch(props){
         return () => clearTimeout(timeOutId);
         //props.setSearch
       }, [query]);
-    const [showCustomers,setShowCustomers] = useState(0)
     return(<>
         <div className="code-input-wrapper">
             <input className="dp-input" type="text" placeholder="شرح کالا"
@@ -32,7 +31,7 @@ function QuickSearch(props){
         {query?
         <div className="code-drop-menu">
             {data?data.products&&data.products.map((item,i)=>(
-               <CountCalculator item={item} setShowDrop={setShowDrop} 
+               <CountCalculator item={item} setQuery={setQuery} setShowDrop={setShowDrop} 
                key={i} setSelectedItem={props.setSelectedItem} token={props.token}/>
             )):<div className="roader">{env.loader}</div>}
         </div>:<></>}

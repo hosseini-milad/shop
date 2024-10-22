@@ -4,10 +4,11 @@ function CountCalculator(props){
     const token = props.token
     const item = props.item
     const sku = item&&item.sku
+    const close=props.setQuery
     const [findCount,setCount] = useState()
     const [countValue,setCountValue] = useState()
     const calcCountFunction=()=>{
-        props.setShowDrop(1)
+        
         const postOptions={
             method:'post',
             headers: { 'Content-Type': 'application/json' ,
@@ -33,11 +34,10 @@ function CountCalculator(props){
     }
     return(
       <div className="menu-item"
-        onClick={(e)=>//findCount?
-            {props.setSelectedItem(item);
-            (e.target.id!=="calcCount")&&props.setShowDrop(0)
+        onClick={(e)=>
+            {(props.setSelectedItem(item));
+            (e.target.id!=="calcCount")&&(close(""))
             }
-            //:calcCountFunction()
         }>
         <div className="item-img">
             <img src={env.siteApiUrl+item.thumbUrl} alt=""/>

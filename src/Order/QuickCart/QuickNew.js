@@ -78,7 +78,7 @@ function QuickNew(props){
             <td data-cell="ردیف"></td>
             
             <td className="search-td" data-cell="کد کالا">
-                <QuickSearch data={props.data} token={token}
+                <QuickSearch data={props.data} setdata={props.setdata} token={token}
                 search={props.search} setSearch={props.setSearch}
                 setSelectedItem={setSelectedItem}/>
             </td>
