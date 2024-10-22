@@ -72,11 +72,11 @@ function QuickTotal(props){
       {props.action?<></>:
       <div className="total-btn-wrapper">
         <button type="button" className="product-table-btn temp-btn"
-        onClick={()=>setPopUp({action:"false",title:"ثبت فاکتور"})}>
+        onClick={()=>setPopUp({action:false,title:"ثبت فاکتور"})}>
           <p>ثبت فاکتور</p>
         </button>
         <button type="button" className="product-table-btn temp-btn"
-        onClick={()=>setPopUp({action:"true",title:"ثبت پیش فاکتور"})}>
+        onClick={()=>setPopUp({action:true,title:"ثبت پیش فاکتور"})}>
           <p>ثبت پیش فاکتور</p>
         </button>
       </div>}
