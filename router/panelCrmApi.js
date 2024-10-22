@@ -310,7 +310,7 @@ router.post('/find-bulk', auth, jsonParser, async (req, res) => {
 
     orderData.sort((a, b) => localCompare(a.customerName, b.customerName));
 
-    const customersName = orderData.map(x => `${x.customerName ?? ""} ${x.customerLastName ?? ""}`)
+    const customersName = orderData.map(x => `${x.customerName ?? ""} ${x.customerLastName ?? ""}`);
 
     for (var i = 0; i < orderData.length; i++) {
         var orderItems = orderData[i].cartItems;
@@ -351,7 +351,11 @@ router.post('/find-bulk', auth, jsonParser, async (req, res) => {
         category.data?.forEach(brand => {
             brand.data?.forEach(item => {
                 const count = item.count ?? 0;
-                const box = item.box ?? 0;
+                let box = item.box;
+                if (box === null || box === undefined || box === '') {
+                    box = 1;
+                }
+                box = Number(box) || 1;
                 const unitID = item.unitID ?? null;
 
                 totalCount += count;
@@ -363,9 +367,9 @@ router.post('/find-bulk', auth, jsonParser, async (req, res) => {
 
                 if (unitID !== null) {
                     if (!unitIDCounts[unitID]) {
-                        unitIDCounts[unitID] = 1;
+                        unitIDCounts[unitID] = box;
                     } else {
-                        unitIDCounts[unitID]++;
+                        unitIDCounts[unitID] += box;
                     }
                 }
             });
@@ -380,12 +384,12 @@ router.post('/find-bulk', auth, jsonParser, async (req, res) => {
         count: totalCount,
         box: totalBox || null,
         unitCount: totalUnitCount || null,
-        unitID: unitIDCountArray.length ? unitIDCountArray : null // Replace object with array format
+        unitID: unitIDCountArray.length ? unitIDCountArray : null
     };
 
-    // Send response with updated unitID array format
     res.json({ customersName, data: classOrder, total, message: "اطلاعات تجمعی" });
 });
+
 
 
 
