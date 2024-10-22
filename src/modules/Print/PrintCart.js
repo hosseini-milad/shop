@@ -7,6 +7,7 @@ function PrintCart(props){
   const total = orderInfo?orderInfo.orderData:''
   const userInfo = orderInfo?orderInfo.userData[0]:''
   const manInfo = orderInfo?orderInfo.manData[0]:''
+  
     return(
         <div className="printArea">
           <div className="userInfo">
@@ -14,7 +15,7 @@ function PrintCart(props){
               </div>
               <div className="hesabfaSection">
                 <h1> </h1>
-                <h4>فاکتور فروش</h4>
+                {orderInfo.taskData=="quote"?<h4>پیش فاکتور </h4>:<h4>فاکتور فروش</h4>}
               </div>
               <div className="hesabfaSection" style={{minWidth: "240px"}}>
                 <small>شماره فاکتور: <b>{props.url}</b></small>

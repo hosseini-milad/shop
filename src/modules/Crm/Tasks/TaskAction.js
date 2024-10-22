@@ -64,6 +64,7 @@ function TaskAction(props){
           console.log(error);
         })
     }
+    
     if(data&&data.result){
         if(data.result.InvoiceID){
         return(
@@ -93,6 +94,14 @@ function TaskAction(props){
             )
                 
     }
+    // else if(data&&data.taskStep==="quote"){
+    //     <div className="taskAction">
+            
+    //             <button type="button" className="btn-crm btn-crm-accept"
+    //                 onClick={()=>updateTask("accept")}>
+    //                 <p>تایید سفارش</p></button>
+    //     </div>
+    // }
     else
     return(
         <div className="taskAction">
