@@ -112,12 +112,11 @@ router.get('/get-sub-cats', async (req, res) => {
     try {
         const title = req.query.title;
         const catData = await category.findOne({ catCode: title }, { title: 1, catCode: 1, link: 1, _id: 1 });
-        //for (var i = 0; i < catData.length; i++) {
-            var subCat = await category.find(
-                { parent: catData._id }, { title: 1, catCode: 1, link: 1, _id: 1 })
-        //    );
-            //catData[i].children = subCat;
-        //}
+        if (!catData) {
+            res.status(400).json({ error: "دسته بندی یافت نشد" });
+        }
+        var subCat = await category.find(
+            { parent: catData._id }, { title: 1, catCode: 1, link: 1, _id: 1 })
         res.send(subCat);
     } catch (error) {
         res.status(500).json({ message: error.message });
@@ -128,9 +127,13 @@ router.get('/get-sub-cats', async (req, res) => {
 router.get('/list-filters', async (req, res) => {
     try {
         const brandData = await brand.find()
-        const catData = await category.aggregate([{$match: {$or:[
-            {parent: { $exists: false }},
-            {parent:null}]}} ])
+        const catData = await category.aggregate([{
+            $match: {
+                $or: [
+                    { parent: { $exists: false } },
+                    { parent: null }]
+            }
+        }])
         /*for (var i = 0; i < catData.length; i++) {
             var subCat = await category.find(
                 { "parent._id": (catData[i]._id).toString() })
@@ -775,17 +778,17 @@ router.post('/cart-find', async (req, res) => {
         var cartItems = cartData.cartItems
         if (cartItems)
             for (var i = 0; i < cartItems.length; i++) {
-                    try {
-                        var cartTemp = cartItems[i]
-                        const productData = await products.findOne({ sku: cartTemp.sku })
-                        cartList[0].cartItems[i].productData = productData
-                    }
-                    catch { }
-                            
-                    cartList[0].cartItems[i].total = findCartItemDetail(cartItems[i], cartData.payValue)
-    
-                
-                
+                try {
+                    var cartTemp = cartItems[i]
+                    const productData = await products.findOne({ sku: cartTemp.sku })
+                    cartList[0].cartItems[i].productData = productData
+                }
+                catch { }
+
+                cartList[0].cartItems[i].total = findCartItemDetail(cartItems[i], cartData.payValue)
+
+
+
 
             }
         var orderData = findQuickCartSum(cartItems, cartData.payValue,
