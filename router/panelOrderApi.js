@@ -116,7 +116,7 @@ router.post('/list',jsonParser,async (req,res)=>{
         if(data.status){
             if((cartTask&&cartTask.taskStep) !== data.status)
                 continue 
-        }
+        } 
         var totalPrice=findCartSum(cartList[i].cartItems,
             cartList[i].payValue)
         showCart.push({...cartList[i],totalCart:totalPrice})
