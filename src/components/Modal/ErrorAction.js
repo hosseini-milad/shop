@@ -13,7 +13,7 @@ function ErrorAction(props){
             <div className="d-m-content">
               <p className="popTitle">{props.title}</p>
               <div className="sure-checkbox">
-                <input type="checkbox" name="sure checkbox" id="sure"/>
+                {/* <input type="checkbox" name="sure checkbox" id="sure"/> */}
                 <label for="sure">{props.text}</label>
 
               </div>

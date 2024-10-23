@@ -33,7 +33,7 @@ function Task(props){
                     setBoardArray={props.setBoardArray}
                     data={taskData} close={()=>setTaskPop(0)}
                     />:<></>}
-                    {orderPop?<OrderPopUp title={"ویرایش سفارش"}
+                    {orderPop?<OrderPopUp OrderPop={false} title={"ویرایش سفارش"}
                     btnText={"بروزرسانی"} action={props.action}
                     token={props.token} crm={props.crm}
                     customer={customer} creator={creator}

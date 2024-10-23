@@ -8,7 +8,7 @@ import TaskUpload from "./Tasks/TaskUpload"
 import QuickCartHolder from "../../Order/QuickCart/QuickCartHolder"
 import ShowError from "../../components/Modal/ShowError"
 import TaskAction from "./Tasks/TaskAction"
-
+import QuoteTaskAction from "./Tasks/QuoteTaskAction"
 function OrderPopUp(props){
     const data =props.data
     const token = props.token
@@ -17,7 +17,6 @@ function OrderPopUp(props){
     const [content,setContent] = useState()
     //console.log(content)
     const [error,setError] = useState({message:'',color:"brown"})
-    console.log(error)
     useEffect(()=>{
         const postOptions={
             method:'post',
@@ -37,7 +36,6 @@ function OrderPopUp(props){
           console.log(error);
         })
     },[Loading])
-    console.log(data)
     const updateTotal =()=>{
         const postOptions={
             method:'post',
@@ -118,7 +116,6 @@ function OrderPopUp(props){
                 console.log(error)
             })
     }
-    console.log(Loading)
     const regSepidar =()=>{
         const postOptions={
             method:'post',
@@ -140,6 +137,7 @@ function OrderPopUp(props){
         }
       )
     }
+    
     if(!content){
         return
     } else
@@ -162,7 +160,7 @@ function OrderPopUp(props){
                     onClick={props.close}></i>
                 <div className="sharif" style={{padding: "70px 10px 10px"}}>
                     <main className="sharif-order-main">
-                        {content?<QuickCartHolder token={token} 
+                        {content?<QuickCartHolder OrderPop={props.OrderPop} token={token} 
                         user={content.cart&&content.cart.userId}
                         payValue={payValue} setPayValue={setPayValue}
                         cartNo={data?data.orderNo:''} access={props.access}
@@ -181,9 +179,12 @@ function OrderPopUp(props){
                 </div>
             {props.access&&props.access==="edit"?
             <div className="crmAction">
+                {props.data.taskStep=="quote"?<QuoteTaskAction content={content} token={token}
+                data={props.data} setBoard={(e)=>props.setBoardArray(e)}
+                close={props.close}/>:
                 <TaskAction content={content} token={token}
                 data={props.data} setBoard={(e)=>props.setBoardArray(e)}
-                close={props.close}/>
+                close={props.close}/>}
             </div>:<></>}
             </div>
             

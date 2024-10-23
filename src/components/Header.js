@@ -16,6 +16,7 @@ const Header = (props) => {
     cookies.remove(env.cookieName, { path: "/" });
     setTimeout(() => (document.location.reload(), 500));
   };
+  console.log(token.username.split("undefined")[0])
   return (
     <nav
       className="navbar topMenu navbar-main navbar-expand-lg px-0 mx-4 shadow-none border-radius-xl"
@@ -148,8 +149,9 @@ const Header = (props) => {
               </ul>
             </li>
             <li className="nav-item d-flex align-items-center">
-              <a href="#" className="nav-link text-body font-weight-bold px-0">
+              <a href="#" className="nav-link text-body font-weight-bold px-0 username-icon">
                 <i className="fa fa-user me-sm-1"></i>
+                <span>{token.username.split("undefined")[0]}</span>
               </a>
             </li>
           </ul>

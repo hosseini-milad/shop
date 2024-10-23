@@ -88,7 +88,7 @@ function PreOrderItem(props){
                   <th data-cell="مبلغ کل">
                     <p>مبلغ کل</p>
                   </th>
-                  <th></th>
+                  
                 </tr>
               </thead>
               <tbody>

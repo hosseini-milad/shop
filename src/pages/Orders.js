@@ -124,13 +124,13 @@ function Orders(props) {
         </div>
       </div>
       <div className="list-container">
-      <StatusBar
+      {/* <StatusBar
           lang={lang}
           token={token}
           filters={filters}
           status={content.rxStatus}
           setFilters={setFilters}
-        />
+        /> */}
         <OrderTab setFilters={handleFilterChange} filters={filters} 
         setTab={setTab} tab={tab}/>
 
