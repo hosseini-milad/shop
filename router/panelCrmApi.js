@@ -192,6 +192,75 @@ router.post('/update-tasks', auth, jsonParser, async (req, res) => {
         res.status(500).json({ message: error.message })
     }
 })
+
+router.post('/quote-to-initial', auth, jsonParser, async (req, res) => {
+    const id = req.body._id;
+    const userId = req.body.userId ? req.body.userId : req.headers['userid']
+
+
+    const userData = await customers.findOne({ _id: ObjectID(userId) })
+    const qCartData = await quickCart.findOne({ userId: userId })
+
+    data.payValue = qCartData && qCartData.payValue
+    data.description = qCartData && qCartData.description
+    data.discount = qCartData && qCartData.discount
+    const quickCartItems = qCartData && qCartData.cartItems
+    data.cartItems = quickCartItems
+    const stockId = userData.StockId ? userData.StockId : "5"
+
+    const availItems = !data.isQuote ?
+        await checkCart(quickCartItems, stockId, data.payValue) : 0
+
+
+    if (availItems) {
+        res.status(400).json({ error: availItems })
+        return
+    }
+    try {
+        const result = await db.collection('tasks').updateOne(
+            { _id: id },
+            {
+                $set: { taskStep: 'initial' },
+                $setOnInsert: { isQuote: false }
+            },
+            { upsert: true }
+        );
+
+        if (result.modifiedCount === 0) {
+            return res.status(404).json({ message: "داده ای یافت نشد" });
+        }
+
+        res.status(200).json({ message: "وضعیت با موفقیت به‌روزرسانی شد" });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: "در هنگام به‌روزرسانی خطایی رخ داد" });
+    }
+});
+
+router.post('/cancel-faktor', auth, jsonParser, async (req, res) => {
+    const id = req.body._id;
+    const userId = req.body.userId ? req.body.userId : req.headers['userid']
+
+
+    try {
+        const result = await db.collection('tasks').updateOne(
+            { _id: id },
+            { $set: { taskStep: 'cancel' } }
+        );
+
+        if (result.modifiedCount === 0) {
+            return res.status(404).json({ message: "داده ای یافت نشد" });
+        }
+
+        res.status(200).json({ message: "وضعیت با موفقیت به‌روزرسانی شد" });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: "در هنگام به‌روزرسانی خطایی رخ داد" });
+    }
+});
+
+
+
 router.post('/update-tasks-status', auth, jsonParser, async (req, res) => {
     const taskId = req.body._id ? req.body._id : ""
     var status = req.body.status
