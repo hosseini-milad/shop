@@ -194,22 +194,19 @@ router.post('/update-tasks', auth, jsonParser, async (req, res) => {
 })
 
 router.post('/quote-to-initial', auth, jsonParser, async (req, res) => {
-    const id = req.body._id;
-    const userId = req.body.userId ? req.body.userId : req.headers['userid']
+    const orderNo = req.body.orderNo
 
 
-    const userData = await customers.findOne({ _id: ObjectID(userId) })
-    const qCartData = await quickCart.findOne({ userId: userId })
+    const cartData = await cart.findOne({ cartNo: orderNo })
+    if (!cartData) {
+        res.status(400).json({ error: "سفارشی یافت نشد" })
+        return
+    }
 
-    data.payValue = qCartData && qCartData.payValue
-    data.description = qCartData && qCartData.description
-    data.discount = qCartData && qCartData.discount
-    const quickCartItems = qCartData && qCartData.cartItems
-    data.cartItems = quickCartItems
-    const stockId = userData.StockId ? userData.StockId : "5"
+    const cartItems = cartData && cartData.cartItems
+    const stockId = cartData.stockId
 
-    const availItems =
-        await checkCart(quickCartItems, stockId, data.payValue)
+    const availItems = await checkCart(cartItems, stockId)
 
 
     if (availItems) {
@@ -218,7 +215,7 @@ router.post('/quote-to-initial', auth, jsonParser, async (req, res) => {
     }
     try {
         const result = await db.collection('tasks').updateOne(
-            { _id: id },
+            { _id: orderNo },
             {
                 $set: { taskStep: 'initial' },
                 $setOnInsert: { isQuote: false }
