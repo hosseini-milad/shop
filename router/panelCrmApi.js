@@ -192,6 +192,8 @@ router.post('/update-tasks', auth, jsonParser, async (req, res) => {
         res.status(500).json({ message: error.message })
     }
 })
+
+
 router.post('/update-tasks-status', auth, jsonParser, async (req, res) => {
     const taskId = req.body._id ? req.body._id : ""
     var status = req.body.status
