@@ -14,7 +14,7 @@ const CreateTask = async (type, data, user) => {
 
     }
     if (!crmId) return ('')
-    let step;
+    let step = crmId.crmSteps[0]
     if (data.isQuote) {
         step = crmId.crmSteps.find(item => item.index == 0)
     } else {
@@ -28,6 +28,7 @@ const CreateTask = async (type, data, user) => {
         customer: data.userId,
         taskStep: step.enTitle,
         orderNo: data.cartNo,
+        isQuote:data.isQuote,
         //date:data.date,
         prior: 1,
         date: Date.now(),
