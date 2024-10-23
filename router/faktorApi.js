@@ -450,6 +450,10 @@ const findCartFunction = async (userId, managerId) => {
                     var cartTemp = qCartData.cartItems[j]
                     const productData = await products.findOne({ sku: cartTemp.sku })
                     qCartData.cartItems[j].productData = productData
+
+                    const cartItemDetail = findCartItemDetail(cartTemp, qCartData.payValue, qCartData.discount)
+                    qCartData.cartItems[j].total = cartItemDetail
+                    qCartData.cartItems[j].productData = productData
                 }
                 catch { }
             }
@@ -478,7 +482,7 @@ const findPayValuePrice = (priceArray, payValue) => {
     return (price)
 
 }
-const findCartItemDetail = (cartItem, payValue) => {
+const findCartItemDetail = (cartItem, payValue, totalDiscount) => {
     var cartItemPrice = findPayValuePrice(cartItem.price, payValue)
     var tax = 0
     var discount = 0
@@ -486,7 +490,9 @@ const findCartItemDetail = (cartItem, payValue) => {
     var count = cartItem.count
     if (cartItem.discount) {
         var off = parseInt(cartItem.discount.toString().replace(/,/g, '').replace(/^\D+/g, ''))
-
+        if (totalDiscount) {
+            off += parseInt(totalDiscount.toString().replace(/,/g, '').replace(/^\D+/g, ''))
+        }
         if (off > 100)
             discount += off
         else
