@@ -17,7 +17,7 @@ const CartSchema = new Schema({
     taskStep:{ type: String },
     query:{ type: String },
     result:{ type: String },
-    isSale:{type:String},
+    isSale:{type:Boolean,default:false},
     isQuote:{type:Boolean,default:false},
     Number:{type:String},
     InvoiceID:{type:String}

@@ -1123,7 +1123,7 @@ router.post('/update-Item', jsonParser, async (req, res) => {
     catch (error) {
         res.status(500).json({ message: error.message })
     }
-})
+}) 
 router.post('/update-Item-cart', jsonParser, async (req, res) => {
     const data = {
         cartID: req.body.cartID,
