@@ -127,7 +127,7 @@ router.post('/list', jsonParser, async (req, res) => {
 
                 var cartWithTaskStep = {
                     _id: cartList[i]._id,
-                    taskStep: taskStep,
+                    status: taskStep,
                     ...cartList[i],
                     totalCart: totalPrice
                 };
