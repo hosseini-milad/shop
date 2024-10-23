@@ -111,12 +111,12 @@ router.post('/list-products', async (req, res) => {
 router.get('/get-sub-cats', async (req, res) => {
     try {
         const title = req.query.title;
-        const catData = await category.findOne({ catCode: title }, { title: 1, catCode: 1, link: 1, _id: 1 });
+        const catData = await category.findOne({ catCode: title }, { title: 1, catCode: 1, link: 1, _id: 1, imageUrl: 1, iconUrl: 1, thumbUrl: 1 });
         if (!catData) {
             res.status(400).json({ error: "دسته بندی یافت نشد" });
         }
         var subCat = await category.find(
-            { parent: catData._id }, { title: 1, catCode: 1, link: 1, _id: 1 })
+            { parent: catData._id }, { title: 1, catCode: 1, link: 1, _id: 1, imageUrl: 1, iconUrl: 1, thumbUrl: 1 })
         res.send(subCat);
     } catch (error) {
         res.status(500).json({ message: error.message });
