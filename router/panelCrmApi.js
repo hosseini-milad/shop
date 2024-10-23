@@ -208,8 +208,8 @@ router.post('/quote-to-initial', auth, jsonParser, async (req, res) => {
     data.cartItems = quickCartItems
     const stockId = userData.StockId ? userData.StockId : "5"
 
-    const availItems = !data.isQuote ?
-        await checkCart(quickCartItems, stockId, data.payValue) : 0
+    const availItems =
+        await checkCart(quickCartItems, stockId, data.payValue)
 
 
     if (availItems) {
