@@ -4,7 +4,7 @@ import QuickOff from "./QuickOff"
 import QuickSearch from "./QuickSearch"
 import env, { payValue } from "../../env"
 import DataModal from "../../components/Modal/dataModal"
-
+import SalesQuickSearch from "./SalesQuickSearch"
 function QuickNew(props){
     const [selectedItem,setSelectedItem] = useState()
     const [count,setCount] = useState(1)
@@ -78,9 +78,13 @@ function QuickNew(props){
             <td data-cell="ردیف"></td>
             
             <td className="search-td" data-cell="کد کالا">
+                {token.profileCode == "sale"?
+                <SalesQuickSearch data={props.data} setdata={props.setdata} token={token}
+                search={props.search} setSearch={props.setSearch}
+                setSelectedItem={setSelectedItem}/>:
                 <QuickSearch data={props.data} setdata={props.setdata} token={token}
                 search={props.search} setSearch={props.setSearch}
-                setSelectedItem={setSelectedItem}/>
+                setSelectedItem={setSelectedItem}/>}
             </td>
             <td data-cell="شرح کالا">
                 {selectedItem?selectedItem.title:''}<br/>

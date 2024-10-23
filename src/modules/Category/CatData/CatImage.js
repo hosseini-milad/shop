@@ -112,7 +112,10 @@ function CatImage(props){
             <ImageSimple cardName="Icon Image" imageGallery={[]} 
                     setImage={setIcon} setImageUrl={setImageUrl} 
                     part={"5"} resize={false}/>
-            
+            <img src={props.catChange[props.ivalue]?
+              env.siteApiUrl+props.catChange[props.ivalue]:
+                (content?(env.siteApiUrl+content[props.ivalue]):'')} 
+                alt={content?content.title:env.default}/>
         </div>
         </div>
     )

@@ -2,7 +2,7 @@ import { useEffect, useState } from "react"
 import env,{findBox} from "../../env"
 import CountCalculator from "./CountCalculator"
 
-function QuickSearch(props){
+function SalesQuickSearch(props){
     const data = props.data
     const [showDrop,setShowDrop] = useState(0)
     const [query,setQuery] = useState('')
@@ -31,11 +31,31 @@ function QuickSearch(props){
         {query?
         <div className="code-drop-menu">
             {data?data.products&&data.products.map((item,i)=>(
-               <CountCalculator item={item} setQuery={setQuery} setShowDrop={setShowDrop} 
-               key={i} setSelectedItem={props.setSelectedItem} token={props.token}/>
+                    <div
+                        key={i}
+                        className="menu-item"
+                        onClick={(e)=>{
+                        (props.setSelectedItem(item));
+                        (setQuery(""))
+                        }
+                    }>
+                        <div className="item-img">
+                            <img src={env.siteApiUrl+item.thumbUrl} alt=""/>
+                        </div>
+                        <div className="item-info">
+                            <div className="item-p">
+                                <p>{item.title}</p>
+                            </div>
+                            <div className="item-amount">
+                                <p>{item.sku}</p>
+                                <p>{item.count.quantity}</p>
+                            </div>
+                        </div>
+                    </div>
+            
             )):<div className="roader">{env.loader}</div>}
         </div>:<></>}
     </>
     )
 }
-export default QuickSearch
+export default SalesQuickSearch

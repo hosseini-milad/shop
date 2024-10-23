@@ -92,7 +92,7 @@ return(
             setCatChange={setCatChange} catChange={catChange}
             options={catOptions}/>
           <CatImage lang={lang} content={content} value="imageUrl"
-                catChange={catChange} part={1}
+              ivalue="iconUrl"  catChange={catChange} part={1}
                 setCatChange={setCatChange} />
           </div>
         <div className="create-btn-wrapper">
