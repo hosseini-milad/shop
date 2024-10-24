@@ -43,7 +43,7 @@ function QuickTable(props){
               <td colSpan={5}><p>در حال ثبت</p></td>
             </tr>}
             {qCart&&qCart.cartItems&&qCart.cartItems.map((item,i)=>(
-              <QuickRow data={item} key={i} index={i+1} payValue={props.payValue?props.payValue:"4"}
+              <QuickRow data={item} cart={qCart} key={i} index={i+1} payValue={props.payValue?props.payValue:"4"}
               action={props.delete} setError={props.setError}
               token={props.token} user={props.user} setCart={props.setCart}
               cartNo={props.cartNo} canEdit={props.canEdit}/>

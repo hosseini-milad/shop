@@ -1,6 +1,6 @@
 import { useState } from "react"
 import ErrorAction from "../../components/Modal/ErrorAction"
-import env, { normalPriceCount, payValue } from "../../env"
+import env, { normalPriceCount, payValue ,normalPriceRound} from "../../env"
 import DataModal from "../../components/Modal/dataModal"
 import QuickOff from "./QuickOff"
 import QuickCounter from "./QuickCounter"
@@ -128,11 +128,14 @@ function QuickRow(props){
                     discount:e
                     }))} discount={changes?changes.discount:data.discount}
                     def={data.discount}/></div>:
-                <p>{normalPriceCount(data.discount)}
-                {parseInt(data.discount)<100?"%":""}</p>}
+                <p>
+                {normalPriceCount(data.discount)}
+                {parseInt(data.discount)<100?"%":""}
+                <span className="total-discount">{(props.cart.discount&&props.cart.discount!=="0")?"+"+props.cart.discount+"%":""}</span>
+                </p>}
             </td>
             <td data-cell="مبلغ کل">
-            <p>{payValue(data.price,props.payValue,data.count,data.discount)}</p>
+            <p>{normalPriceRound(data.total.total)}</p>
             </td>
             <td>
             {editMode?<div className="more-btn">
