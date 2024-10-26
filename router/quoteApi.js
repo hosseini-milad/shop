@@ -361,8 +361,8 @@ const findCartFunction = async (userId, managerId) => {
             { $sort: { "initDate": -1 } }
         ])
 
-        const qCartData = await qCart.findOne({ userId: userId ? userId : managerId }).lean()
-        const qCartAdmin = await qCart.aggregate([
+        const qCartData = await quoteApi.findOne({ userId: userId ? userId : managerId }).lean()
+        const qCartAdmin = await quoteApi.aggregate([
             { $match: { manageId: managerId } },
 
             { $match: { cartItems: { $ne: [] } } },
