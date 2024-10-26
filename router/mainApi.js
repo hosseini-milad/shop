@@ -17,6 +17,7 @@ const CRMPanelApi = require('./panelCrmApi')
 const panelOrderApi = require('./panelOrderApi')
 const panelProductApi = require('./panelProductApi')
 const panelFaktorApi = require('./faktorApi')
+const panelQuoteApi = require('./quoteApi')
 const salesApi = require('./salesApi')
 const sepidarFetch = require('../middleware/Sepidar');
 const products = require('../models/product/products');
@@ -58,6 +59,7 @@ router.use('/panel/user', panelUserApi)
 router.use('/panel/order', panelOrderApi)
 router.use('/panel/product', panelProductApi)
 router.use('/panel/faktor', panelFaktorApi)
+router.use('/panel/quote', panelQuoteApi)
 
 router.use('/panel/crm', CRMPanelApi)
 schedule.scheduleJob('5 */2 * * *', async () => {
