@@ -384,7 +384,6 @@ const findCartFunction = async (userId, managerId) => {
         var description = ''
         var todayCartData = []
         for (var c = 0; c < (cartData && cartData.length); c++) {
-
             if (!userId && IsToday(cartData[c].initDate) !== 1) {
                 continue
             }
@@ -412,6 +411,9 @@ const findCartFunction = async (userId, managerId) => {
                 try {
                     var cartTemp = qCartData.cartItems[j]
                     const productData = await products.findOne({ sku: cartTemp.sku })
+
+                    const cartItemDetail = findCartItemDetail(cartTemp, qCartData.payValue, qCartData.discount)
+                    qCartData.cartItems[j].total = cartItemDetail
                     qCartData.cartItems[j].productData = productData
                 }
                 catch { }
