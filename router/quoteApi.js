@@ -893,7 +893,7 @@ router.post('/update-desc', jsonParser, async (req, res) => {
             await cart.updateOne({ cartNo: cartNo },
                 { ...data })
         else
-            await quickCart.updateOne({ userId: userId },
+            await quoteApi.updateOne({ userId: userId },
                 { ...data })
 
         const cartDetails = cartNo ? await findCartData(cartNo)
@@ -915,7 +915,7 @@ router.post('/edit-cart', jsonParser, async (req, res) => {
 
     var status = "";
     //const cartData = await cart.find({userId:data.userId})
-    const qCartData = await quickCart.findOne({ userId: userId })
+    const qCartData = await quoteApi.findOne({ userId: userId })
     const availItems = await checkAvailable(req.body.cartItem)
 
     if (!availItems) {
@@ -924,7 +924,7 @@ router.post('/edit-cart', jsonParser, async (req, res) => {
     }
     const cartItems = editCart(qCartData, req.body.cartItem)
     data.cartItems = (cartItems)
-    await quickCart.updateOne({ userId: userId }, { $set: data })
+    await quoteApi.updateOne({ userId: userId }, { $set: data })
     status = "update cart"
     const cartDetails = await findCartFunction(userId, req.headers['userid'])
     res.json({ ...cartDetails, message: "آیتم ها بروز شدند" })
@@ -1039,7 +1039,7 @@ router.post('/update-Item', jsonParser, async (req, res) => {
     try {
         var status = "";
         //const cartData = await cart.find({userId:data.userId})
-        const qCartData = await quickCart.findOne({ userId: data.userId })
+        const qCartData = await quoteApi.findOne({ userId: data.userId })
         var oldCartItems = qCartData.cartItems
         for (var i = 0; i < (oldCartItems && oldCartItems.length); i++) {
             if (!data.changes) break
@@ -1065,7 +1065,7 @@ router.post('/update-Item', jsonParser, async (req, res) => {
         //const cartItems = removeCart(qCartData,req.body.cartID)
         //data.cartItems =(cartItems)
         cartLog.create({ ...data, ItemID: req.body.cartID, action: "delete" })
-        await quickCart.updateOne(
+        await quoteApi.updateOne(
             { userId: data.userId }, { $set: { cartItems: oldCartItems } })
         status = "update cart"
         const cartDetails = await findCartFunction(data.userId, req.headers['userid'])
@@ -1139,12 +1139,12 @@ router.post('/remove-cart', jsonParser, async (req, res) => {
     try {
         var status = "";
         const cartData = await cart.find({ userId: data.userId })
-        const qCartData = await quickCart.findOne({ userId: data.userId })
+        const qCartData = await quoteApi.findOne({ userId: data.userId })
         const cartItems = removeCart(qCartData, req.body.cartID)
         data.cartItems = (cartItems)
         //console.log(req.body.cartItem)
         cartLog.create({ ...data, ItemID: req.body.cartID, action: "delete" })
-        await quickCart.updateOne(
+        await quoteApi.updateOne(
             { userId: data.userId }, { $set: data })
         status = "update cart"
         const cartDetails = await findCartFunction(data.userId, req.headers['userid'])
@@ -1204,7 +1204,7 @@ router.post('/quick-to-cart', jsonParser, async (req, res) => {
         data.isSale = isSale
         //const cartAll = await cart.find()
         const userData = await customers.findOne({ _id: ObjectID(userId) })
-        const qCartData = await quickCart.findOne({ userId: userId })
+        const qCartData = await quoteApi.findOne({ userId: userId })
 
         data.payValue = qCartData && qCartData.payValue
         data.description = qCartData && qCartData.description
@@ -1227,7 +1227,7 @@ router.post('/quick-to-cart', jsonParser, async (req, res) => {
         cartLog.create({ ...data, ItemID: req.body.cartID, action: "quick to cart" })
         await cart.create(data)
         status = "create cart"
-        await quickCart.deleteOne({ userId: data.userId })
+        await quoteApi.deleteOne({ userId: data.userId })
         if (!isSale)
             await CreateTask("border", data, userData)
         const cartDetails = await findCartFunction(userId, req.headers['userid'])
@@ -1250,7 +1250,7 @@ router.post('/quick-to-quote', jsonParser, async (req, res) => {
         var status = "";
         //const cartAll = await cart.find()
         const userData = await customers.findOne({ _id: ObjectID(userId) })
-        const qCartData = await quickCart.findOne({ userId: userId })
+        const qCartData = await quoteApi.findOne({ userId: userId })
 
         data.payValue = qCartData && qCartData.payValue
         data.description = qCartData && qCartData.description
@@ -1272,7 +1272,7 @@ router.post('/quick-to-quote', jsonParser, async (req, res) => {
         cartLog.create({ ...data, ItemID: req.body.cartID, action: "quick to quote" })
         await quote.create(data)
         status = "create cart"
-        await quickCart.deleteOne({ userId: data.userId })
+        await quoteApi.deleteOne({ userId: data.userId })
         if (!isSale)
             await CreateTask("bquote", data, userData)
         const cartDetails = await findCartFunction(userId, req.headers['userid'])
@@ -1898,7 +1898,7 @@ router.post('/edit-payValue', jsonParser, async (req, res) => {
     try {
         var status = "";
         cartNo ? await cart.updateOne({ cartNo: cartNo }, { $set: { payValue: req.body.payValue } }) :
-            await quickCart.updateOne({ userId: data.userId }, { $set: data })
+            await quoteApi.updateOne({ userId: data.userId }, { $set: data })
         status = "update cart"
         const cartDetails = cartNo ? await findCartData(cartNo)
             : await findCartFunction(data.userId, req.headers['userid'])
