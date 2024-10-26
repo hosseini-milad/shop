@@ -9,14 +9,13 @@ const productSchema = require('../models/product/products');
 const productcounts = require('../models/product/productCount');
 const category = require('../models/product/category');
 const cart = require('../models/product/cart');
-const qCart = require('../models/product/quickCart');
 const FaktorSchema = require('../models/product/faktor');
 const customerSchema = require('../models/auth/customers');
 const sepidarPOST = require('../middleware/SepidarPost');
 const productCount = require('../models/product/productCount');
 const cartLog = require('../models/product/cartLog');
 const users = require('../models/auth/users');
-const quickCart = require('../models/product/quickCart');
+const quoteApi = require('../models/product/quote');
 const bankAccounts = require('../models/product/bankAccounts');
 const sepidarFetch = require('../middleware/Sepidar');
 const products = require('../models/product/products');
@@ -856,23 +855,19 @@ router.post('/update-cart', jsonParser, async (req, res) => {
         const stockId = userData.StockId ? userData.StockId : "13"
         var status = "";
         //const cartData = await cart.find({userId:userId})
-        const qCartData = await quickCart.findOne({ userId: userId })
-        const availItems = await checkAvailable(req.body.cartItem, stockId)
-        if (!availItems) {
-            res.status(400).json({ error: "موجودی کافی نیست" })
-            return
-        }
+        const qCartData = await quoteApi.findOne({ userId: userId })
+        
         const cartItems = createCart(qCartData ? qCartData.cartItems : [],
             req.body.cartItem)
         data.cartItems = (cartItems)
         if (!qCartData) {
             cartLog.create({ ...data, ItemID: req.body.cartItem, action: "create" })
-            await quickCart.create({ ...data, stockId: stockId })
+            await quoteApi.create({ ...data, stockId: stockId })
             status = "new Cart"
         }
         else {
             cartLog.create({ ...data, ItemID: req.body.cartItem, action: "update" })
-            await quickCart.updateOne(
+            await quoteApi.updateOne(
                 { userId: userId }, { $set: data })
             status = "update cart"
         }
