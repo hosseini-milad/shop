@@ -74,7 +74,6 @@ router.post('/list', jsonParser, async (req, res) => {
                 res.status(400).json({ error: "دسترسی به این بخش ندارید" });
                 return;
             }
-
             var showCart = [];
             const cartList = await carts.aggregate([
                 { $addFields: { "userId": { "$toObjectId": "$userId" } } },
