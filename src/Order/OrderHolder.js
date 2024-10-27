@@ -21,6 +21,7 @@ function OrderHolder(props) {
   const [appFilter, setAppFilter] = useState();
   const [products, setProduct] = useState();
   const [payValue, setPayValue] = useState(defPay);
+  const [tab,setTab] = useState(0)
   const [error, setError] = useState({ message: "", color: "brown" });
   const access = CheckAccess(token,"orders")
   useEffect(() => {
@@ -39,7 +40,7 @@ function OrderHolder(props) {
           : token && token.userId,
       }),
     };
-    fetch(env.siteApi + "/panel/faktor/cart", postOptions)
+    fetch(env.siteApi + `/panel/${tab?"quote":"faktor"}/cart`, postOptions)
       .then((res) => res.json())
       .then(
         (result) => {
@@ -154,7 +155,10 @@ function OrderHolder(props) {
         )}
         {user ? (
           <QuickCartHolder
+            
             OrderPop={true}
+            tab={tab}
+            setTab={setTab}
             token={token}
             user={user}
             canEdit={1}
