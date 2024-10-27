@@ -60,7 +60,7 @@ function OrderHolder(props) {
           console.log(error);
         }
       );
-  }, [user]);
+  }, [user,tab]);
   useEffect(() => {
     const postOptions = {
       method: "get",
