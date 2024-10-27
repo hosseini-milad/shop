@@ -1,6 +1,6 @@
 import { useState } from "react"
 import ErrorAction from "../../components/Modal/ErrorAction"
-import env, { normalPriceCount, payValue } from "../../env"
+import env, { normalPriceCount, payValue ,normalPriceRound} from "../../env"
 import DataModal from "../../components/Modal/dataModal"
 import QuickOff from "./QuickOff"
 import QuickCounter from "./QuickCounter"
@@ -9,7 +9,7 @@ function QuickRow(props){
     const data = props.data
     const token = props.token
     const user = props.user
-    
+    const tab = props.tab
     const [showDesc,setShowDesc] = useState(0)
     const [editMode,setEditMode] = useState(0)
     const [changes,setChanges]= useState()
@@ -26,8 +26,8 @@ function QuickRow(props){
                 cartID:data.id,changes})
           }
           console.log(postOptions)
-        fetch(env.siteApi + (props.cartNo?"/panel/faktor/update-Item-cart":
-            "/panel/faktor/update-Item") ,postOptions)
+        fetch(env.siteApi + (props.cartNo?`/panel/${tab?"quote":"faktor"}/update-Item-cart`:
+            `/panel/${tab?"quote":"faktor"}/update-Item`) ,postOptions)
         .then(res => res.json())
         .then(
             (result) => {
@@ -62,7 +62,7 @@ function QuickRow(props){
                 cartID:data.id})
           }
           console.log(postOptions)
-        fetch(env.siteApi + "/panel/faktor/remove-cart",postOptions)
+        fetch(env.siteApi + `/panel/${tab?"quote":"faktor"}/remove-cart`,postOptions)
         .then(res => res.json())
         .then(
             (result) => {
@@ -121,18 +121,24 @@ function QuickRow(props){
             <td data-cell="مبلغ واحد">
             <p>{payValue(data.price,props.payValue,1)}</p>
             </td>
-            <td data-cell="تخفیف">
+            <td  data-cell="تخفیف">
                 {editMode?<div className="input-tr">
                     <QuickOff change={(e)=>setChanges(prevState => ({
                     ...prevState,
                     discount:e
                     }))} discount={changes?changes.discount:data.discount}
-                    def={data.discount}/></div>:
-                <p>{normalPriceCount(data.discount)}
-                {parseInt(data.discount)<100?"%":""}</p>}
+                    def={data.discount}/></div>:<div className="discount-td">
+                <p>
+                {normalPriceCount(data.discount)}
+                {parseInt(data.discount)<100?"%":""}
+                </p>
+                <span className="total-discount">{(props.cart.discount&&props.cart.discount!=="0")?"+"+props.cart.discount+"%":""}</span>
+                </div>
+                }
+                
             </td>
             <td data-cell="مبلغ کل">
-            <p>{payValue(data.price,props.payValue,data.count,data.discount)}</p>
+            <p>{normalPriceRound(data.total.total)}</p>
             </td>
             <td>
             {editMode?<div className="more-btn">

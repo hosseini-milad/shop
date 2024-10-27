@@ -6,6 +6,7 @@ import env, { payValue } from "../../env"
 import DataModal from "../../components/Modal/dataModal"
 import SalesQuickSearch from "./SalesQuickSearch"
 function QuickNew(props){
+    const tab = props.tab
     const [selectedItem,setSelectedItem] = useState()
     const [count,setCount] = useState(1)
     const [discount,setDiscount] = useState(0)
@@ -35,7 +36,7 @@ function QuickNew(props){
                     description:description},
                     payValue:props.payValue})
           }
-        fetch(env.siteApi + "/panel/faktor/update-cart",postOptions)
+        fetch(env.siteApi + `/panel/${tab?"quote":"faktor"}/update-cart`,postOptions)
         .then(res => res.json())
         .then(
             (result) => {
