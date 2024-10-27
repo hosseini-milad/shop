@@ -1658,3 +1658,9 @@ dialog {
   color: red;
   font-size: 0.85rem;
 }
+.discount-td{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  direction: ltr;
+}

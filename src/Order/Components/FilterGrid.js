@@ -8,7 +8,7 @@ function FilterGrid(props) {
   const [brandIndex, setBrandIndex] = useState(-1);
   const [catIndex, setCatIndex] = useState(-1);
   const [subIndex, setSubIndex] = useState(-1);
-
+  console.log(props.SubCat)
   const updateBrand = (brand, index) => {
     if (brandIndex === index) {
       setBrandIndex(-1);
@@ -70,7 +70,7 @@ function FilterGrid(props) {
       }));
     } else {
       setCatIndex(index);
-      setSubCat(category);
+      props.getSubCat(category.catCode);
       props.setFilters((prevState) => ({
         ...prevState,
         category: category,
@@ -155,9 +155,9 @@ function FilterGrid(props) {
           ))}
       </div>
       <div className="product-filter-tile-wrapper">
-        {subCat &&
-          subCat.children &&
-          subCat.children.map((subCat, i) => (
+        {props.SubCat &&
+          props.SubCat&&
+          props.SubCat.map((subCat, i) => (
             <div
               className={
                 subIndex === i
