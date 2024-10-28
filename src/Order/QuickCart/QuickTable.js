@@ -34,7 +34,7 @@ function QuickTable(props){
             </tr>
           </thead>
           <tbody>
-            {reload?<QuickNew data={props.data} setdata={props.setdata} token={props.token}
+            {reload?<QuickNew tab={props.tab} data={props.data} setdata={props.setdata} token={props.token}
               payValue={props.payValue?props.payValue:"4"} setCart={props.setCart}
               user={props.user} action={props.action} setError={props.setError}
               search={props.search} setSearch={props.setSearch}
@@ -43,7 +43,7 @@ function QuickTable(props){
               <td colSpan={5}><p>در حال ثبت</p></td>
             </tr>}
             {qCart&&qCart.cartItems&&qCart.cartItems.map((item,i)=>(
-              <QuickRow data={item} key={i} index={i+1} payValue={props.payValue?props.payValue:"4"}
+              <QuickRow tab={props.tab} data={item} cart={qCart} key={i} index={i+1} payValue={props.payValue?props.payValue:"4"}
               action={props.delete} setError={props.setError}
               token={props.token} user={props.user} setCart={props.setCart}
               cartNo={props.cartNo} canEdit={props.canEdit}/>

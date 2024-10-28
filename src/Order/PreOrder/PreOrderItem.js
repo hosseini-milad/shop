@@ -32,7 +32,7 @@ function PreOrderItem(props){
                 </span>
               </div>:<></>}
             </div>
-            <div className="newCol">
+            <div className="newCol" style={{}}>
               <p>شماره سفارش: {data.cartNo}</p>
               <a className="orderNoCol" href={"/orders/print/"+data.cartNo}>
                 چاپ سفارش</a>

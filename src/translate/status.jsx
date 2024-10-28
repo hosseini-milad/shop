@@ -7,6 +7,13 @@ const statustrans ={
         color: "rgb(255, 255, 255)",
         background: "rgb(33, 43, 54)"
     },
+    archive:{
+        english: "Archive",
+        persian: "آرشیو",
+        index:0,
+        color: "rgb(255, 255, 255)",
+        background: "rgb(33, 43, 54)"
+    },
     initial:{
         english: "Initial",
         persian: "در حال ثبت",

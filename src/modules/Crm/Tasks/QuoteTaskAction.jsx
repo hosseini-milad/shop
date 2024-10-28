@@ -9,17 +9,17 @@ function QuoteTaskAction(props){
     const [showRemove,setShowRemove] = useState(0)
     const [Loader,setLoader] = useState(0)
     const [ShowAlert,setShowAlert] = useState(0)
-    
-    const updateTask=(action)=>{
+    console.log(data)
+    const updateTask=()=>{
         setLoader(1)
         const postOptions={
             method:'post',
             headers: {'Content-Type': 'application/json',
             "x-access-token":token&&token.token,"userId":token&&token.userId},
-            body:JSON.stringify({_id:data?data._id:'',
-            status:action})
+            body:JSON.stringify({"orderNo":data.orderNo
+            })
           }
-      fetch(env.siteApi + "/panel/crm/update-tasks-status",postOptions)
+      fetch(env.siteApi + "/panel/faktor/quote-to-initial",postOptions)
       .then(res => res.json())
       .then(
         (result) => {
@@ -70,7 +70,7 @@ function QuoteTaskAction(props){
             <button
             type="button" 
             className="btn-crm btn-crm-accept"
-            onClick={()=>updateTask("accept")}>
+            >
             <p>درحال پردازش</p>
             </button>:
             <button 

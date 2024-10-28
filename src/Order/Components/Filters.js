@@ -102,6 +102,8 @@ function OrderFilters(props) {
             setAppFilter={props.setAppFilter}
             brands={brands}
             cat={cat}
+            SubCat={SubCat}
+            getSubCat={getSubCat}
           />
           <div className="add-wrapper display-on">
             <img src="/img/business/ad-pic.jpg" alt="ad" />

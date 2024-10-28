@@ -1654,3 +1654,13 @@ dialog {
   gap: 6px;
   flex-direction: row-reverse;
 }
+.total-discount{
+  color: red;
+  font-size: 0.85rem;
+}
+.discount-td{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  direction: ltr;
+}
