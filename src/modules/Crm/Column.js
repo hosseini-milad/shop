@@ -28,7 +28,6 @@ function Column(props){
         }
       )
     }
-    console.log(props.column)
     return(
         <div className="board-item c">
             <h2 className="board-title">
