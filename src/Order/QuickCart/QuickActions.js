@@ -3,6 +3,7 @@ import DataModal from "../../components/Modal/dataModal"
 import env from "../../env"
 
 function QuickActions(props){
+    const tab = props.tab
     const token = props.token
     const cart = props.cart
     //console.log(cart.discount)
@@ -35,7 +36,7 @@ function QuickActions(props){
             cartNo:props.cartNo})
           }
         console.log(postOptions)
-        fetch(env.siteApi + "/panel/faktor/update-desc",postOptions)
+        fetch(env.siteApi + `/panel/${tab?"quote":"faktor"}/update-desc`,postOptions)
         .then(res => res.json())
         .then(
             (result) => {

@@ -59,7 +59,7 @@ function QuickTotal(props){
         </div>
         <div className="t-wrapper">
           <p>تخفیف</p>
-          <p>{normalPriceRound(qCart.totalDiscount,1)||"-"}</p>
+          <p>{normalPriceCount(qCart.totalDiscount.toString().split(".")[0])||"-"}</p>
         </div>
         <div className="t-wrapper">
           <p>مالیات</p>
@@ -72,14 +72,14 @@ function QuickTotal(props){
       </div>
       {props.action?<></>:
       <div className="total-btn-wrapper">
-        {props.tab?<></>:<button type="button" className="product-table-btn temp-btn"
+        {props.tab?<button type="button" className="product-table-btn temp-btn"
+        onClick={()=>setPopUp({action:true,title:"ثبت پیش فاکتور"})}>
+          <p>ثبت پیش فاکتور</p>
+        </button>:<button type="button" className="product-table-btn temp-btn"
         onClick={()=>setPopUp({action:false,title:"ثبت فاکتور"})}>
           <p>ثبت فاکتور</p>
         </button>}
-        <button type="button" className="product-table-btn temp-btn"
-        onClick={()=>setPopUp({action:true,title:"ثبت پیش فاکتور"})}>
-          <p>ثبت پیش فاکتور</p>
-        </button>
+        
       </div>}
       {PopUp?<ErrorAction
         status={"DELETE"}
