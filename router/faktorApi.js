@@ -1577,8 +1577,7 @@ router.post('/quote-to-initial', auth, jsonParser, async (req, res) => {
         const result = await tasks.updateOne(
             { orderNo: orderNo },
             {
-                $set: { taskStep: 'initial' },
-                $set: { isQuote: false }
+                $set: { taskStep: 'initial' , isQuote: false }
             },
         );
 
@@ -1589,7 +1588,9 @@ router.post('/quote-to-initial', auth, jsonParser, async (req, res) => {
             },
         );
 
-        res.status(200).json({ message: "وضعیت با موفقیت به‌روزرسانی شد" });
+        res.status(200).json({ message: "وضعیت با موفقیت به‌روزرسانی شد" ,
+            result,result2
+        });
     } catch (error) {
         console.error(error);
         res.status(500).json({ error: "در هنگام به‌روزرسانی خطایی رخ داد" });
