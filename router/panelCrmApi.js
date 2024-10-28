@@ -212,9 +212,10 @@ router.post('/update-tasks-status', auth, jsonParser, async (req, res) => {
     var userData = ''
     var adminData = ''
     if (status === "sepidar") {
+
         const faktorNo = "F123" + taskData.orderNo
         var sepidarResult = await SepidarOrder(taskData.orderNo)
-        if (sepidarResult.Message)
+        if (sepidarResult&&sepidarResult.Message)
             await tasks.updateOne({ _id: ObjectID(taskId) },
                 {
                     $set: {
