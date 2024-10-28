@@ -1888,7 +1888,7 @@ const SepidarFunc = async (data, faktorNo) => {
     for (var i = 0; i < data.cartItems.length; i++)
         data.cartItems[i].count ?
             notNullCartItem.push(data.cartItems[i]) : ''
-    //console.log(data)
+    const totalDiscount = parseInt(data&&data.discount)
     var query = {
         "GUID": "124ab075-fc79-417f-b8cf-2a" + faktorNo,
         "CustomerRef": toInt(data.userId),
@@ -1908,7 +1908,7 @@ const SepidarFunc = async (data, faktorNo) => {
                     "Quantity": toInt(item.count),
                     "Fee": toInt(item.price),
                     "Price": normalPriceCount(item.price, item.count, 1),
-                    "Discount": findDiscount(item),
+                    "Discount": findDiscount(item,totalDiscount),
                     "Tax": normalPriceCount(item.price, item.count, TaxRate),
                     "Duty": 0.0000,
                     "Addition": 0.0000
@@ -1974,12 +1974,13 @@ const normalPriceCount = (priceText, count, tax) => {
         (rawPrice.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",").replace(/^\D+/g, ''))
     )
 }
-const findDiscount = (item) => {
+const findDiscount = (item,totalDiscount) => {
     if (!item.discount) return (0.00)
-    var off = Number(item.discount)
+    var total = totalDiscount?Number(totalDiscount):0
+    var off = item.discount?Number(item.discount):0
     var discount = off
     if (off < 100) {
-        discount = Number(item.price) * Number(item.count) * discount / 100
+        discount = Number(item.price) * Number(item.count) * (discount+total) / 100
     }
     return (roundNumber(discount))
 }
