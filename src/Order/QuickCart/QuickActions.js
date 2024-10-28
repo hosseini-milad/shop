@@ -13,7 +13,13 @@ function QuickActions(props){
     const [discount,setDiscount] = useState()
     const [disText,setDisText] = useState(cart&&cart.discount)
     
-    
+    const setDisFunc=(value)=>{
+        let intVal = value?parseFloat(value):0
+        if(intVal>50){
+            intVal = 50
+        }
+        setDisText(intVal)
+    }
     useEffect(()=>{    
         //if(!description&&!discount)return
         if(!cart) return
@@ -110,7 +116,7 @@ function QuickActions(props){
         </button>
         {showDisc?<button type="button" className="product-table-btn">
             <input type="input" placeholder="تخفیف" value={disText}
-                onChange={(e)=>setDisText(e.target.value)}/>
+                onChange={(e)=>setDisFunc(e.target.value)}/>
             <i className="fa fa-check" onClick={()=>(setDiscount(disText),setShowDisc(0))}></i>
             <i className="fa fa-remove" onClick={()=>setShowDisc(0)}></i>
         </button>:
