@@ -599,6 +599,18 @@ const findCartData = async (cartNo) => {
 
         cartDetail = findQuickCartSum(cartData.cartItems, cartData.payValue, cartData.discount)
         //if(qCartData) qCartDetail =findQuickCartSum(qCartData.cartItems,qCartData.payValue)
+        for (var j = 0; j < cartData.cartItems.length; j++) {
+            try {
+                var cartTemp = cartData.cartItems[j]
+                const productData = await products.findOne({ sku: cartTemp.sku })
+                cartData.cartItems[j].productData = productData
+
+                const cartItemDetail = findCartItemDetail(cartTemp, cartData.payValue, cartData.discount)
+                cartData.cartItems[j].total = cartItemDetail
+                cartData.cartItems[j].productData = productData
+            }
+            catch { }
+        }
 
         return ({ cart: [cartData], cartDetail: cartDetail })
     }
