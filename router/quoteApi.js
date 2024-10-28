@@ -1206,6 +1206,7 @@ router.post('/quick-to-cart', jsonParser, async (req, res) => {
         data.payValue = qCartData && qCartData.payValue
         data.description = qCartData && qCartData.description
         data.discount = qCartData && qCartData.discount
+        data.isQuote = true
         const quickCartItems = qCartData && qCartData.cartItems
         data.cartItems = quickCartItems
         const stockId = userData.StockId ? userData.StockId : "5"
@@ -1226,7 +1227,7 @@ router.post('/quick-to-cart', jsonParser, async (req, res) => {
         status = "create cart"
         await quoteApi.deleteOne({ userId: data.userId })
         if (!isSale)
-            await CreateTask("border", data, userData)
+            await CreateTask("qborder", data, userData)
         const cartDetails = await findCartFunction(userId, req.headers['userid'])
         setTimeout(() => res.json(cartDetails), 3000)
 
