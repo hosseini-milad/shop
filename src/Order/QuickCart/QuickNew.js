@@ -83,7 +83,7 @@ function QuickNew(props){
                 <SalesQuickSearch data={props.data} setdata={props.setdata} token={token}
                 search={props.search} setSearch={props.setSearch}
                 setSelectedItem={setSelectedItem}/>:
-                <QuickSearch data={props.data} setdata={props.setdata} token={token}
+                <QuickSearch tab={tab} data={props.data} setdata={props.setdata} token={token}
                 search={props.search} setSearch={props.setSearch}
                 setSelectedItem={setSelectedItem}/>}
             </td>

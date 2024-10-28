@@ -20,7 +20,7 @@ function QuickCartHolder(props){
         "x-access-token":token&&token.token,"userId":token&&token.userId},
         body:JSON.stringify({search:search})
       }
-  fetch(env.siteApi + (token.profileCode == "sale"?"/sales/find-products":"/panel/faktor/find-products"),postOptions)
+  fetch(env.siteApi + (token.profileCode == "sale"?"/sales/find-products":`/panel/${tab?"quote":"faktor"}/find-products`),postOptions)
   .then(res => res.json())
   .then(
     (result) => {
