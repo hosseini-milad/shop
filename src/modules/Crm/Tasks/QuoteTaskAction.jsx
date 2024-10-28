@@ -39,7 +39,7 @@ function QuoteTaskAction(props){
           console.log(error);
         })
     }
-    // const deleteOrder=(orderNo)=>{
+     const deleteOrder=(orderNo)=>{}
     //     //console.log("cart-delete",orderNo)
     //     const postOptions={
     //         method:'post',
