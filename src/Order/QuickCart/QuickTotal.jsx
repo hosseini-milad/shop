@@ -5,6 +5,7 @@ function QuickTotal(props){
   const token = props.token
   const qCart = props.data
   const user = props.user
+  const tab = props.tab
   const [loading ,setLoading]=useState(0)  
   const [PopUp ,setPopUp]=useState("") 
   //console.log(qCart)
@@ -19,7 +20,7 @@ function QuickTotal(props){
               user._id:(token&&token.userId),isQuote})
         }
         //console.log(postOptions)
-      fetch(env.siteApi + "/panel/faktor/quick-to-cart",postOptions)
+      fetch(env.siteApi + `/panel/${tab?"quote":"faktor"}/quick-to-cart`,postOptions)
       .then(res => res.json())
       .then(
           (result) => {
