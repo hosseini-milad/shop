@@ -355,7 +355,7 @@ router.post('/find-bulk', auth, jsonParser, async (req, res) => {
                 const count = item.count ?? 0;
                 let box = item.box;
                 if (box === null || box === undefined || box === '') {
-                    box = 1;
+                    box = 0;
                 }
                 box = Number(box) || 1;
                 const unitID = item.unitID ?? null;

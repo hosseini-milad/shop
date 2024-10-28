@@ -150,6 +150,10 @@ router.get('/list-filters', async (req, res) => {
 router.post('/find-products', auth, async (req, res) => {
     const search = req.body.search
     const userData = await users.findOne({ _id: req.headers['userid'] })
+    if(!userData){
+        res.status(400).json({error:"کاربر مجاز نیست"})
+        return
+    }
     const stockId = userData.StockId ? userData.StockId : "13"
     var filter = ''
     //if(userData.group === "bazaryab") filter = "fs"
