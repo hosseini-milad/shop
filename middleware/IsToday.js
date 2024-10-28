@@ -2,7 +2,8 @@
 const IsToday=(date)=>{
     var today = new Date()
     var date = new Date(date)
-    if(today.getDate() === date.getDate())
+
+    if(today.getDate() > (date.getDate()-1))
         return(1)
     else
         return(0)

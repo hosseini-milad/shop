@@ -395,6 +395,7 @@ router.post('/cart', auth, async (req, res) => {
 })
 const findCartFunction = async (userId, managerId) => {
     const isSale = await CheckSale(managerId)
+    if(managerId==userId) userId = ''
     try {
         const cartData = await cart.aggregate([
             { $match: { manageId: managerId } },
@@ -426,8 +427,7 @@ const findCartFunction = async (userId, managerId) => {
         var description = ''
         var todayCartData = []
         for (var c = 0; c < (cartData && cartData.length); c++) {
-
-            if (!userId && IsToday(cartData[c].initDate) !== 1) {
+            if (managerId!==userId && (IsToday(cartData[c].initDate) !== 1)) {
                 continue
             }
             try {
@@ -1987,7 +1987,7 @@ const findDiscount = (item,totalDiscount) => {
     if (off < 100) {
         discount = Number(item.price) * Number(item.count) * (discount+total) / 100
     }
-    return (roundNumber(discount))
+    return ((discount))
 }
 const roundNumber = (number) => {
     var rawNumber = parseInt(number.toString().replace(/,/g, ''))
