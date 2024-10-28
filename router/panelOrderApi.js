@@ -94,7 +94,7 @@ router.post('/list', jsonParser, async (req, res) => {
                     }
                 },
                 { $match: data.orderNo ? { cartNo: new RegExp('.*' + data.orderNo + '.*') } : {} },
-                { $match: { $or: [{ isSale: { $exists: false } }, { isSale: "0" }] } },
+                { $match: { $or: [{ isSale: { $exists: false } }, { isSale: "0" }, { isSale: false }] } },
                 { $match: !data.orderNo ? { initDate: { $gte: new Date(data.dateFrom) } } : {} },
                 { $match: !data.orderNo ? { initDate: { $lte: new Date(data.dateTo) } } : {} },
                 { $sort: { "initDate": -1 } }
