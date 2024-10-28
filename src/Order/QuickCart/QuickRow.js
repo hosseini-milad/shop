@@ -129,7 +129,7 @@ function QuickRow(props){
                     }))} discount={changes?changes.discount:data.discount}
                     def={data.discount}/></div>:<div className="discount-td">
                 <p>
-                {normalPriceCount(data.discount)}
+                {data.discount}
                 {parseInt(data.discount)<100?"%":""}
                 </p>
                 <span className="total-discount">{(props.cart.discount&&props.cart.discount!=="0")?"+"+props.cart.discount+"%":""}</span>
