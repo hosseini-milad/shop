@@ -431,7 +431,7 @@ const findCartFunction = async (userId, managerId) => {
                     try {
                         var cartTemp = cartData[c].cartItems[j]
                         const productData = await products.findOne({ sku: cartTemp.sku })
-                        const cartItemDetail = findCartItemDetail(cartTemp, cartData[c].payValue)
+                        const cartItemDetail = findCartItemDetail(cartTemp, cartData[c].payValue,cartData[c].discount)
                         cartData[c].cartItems[j].total = cartItemDetail
                         cartData[c].cartItems[j].productData = productData
                     }
@@ -515,7 +515,7 @@ const findQuoteFunction = async (userId, managerId) => {
                     try {
                         var cartTemp = cartData[c].cartItems[j]
                         const productData = await products.findOne({ sku: cartTemp.sku })
-                        const cartItemDetail = findCartItemDetail(cartTemp, cartData[c].payValue)
+                        const cartItemDetail = findCartItemDetail(cartTemp, cartData[c].payValue,cartData[c].discount)
                         cartData[c].cartItems[j].total = cartItemDetail
                         cartData[c].cartItems[j].productData = productData
                     }
@@ -887,7 +887,7 @@ router.post('/cart-find', async (req, res) => {
                 }
                 catch { }
 
-                cartList[0].cartItems[i].total = findCartItemDetail(cartItems[i], cartData.payValue)
+                cartList[0].cartItems[i].total = findCartItemDetail(cartItems[i], cartData.payValue,cartData.discount)
 
 
 
