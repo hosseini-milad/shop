@@ -69,7 +69,7 @@ const ClassifyOrder = async (totalData, newItems) => {
                 classResult[cIndex].data[bIndex].data.push(sku)
             }
             else {
-                sku.count += parseInt(newItems.count);
+                sku.count =parseInt(sku.count)+ parseInt(newItems.count);
                 const { box, single } = calculateBoxing(sku.count, productData.perBox)
                 sku.box = box
                 sku.single = single
