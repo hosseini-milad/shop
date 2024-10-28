@@ -427,7 +427,7 @@ const findCartFunction = async (userId, managerId) => {
         var description = ''
         var todayCartData = []
         for (var c = 0; c < (cartData && cartData.length); c++) {
-            if (managerId!==userId && (IsToday(cartData[c].initDate) !== 1)) {
+            if (!userId && (IsToday(cartData[c].initDate) !== 1)) {
                 continue
             }
             try {
