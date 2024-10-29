@@ -443,15 +443,17 @@ const findPayValuePrice = (priceArray, payValue) => {
     return (price)
 
 }
-const findCartItemDetail = (cartItem, payValue) => {
+const findCartItemDetail = (cartItem, payValue, totalDiscount) => {
     var cartItemPrice = findPayValuePrice(cartItem.price, payValue)
     var tax = 0
     var discount = 0
     var totalPrice = 0
     var count = cartItem.count
-    if (cartItem.discount) {
+    if (cartItem.discount||totalDiscount) {
         var off = parseInt(cartItem.discount.toString().replace(/,/g, '').replace(/^\D+/g, ''))
-
+        if (totalDiscount) {
+            off += parseInt(totalDiscount.toString().replace(/,/g, '').replace(/^\D+/g, ''))
+        }
         if (off > 100)
             discount += off
         else
