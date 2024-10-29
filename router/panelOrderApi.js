@@ -247,7 +247,7 @@ router.post('/list', jsonParser, async (req, res) => {
 
         res.json({
             filter: resultData, brand: brandUnique, isSale,
-            size
+            size,adminData
         });
     } catch (error) {
         res.status(500).json({ message: error.message });
