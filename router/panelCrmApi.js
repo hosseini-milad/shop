@@ -264,14 +264,14 @@ router.post('/update-bulk', auth, jsonParser, async (req, res) => {
 })
 const findNext = (index, status) => {
     if (status == "accept") {
-        if (index === 0) return (2)
+        if (index === 1) return (3)
         else
             return (index + 1)
     }
     if (status == "sepidar")
         return (6)
     if (status == "edit") {
-        return (1)
+        return (2)
     }
 }
 
