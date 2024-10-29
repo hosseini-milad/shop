@@ -22,9 +22,6 @@ const CartToSepidar=async(data,faktorNo,user,stock,cartOff)=>{
                 const price = findPayValuePrice(item.price,3)
                 const itemDiscount = MultiplySum(item.discount,totalOff,1)
                 const discount =item.discount?normalPriceFix(price,itemDiscount)/100:0
-                console.log("itemDiscount: "+itemDiscount)
-                console.log("totalOff: "+totalOff)
-                console.log("discount: "+discount)
                 return({
                 "ItemRef": toInt(item.id),
                 "TracingRef": null,
@@ -34,7 +31,7 @@ const CartToSepidar=async(data,faktorNo,user,stock,cartOff)=>{
                 "Fee": toInt(price),
                 "Price": normalPriceCount(price,item.count,1),
                 "Discount": discount?normalPriceFix(discount,item.count):0.0000,
-                "Tax": normalPriceCount(price-discount,item.count,TaxRate),
+                "Tax": normalPriceFix(price-discount,item.count,TaxRate),
                 "Duty": 0.0000,
                 "Addition": 0.0000
               })})
@@ -54,7 +51,8 @@ const normalPriceCount=(priceText,count,tax)=>{
     if(!priceText||priceText === null||priceText === undefined) return("")
     var rawCount = parseFloat(count.toString())
     var rawTax = parseFloat(tax.toString())
-    var rawPrice = Math.round(parseInt(priceText.toString().replace( /,/g, '')
+    var tempPrice = priceText.toString().split('.')[0]
+    var rawPrice = Math.round(parseInt(tempPrice.replace( /,/g, '')
         .replace(/\D/g,''))*rawCount*rawTax/1000)
     rawPrice = parseInt(rawPrice)*1000
     return(

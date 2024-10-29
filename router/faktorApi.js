@@ -1972,7 +1972,8 @@ const normalPriceCount = (priceText, count, tax) => {
     if (!priceText || priceText === null || priceText === undefined) return ("")
     var rawCount = parseFloat(count.toString())
     var rawTax = parseFloat(tax.toString())
-    var rawPrice = Math.round(parseInt(priceText.toString().replace(/,/g, '')
+    var tempPrice = priceText.toString().split('.')[0]
+    var rawPrice = Math.round(parseInt(tempPrice.replace(/,/g, '')
         .replace(/\D/g, '')) * rawCount * rawTax / 1000)
     rawPrice = parseInt(rawPrice) * 1000
     return (
