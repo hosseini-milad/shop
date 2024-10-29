@@ -21,7 +21,10 @@ const CartToSepidar=async(data,faktorNo,user,stock,cartOff)=>{
             notNullCartItem.map((item,i)=>{
                 const price = findPayValuePrice(item.price,3)
                 const itemDiscount = MultiplySum(item.discount,totalOff,1)
-                const discount =item.discount?normalPriceDiscount(price,itemDiscount,1):0
+                const discount =item.discount?normalPriceFix(price,itemDiscount)/100:0
+                console.log("itemDiscount: "+itemDiscount)
+                console.log("totalOff: "+totalOff)
+                console.log("discount: "+discount)
                 return({
                 "ItemRef": toInt(item.id),
                 "TracingRef": null,
@@ -61,10 +64,11 @@ const normalPriceCount=(priceText,count,tax)=>{
   const normalPriceFix=(priceText,count)=>{
     if(!priceText||priceText === null||priceText === undefined) return("")
     var rawCount = parseFloat(count.toString())
-    var rawPrice = (parseInt(priceText.toString().replace( /,/g, '')
+    var purePrice = priceText.toString().split('.')[0]
+    var rawPrice = (parseInt(purePrice.replace( /,/g, '')
         .replace(/\D/g,''))*rawCount)
     return(
-      (rawPrice.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",").replace( /^\D+/g, ''))
+      (rawPrice)
     )
   }
   const normalPriceDiscount=(priceText,discount,count)=>{

@@ -138,7 +138,7 @@ router.post('/multi-sepidar', jsonParser, auth, async (req, res) => {
         const adminData = await users.findOne({ _id: ObjectID(manageId) })
         const faktorNo = "F321" + orderDetails[0].cartNo
         var sepidarQuery = await CartToSepidar(mergeOrder, faktorNo,
-            adminData, adminData.StockId)
+            adminData, adminData.StockId,orderDetails[0].discount)
         //console.log(sepidarQuery) 
         var sepidarResult = await sepidarPOST(sepidarQuery, "/api/invoices", adminData._id)
         if (sepidarResult && sepidarResult.InvoiceID) {
@@ -157,7 +157,7 @@ router.post('/multi-sepidar', jsonParser, auth, async (req, res) => {
                 }
             })
         }
-        res.json({ data: sepidarResult, message: "orders process" })
+        res.json({ data: sepidarResult,query:sepidarQuery, message: "orders process" })
     }
     catch (error) {
         res.status(500).json({ message: error.message })

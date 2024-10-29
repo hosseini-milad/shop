@@ -186,7 +186,7 @@ router.post('/list', jsonParser, async (req, res) => {
                     }
                 },
                 { $match: { InvoiceID: { $exists: false } } },
-                { $match: { isSale: "1" } },
+                { $match: { isSale: true} },
                 { $match: data.orderNo ? { cartNo: new RegExp('.*' + data.orderNo + '.*') } : {} },
                 { $match: !data.orderNo ? { initDate: { $gte: new Date(data.dateFrom) } } : {} },
                 { $match: !data.orderNo ? { initDate: { $lte: new Date(data.dateTo) } } : {} },
