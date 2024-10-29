@@ -1812,7 +1812,8 @@ router.post('/update-faktor', jsonParser, async (req, res) => {
         for (var i = 0; i < faktorDetail.length; i++) {
             faktorNo = await createfaktorNo("F", "02", "21")
             sepidarQuery[i] = await SepidarFunc(faktorDetail[i], faktorNo)
-            //console.log(sepidarQuery[i])
+            console.log(sepidarQuery[i])
+            return
             addFaktorResult[i] = await sepidarPOST(sepidarQuery[i], "/api/invoices", req.headers['userid'])
             //console.log(addFaktorResult[i])
             if (!addFaktorResult[i] || addFaktorResult[0].Message || !addFaktorResult[i].Number) {
@@ -1838,7 +1839,7 @@ router.post('/update-faktor', jsonParser, async (req, res) => {
 
             }
         }
-
+ 
         (cartID && cartID.length) ? await cart.deleteMany({ _id: { $in: cartID } }) :
             await cart.deleteMany({ manageId: userId })
 

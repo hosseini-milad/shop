@@ -30,7 +30,7 @@ const CartToSepidar=async(data,faktorNo,user,stock,cartOff)=>{
                 "Quantity": toInt(item.count),
                 "Fee": toInt(price),
                 "Price": normalPriceCount(price,item.count,1),
-                "Discount": discount?normalPriceCount(discount,item.count,1):0.0000,
+                "Discount": discount?normalPriceFix(discount,item.count):0.0000,
                 "Tax": normalPriceCount(price-discount,item.count,TaxRate),
                 "Duty": 0.0000,
                 "Addition": 0.0000
@@ -54,6 +54,15 @@ const normalPriceCount=(priceText,count,tax)=>{
     var rawPrice = Math.round(parseInt(priceText.toString().replace( /,/g, '')
         .replace(/\D/g,''))*rawCount*rawTax/1000)
     rawPrice = parseInt(rawPrice)*1000
+    return(
+      (rawPrice.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",").replace( /^\D+/g, ''))
+    )
+  }
+  const normalPriceFix=(priceText,count)=>{
+    if(!priceText||priceText === null||priceText === undefined) return("")
+    var rawCount = parseFloat(count.toString())
+    var rawPrice = (parseInt(priceText.toString().replace( /,/g, '')
+        .replace(/\D/g,''))*rawCount)
     return(
       (rawPrice.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",").replace( /^\D+/g, ''))
     )
