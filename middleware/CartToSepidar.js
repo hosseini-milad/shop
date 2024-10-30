@@ -67,7 +67,7 @@ const normalPriceCount=(priceText,count,tax)=>{
     var rawPrice = (parseInt(purePrice.replace( /,/g, '')
         .replace(/\D/g,''))*rawCount*rawMult)
     return(
-      (rawPrice)
+      (rawPrice).toString().split('.')[0]
     )
   }
   const normalPriceDiscount=(priceText,discount,count)=>{
