@@ -59,12 +59,13 @@ const normalPriceCount=(priceText,count,tax)=>{
       (rawPrice.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",").replace( /^\D+/g, ''))
     )
   }
-  const normalPriceFix=(priceText,count)=>{
+  const normalPriceFix=(priceText,count,mult)=>{
     if(!priceText||priceText === null||priceText === undefined) return("")
     var rawCount = parseFloat(count.toString())
+    var rawMult = mult?parseFloat(mult.toString()):1
     var purePrice = priceText.toString().split('.')[0]
     var rawPrice = (parseInt(purePrice.replace( /,/g, '')
-        .replace(/\D/g,''))*rawCount)
+        .replace(/\D/g,''))*rawCount*rawMult)
     return(
       (rawPrice)
     )
