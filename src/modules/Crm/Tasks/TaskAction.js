@@ -2,6 +2,7 @@ import { useState } from "react"
 import ErrorAction from "../../../components/Modal/ErrorAction"
 import ShowError from "../../../components/Modal/ShowError"
 import env from "../../../env"
+import { WindowSharp } from "@mui/icons-material"
 
 function TaskAction(props){
     const token = props.token
@@ -33,6 +34,8 @@ function TaskAction(props){
                 setShowAlert(result.message)
                 setTimeout(()=>setShowAlert(0),2000)
                 setLoader(0)
+                setTimeout(()=>window.location.reload(),1000)
+                
             }
         },
         (error) => {
