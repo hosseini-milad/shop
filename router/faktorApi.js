@@ -1293,6 +1293,7 @@ router.post('/update-Item-cart', jsonParser, async (req, res) => {
         //const cartData = await cart.find({userId:data.userId})
         const CartData = await cart.findOne({ cartNo: data.cartNo })
         var oldCartItems = CartData.cartItems
+        var newStock = ''
         var manId = await users.findOne({ _id: ObjectID(CartData.manageId) })
         for (var i = 0; i < oldCartItems.length; i++) {
             if (!data.changes) break
@@ -1303,10 +1304,13 @@ router.post('/update-Item-cart', jsonParser, async (req, res) => {
                     oldCartItems[i].count = data.changes.count
                 if (data.changes.discount)
                     oldCartItems[i].discount = data.changes.discount
-                //if(data.changes.stock)
-                oldCartItems[i].stock = data.changes.stock
+                if(data.changes.stock){
+                    newStock=data.changes.stock
+                    oldCartItems[i].stock = data.changes.stock
+                }
 
-                const availItems = await checkAvailable(oldCartItems[i], manId.StockId)
+                const availItems = await checkAvailable(oldCartItems[i], 
+                    newStock?newStock:manId.StockId)
                 if (!availItems) {
                     res.status(400).json({ error: "موجودی کافی نیست" })
                     return
