@@ -94,7 +94,7 @@ router.post('/list', jsonParser, async (req, res) => {
                     }
                 },
                 { $match: data.orderNo ? { cartNo: new RegExp('.*' + data.orderNo + '.*') } : {} },
-                { $match: { $or: [{ isSale: { $exists: false } }, { isSale: "0" }] } },
+                { $match: { $or: [{ isSale: { $exists: false } }, { isSale: "0" }, { isSale: false }] } },
                 { $match: !data.orderNo ? { initDate: { $gte: new Date(data.dateFrom) } } : {} },
                 { $match: !data.orderNo ? { initDate: { $lte: new Date(data.dateTo) } } : {} },
                 { $sort: { "initDate": -1 } }
@@ -186,7 +186,7 @@ router.post('/list', jsonParser, async (req, res) => {
                     }
                 },
                 { $match: { InvoiceID: { $exists: false } } },
-                { $match: { isSale: "1" } },
+                { $match: { isSale: true} },
                 { $match: data.orderNo ? { cartNo: new RegExp('.*' + data.orderNo + '.*') } : {} },
                 { $match: !data.orderNo ? { initDate: { $gte: new Date(data.dateFrom) } } : {} },
                 { $match: !data.orderNo ? { initDate: { $lte: new Date(data.dateTo) } } : {} },
@@ -247,7 +247,7 @@ router.post('/list', jsonParser, async (req, res) => {
 
         res.json({
             filter: resultData, brand: brandUnique, isSale,
-            size
+            size,adminData
         });
     } catch (error) {
         res.status(500).json({ message: error.message });

@@ -212,9 +212,11 @@ router.post('/update-tasks-status', auth, jsonParser, async (req, res) => {
     var userData = ''
     var adminData = ''
     if (status === "sepidar") {
+
         const faktorNo = "F123" + taskData.orderNo
         var sepidarResult = await SepidarOrder(taskData.orderNo)
-        if (sepidarResult.Message)
+        res.json(sepidarResult)
+        if (sepidarResult&&sepidarResult.Message)
             await tasks.updateOne({ _id: ObjectID(taskId) },
                 {
                     $set: {
@@ -263,14 +265,14 @@ router.post('/update-bulk', auth, jsonParser, async (req, res) => {
 })
 const findNext = (index, status) => {
     if (status == "accept") {
-        if (index === 0) return (2)
+        if (index === 1) return (3)
         else
             return (index + 1)
     }
     if (status == "sepidar")
         return (6)
     if (status == "edit") {
-        return (1)
+        return (2)
     }
 }
 
@@ -355,9 +357,9 @@ router.post('/find-bulk', auth, jsonParser, async (req, res) => {
                 const count = item.count ?? 0;
                 let box = item.box;
                 if (box === null || box === undefined || box === '') {
-                    box = 1;
+                    box = 0;
                 }
-                box = Number(box) || 1;
+                box = Number(box);
                 const unitID = item.unitID ?? null;
 
                 totalCount += count;

@@ -34,7 +34,7 @@ router.post("/fetch-user", jsonParser, async (req, res) => {
     }
 });
 router.post("/list", jsonParser, async (req, res) => {
-    var pageSize = req.body.pageSize ? req.body.pageSize : "10";
+    var pageSize = req.body.pageSize ? req.body.pageSize : "20";
     var offset = req.body.offset ? parseInt(req.body.offset) : 0;
     try {
         const data = {

@@ -150,6 +150,10 @@ router.get('/list-filters', async (req, res) => {
 router.post('/find-products', auth, async (req, res) => {
     const search = req.body.search
     const userData = await users.findOne({ _id: req.headers['userid'] })
+    if(!userData){
+        res.status(400).json({error:"کاربر مجاز نیست"})
+        return
+    }
     const stockId = userData.StockId ? userData.StockId : "13"
     var filter = ''
     //if(userData.group === "bazaryab") filter = "fs"
@@ -391,6 +395,7 @@ router.post('/cart', auth, async (req, res) => {
 })
 const findCartFunction = async (userId, managerId) => {
     const isSale = await CheckSale(managerId)
+    if(managerId==userId) userId = ''
     try {
         const cartData = await cart.aggregate([
             { $match: { manageId: managerId } },
@@ -422,8 +427,7 @@ const findCartFunction = async (userId, managerId) => {
         var description = ''
         var todayCartData = []
         for (var c = 0; c < (cartData && cartData.length); c++) {
-
-            if (!userId && IsToday(cartData[c].initDate) !== 1) {
+            if (!userId && (IsToday(cartData[c].initDate) !== 1)) {
                 continue
             }
             try {
@@ -1838,7 +1842,7 @@ router.post('/update-faktor', jsonParser, async (req, res) => {
 
             }
         }
-
+ 
         (cartID && cartID.length) ? await cart.deleteMany({ _id: { $in: cartID } }) :
             await cart.deleteMany({ manageId: userId })
 
@@ -1972,7 +1976,8 @@ const normalPriceCount = (priceText, count, tax) => {
     if (!priceText || priceText === null || priceText === undefined) return ("")
     var rawCount = parseFloat(count.toString())
     var rawTax = parseFloat(tax.toString())
-    var rawPrice = Math.round(parseInt(priceText.toString().replace(/,/g, '')
+    var tempPrice = priceText.toString().split('.')[0]
+    var rawPrice = Math.round(parseInt(tempPrice.replace(/,/g, '')
         .replace(/\D/g, '')) * rawCount * rawTax / 1000)
     rawPrice = parseInt(rawPrice) * 1000
     return (
@@ -1987,7 +1992,7 @@ const findDiscount = (item,totalDiscount) => {
     if (off < 100) {
         discount = Number(item.price) * Number(item.count) * (discount+total) / 100
     }
-    return (roundNumber(discount))
+    return ((discount))
 }
 const roundNumber = (number) => {
     var rawNumber = parseInt(number.toString().replace(/,/g, ''))

@@ -15,7 +15,7 @@ const ClassifyOrder = async (totalData, newItems) => {
     const catDetail = catId && await category.findOne({ catCode: catId })
 
     const cIndex = totalData.findIndex(item => item.cat == catId)
-    console.log(cIndex)
+    //console.log(cIndex)
 
     var classResult = totalData
     if (cIndex == -1) {
@@ -69,7 +69,7 @@ const ClassifyOrder = async (totalData, newItems) => {
                 classResult[cIndex].data[bIndex].data.push(sku)
             }
             else {
-                sku.count += newItems.count;
+                sku.count =parseInt(sku.count)+ parseInt(newItems.count);
                 const { box, single } = calculateBoxing(sku.count, productData.perBox)
                 sku.box = box
                 sku.single = single
