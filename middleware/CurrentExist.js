@@ -2,7 +2,7 @@ const tasks = require("../models/crm/tasks")
 const cart = require("../models/product/cart")
 
 const FindCurrentExist=async(itemId)=>{
-    const currentTasks = await tasks.find({taskStep:{$nin:["cancel","archive"]}})
+    const currentTasks = await tasks.find({taskStep:{$nin:["cancel","archive","quote"]}})
     
     //var validOrder = []
     var countOrder =0
