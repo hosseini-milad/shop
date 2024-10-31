@@ -252,7 +252,7 @@ router.post('/calc-count', auth, async (req, res) => {
                 $match: {
                     taskStep: {
                         $nin:
-                            allOrder ? ['cancel'] : ['archive', 'cancel']
+                            allOrder ? ['cancel'] : ['archive', 'cancel','quote']
                     }
                 }
             },
