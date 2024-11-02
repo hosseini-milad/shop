@@ -1099,11 +1099,11 @@ router.post('/update-Item-cart', jsonParser, async (req, res) => {
                 //if(data.changes.stock)
                 oldCartItems[i].stock = data.changes.stock
 
-                const availItems = await checkAvailable(oldCartItems[i], manId.StockId)
+                /*const availItems = await checkAvailable(oldCartItems[i], manId.StockId)
                 if (!availItems) {
                     res.status(400).json({ error: "موجودی کافی نیست" })
                     return
-                }
+                }*/
             }
         }
 
