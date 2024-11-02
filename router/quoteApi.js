@@ -1124,7 +1124,7 @@ router.post('/update-Item-cart', jsonParser, async (req, res) => {
         res.json({ ...cartDetails, message: "آیتم بروز شد.", canEdit })
     }
     catch (error) {
-        res.status(500).json({ message: error.message })
+        res.status(500).json({ message: error.message ,test:"test"})
     }
 })
 
