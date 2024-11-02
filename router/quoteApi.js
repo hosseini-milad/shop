@@ -1081,6 +1081,8 @@ router.post('/update-Item-cart', jsonParser, async (req, res) => {
         cartNo: req.body.cartNo,
         progressDate: Date.now()
     }
+    res.status(400).json({ data: data })
+                    return
     try {
         var status = "";
         //const cartData = await cart.find({userId:data.userId})
@@ -1124,7 +1126,7 @@ router.post('/update-Item-cart', jsonParser, async (req, res) => {
         res.json({ ...cartDetails, message: "آیتم بروز شد.", canEdit })
     }
     catch (error) {
-        res.status(500).json({ message: error.message ,test:"test"})
+        res.status(500).json({ message: error.message })
     }
 })
 
