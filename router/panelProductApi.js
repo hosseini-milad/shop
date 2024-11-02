@@ -31,6 +31,7 @@ const users = require('../models/auth/users');
 const products = require('../models/product/products');
 const UpdateMarket = require('../middleware/UpdateMarket');
 const crmlist = require('../models/crm/crmlist');
+const CanAnalyze = require('../middleware/CanAnalyze');
 
 router.post('/fetch-service',jsonParser,async (req,res)=>{
     var serviceId = req.body.serviceId?req.body.serviceId:''
@@ -710,6 +711,8 @@ router.post('/report-total',jsonParser,auth,async(req,res)=>{
                 id:item._id,count:0,price:0}))
         var brandData = await BrandSchema.find().sort({title:-1})
         for(var i=0;i<(reportList&&reportList.length);i++){
+            var analyzeStatus = await CanAnalyze(reportList[i].cartNo)
+            if(!analyzeStatus) continue
             var payValue = reportList[i].payValue
             var cartItems=reportList[i].cartItems
             var manageId =reportList[i].manageId 
