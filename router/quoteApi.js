@@ -1081,8 +1081,6 @@ router.post('/update-Item-cart', jsonParser, async (req, res) => {
         cartNo: req.body.cartNo,
         progressDate: Date.now()
     }
-    res.status(400).json({ data: data })
-                    return
     try {
         var status = "";
         //const cartData = await cart.find({userId:data.userId})
