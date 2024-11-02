@@ -449,7 +449,7 @@ const findCartItemDetail = (cartItem, payValue, totalDiscount) => {
     var discount = 0
     var totalPrice = 0
     var count = cartItem.count
-    if (cartItem.discount||totalDiscount) {
+    if (cartItem.discount || totalDiscount) {
         var off = parseInt(cartItem.discount.toString().replace(/,/g, '').replace(/^\D+/g, ''))
         if (totalDiscount) {
             off += parseInt(totalDiscount.toString().replace(/,/g, '').replace(/^\D+/g, ''))
@@ -734,7 +734,7 @@ router.post('/cart-find', async (req, res) => {
         var canEdit = 0
         var taskData = await OrderToTask(cartData.cartNo)
         if (taskData && (
-            taskData.taskStep == "initial" || taskData.taskStep == "edit"))
+            taskData.taskStep == "initial" || taskData.taskStep == "edit" || taskData.taskStep == "quote"))
             canEdit = 1
 
         if (!cartData) {
@@ -860,7 +860,7 @@ router.post('/update-cart', jsonParser, async (req, res) => {
         var status = "";
         //const cartData = await cart.find({userId:userId})
         const qCartData = await quoteApi.findOne({ userId: userId })
-        
+
         const cartItems = createCart(qCartData ? qCartData.cartItems : [],
             req.body.cartItem)
         data.cartItems = (cartItems)
@@ -1056,7 +1056,7 @@ router.post('/update-Item', jsonParser, async (req, res) => {
                 if (data.changes.discount)
                     oldCartItems[i].discount = data.changes.discount
 
-                
+
             }
         }
 
