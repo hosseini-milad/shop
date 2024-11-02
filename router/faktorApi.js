@@ -876,7 +876,7 @@ router.post('/cart-find', async (req, res) => {
         var canEdit = 0
         var taskData = await OrderToTask(cartData.cartNo)
         if (taskData && (
-            taskData.taskStep == "initial" || taskData.taskStep == "edit"))
+            taskData.taskStep == "initial" || taskData.taskStep == "edit"|| taskData.taskStep == "quote"))
             canEdit = 1
 
         if (!cartData) {
@@ -1336,7 +1336,7 @@ router.post('/update-Item-cart', jsonParser, async (req, res) => {
         var canEdit = 0
         var taskData = await OrderToTask(data.cartNo)
         if (taskData && (
-            taskData.taskStep == "initial" || taskData.taskStep == "edit"))
+            taskData.taskStep == "initial" || taskData.taskStep == "edit"|| taskData.taskStep == "quote"))
             canEdit = 1
         res.json({ ...cartDetails, message: "آیتم بروز شد.", canEdit })
     }
