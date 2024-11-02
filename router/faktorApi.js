@@ -578,7 +578,9 @@ const findCartItemDetail = (cartItem, payValue, totalDiscount) => {
     var totalPrice = 0
     var count = cartItem.count
     if (cartItem.discount||totalDiscount) {
-        var off = parseInt(cartItem.discount.toString().replace(/,/g, '').replace(/^\D+/g, ''))
+        var off = 0
+        if(cartItem.discount)
+            off += parseInt(cartItem.discount.toString().replace(/,/g, '').replace(/^\D+/g, ''))
         if (totalDiscount) {
             off += parseInt(totalDiscount.toString().replace(/,/g, '').replace(/^\D+/g, ''))
         }
