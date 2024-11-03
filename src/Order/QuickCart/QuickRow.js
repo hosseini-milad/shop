@@ -10,11 +10,21 @@ function QuickRow(props){
     const token = props.token
     const user = props.user
     const tab = props.tab
+    const type = props.cart.isQuote
+    const setTab = props.setTab??props.setTab
     const [showDesc,setShowDesc] = useState(0)
     const [editMode,setEditMode] = useState(0)
     const [changes,setChanges]= useState()
+    console.log(props)
+    if(type==true){
+        setTab(true)
+        console.log(type)
+    }
+    
     const updateField=(changes)=>{
+        console.log(tab)
         if(!changes) return
+        
         const postOptions={
             method:'post',
             headers: { 'Content-Type': 'application/json' ,
@@ -24,8 +34,8 @@ function QuickRow(props){
                 user._id:(token&&token.userId),
                 cartNo:props.cartNo,
                 cartID:data.id,changes})
-          }
-          console.log(postOptions)
+        }
+        
         fetch(env.siteApi + (props.cartNo?`/panel/${tab?"quote":"faktor"}/update-Item-cart`:
             `/panel/${tab?"quote":"faktor"}/update-Item`) ,postOptions)
         .then(res => res.json())

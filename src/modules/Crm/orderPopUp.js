@@ -15,6 +15,7 @@ function OrderPopUp(props){
     const [Loading,setLoading]=useState(1)
     const [payValue,setPayValue] = useState(defPay)
     const [content,setContent] = useState()
+    const [tab,setTab]=useState(0)
     //console.log(content)
     const [error,setError] = useState({message:'',color:"brown"})
     useEffect(()=>{
@@ -160,7 +161,7 @@ function OrderPopUp(props){
                     onClick={props.close}></i>
                 <div className="sharif" style={{padding: "70px 10px 10px"}}>
                     <main className="sharif-order-main">
-                        {content?<QuickCartHolder OrderPop={props.OrderPop} token={token} 
+                        {content?<QuickCartHolder tab={tab} setTab={setTab} OrderPop={props.OrderPop} token={token} 
                         user={content.cart&&content.cart.userId}
                         payValue={payValue} setPayValue={setPayValue}
                         cartNo={data?data.orderNo:''} access={props.access}
