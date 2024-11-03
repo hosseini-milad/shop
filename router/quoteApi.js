@@ -1098,12 +1098,13 @@ router.post('/update-Item-cart', jsonParser, async (req, res) => {
                     oldCartItems[i].discount = data.changes.discount
                 //if(data.changes.stock)
                 oldCartItems[i].stock = data.changes.stock
-
-                const availItems = await checkAvailable(oldCartItems[i], manId.StockId)
+                oldCartItems[i].total = findCartItemDetail(oldCartItems[i],
+                    oldCartItems[i].payValue, oldCartItems[i].discount)
+                /*const availItems = await checkAvailable(oldCartItems[i], manId.StockId)
                 if (!availItems) {
                     res.status(400).json({ error: "موجودی کافی نیست" })
                     return
-                }
+                }*/
             }
         }
 
@@ -1119,7 +1120,7 @@ router.post('/update-Item-cart', jsonParser, async (req, res) => {
         var canEdit = 0
         var taskData = await OrderToTask(data.cartNo)
         if (taskData && (
-            taskData.taskStep == "initial" || taskData.taskStep == "edit"))
+            taskData.taskStep == "initial" || taskData.taskStep == "edit" || taskData.taskStep == "quote"))
             canEdit = 1
         res.json({ ...cartDetails, message: "آیتم بروز شد.", canEdit })
     }
