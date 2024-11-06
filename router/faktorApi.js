@@ -1143,7 +1143,7 @@ router.post('/edit-quote', jsonParser, async (req, res) => {
         res.status(500).json({ message: error.message })
     }
 })
-const checkAvailable = async (items, stockId) => {
+const checkAvailable = async (items, stockId,cartNo) => {
 
     // console.log(stockId)
     if (!stockId) stockId = "13"
@@ -1155,7 +1155,7 @@ const checkAvailable = async (items, stockId) => {
     var totalCount = existItem ? parseFloat(existItem.quantity) : 0
     totalCount += existItem3 ? parseFloat(existItem3.quantity) : 0
 
-    const currentOrder = await FindCurrentExist(items.id)
+    const currentOrder = await FindCurrentExist(items.id,cartNo)
 
     /*console.log("total: ",totalCount, "- order: ",currentOrder,
         "- req: ",items.count
@@ -1316,7 +1316,7 @@ router.post('/update-Item-cart', jsonParser, async (req, res) => {
                 }
 
                 const availItems = await checkAvailable(oldCartItems[i], 
-                    oldCartItems[i].stock?oldCartItems[i].stock:manId.StockId)
+                    oldCartItems[i].stock?oldCartItems[i].stock:manId.StockId,data.cartNo)
                 if (!availItems) {
                     res.status(400).json({ error: "موجودی کافی نیست" })
                     return

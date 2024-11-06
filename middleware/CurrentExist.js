@@ -1,13 +1,14 @@
 const tasks = require("../models/crm/tasks")
 const cart = require("../models/product/cart")
 
-const FindCurrentExist=async(itemId)=>{
+const FindCurrentExist=async(itemId,cartNo)=>{
     const currentTasks = await tasks.find({taskStep:{$nin:["cancel","archive","quote"]}})
     
     //var validOrder = []
     var countOrder =0
     for(var i=0;i<currentTasks.length;i++){
         if(currentTasks.isQuote) continue;
+        if(currentTasks[i].orderNo == cartNo) continue
         const orderData = await cart.findOne({cartNo:currentTasks[i].orderNo})
         const cartItems = orderData&&orderData.cartItems
         for(var j=0;j<(cartItems&&cartItems.length);j++){
