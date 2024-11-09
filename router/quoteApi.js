@@ -449,7 +449,7 @@ const findCartItemDetail = (cartItem, payValue, totalDiscount) => {
     var discount = 0
     var totalPrice = 0
     var count = cartItem.count
-    if (cartItem.discount||totalDiscount) {
+    if (cartItem.discount || totalDiscount) {
         var off = parseInt(cartItem.discount.toString().replace(/,/g, '').replace(/^\D+/g, ''))
         if (totalDiscount) {
             off += parseInt(totalDiscount.toString().replace(/,/g, '').replace(/^\D+/g, ''))
@@ -860,7 +860,7 @@ router.post('/update-cart', jsonParser, async (req, res) => {
         var status = "";
         //const cartData = await cart.find({userId:userId})
         const qCartData = await quoteApi.findOne({ userId: userId })
-        
+
         const cartItems = createCart(qCartData ? qCartData.cartItems : [],
             req.body.cartItem)
         data.cartItems = (cartItems)
@@ -1056,7 +1056,7 @@ router.post('/update-Item', jsonParser, async (req, res) => {
                 if (data.changes.discount)
                     oldCartItems[i].discount = data.changes.discount
 
-                
+
             }
         }
 

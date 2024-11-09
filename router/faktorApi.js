@@ -150,8 +150,8 @@ router.get('/list-filters', async (req, res) => {
 router.post('/find-products', auth, async (req, res) => {
     const search = req.body.search
     const userData = await users.findOne({ _id: req.headers['userid'] })
-    if(!userData){
-        res.status(400).json({error:"کاربر مجاز نیست"})
+    if (!userData) {
+        res.status(400).json({ error: "کاربر مجاز نیست" })
         return
     }
     const stockId = userData.StockId ? userData.StockId : "13"
@@ -252,7 +252,7 @@ router.post('/calc-count', auth, async (req, res) => {
                 $match: {
                     taskStep: {
                         $nin:
-                            allOrder ? ['cancel'] : ['archive', 'cancel','quote']
+                            allOrder ? ['cancel'] : ['archive', 'cancel', 'quote']
                     }
                 }
             },
@@ -395,7 +395,7 @@ router.post('/cart', auth, async (req, res) => {
 })
 const findCartFunction = async (userId, managerId) => {
     const isSale = await CheckSale(managerId)
-    if(managerId==userId) userId = ''
+    if (managerId == userId) userId = ''
     try {
         const cartData = await cart.aggregate([
             { $match: { manageId: managerId } },
@@ -435,7 +435,7 @@ const findCartFunction = async (userId, managerId) => {
                     try {
                         var cartTemp = cartData[c].cartItems[j]
                         const productData = await products.findOne({ sku: cartTemp.sku })
-                        const cartItemDetail = findCartItemDetail(cartTemp, cartData[c].payValue,cartData[c].discount)
+                        const cartItemDetail = findCartItemDetail(cartTemp, cartData[c].payValue, cartData[c].discount)
                         cartData[c].cartItems[j].total = cartItemDetail
                         cartData[c].cartItems[j].productData = productData
                     }
@@ -519,7 +519,7 @@ const findQuoteFunction = async (userId, managerId) => {
                     try {
                         var cartTemp = cartData[c].cartItems[j]
                         const productData = await products.findOne({ sku: cartTemp.sku })
-                        const cartItemDetail = findCartItemDetail(cartTemp, cartData[c].payValue,cartData[c].discount)
+                        const cartItemDetail = findCartItemDetail(cartTemp, cartData[c].payValue, cartData[c].discount)
                         cartData[c].cartItems[j].total = cartItemDetail
                         cartData[c].cartItems[j].productData = productData
                     }
@@ -577,9 +577,9 @@ const findCartItemDetail = (cartItem, payValue, totalDiscount) => {
     var discount = 0
     var totalPrice = 0
     var count = cartItem.count
-    if (cartItem.discount||totalDiscount) {
+    if (cartItem.discount || totalDiscount) {
         var off = 0
-        if(cartItem.discount)
+        if (cartItem.discount)
             off += parseInt(cartItem.discount.toString().replace(/,/g, '').replace(/^\D+/g, ''))
         if (totalDiscount) {
             off += parseInt(totalDiscount.toString().replace(/,/g, '').replace(/^\D+/g, ''))
@@ -893,7 +893,7 @@ router.post('/cart-find', async (req, res) => {
                 }
                 catch { }
 
-                cartList[0].cartItems[i].total = findCartItemDetail(cartItems[i], cartData.payValue,cartData.discount)
+                cartList[0].cartItems[i].total = findCartItemDetail(cartItems[i], cartData.payValue, cartData.discount)
 
 
 
@@ -1310,8 +1310,8 @@ router.post('/update-Item-cart', jsonParser, async (req, res) => {
                     oldCartItems[i].count = data.changes.count
                 if (data.changes.discount)
                     oldCartItems[i].discount = data.changes.discount
-                if(data.changes.stock){
-                    newStock=data.changes.stock
+                if (data.changes.stock) {
+                    newStock = data.changes.stock
                     oldCartItems[i].stock = data.changes.stock
                 }
 
@@ -1570,24 +1570,12 @@ router.post('/quote-to-initial', auth, jsonParser, async (req, res) => {
     const stockId = cartData.stockId
 
     // const availItems = await checkCart(cartItems, stockId)
-    let availItems = []
-    for (let i = 0; i < cartItems.length; i++) {
-        const result = await checkAvailable(cartItems[i], stockId)
-
-        if (!result) {
-            availItems.push({ error: "موجودی کالا کافی نمیباشد", sku: cartItems[i].sku })
-        }
-    }
-    if (availItems.length != 0) {
-        res.status(500).json({ error: availItems });
-        return
-    }
 
     try {
         const result = await tasks.updateOne(
             { orderNo: orderNo },
             {
-                $set: { taskStep: 'initial' , isQuote: false }
+                $set: { taskStep: 'initial', isQuote: false }
             },
         );
 
@@ -1598,8 +1586,9 @@ router.post('/quote-to-initial', auth, jsonParser, async (req, res) => {
             },
         );
 
-        res.status(200).json({ message: "وضعیت با موفقیت به‌روزرسانی شد" ,
-            result,result2
+        res.status(200).json({
+            message: "وضعیت با موفقیت به‌روزرسانی شد",
+            result, result2
         });
     } catch (error) {
         console.error(error);
@@ -1844,7 +1833,7 @@ router.post('/update-faktor', jsonParser, async (req, res) => {
 
             }
         }
- 
+
         (cartID && cartID.length) ? await cart.deleteMany({ _id: { $in: cartID } }) :
             await cart.deleteMany({ manageId: userId })
 
@@ -1899,7 +1888,7 @@ const SepidarFunc = async (data, faktorNo) => {
     for (var i = 0; i < data.cartItems.length; i++)
         data.cartItems[i].count ?
             notNullCartItem.push(data.cartItems[i]) : ''
-    const totalDiscount = parseInt(data&&data.discount)
+    const totalDiscount = parseInt(data && data.discount)
     var query = {
         "GUID": "124ab075-fc79-417f-b8cf-2a" + faktorNo,
         "CustomerRef": toInt(data.userId),
@@ -1919,7 +1908,7 @@ const SepidarFunc = async (data, faktorNo) => {
                     "Quantity": toInt(item.count),
                     "Fee": toInt(item.price),
                     "Price": normalPriceCount(item.price, item.count, 1),
-                    "Discount": findDiscount(item,totalDiscount),
+                    "Discount": findDiscount(item, totalDiscount),
                     "Tax": normalPriceCount(item.price, item.count, TaxRate),
                     "Duty": 0.0000,
                     "Addition": 0.0000
@@ -1986,13 +1975,13 @@ const normalPriceCount = (priceText, count, tax) => {
         (rawPrice.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",").replace(/^\D+/g, ''))
     )
 }
-const findDiscount = (item,totalDiscount) => {
+const findDiscount = (item, totalDiscount) => {
     if (!item.discount) return (0.00)
-    var total = totalDiscount?Number(totalDiscount):0
-    var off = item.discount?Number(item.discount):0
+    var total = totalDiscount ? Number(totalDiscount) : 0
+    var off = item.discount ? Number(item.discount) : 0
     var discount = off
     if (off < 100) {
-        discount = Number(item.price) * Number(item.count) * (discount+total) / 100
+        discount = Number(item.price) * Number(item.count) * (discount + total) / 100
     }
     return ((discount))
 }
