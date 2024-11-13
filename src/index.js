@@ -57,6 +57,7 @@ import Printofficial from "./modules/Print/Printofficial";
 import Discount from "./pages/Discount";
 import OffCustomer from "./pages/Offcustomer";
 import PrintStore from "./modules/Crm/PrintStore";
+import PublicPrint from "./modules/Print/PublicPrint";
 const cookies = new Cookies();
 const style = document.getElementById("style-direction");
 var lang = JSON.parse(localStorage.getItem(env.cookieLang));
@@ -401,9 +402,18 @@ root.render(
             </Layout>
           }
         />
+        <Route
+          path="/public-print/:orderId"
+          element={
+            
+              <PublicPrint lang={lang}/>
+            
+          }
+        />
       </Routes>
     ) : (
       <Routes>
+        
         <Route
           path="/"
           element={
@@ -433,6 +443,14 @@ root.render(
           element={
             <LayoutLogin>
               <Login lang={lang} />
+            </LayoutLogin>
+          }
+        />
+        <Route
+          path="/public-print/:orderId"
+          element={
+            <LayoutLogin>
+              <PublicPrint lang={lang}/>
             </LayoutLogin>
           }
         />
