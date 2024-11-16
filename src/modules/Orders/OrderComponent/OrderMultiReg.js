@@ -21,7 +21,7 @@ function OrderMultiReg(props){
           body:JSON.stringify(body)
         }
         console.log(postOptions)
-    fetch(env.siteApi + "/setting/multi-sepidar",postOptions)
+    0&&fetch(env.siteApi + "/setting/multi-sepidar",postOptions)
     .then(res => res.json())
     .then(
       (result) => {
