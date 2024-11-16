@@ -11,6 +11,7 @@ import { PieChart, pieArcLabelClasses } from "@mui/x-charts/PieChart";
 import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
 import CustomerTable from "../modules/visitor/customers/CustomerTable";
+import { Label } from "@mui/icons-material";
 const cookies = new Cookies();
 
 function Users(props) {
@@ -89,6 +90,7 @@ function Users(props) {
         return {
           ...item,
           value: item.price,
+          label: item.username,
         };
       });
     setVisitorList(convertVisitorInfo);
@@ -100,6 +102,7 @@ function Users(props) {
         return {
           ...item,
           value: item.price,
+          label: item.name
         };
       });
     setBrands(convertPriceToValue);
@@ -246,9 +249,9 @@ function Users(props) {
                       fontSize: "12px",
                     },
                   }}
-                  // slotProps={{
-                  //   legend: { hidden: true },
-                  // }}
+                  slotProps={{
+                    legend: { hidden: true },
+                  }}
                   onItemClick={(event, pieItemIdentifier, item) =>
                     selectedVisitor(event, pieItemIdentifier, item)
                   }
