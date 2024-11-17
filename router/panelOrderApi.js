@@ -176,7 +176,14 @@ router.post('/list', jsonParser, async (req, res) => {
                 res.status(400).json({ error: "دسترسی به این بخش ندارید" });
                 return;
             }
-            const manager = await users.findOne({cName:data.manager})
+            var manager = ''
+            if(adminData.access !== "manager"){
+                if (!data.manager) {
+                    res.status(400).json({ error: "اطلاعات واحد فروش وارد نشده است" });
+                    return;
+                }
+                manager = data.manager&&await users.findOne({cName:data.manager})
+            }
             var isSale = 1;
             var showCart = [];
             const openList = await carts.aggregate([
