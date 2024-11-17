@@ -35,9 +35,11 @@ function OrderHolder(props) {
       body: JSON.stringify(
         {
           
-          userId:(
-            (token.profileCode == "sale")?"66128faa5820d102747ed259"
-            :user? user.Code? user.Code: user._id: token && token.userId)
+          userId: user
+          ? user.Code
+            ? user.Code
+            : user._id
+          : token && token.userId,
         }),
     };
     fetch(env.siteApi + `/panel/${tab?"quote":"faktor"}/cart`, postOptions)
