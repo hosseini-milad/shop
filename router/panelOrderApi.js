@@ -10,6 +10,7 @@ const products = require('../models/product/products');
 const { findQuickCartSum } = require('./faktorApi');
 const users = require('../models/auth/users');
 const Invoice = require('../models/product/Invoice');
+const bankData = require('../publicPay/bank.json')
 const { TaxRate } = process.env
 
 router.post('/sku/find', jsonParser, async (req, res) => {
@@ -30,6 +31,7 @@ router.post('/list', jsonParser, async (req, res) => {
             orderNo: req.body.orderNo,
             status: req.body.status,
             customer: req.body.customer,
+            manager: req.body.manager,
             brand: req.body.brand,
             dateFrom:
                 req.body.dateFrom ? req.body.dateFrom[0] + "/" +
@@ -68,6 +70,8 @@ router.post('/list', jsonParser, async (req, res) => {
         var isSale = 0;
         var isWeb = 0;
         var size = 0;
+        var status = []
+        var bankList = []
 
         if (!type || type == "Visitor") {
             if (adminData.access == "sale") {
@@ -133,7 +137,7 @@ router.post('/list', jsonParser, async (req, res) => {
 
                 showCart.push(cartWithTaskStep);
             }
-
+            status = await state.find({})
             brandUnique = [...new Set(showCart &&
                 showCart.map((item) => item.brand))];
             size = showCart && showCart.length;
@@ -172,7 +176,7 @@ router.post('/list', jsonParser, async (req, res) => {
                 res.status(400).json({ error: "دسترسی به این بخش ندارید" });
                 return;
             }
-
+            const manager = await users.findOne({cName:data.manager})
             var isSale = 1;
             var showCart = [];
             const openList = await carts.aggregate([
@@ -186,6 +190,7 @@ router.post('/list', jsonParser, async (req, res) => {
                     }
                 },
                 { $match: { InvoiceID: { $exists: false } } },
+                { $match: manager ? { manageId: manager._id } : {} },
                 { $match: { isSale: true} },
                 { $match: data.orderNo ? { cartNo: new RegExp('.*' + data.orderNo + '.*') } : {} },
                 { $match: !data.orderNo ? { initDate: { $gte: new Date(data.dateFrom) } } : {} },
@@ -198,7 +203,8 @@ router.post('/list', jsonParser, async (req, res) => {
                     openList[i].payValue);
                 showCart.push({ ...openList[i], totalCart: totalPrice });
             }
-
+            status = [{title:"انجام نشده",enTitle:"undone",id:0},{title:"انجام شده",enTitle:"done",id:1}]
+            bankList = bankData
             brandUnique = [...new Set(showCart &&
                 showCart.map((item) => item.brand))];
             size = showCart && showCart.length;
@@ -247,7 +253,7 @@ router.post('/list', jsonParser, async (req, res) => {
 
         res.json({
             filter: resultData, brand: brandUnique, isSale,
-            size,adminData
+            size,adminData,status,bankList
         });
     } catch (error) {
         res.status(500).json({ message: error.message });
