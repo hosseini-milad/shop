@@ -186,7 +186,6 @@ router.post('/list', jsonParser, async (req, res) => {
                 manager = managerData&&managerData._id
             }
             var isSale = 1;
-            console.log(manager)
             var showCart = [];
             const openList = await carts.aggregate([
                 { $addFields: { "userId": { "$toObjectId": "$userId" } } },
@@ -211,7 +210,7 @@ router.post('/list', jsonParser, async (req, res) => {
             for (var i = 0; i < (openList && openList.length); i++) {
                 var totalPrice = findCartSum(openList[i].cartItems,
                     openList[i].payValue);
-                var tempStatus = openList[i].InvoiceID?"1":"0"
+                var tempStatus = openList[i].InvoiceID?"done":"undone"
                 showCart.push({ ...openList[i], totalCart: totalPrice ,
                     status:tempStatus});
             }
