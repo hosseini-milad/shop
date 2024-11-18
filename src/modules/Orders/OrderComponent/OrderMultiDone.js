@@ -38,18 +38,18 @@ function OrderMultiDone(props){
     }
     console.log(Loader)
     return(
-      <tbody>
-          {props.orders&&props.orders.length?<tr>
+      <>
+          {props.orders&&props.orders.length?<div>
             
-            <td colSpan={7}></td>
-            <td colSpan={2} className="bold-td">تعداد کل: {orders.length}</td>
-            <td colSpan={3} className="regSepidar">
+            <div colSpan={6}></div>
+            <div colSpan={2} className="bold-td">تعداد کل: {orders.length}</div>
+            <div colSpan={3} className="regSepidar">
               {Loader?<div ><p>درحال پردازش</p></div>:<div className="regSepidar"
               onClick={setSepidar} style={{cursor:"pointer"}}><p>ثبت سپیدار</p>
               </div>}
-              </td>
-          </tr>:<></>}
-        </tbody>
+              </div>
+          </div>:<></>}
+        </>
     )
 }
 export default OrderMultiDone

@@ -28,9 +28,23 @@ const statustrans ={
         color: "rgb(183, 110, 0)",
         background: "rgba(255, 171, 0, 0.16)"
     },
+    undone:{
+        english: "Undone",
+        persian: "انجام نشده",
+        index:3,
+        color: "rgb(183, 110, 0)",
+        background: "rgba(255, 171, 0, 0.16)"
+    },
     accept:{
         english: "Accept",
         persian: "تایید شده",
+        index:2,
+        color: "rgb(17, 141, 87)",
+        background: "rgba(34, 197, 94, 0.16)"
+    },
+    done:{
+        english: "Done",
+        persian: "انجام شده",
         index:2,
         color: "rgb(17, 141, 87)",
         background: "rgba(34, 197, 94, 0.16)"

@@ -52,10 +52,10 @@ function PreOrderSale(props){
           <OpenOrderItem key={i} data={cart}
             total={total} index={i} setOrders={setOrders}/>
         ))}
-        {(access=="edit"||access=="full")?<div className="orderButtonHolder">
+        {/* {(access=="edit"||access=="full")?<div className="orderButtonHolder">
         <input type="button" className="orderButton" value={"ثبت سپیدار"}
-        onClick={setSepidarTotal}/> 
-        </div>:<></>}
+        />
+        </div>:<></>} */}
         
       </section>
     )
