@@ -38,7 +38,7 @@ function Products(props) {
     setLoading(1);
     const body = {
       offset: filters.offset || "0",
-      pageSize: filters.pageSize || "10",
+      pageSize: filters.pageSize || "25",
       customer: filters.customer,
       title: filters.title,
       sku: filters.sku,

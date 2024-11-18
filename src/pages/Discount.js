@@ -45,7 +45,7 @@ function Users(props) {
       offset: filters.offset || "0",
 
       // pageSize:filters.pageSize?filters.pageSize:"10",
-      pageSize: filters.pageSize || "10",
+      pageSize: filters.pageSize || "25",
 
       customer: filters.customer,
       orderNo: filters.orderNo,

@@ -48,8 +48,7 @@ function OrderTableRow(props) {
       <tr className={activeAcc ? "activeAccordion" : "accordion"}>
         <td>{props.index+1}</td>
         <td className="checkBoxStyle">
-          {order.taskInfo&&order.taskInfo[0]&&
-          order.taskInfo[0].taskStep=="done"?<input
+          {order.status&&order.status=="done"?<input
             type="checkbox"
             checked={checkState}
             onChange={(e) =>  updateCheckBox(order,checkState)}
@@ -91,8 +90,6 @@ function OrderTableRow(props) {
             </p>
           </div>
         </td>
-        
-        
         <td>
             <div className="or-date">
               <p className="date">
@@ -107,7 +104,6 @@ function OrderTableRow(props) {
             </div>
           
         </td>
-
         <td>
           <div className="order-price">
             <p>{normalPriceRound(order.totalCart&&
@@ -123,7 +119,6 @@ function OrderTableRow(props) {
             lang={props.lang}
           />
         </td>
-
         <td>
           <div className="more-btn">
             <i
@@ -140,22 +135,24 @@ function OrderTableRow(props) {
             ></i> */}
             <i
               className="tableIcon fas fa-print"
-              onClick={() =>(order.taskInfo[0].taskStep=="archive"?setOpenOption(openOption?0:1):(window.location.href = "/orders/print/" + order.cartNo))
-                
-              }
+              onClick={() =>(setOpenOption(openOption?0:1))}
             ></i>
             
           </div>
           {openOption ? (
             <div className="sub-more-menu">
-              <div className="sub-option" onClick={()=>window.location.href="/print/sepidar/"+order.taskInfo[0].result.InvoiceID}>
+              <div className="sub-option" onClick={()=>window.location.href = "/orders/print/" + order.cartNo}>
+                
+                <p>پرینت سفارش</p>
+              </div>
+              {(order.InvoiceID)?<><div className="sub-option" onClick={()=>window.location.href="/print/sepidar/"+order.InvoiceID}>
                 
                 <p>پرینت سپیدار</p>
               </div>
-              <div className="sub-option" onClick={()=>window.location.href="/print/official/"+order.taskInfo[0].result.InvoiceID}>
+              <div className="sub-option" onClick={()=>window.location.href="/print/official/"+order.InvoiceID}>
                 
                 <p>پرینت رسمی</p>
-              </div>
+              </div></>:<></>}
             </div>
           ) : (
             <></>

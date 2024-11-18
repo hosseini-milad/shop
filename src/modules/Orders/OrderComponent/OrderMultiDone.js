@@ -41,7 +41,7 @@ function OrderMultiDone(props){
       <tbody>
           {props.orders&&props.orders.length?<tr>
             
-            <td colSpan={7}></td>
+            <td colSpan={6}></td>
             <td colSpan={2} className="bold-td">تعداد کل: {orders.length}</td>
             <td colSpan={3} className="regSepidar">
               {Loader?<div ><p>درحال پردازش</p></div>:<div className="regSepidar"

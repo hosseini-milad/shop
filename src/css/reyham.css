@@ -1611,7 +1611,6 @@ dialog {
   cursor: pointer;
 }
 .sub-more-menu {
-  display: none !important;
   left: 50px !important;
 }
 .sub-active {

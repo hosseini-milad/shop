@@ -25,6 +25,7 @@ function Orders(props) {
   const [filters, setFilters] = useState(getFiltersFromUrl());
   const [loading, setLoading] = useState(0);
   const [StatusList, setStatusList] = useState("");
+  const [StatusSale, setStatusSale] = useState("");
   const [tab, setTab] = useState(localStorage.getItem("orderTab"));
   const [Error, setError] = useState("");
   const token = cookies.get(env.cookieName);
@@ -40,15 +41,15 @@ function Orders(props) {
     setLoading(1);
     const body = {
       offset: filters.offset ? filters.offset : "0",
-      pageSize: filters.pageSize ? filters.pageSize : "10",
+      pageSize: filters.pageSize ? filters.pageSize : "25",
       customer: filters.customer,
       orderNo: filters.orderNo,
       status: filters.status,
       brand: filters.brand,
       dateFrom: filters.date && filters.date.dateFrom,
       dateTo: filters.date && filters.date.dateTo,
-      access: "manager",
       type:filters.category,
+      manager:filters.manage && filters.manage,
       index:tab
     };
     const postOptions = {
@@ -71,6 +72,7 @@ function Orders(props) {
           setLoading(0);
           setContent("");
           setTimeout(() => setContent(result), 200);
+          setStatusSale(result.status)
           setError('')
           }
         },
@@ -141,6 +143,7 @@ function Orders(props) {
           options={content.brand}
           filters={filters}
           StatusList={StatusList}
+          StatusSale={StatusSale}
         />
         
         <div className="user-list">

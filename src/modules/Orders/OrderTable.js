@@ -10,7 +10,6 @@ function OrderTable(props){
   const [selectedOrder,setSelectedOrder] = useState()
   const [detail,showDetail] = useState(-1)
   const [AllCheck,setAllCheck] = useState(0)
-  console.log(selectedOrder)
   if(!orders||!orders.length) return <main>waiting</main>
   else  return(
         <table>
@@ -40,10 +39,7 @@ function OrderTable(props){
               <i></i>
             </th>
 
-            {/* <th>
-              <p>{tabletrans.item[lang]}</p>
-              <i></i>
-            </th> */}
+            
             <th>
             <p>{tabletrans.price[lang]}</p>
               <i></i>
