@@ -119,6 +119,7 @@ router.post('/list', jsonParser, async (req, res) => {
                 }
 
                 var cartTask = cartList[i].taskInfo && cartList[i].taskInfo[0];
+                var InvoiceID = cartTask?(cartTask.result?cartTask.result.InvoiceID:''):''
                 var taskStep = cartTask ? cartTask.taskStep : null;
 
                 if (data.status) {
@@ -130,7 +131,7 @@ router.post('/list', jsonParser, async (req, res) => {
 
                 var cartWithTaskStep = {
                     _id: cartList[i]._id,
-                    status: taskStep,
+                    status: taskStep, InvoiceID,
                     ...cartList[i],
                     totalCart: totalPrice
                 };
