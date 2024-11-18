@@ -182,7 +182,8 @@ router.post('/list', jsonParser, async (req, res) => {
                     res.status(400).json({ error: "اطلاعات واحد فروش وارد نشده است" });
                     return;
                 }
-                manager = data.manager&&await users.findOne({cName:data.manager})
+                var managerData = data.manager&&await users.findOne({cName:data.manager})
+                manager = managerData&&managerData._id
             }
             var isSale = 1;
             var showCart = [];
@@ -198,7 +199,7 @@ router.post('/list', jsonParser, async (req, res) => {
                 },
                 { $match: data.status?data.status=="done"?{ InvoiceID: { $exists: true } }:
                         { InvoiceID: { $exists: false } }:{} },
-                { $match: manager ? { manageId: manager._id } : {} },
+                { $match: manager ? { manageId: manager } : {} },
                 { $match: { isSale: true} },
                 { $match: data.orderNo ? { cartNo: new RegExp('.*' + data.orderNo + '.*') } : {} },
                 { $match: !data.orderNo ? { initDate: { $gte: new Date(data.dateFrom) } } : {} },
@@ -212,7 +213,6 @@ router.post('/list', jsonParser, async (req, res) => {
                 var tempStatus = openList[i].InvoiceID?"1":"0"
                 showCart.push({ ...openList[i], totalCart: totalPrice ,
                     status:tempStatus});
-                console.log(tempStatus)
             }
             status = [{title:"انجام نشده",enTitle:"undone",id:0},{title:"انجام شده",enTitle:"done",id:1}]
             bankList = bankData
