@@ -11,7 +11,7 @@ const { findQuickCartSum } = require('./faktorApi');
 const users = require('../models/auth/users');
 const Invoice = require('../models/product/Invoice');
 const bankData = require('../publicPay/bank.json')
-const state = require('../models/main/state');
+const crmlist = require('../models/crm/crmlist');
 const { TaxRate } = process.env
 
 router.post('/sku/find', jsonParser, async (req, res) => {
@@ -138,7 +138,8 @@ router.post('/list', jsonParser, async (req, res) => {
 
                 showCart.push(cartWithTaskStep);
             }
-            status = await state.find({})
+            var crmData = await crmlist.findOne({crmCode:"main"})
+            status = crmData?crmData.crmSteps:[]
             brandUnique = [...new Set(showCart &&
                 showCart.map((item) => item.brand))];
             size = showCart && showCart.length;
