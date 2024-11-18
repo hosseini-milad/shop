@@ -11,7 +11,7 @@ function OrderTable(props){
   const [detail,showDetail] = useState(-1)
   const [AllCheck,setAllCheck] = useState(0)
   if(!orders||!orders.length) return <main>waiting</main>
-  else  return(
+  else  return(<>
         <table>
         <thead>
         <tr>
@@ -61,10 +61,12 @@ function OrderTable(props){
           )):''}
           
         </tbody>
-        {props.isSale?
-        <OrderMultiReg orders={selectedOrder} token={props.token}/>:
-        <OrderMultiDone orders={selectedOrder} token={props.token}/>}
+        
       </table>
+      {props.isSale?
+        <OrderMultiReg bankList={props.bankList} orders={selectedOrder} token={props.token}/>:
+        <OrderMultiDone orders={selectedOrder} token={props.token}/>}
+      </>
 
     )
 }

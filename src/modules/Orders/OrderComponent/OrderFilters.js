@@ -46,7 +46,7 @@ function OrderFilters(props) {
         <StyleSelect
             title={tabletrans.status[props.lang.lang]}
             direction={props.lang.dir}
-            options={props.StatusSale?props.StatusSale:props.StatusList}
+            options={props.StatusSale}
             label="title"
             action={(e) => handleFilterChange("status",e?e.enTitle:"")}
           />

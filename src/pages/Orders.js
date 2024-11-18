@@ -22,6 +22,7 @@ function Orders(props) {
   const direction = props.lang ? props.lang.dir : errortrans.defaultDir;
   const lang = props.lang ? props.lang.lang : errortrans.defaultLang;
   const [content, setContent] = useState("");
+  const [bankList, setbankList] = useState("");
   const [filters, setFilters] = useState(getFiltersFromUrl());
   const [loading, setLoading] = useState(0);
   const [StatusList, setStatusList] = useState("");
@@ -72,6 +73,7 @@ function Orders(props) {
           setLoading(0);
           setContent("");
           setTimeout(() => setContent(result), 200);
+          setbankList(result.bankList)
           setStatusSale(result.status)
           setError('')
           }
@@ -150,7 +152,7 @@ function Orders(props) {
           {loading ? (
             env.loader
           ) : (
-            Error?<p>دسترسی ندارید</p>:<OrderTable orders={content ? content.filter : {}} lang={lang} 
+            Error?<p>دسترسی ندارید</p>:<OrderTable bankList={bankList} orders={content ? content.filter : {}} lang={lang} 
             isSale={content&&content.isSale} token={token}/>
           )}
         </div>

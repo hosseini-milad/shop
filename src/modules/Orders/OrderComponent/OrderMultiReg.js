@@ -1,12 +1,19 @@
 import { useState } from "react"
-import env, { normalArrayRound } from "../../../env"
+import env, { normalArrayRound,minusArrayRound } from "../../../env"
+import BankSelect from "../Bank/BankSelect"
 
 function OrderMultiReg(props){
     const [Loader,setLoader]=useState("")
+    const [TransData,setTransData]=useState("")
     const token = props.token
     const orders = props.orders
     const totalPrice = normalArrayRound(orders&&
       orders.map(item=>(item.totalCart&&item.totalCart.totalPrice)))
+    const TotalTrans=normalArrayRound(TransData&&
+        TransData.map(item=>(parseInt(item.payValue))))
+    const RemainTotal=minusArrayRound(
+      totalPrice,TotalTrans
+    )
     const setSepidarTotal=()=>{
       setLoader(1)
       if(!orders||!orders.length)
@@ -36,18 +43,29 @@ function OrderMultiReg(props){
     }
     
     return(
-      <tbody>
-          {props.orders&&props.orders.length?<tr>
-            <td></td>
-            <td colSpan={3}>بانک ها</td>
-            <td colSpan={2}>مبلغ کل: {totalPrice}</td>
-            <td colSpan={3} className="regSepidar">
-              {Loader?<div><p>درحال پردازش</p></div>:<div style={{cursor:"pointer"}} className="regSepidar"
-              onClick={setSepidarTotal}><p>ثبت سپیدار</p>
-              </div>}
-              </td>
-          </tr>:<></>}
-        </tbody>
+      <>
+          {props.orders&&props.orders.length?
+            <div className="bank-wrapper">
+              <h6>روش پرداخت</h6>
+              <p>مبلغ کل سفارش: {totalPrice}</p>
+              <div className="bank-form"><BankSelect TransData={TransData} setTransData={setTransData} token={token} bankList={props.bankList}/></div>
+              <div class="amount">
+                <p>جمع پرداختی: {TotalTrans}</p>
+                <p>باقی مانده: {RemainTotal&&RemainTotal}</p>
+                
+                
+              </div>
+              
+              {(totalPrice==TotalTrans)?<div className="regSepidar">
+                {Loader?
+                <div><p>درحال پردازش</p></div>:
+                <div style=  {{cursor:"pointer"}} className="regSepidar"
+                onClick={setSepidarTotal}><p>ثبت سپیدار</p>
+                </div>}
+              </div>:<></>}
+            </div>:<></>}
+          
+        </>
     )
 }
 export default OrderMultiReg
