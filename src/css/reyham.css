@@ -102,7 +102,7 @@
   width: unset;
 }
 .sub-more-menu {
-  display: inherit;
+  display:none;
 }
 .formInput {
   margin: 15px !important;

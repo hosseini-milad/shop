@@ -140,7 +140,7 @@ function OrderTableRow(props) {
             
           </div>
           {openOption ? (
-            <div className="sub-more-menu">
+            <div className="sub-more-menu sub-active">
               <div className="sub-option" onClick={()=>window.location.href = "/orders/print/" + order.cartNo}>
                 
                 <p>پرینت سفارش</p>
