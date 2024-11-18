@@ -186,6 +186,7 @@ router.post('/list', jsonParser, async (req, res) => {
                 manager = managerData&&managerData._id
             }
             var isSale = 1;
+            console.log(manager)
             var showCart = [];
             const openList = await carts.aggregate([
                 { $addFields: { "userId": { "$toObjectId": "$userId" } } },
