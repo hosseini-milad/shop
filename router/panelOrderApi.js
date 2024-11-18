@@ -209,6 +209,7 @@ router.post('/list', jsonParser, async (req, res) => {
             for (var i = 0; i < (openList && openList.length); i++) {
                 var totalPrice = findCartSum(openList[i].cartItems,
                     openList[i].payValue);
+                openList[i].status = openList[i].InvoiceID?"1":"0"
                 showCart.push({ ...openList[i], totalCart: totalPrice });
             }
             status = [{title:"انجام نشده",enTitle:"undone",id:0},{title:"انجام شده",enTitle:"done",id:1}]
