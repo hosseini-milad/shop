@@ -9,6 +9,9 @@ const category = require('../models/product/category');
 const cart = require('../models/product/cart');
 const FaktorSchema = require('../models/product/faktor');
 
+router.get('/welcome',jsonParser,auth, async (req,res)=>{
+    res.json({auth:true})
+})
 router.post('/list', async (req,res)=>{
     try{
         const allProducts = await productSchema.find()

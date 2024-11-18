@@ -1144,7 +1144,7 @@ router.post('/edit-quote', jsonParser, async (req, res) => {
         res.status(500).json({ message: error.message })
     }
 })
-const checkAvailable = async (items, stockId) => {
+const checkAvailable = async (items, stockId,cartNo) => {
 
     // console.log(stockId)
     if (!stockId) stockId = "13"
@@ -1156,7 +1156,7 @@ const checkAvailable = async (items, stockId) => {
     var totalCount = existItem ? parseFloat(existItem.quantity) : 0
     totalCount += existItem3 ? parseFloat(existItem3.quantity) : 0
 
-    const currentOrder = await FindCurrentExist(items.id)
+    const currentOrder = await FindCurrentExist(items.id,cartNo)
 
     /*console.log("total: ",totalCount, "- order: ",currentOrder,
         "- req: ",items.count
@@ -1317,7 +1317,7 @@ router.post('/update-Item-cart', jsonParser, async (req, res) => {
                 }
 
                 const availItems = await checkAvailable(oldCartItems[i], 
-                    oldCartItems[i].stock?oldCartItems[i].stock:manId.StockId)
+                    oldCartItems[i].stock?oldCartItems[i].stock:manId.StockId,data.cartNo)
                 if (!availItems) {
                     res.status(400).json({ error: "موجودی کافی نیست" })
                     return
@@ -2315,39 +2315,59 @@ router.post('/public-cart-find', async (req, res) => {
 });
 
 
-router.post("/create-public-link",auth, async (req, res) => {
+router.post("/create-public-link", auth, async (req, res) => {
     try {
       const { cartNo, expirationDate } = req.body;
       const creatorUserId = req.headers['userid'];
   
-      if(!cartNo){
+      // Validate if cartNo is provided
+      if (!cartNo) {
         return res.status(400).json({ error: "CartNo را وارد کنید" });
       }
-
+  
+      // Validate if user ID is provided in the headers
       if (!creatorUserId) {
         return res.status(400).json({ error: "شناسه کاربری در هدر الزامی است." });
       }
   
+      // Fetch user details by user ID
       const userDetail = await users.findOne({ _id: creatorUserId });
       if (!userDetail) {
         return res.status(404).json({ error: "کاربر یافت نشد." });
       }
   
+      // Check if a record with the same cartNo exists and its expiration date is still valid
+      const existingLink = await publicLinks.findOne({
+        cartNo: cartNo,
+        expirationDate: { $gte: new Date() }, // Check if the link has not expired
+      });
+  
+      if (existingLink) {
+        return res.status(400).json({ error: "لینک عمومی با این شماره کارت قبلاً ایجاد شده و هنوز منقضی نشده است." });
+      }
+  
+      // Default expiration date to 30 days from now if not provided
       const defaultExpirationDate = expirationDate || new Date(Date.now() + 30 * 24 * 60 * 60 * 1000);
   
+      // Create a new public link
       const newLink = new publicLinks({
         cartNo: cartNo,
         creatorUserId,
         expirationDate: defaultExpirationDate,
       });
   
+      // Save the new public link
       await newLink.save();
-      res.status(201).json(newLink);
+  
+      // Respond with success message in Persian
+      res.status(201).json({ 
+        message: "لینک عمومی با موفقیت ایجاد شد.", 
+        data: newLink 
+      });
     } catch (error) {
       res.status(500).json({ error: "ایجاد لینک عمومی با شکست مواجه شد." });
     }
-  });
-  
+  });  
 
 router.post('/sepidar-find', jsonParser, async (req, res) => {
     const faktorId = req.body.faktorId;
@@ -2363,7 +2383,7 @@ router.post('/sepidar-find', jsonParser, async (req, res) => {
 
         const OnlineFaktor = await sepidarFetch("data", "/api/invoices/" + faktorId)
 
-        const userDetail = await customerSchema.findOne({ CustomerID: OnlineFaktor.CustomerRef, agent: { $exists: false } })
+        const userDetail = await customerSchema.findOne({ CustomerID: OnlineFaktor.CustomerRef})
         const invoice = OnlineFaktor.InvoiceItems
         if (!invoice)
             res.status(400).json({ error: OnlineFaktor.Message })

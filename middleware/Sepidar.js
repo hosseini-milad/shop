@@ -2,7 +2,7 @@ const { default: fetch } = require("node-fetch");
 const users = require("../models/auth/users");
 const { SEPIDAR_URL,SEPIDAR_HEADER,
     SEPIDAR_HEADER_Bazaryab,SEPIDAR_HEADER_HESARAK} = process.env;
- 
+  
 const sepidarFetch=async(data,action,user)=>{
     var header = SEPIDAR_HEADER
     const userDetail = users&&await users.findOne({_id:user})

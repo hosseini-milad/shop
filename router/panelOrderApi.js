@@ -10,6 +10,8 @@ const products = require('../models/product/products');
 const { findQuickCartSum } = require('./faktorApi');
 const users = require('../models/auth/users');
 const Invoice = require('../models/product/Invoice');
+const bankData = require('../publicPay/bank.json')
+const crmlist = require('../models/crm/crmlist');
 const { TaxRate } = process.env
 
 router.post('/sku/find', jsonParser, async (req, res) => {
@@ -30,6 +32,7 @@ router.post('/list', jsonParser, async (req, res) => {
             orderNo: req.body.orderNo,
             status: req.body.status,
             customer: req.body.customer,
+            manager: req.body.manager,
             brand: req.body.brand,
             dateFrom:
                 req.body.dateFrom ? req.body.dateFrom[0] + "/" +
@@ -66,8 +69,9 @@ router.post('/list', jsonParser, async (req, res) => {
         var resultData = [];
         var fullSize = 0;
         var isSale = 0;
-        var isWeb = 0;
         var size = 0;
+        var status = []
+        var bankList = []
 
         if (!type || type == "Visitor") {
             if (adminData.access == "sale") {
@@ -115,6 +119,7 @@ router.post('/list', jsonParser, async (req, res) => {
                 }
 
                 var cartTask = cartList[i].taskInfo && cartList[i].taskInfo[0];
+                var InvoiceID = cartTask?(cartTask.result?cartTask.result.InvoiceID:''):''
                 var taskStep = cartTask ? cartTask.taskStep : null;
 
                 if (data.status) {
@@ -126,14 +131,15 @@ router.post('/list', jsonParser, async (req, res) => {
 
                 var cartWithTaskStep = {
                     _id: cartList[i]._id,
-                    status: taskStep,
+                    status: taskStep, InvoiceID,
                     ...cartList[i],
                     totalCart: totalPrice
                 };
 
                 showCart.push(cartWithTaskStep);
             }
-
+            var crmData = await crmlist.findOne({crmCode:"main"})
+            status = crmData?crmData.crmSteps:[]
             brandUnique = [...new Set(showCart &&
                 showCart.map((item) => item.brand))];
             size = showCart && showCart.length;
@@ -172,7 +178,15 @@ router.post('/list', jsonParser, async (req, res) => {
                 res.status(400).json({ error: "دسترسی به این بخش ندارید" });
                 return;
             }
-
+            var manager = ''
+            if(adminData.access !== "manager"){
+                if (!data.manager) {
+                    res.status(400).json({ error: "اطلاعات واحد فروش وارد نشده است" });
+                    return;
+                }
+                var managerData = data.manager&&await users.findOne({cName:data.manager})
+                manager = managerData&&managerData._id
+            }
             var isSale = 1;
             var showCart = [];
             const openList = await carts.aggregate([
@@ -185,7 +199,9 @@ router.post('/list', jsonParser, async (req, res) => {
                         as: "userInfo"
                     }
                 },
-                { $match: { InvoiceID: { $exists: false } } },
+                { $match: data.status?data.status=="done"?{ InvoiceID: { $exists: true } }:
+                        { InvoiceID: { $exists: false } }:{} },
+                { $match: manager ? { manageId: manager.toString() } : {} },
                 { $match: { isSale: true} },
                 { $match: data.orderNo ? { cartNo: new RegExp('.*' + data.orderNo + '.*') } : {} },
                 { $match: !data.orderNo ? { initDate: { $gte: new Date(data.dateFrom) } } : {} },
@@ -196,9 +212,12 @@ router.post('/list', jsonParser, async (req, res) => {
             for (var i = 0; i < (openList && openList.length); i++) {
                 var totalPrice = findCartSum(openList[i].cartItems,
                     openList[i].payValue);
-                showCart.push({ ...openList[i], totalCart: totalPrice });
+                var tempStatus = openList[i].InvoiceID?"done":"undone"
+                showCart.push({ ...openList[i], totalCart: totalPrice ,
+                    status:tempStatus});
             }
-
+            status = [{title:"انجام نشده",enTitle:"undone",id:0},{title:"انجام شده",enTitle:"done",id:1}]
+            bankList = bankData
             brandUnique = [...new Set(showCart &&
                 showCart.map((item) => item.brand))];
             size = showCart && showCart.length;
@@ -247,7 +266,7 @@ router.post('/list', jsonParser, async (req, res) => {
 
         res.json({
             filter: resultData, brand: brandUnique, isSale,
-            size,adminData
+            size,adminData,status,bankList
         });
     } catch (error) {
         res.status(500).json({ message: error.message });
