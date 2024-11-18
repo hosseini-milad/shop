@@ -1663,7 +1663,7 @@ dialog {
   justify-content: center;
   direction: ltr;
 }
-.bank-wrapper {
+.bank-wrappeق {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
@@ -1671,57 +1671,68 @@ dialog {
   gap: 6px;
   padding: 1rem 0.5rem;
   border-top: 1px solid black;
-  .bank-form {
-    width: 70%;
-  }
-  .amount{
-    display: flex;
-    align-items: center;
-    justify-content: flex-start;
-    gap: 0.5rem;
-  }
-  .bank-list {
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    padding-right: 6px;
-    .bank-tr {
-      width: 100%;
-      display: flex;
-      align-items: center;
-      justify-content: flex-start;
-      flex-direction: row;
-      gap: 6px;
-      margin-top: 0.5rem;
-    }
-  }
-  .add-bank {
-    width: 100%;
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: flex-start;
-    padding-right: 6px;
-    gap: 6px;
-  }
-  .bank-item {
+}
+.bank-wrapper .bank-form {
+  width: 70%;
+}
+.bank-wrapper .amount {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 0.5rem;
+}
+.bank-wrapper .amount {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 0.5rem;
+}
+.bank-wrapper .bank-list {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  padding-right: 6px;
+  
+}
+.bank-wrapper .bank-list .bank-tr {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  flex-direction: row;
+  gap: 6px;
+  margin-top: 0.5rem;
+}
+.bank-wrapper .add-bank {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+  padding-right: 6px;
+  gap: 6px;
+}
+  
+  
+  
+.bank-wrapper .bank-item {
     padding: 0.5rem;
     border-radius: 0.2rem;
     border: 1px solid grey;
     min-width: 200px;
-  }
-  input {
+}
+.bank-wrapper input {
     width: unset;
     height: 45px;
     border-radius: 0.2rem;
     border: 1px solid grey;
     outline: none;
-  }
-  .MuiInputBase-input {
+}
+.bank-wrapper .MuiInputBase-input {
     height: unset;
     width: unset !important;
-  }
-  .MuiAutocomplete-root{
+}
+.bank-wrapper .MuiAutocomplete-root {
     width: 100%;
   }
-}
+
