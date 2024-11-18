@@ -2247,7 +2247,7 @@ router.post('/sepidar-find', jsonParser, async (req, res) => {
 
         const OnlineFaktor = await sepidarFetch("data", "/api/invoices/" + faktorId)
 
-        const userDetail = await customerSchema.findOne({ CustomerID: OnlineFaktor.CustomerRef, agent: { $exists: false } })
+        const userDetail = await customerSchema.findOne({ CustomerID: OnlineFaktor.CustomerRef})
         const invoice = OnlineFaktor.InvoiceItems
         if (!invoice)
             res.status(400).json({ error: OnlineFaktor.Message })
