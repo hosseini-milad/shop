@@ -69,7 +69,6 @@ router.post('/list', jsonParser, async (req, res) => {
         var resultData = [];
         var fullSize = 0;
         var isSale = 0;
-        var isWeb = 0;
         var size = 0;
         var status = []
         var bankList = []
@@ -197,7 +196,8 @@ router.post('/list', jsonParser, async (req, res) => {
                         as: "userInfo"
                     }
                 },
-                { $match: { InvoiceID: { $exists: false } } },
+                { $match: data.status?data.status=="done"?{ InvoiceID: { $exists: true } }:
+                        { InvoiceID: { $exists: false } }:{} },
                 { $match: manager ? { manageId: manager._id } : {} },
                 { $match: { isSale: true} },
                 { $match: data.orderNo ? { cartNo: new RegExp('.*' + data.orderNo + '.*') } : {} },
