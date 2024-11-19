@@ -26,7 +26,7 @@ export function getFiltersFromUrl() {
   // Default filter values
 export const defaultFilterValues = {
     offset: "0",
-    pageSize: "10",
+    pageSize: "25",
   };
 
   // Function to update URL with filters

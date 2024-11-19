@@ -33,37 +33,38 @@ function QuoteTaskAction(props){
                 setShowAlert(result.message)
                 setTimeout(()=>setShowAlert(0),2000)
                 setLoader(0)
+                window.location.reload()
             }
         },
         (error) => {
           console.log(error);
         })
     }
-     const deleteOrder=(orderNo)=>{}
-    //     //console.log("cart-delete",orderNo)
-    //     const postOptions={
-    //         method:'post',
-    //         headers: {'Content-Type': 'application/json',
-    //         "x-access-token":token&&token.token,"userId":token&&token.userId},
-    //         body:JSON.stringify({cartID:orderNo})
-    //       }
-    //   fetch(env.siteApi + "/panel/faktor/cart-delete",postOptions)
-    //   .then(res => res.json())
-    //   .then(
-    //     (result) => {
-    //         if(result.error){
+    const deleteOrder=(orderNo)=>{
+        //console.log("cart-delete",orderNo)
+        const postOptions={
+            method:'post',
+            headers: {'Content-Type': 'application/json',
+            "x-access-token":token&&token.token,"userId":token&&token.userId},
+            body:JSON.stringify({cartID:orderNo})
+          }
+      fetch(env.siteApi + "/panel/faktor/cart-delete",postOptions)
+      .then(res => res.json())
+      .then(
+        (result) => {
+            if(result.error){
 
-    //         }
-    //         else{
+            }
+            else{
 
-    //             setTimeout(()=>props.close(),3000)
-    //             window.location.reload()
-    //         }
-    //     },
-    //     (error) => {
-    //       console.log(error);
-    //     })
-    // }
+                setTimeout(()=>props.close(),3000)
+                window.location.reload()
+            }
+        },
+        (error) => {
+          console.log(error);
+        })
+    }
     return(
         <div className="taskAction">
             {Loader?

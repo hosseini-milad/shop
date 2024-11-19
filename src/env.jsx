@@ -1,12 +1,12 @@
 
 const env={
     //siteApi:'http://localhost:6090/api',
-   //  siteApi:'https://testadmin.sharifoilco.com/api',
-    siteApi:'https://shopadmin.sharifoilco.com/api',
+    siteApi:'https://testadmin.sharifoilco.com/api',
+    // siteApi:'https://shopadmin.sharifoilco.com/api',
     
-    //siteApiUrl:'http://localhost:6090',
-    // siteApiUrl:'https://testadmin.sharifoilco.com',
-    siteApiUrl:'https://shopadmin.sharifoilco.com',
+    // siteApiUrl:'http://localhost:6090',
+    siteApiUrl:'https://testadmin.sharifoilco.com',
+    //siteApiUrl:'https://shopadmin.sharifoilco.com',
     cookieName:'shop-login',
     //cookieName:'panel-login',
     //cookieName:'mehr-login',
@@ -88,6 +88,18 @@ export function normalArrayRound(priceArray){
     var price = priceArray[i].toString().split('.')[0]
     rawPrice += parseInt(price.replace(/\D/g,''))
   }
+  rawPrice = parseInt(Math.round(rawPrice/1000))*1000
+  return(
+      (rawPrice.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",").replace( /^\D+/g, ''))
+  )
+}
+export function minusArrayRound(price,minus){
+  if(!price) return("")
+  if(!minus) return(price)
+
+  var rawPrice = parseInt(price.toString().replace(/\D/g,''))
+  var rawMinus = parseInt(minus.toString().replace(/\D/g,''))
+  rawPrice = rawPrice - rawMinus
   rawPrice = parseInt(Math.round(rawPrice/1000))*1000
   return(
       (rawPrice.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",").replace( /^\D+/g, ''))

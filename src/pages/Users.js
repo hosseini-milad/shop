@@ -8,7 +8,13 @@ import UserCard from "../modules/Users/UserCard";
 import formtrans from "../translate/forms";
 import StyleSelect from "../components/Button/AutoComplete";
 import StyleInput from "../components/Button/Input";
-
+import Paging from "../modules/Components/Paging";
+import {
+  getFiltersFromUrl,
+  updateUrlWithFilters,
+  defaultFilterValues,
+  handleFilterChange,
+} from "../utils/filterUtils";
 const cookies = new Cookies();
 
 const Users = (props) => {
@@ -31,11 +37,15 @@ const Users = (props) => {
     email: "",
     username: "",
   });
+  function handleFilterChange(newFilters) {
+    setFilters(newFilters);
+    updateUrlWithFilters(newFilters);
+  }
   const token = cookies.get(env.cookieName);
   const userId = token.userId; // userId
   const body = {
     offset: filters.offset || "0",
-    pageSize: filters.pageSize || "10",
+    pageSize: filters.pageSize || "5",
     cName: filters.cName,
     sName: filters.sName,
     access: filters.access,
@@ -150,7 +160,7 @@ const Users = (props) => {
   useEffect(() => {
     fetchUsers();
     fetchProfiles();
-  }, []);
+  }, [filters]);
 
   // useEffect(() => {
   //   console.log("Access List:", accessList);
@@ -344,7 +354,16 @@ const Users = (props) => {
             onEdit={handleUserEdit}
           />
         ))}
+        
       </div>
+      <Paging
+          content={Users}
+          size={Users.size}
+          filters={filters}
+          lang={props.lang}
+          setFilters={handleFilterChange}
+          updateUrlWithFilters={updateUrlWithFilters} // Pass the function as a prop
+        />
     </div>
   );
 };

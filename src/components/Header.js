@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState,useEffect } from "react";
 import Cookies from "universal-cookie";
 import env from "../env";
 
@@ -16,6 +16,31 @@ const Header = (props) => {
     cookies.remove(env.cookieName, { path: "/" });
     setTimeout(() => (document.location.reload(), 500));
   };
+  useEffect(() => {
+    
+    const postOptions = {
+      method: "get",
+      headers: {
+        "Content-Type": "application/json",
+        "x-access-token": token && token.token,
+        userId: token && token.userId,
+      },
+      
+    };
+    fetch(env.siteApi + "/user/welcome", postOptions)
+      .then((res) => res.json())
+      .then(
+        (result) => {if(result.error){
+          logOff()
+        }
+        },
+        (error) => {
+          
+          console.log(error);
+        }
+      );
+  }, []);
+
   console.log(token.username.split("undefined")[0])
   return (
     <nav

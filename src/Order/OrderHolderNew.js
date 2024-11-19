@@ -35,9 +35,11 @@ function OrderHolder(props) {
       body: JSON.stringify(
         {
           
-          userId:(
-            (token.profileCode == "sale")?"66128faa5820d102747ed259"
-            :user? user.Code? user.Code: user._id: token && token.userId)
+          userId: user
+          ? user.Code
+            ? user.Code
+            : user._id
+          : token && token.userId,
         }),
     };
     fetch(env.siteApi + `/panel/${tab?"quote":"faktor"}/cart`, postOptions)
@@ -83,8 +85,8 @@ function OrderHolder(props) {
       );
     if(token.profileCode == "sale") 
       setUser(
-      {"_id":"66128faa5820d102747ed259",
-
+      {"_id":"67385624326b3fa045147729",
+        "username":"مصرف کننده نهایی4"
       },
     )
   }, []);

@@ -5,6 +5,7 @@ function QuickTotal(props){
   const token = props.token
   const qCart = props.data
   const user = props.user
+  const tab = props.tab
   const [loading ,setLoading]=useState(0)  
   const [PopUp ,setPopUp]=useState("") 
   //console.log(qCart)
@@ -19,7 +20,7 @@ function QuickTotal(props){
               user._id:(token&&token.userId),isQuote})
         }
         //console.log(postOptions)
-      fetch(env.siteApi + "/panel/faktor/quick-to-cart",postOptions)
+      fetch(env.siteApi + `/panel/${tab?"quote":"faktor"}/quick-to-cart`,postOptions)
       .then(res => res.json())
       .then(
           (result) => {
@@ -58,7 +59,7 @@ function QuickTotal(props){
         </div>
         <div className="t-wrapper">
           <p>تخفیف</p>
-          <p>{normalPriceRound(qCart.totalDiscount,1)||"-"}</p>
+          <p>{normalPriceCount(qCart.totalDiscount.toString().split(".")[0])||"-"}</p>
         </div>
         <div className="t-wrapper">
           <p>مالیات</p>
@@ -71,14 +72,14 @@ function QuickTotal(props){
       </div>
       {props.action?<></>:
       <div className="total-btn-wrapper">
-        {props.tab?<></>:<button type="button" className="product-table-btn temp-btn"
+        {props.tab?<button type="button" className="product-table-btn temp-btn"
+        onClick={()=>setPopUp({action:true,title:"ثبت پیش فاکتور"})}>
+          <p>ثبت پیش فاکتور</p>
+        </button>:<button type="button" className="product-table-btn temp-btn"
         onClick={()=>setPopUp({action:false,title:"ثبت فاکتور"})}>
           <p>ثبت فاکتور</p>
         </button>}
-        <button type="button" className="product-table-btn temp-btn"
-        onClick={()=>setPopUp({action:true,title:"ثبت پیش فاکتور"})}>
-          <p>ثبت پیش فاکتور</p>
-        </button>
+        
       </div>}
       {PopUp?<ErrorAction
         status={"DELETE"}

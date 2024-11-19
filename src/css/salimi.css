@@ -5478,6 +5478,10 @@ table {
   padding: 1rem;
   border-radius: 10px;
   position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
 }
 .team-users p {
   margin: 0;
@@ -5486,6 +5490,7 @@ table {
   display: flex;
   align-items: center;
   padding-bottom: 1rem;
+  width: 100%;
 }
 .team-header h4 {
   font-size: 1.3rem;
@@ -5536,6 +5541,8 @@ table {
   flex-wrap: wrap;
   gap: 20px;
   margin-top: 5px;
+  width: 100%;
+  overflow: auto;
 }
 .user-card {
   border-radius: 3px;
@@ -5543,6 +5550,7 @@ table {
   padding: 1rem;
   display: flex;
   position: relative;
+  width: 350px;
 }
 .user-card:hover {
   box-shadow: 0 0 10px 7px #dddddd;

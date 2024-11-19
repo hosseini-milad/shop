@@ -34,7 +34,7 @@ function Services(props) {
     setLoading(1);
     const body = {
       offset: filters.offset || "0",
-      pageSize: filters.pageSize || "10",
+      pageSize: filters.pageSize || "25",
       category: filters.category,
       title: filters.title,
     };

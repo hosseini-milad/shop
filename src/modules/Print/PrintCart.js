@@ -7,7 +7,25 @@ function PrintCart(props){
   const total = orderInfo?orderInfo.orderData:''
   const userInfo = orderInfo?orderInfo.userData[0]:''
   const manInfo = orderInfo?orderInfo.manData[0]:''
-  
+  const CreateLink =(()=>{
+    const postOptions={
+        method:'post',
+        headers: { 'Content-Type': 'application/json' ,
+        "x-access-token": token&&token.token,
+        "userId":token&&token.userId},
+        body:JSON.stringify({cartNo:props.url})
+      }
+    fetch(env.siteApi + "/panel/faktor/create-public-link",postOptions)
+    .then(res => res.json())
+    .then(
+        (result) => {
+            console.log(result)
+        },
+        (error) => {
+            console.log(error)
+        })
+    })
+
     return(
         <div className="printArea">
           <div className="userInfo">
@@ -15,7 +33,7 @@ function PrintCart(props){
               </div>
               <div className="hesabfaSection">
                 <h1> </h1>
-                {orderInfo.taskData=="quote"?<h4>پیش فاکتور </h4>:<h4>فاکتور فروش</h4>}
+                {orderInfo.cart&&orderInfo.cart[0].isQuote?<h4>پیش فاکتور </h4>:<h4>فاکتور فروش</h4>}
               </div>
               <div className="hesabfaSection" style={{minWidth: "240px"}}>
                 <small>شماره فاکتور: <b>{props.url}</b></small>
@@ -122,7 +140,7 @@ function PrintCart(props){
                   چاپ</button>
                 
                   <i className="fa fa-share-alt"
-                  onClick={()=>navigator.share()}></i>
+                  onClick={()=>CreateLink()}></i>
                   </div>    
                   </div>
                 </div>

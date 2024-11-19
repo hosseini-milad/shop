@@ -10,9 +10,8 @@ function OrderTable(props){
   const [selectedOrder,setSelectedOrder] = useState()
   const [detail,showDetail] = useState(-1)
   const [AllCheck,setAllCheck] = useState(0)
-  console.log(selectedOrder)
   if(!orders||!orders.length) return <main>waiting</main>
-  else  return(
+  else  return(<>
         <table>
         <thead>
         <tr>
@@ -40,10 +39,7 @@ function OrderTable(props){
               <i></i>
             </th>
 
-            {/* <th>
-              <p>{tabletrans.item[lang]}</p>
-              <i></i>
-            </th> */}
+            
             <th>
             <p>{tabletrans.price[lang]}</p>
               <i></i>
@@ -65,10 +61,12 @@ function OrderTable(props){
           )):''}
           
         </tbody>
-        {props.isSale?
-        <OrderMultiReg orders={selectedOrder} token={props.token}/>:
-        <OrderMultiDone orders={selectedOrder} token={props.token}/>}
+        
       </table>
+      {props.isSale?
+        <OrderMultiReg bankList={props.bankList} orders={selectedOrder} token={props.token}/>:
+        <OrderMultiDone orders={selectedOrder} token={props.token}/>}
+      </>
 
     )
 }

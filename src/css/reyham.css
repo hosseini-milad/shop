@@ -102,7 +102,7 @@
   width: unset;
 }
 .sub-more-menu {
-  display: inherit;
+  display:none;
 }
 .formInput {
   margin: 15px !important;
@@ -1523,7 +1523,7 @@ dialog {
     p {
       font-size: 1rem;
       color: black;
-      width:100%;
+      width: 100%;
       border: 2px solid #333;
       padding: 0.2rem;
       text-align: center;
@@ -1611,7 +1611,6 @@ dialog {
   cursor: pointer;
 }
 .sub-more-menu {
-  display: none !important;
   left: 50px !important;
 }
 .sub-active {
@@ -1647,20 +1646,93 @@ dialog {
     width: 6%;
   }
 }
-.username-icon{
+.username-icon {
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 6px;
   flex-direction: row-reverse;
 }
-.total-discount{
+.total-discount {
   color: red;
   font-size: 0.85rem;
 }
-.discount-td{
+.discount-td {
   display: flex;
   align-items: center;
   justify-content: center;
   direction: ltr;
 }
+.bank-wrappeق {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  gap: 6px;
+  padding: 1rem 0.5rem;
+  border-top: 1px solid black;
+}
+.bank-wrapper .bank-form {
+  width: 70%;
+}
+.bank-wrapper .amount {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 0.5rem;
+}
+.bank-wrapper .amount {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 0.5rem;
+}
+.bank-wrapper .bank-list {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  padding-right: 6px;
+  
+}
+.bank-wrapper .bank-list .bank-tr {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  flex-direction: row;
+  gap: 6px;
+  margin-top: 0.5rem;
+}
+.bank-wrapper .add-bank {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+  padding-right: 6px;
+  gap: 6px;
+}
+  
+  
+  
+.bank-wrapper .bank-item {
+    padding: 0.5rem;
+    border-radius: 0.2rem;
+    border: 1px solid grey;
+    min-width: 200px;
+}
+.bank-wrapper input {
+    width: unset;
+    height: 45px;
+    border-radius: 0.2rem;
+    border: 1px solid grey;
+    outline: none;
+}
+.bank-wrapper .MuiInputBase-input {
+    height: unset;
+    width: unset !important;
+}
+.bank-wrapper .MuiAutocomplete-root {
+    width: 100%;
+  }
+

@@ -20,7 +20,7 @@ function QuickCartHolder(props){
         "x-access-token":token&&token.token,"userId":token&&token.userId},
         body:JSON.stringify({search:search})
       }
-  fetch(env.siteApi + (token.profileCode == "sale"?"/sales/find-products":"/panel/faktor/find-products"),postOptions)
+  fetch(env.siteApi + (token.profileCode == "sale"?"/sales/find-products":`/panel/${tab?"quote":"faktor"}/find-products`),postOptions)
   .then(res => res.json())
   .then(
     (result) => {
@@ -45,7 +45,7 @@ function QuickCartHolder(props){
     return(
     <section className="admin-table-sec ">
         {props.OrderPop?<CartTab setTab={setTab} tab={tab}/>:<></>}
-        <QuickTable tab={tab}
+        <QuickTable tab={tab} setTab={setTab}
           data={content} setdata={setContent} token={token} canEdit={props.canEdit}
           cart={props.cart} setCart={props.setCart}
           user={props.user} action={props.addToCart}
