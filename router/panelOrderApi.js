@@ -184,6 +184,10 @@ router.post('/list', jsonParser, async (req, res) => {
                     res.status(400).json({ error: "اطلاعات واحد فروش وارد نشده است" });
                     return;
                 }
+                if (adminData.username!==data.manager) {
+                    res.status(400).json({ error: "دسترسی به فاکتورهای واحدهای دیگر را ندارید" });
+                    return;
+                }
                 var managerData = data.manager&&await users.findOne({cName:data.manager})
                 manager = managerData&&managerData._id
             }
