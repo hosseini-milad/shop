@@ -2343,7 +2343,7 @@ router.post("/create-public-link", auth, async (req, res) => {
       });
   
       if (existingLink) {
-        return res.status(400).json({ error: "لینک عمومی با این شماره کارت قبلاً ایجاد شده و هنوز منقضی نشده است." });
+        return res.json({ error: "لینک عمومی با این شماره کارت قبلاً ایجاد شده و هنوز منقضی نشده است." });
       }
   
       // Default expiration date to 30 days from now if not provided
