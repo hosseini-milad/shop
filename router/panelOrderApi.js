@@ -188,9 +188,9 @@ router.post('/list', jsonParser, async (req, res) => {
                     res.status(400).json({ error: "دسترسی به فاکتورهای واحدهای دیگر را ندارید" });
                     return;
                 }
-                var managerData = data.manager&&await users.findOne({cName:data.manager})
-                manager = managerData&&managerData._id
             }
+            var managerData = data.manager&&await users.findOne({cName:data.manager})
+            manager = managerData&&managerData._id
             var isSale = 1;
             var showCart = [];
             const openList = await carts.aggregate([
