@@ -5,7 +5,7 @@ const env={
     siteApi:'https://shopadmin.sharifoilco.com/api',
     
     // siteApiUrl:'http://localhost:6090',
-    //siteApiUrl:'https://testadmin.sharifoilco.com',
+    // siteApiUrl:'https://testadmin.sharifoilco.com',
     siteApiUrl:'https://shopadmin.sharifoilco.com',
     cookieName:'shop-login',
     //cookieName:'panel-login',

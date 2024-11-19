@@ -9,6 +9,7 @@ import env, {CheckAccess, defPay } from "../env";
 import Cookies from "universal-cookie";
 import ShowError from "../components/Modal/ShowError";
 import PreQuickHolder from "./PreOrder/PreQuickList";
+import ProductListSale from "./Components/ProductListSale";
 const cookies = new Cookies();
 var shopVar = JSON.parse(localStorage.getItem(env.shopExpert));
 
@@ -94,13 +95,14 @@ function OrderHolder(props) {
     if (!appFilter) return;
     const postOptions = {
       method: "post",
-      headers: { "Content-Type": "application/json" },
+      headers: {'Content-Type': 'application/json',
+        "x-access-token":token&&token.token,"userId":token&&token.userId},
       body: JSON.stringify({
         filters: appFilter,
         stockId: token.stockId ? token.stockId : "5",
       }),
     };
-    fetch(env.siteApi + "/panel/faktor/list-products", postOptions)
+    fetch(env.siteApi + `${token.profileCode == "sale"?"/sales/find-products":"/panel/faktor/list-products"}`, postOptions)
       .then((res) => res.json())
       .then(
         (result) => {
@@ -116,6 +118,7 @@ function OrderHolder(props) {
         }
       );
   }, [appFilter]);
+  console.log(token.profileCode)
   return (
     <div className="sharif new-sharif" style={{ direction: "rtl" }}>
       <header className="sharif-order-header">
@@ -139,6 +142,16 @@ function OrderHolder(props) {
       </header>
       <main className="sharif-order-main">
         {filters && (filters.brand || filters.category) ? (
+          (token.profileCode == "sale")?
+          <ProductListSale
+            filters={filters}
+            products={products}
+            setCart={setCart}
+            user={user}
+            setError={setError}
+            payValue={payValue}
+            token={token}
+          />:
           <ProductList
             filters={filters}
             products={products}

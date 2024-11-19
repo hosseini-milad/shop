@@ -1,7 +1,10 @@
 import env, { TAX, normalPriceCount, normalPriceRound } from "../../env";
-var token = JSON.parse(localStorage.getItem('token-lenz'));
+import Cookies from "universal-cookie";
+const cookies = new Cookies();
+// var token = JSON.parse(localStorage.getItem('shop-login'));
 
 function PrintCart(props){
+  const token = cookies.get(env.cookieName);
   const orderInfo = props.orderData
   const faktorItems =orderInfo?orderInfo.cartItems:''
   const total = orderInfo?orderInfo.orderData:''
@@ -20,6 +23,7 @@ function PrintCart(props){
     .then(
         (result) => {
             console.log(result)
+            window.open("/public-print/"+props.url)
         },
         (error) => {
             console.log(error)

@@ -47,13 +47,22 @@ function OrderTableRow(props) {
     <React.Fragment>
       <tr className={activeAcc ? "activeAccordion" : "accordion"}>
         <td>{props.index+1}</td>
-        <td className="checkBoxStyle">
-          {order.status&&order.status=="done"?<input
+        {order.isSale?<td className="checkBoxStyle">
+          {order.status&&order.status=="undone"?
+          <input
             type="checkbox"
             checked={checkState}
             onChange={(e) =>  updateCheckBox(order,checkState)}
           />:<></>}
-        </td>
+        </td>:
+        <td className="checkBoxStyle">
+          {order.status&&order.status=="done"?
+          <input
+            type="checkbox"
+            checked={checkState}
+            onChange={(e) =>  updateCheckBox(order,checkState)}
+          />:<></>}
+        </td>}
         <td>
           <div className="order-id">
             <p onClick={() =>
