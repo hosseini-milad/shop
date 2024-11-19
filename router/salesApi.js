@@ -8,6 +8,7 @@ const users = require('../models/auth/users');
 
 router.post('/find-products', auth, async (req, res) => {
     const search = req.body.search
+    const filters = req.body.filters
     try {
         const userData = await users.findOne({ _id: req.headers['userid'] })
         const stockId = userData.StockId ? userData.StockId : "13"
@@ -23,6 +24,8 @@ router.post('/find-products', auth, async (req, res) => {
                     ]
                 }
             },
+            {$match:filters&&filters.brand?{brandId:filters.brand}:{}},
+            {$match:filters&&filters.category?{catId:filters.category	}:{}},
             filter ? { $match: { sku: { $in: [/fs/i, /cr/i, /pr/i] } } } :
                 { $match: { sku: { $exists: true } } },
             {
