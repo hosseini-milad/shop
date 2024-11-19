@@ -17,12 +17,12 @@ router.post('/find-products', auth, async (req, res) => {
         const searchProducts = await productSchema.
             aggregate([{
                 $match:
-                {
+                search?{
                     $or: [
                         { sku: { $regex: search, $options: 'i' } },
                         { title: { $regex: search, $options: 'i' } }
                     ]
-                }
+                }:{}
             },
             {$match:filters&&filters.brand?{brandId:filters.brand}:{}},
             {$match:filters&&filters.category?{catId:filters.category	}:{}},
