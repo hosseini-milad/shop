@@ -1,5 +1,5 @@
 import { useState ,useEffect } from "react";
-import env, {  TAX,  normalPriceCount } from "../../env";
+import env, {  TAX,  normalPriceCount, normalPriceRound } from "../../env";
 var token = JSON.parse(localStorage.getItem('token-lenz'));
 
 function FishPrintCart(props){
@@ -55,7 +55,7 @@ function FishPrintCart(props){
                   <td className="centerCell">{i+1}</td>
                   <td style={{fontSize:"11px"}}>{items.title}</td>
                   <td className="centerCell">{items.count}</td>
-                  <td className="priceCell">{normalPriceCount(items.price)}</td>
+                  <td className="priceCell">{normalPriceRound(items.total.total)}</td>
                 </tr>))}
               </tbody>
             </table>
@@ -64,15 +64,15 @@ function FishPrintCart(props){
                 <tr>
                   <td rowSpan={3}>جمع اقلام: {orderInfo.totalCount}</td>
                   <td>جمع فاکتور </td>
-                  <td className="priceCell">{normalPriceCount(orderData.cartPrice)}</td>
+                  <td className="priceCell">{normalPriceCount(orderData.totalFee)}</td>
                 </tr>
                 <tr>
                   <td>مالیات </td>
-                  <td className="priceCell">{normalPriceCount(orderData.cartPrice,TAX)}</td>
+                  <td className="priceCell">{normalPriceCount(orderData.totalTax,TAX)}</td>
                 </tr>
                 <tr>
                   <td>قابل پرداخت </td>
-                  <td className="priceCell"><b>{normalPriceCount(orderData.cartPrice,1+TAX)}</b></td>
+                  <td className="priceCell">{normalPriceCount(orderData.totalPrice,1+TAX)}</td>
                 </tr>
               </tbody>
             </table>

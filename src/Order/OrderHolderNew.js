@@ -185,8 +185,8 @@ function OrderHolder(props) {
         <PreQuickHolder token={token} user={user} cart={cart} />
         
         {(cart&&cart.isSale)?
-      <PreOrderSale token={token} user={user}
-      cart={cart} access={access}/>:
+      <PreOrderSale token={token} user={user} setError={setError}
+      cart={cart} setCart={setCart} access={access}/>:
       <PreOrderHolder token={token} user={user}
         cart={cart}/>}
       </main>

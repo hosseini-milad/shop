@@ -1,4 +1,4 @@
-import React, { useState,useEffect } from "react";
+import React, { useState,useEffect,useRef } from "react";
 import Status from "../Components/Status";
 import PayStatus from "../Components/PayStatus";
 import { normalPriceCount, normalPriceRound, rxFindCount } from "../../env";
@@ -7,12 +7,30 @@ import tabletrans from "../../translate/tables";
 import OrderQuickCart from "./OrderComponent/OrderQuickCart";
 
 function OrderTableRow(props) {
-  const [openOption, setOpenOption] = useState(0);
+  const [openOption, setOpenOption] = useState(false);
   const [checkState, setCheckState] = useState(0);
   const activeAcc = props.index === props.detail;
   const order = props.order;
   const lang = props.lang;
   const cart = props.cart;
+  let menuRef = useRef();
+  useEffect(() => {
+    let handler = (e)=>{
+      if(!menuRef.current.contains(e.target)){
+        setOpenOption(false);
+        console.log(menuRef.current);
+      }      
+    };
+
+    document.addEventListener("mousedown", handler);
+    
+
+    return() =>{
+      document.removeEventListener("mousedown", handler);
+    }
+
+  });
+
   useEffect(()=>{
     setCheckState(props.allcheck)
   },[props.allcheck])
@@ -146,26 +164,29 @@ function OrderTableRow(props) {
               className="tableIcon fas fa-print"
               onClick={() =>(setOpenOption(openOption?0:1))}
             ></i>
+            <i
+              className="tableIcon fas fa-tag"
+              onClick={()=>window.location.href = "/orders/fishprint/" + order.cartNo}>
+            </i>
             
           </div>
-          {openOption ? (
-            <div className="sub-more-menu sub-active">
+          
+            <div className={openOption==true?"sub-more-menu sub-active":"sub-more-menu"} ref={menuRef}>
               <div className="sub-option" onClick={()=>window.location.href = "/orders/print/" + order.cartNo}>
                 
-                <p>پرینت سفارش</p>
+                <p>چاپ فاکتور</p>
               </div>
-              {(order.InvoiceID)?<><div className="sub-option" onClick={()=>window.location.href="/print/sepidar/"+order.InvoiceID}>
+              <div className="sub-option" onClick={()=>window.location.href="/print/sepidar/"+order.cartNo}>
                 
-                <p>پرینت سپیدار</p>
+                <p>چاپ سپیدار</p>
               </div>
+              {(order.InvoiceID)?<>
               <div className="sub-option" onClick={()=>window.location.href="/print/official/"+order.InvoiceID}>
                 
-                <p>پرینت رسمی</p>
+                <p>چاپ رسمی</p>
               </div></>:<></>}
             </div>
-          ) : (
-            <></>
-          )}
+          
         </td>
       </tr>
       {activeAcc ? (

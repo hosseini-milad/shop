@@ -3,6 +3,7 @@ import env from "../../env"
 import Cookies from 'universal-cookie';
 import SepidarPrint from "./SepidarPrint";
 import SepidarFishPrint from "./SepidarFishPrint";
+import OfficialPrintSepidar from "./OfficialPrintSepidar";
 const cookies = new Cookies();
 const url = document.location.pathname.split('/')[3]
 const type = document.location.pathname.split('/')[2]
@@ -21,9 +22,9 @@ const PrintSepidar = (props)=>{
             headers: { 'Content-Type': 'application/json' ,
             "x-access-token": token&&token.token,
             "userId":token&&token.userId},
-            body:JSON.stringify({faktorId:url})
+            body:JSON.stringify({cartNo:url})
           }
-        fetch(env.siteApi + "/panel/faktor/sepidar-find",postOptions)
+        fetch(env.siteApi + "/panel/faktor/cart-find",postOptions)
         .then(res => res.json())
         .then(
             (result) => {
@@ -31,12 +32,12 @@ const PrintSepidar = (props)=>{
                 if(result.error){
                     setError(result.error)
                 }
-                else if(result.faktor.error){
-                    setError(result.faktor.error)
+                else if(result.cart.error){
+                    setError(result.cart.error)
                 }
                 else{
-                    setFaktorList(result.faktor) 
-                    setUserData(result.userDetail)
+                    setFaktorList(result) 
+                    setUserData(result.cart[0].userData[0])
                 }
             },
             (error) => {
@@ -51,10 +52,10 @@ const PrintSepidar = (props)=>{
     }
     else
     return(
-        <div className="container">
+        <div className="print-container">
             {faktorList?type==="fishprint"?<SepidarFishPrint 
-                orderData={faktorList} userInfo={userData}/>
-            :<SepidarPrint orderData={faktorList} userInfo={userData}/>  :
+                orderData={faktorList.cart} userInfo={userData} />
+            :<OfficialPrintSepidar orderData={faktorList.cart[0]} userInfo={userData} data={faktorList} />:
             <main>در حال دریافت اطلاعات</main>}
         </div>
     )
