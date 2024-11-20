@@ -32,6 +32,7 @@ const products = require('../models/product/products');
 const UpdateMarket = require('../middleware/UpdateMarket');
 const crmlist = require('../models/crm/crmlist');
 const CanAnalyze = require('../middleware/CanAnalyze');
+const Stocks = require('../models/product/Stocks');
 
 router.post('/fetch-service',jsonParser,async (req,res)=>{
     var serviceId = req.body.serviceId?req.body.serviceId:''
@@ -247,9 +248,11 @@ router.post('/list-product',jsonParser,async (req,res)=>{
                 (parseInt(offset)+parseInt(pageSize)))  
             const typeUnique = [...new Set(productList.map((item) => item.brand))];
             const brandList = await BrandSchema.find()
+            const stockList = userData.access="manager"?
+                await Stocks.find():await Stocks.find({StockID:stockId})
            res.json({filter:productList,brands:brandList,
             size:newProduct.length,exists:data.exists,
-            quantity:quantity,price:price,stockId})
+            quantity:quantity,price:price,stockId,stockList})
     }
     catch(error){
         res.status(500).json({message: error.message})
