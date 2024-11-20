@@ -248,7 +248,7 @@ router.post('/list-product',jsonParser,async (req,res)=>{
                 (parseInt(offset)+parseInt(pageSize)))  
             const typeUnique = [...new Set(productList.map((item) => item.brand))];
             const brandList = await BrandSchema.find()
-            const stockList = userData.access="manager"?
+            const stockList = userData.access=="manager"?
                 await Stocks.find():await Stocks.find({StockID:stockId})
            res.json({filter:productList,brands:brandList,
             size:newProduct.length,exists:data.exists,
