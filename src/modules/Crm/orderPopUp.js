@@ -66,7 +66,7 @@ function OrderPopUp(props){
             "x-access-token":token&&token.token,"userId":token&&token.userId},
             body:JSON.stringify({cartNo:data.orderNo,data:newData})
           }
-      fetch(env.siteApi + "/panel/faktor/edit-addCart",postOptions)
+      fetch(env.siteApi + `/panel/${tab?"quote":"faktor"}/edit-addCart`,postOptions)
       .then(res => res.json())
       .then(
         (result) => {
