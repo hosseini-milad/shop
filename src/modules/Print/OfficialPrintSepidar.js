@@ -201,12 +201,12 @@ function OfficialPrintSepidar(props){
                   <td className="centerCell">{items.ProductPackRef?items.ProductPackRef:"تعداد"}</td>
                   <td className="centerCell">{items.count}</td>
                   <td>{normalPriceRound(items.total.price)}</td>
-                  <td>{normalPriceRound(items.total.total)}</td>
-                  <td>{normalPriceRound(items.discount)}</td>
-                  <td>{normalPriceCalc(items.Addition,items.Price,items.Discount)}</td>
+                  <td>{normalPriceCount(items.total.price,items.count)}</td>
+                  <td>{normalPriceRound(items.total.discount)}</td>
+                  <td>{normalPriceCalc(items.Addition,items.total.price,items.total.discount)}</td>
                   <td></td>
                   <td>{normalPriceRound(items.total.tax)}</td>
-                  <td>{normalPriceCount(items.NetPrice)}</td>
+                  <td>{normalPriceRound(items.total.total)}</td>
                 </tr>))}
                 <tr>
                   <td colSpan={8}>

@@ -29,7 +29,7 @@ function OpenOrderItem(props){
       .then(res => res.json())
       .then(
           (result) => {
-              // window.location.reload()
+              window.location.reload()
           },
           (error) => {
               console.log(error)

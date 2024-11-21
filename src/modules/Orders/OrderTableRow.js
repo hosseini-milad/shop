@@ -178,12 +178,12 @@ function OrderTableRow(props) {
               </div>
               <div className="sub-option" onClick={()=>window.location.href="/print/sepidar/"+order.cartNo}>
                 
-                <p>چاپ سپیدار</p>
+                <p>چاپ رسمی</p>
               </div>
               {(order.InvoiceID)?<>
               <div className="sub-option" onClick={()=>window.location.href="/print/official/"+order.InvoiceID}>
                 
-                <p>چاپ رسمی</p>
+                <p>چاپ سپیدار</p>
               </div></>:<></>}
             </div>
           

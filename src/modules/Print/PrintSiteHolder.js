@@ -57,9 +57,9 @@ const FaktorSitePrint = (props)=>{
                 <PrintInvoice orderData={faktorList} 
                 userInfo={''} url={url}/> :
             <main>در حال دریافت اطلاعات</main>}
-            <div className="btn-wrapper">
+            {/* <div className="btn-wrapper">
                 <button className="print-btn" onClick={()=>printNow()}>چاپ A4</button>
-            </div>
+            </div> */}
         </div>
     )
 }

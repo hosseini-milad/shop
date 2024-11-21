@@ -92,8 +92,9 @@ function PrintCart(props){
               <tbody>
                 <tr>
                   <th>#</th>
-                  <th>شرح</th>
+                  
                   <th>شناسه</th>
+                  <th>شرح</th>
                   <th>تعداد</th>
                   <th>مبلغ واحد<br/>(ریال)</th>
                   <th>تخفیف<br/>(ریال)</th>
@@ -104,8 +105,9 @@ function PrintCart(props){
                   faktorItems.map((items,i)=>(
                 <tr key={i}>
                   <td className="centerCell">{i+1}</td>
-                  <td>{items.title}</td>
+                  
                   <td>{items.sku}</td>
+                  <td>{items.title}</td>
                   <td className="centerCell">{items.count}</td>
                   <td>{normalPriceCount(items.total&&items.total.price)}</td>
                   <td>{normalPriceRound(items.total&&items.total.discount)}</td>
@@ -139,10 +141,10 @@ function PrintCart(props){
                       <span>{orderInfo.description}</span>
                     </div>
                 <div className="sharePart">
-                <button type="button" className="print-btn-crm"
+                  <button type="button" className="print-btn-crm"
                   onClick={()=>window.print()}>
                   چاپ</button>
-                
+                  <button type="button" className="print-btn-crm" onClick={()=>window.location.href="/cart/fishprint/"+props.url}>فیش پرینت</button>
                   <i className="fa fa-share-alt"
                   onClick={()=>CreateLink()}></i>
                   </div>    
@@ -156,7 +158,7 @@ function PrintCart(props){
                   نام کاربر: {manInfo?manInfo.username:'-'}<br/> ساعت: 
                   {new Date(Date.now()).getHours()+":"+new Date(Date.now()).getMinutes()}
               </span>
-              {/*<button className="btn-fiin" onClick={()=>window.location.href="/cart/fishprint/"+props.url}>فیش پرینت</button>*/}
+              
             </div>
         </div>
     )
