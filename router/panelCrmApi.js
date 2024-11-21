@@ -465,7 +465,11 @@ router.post('/change-state', jsonParser, async (req, res) => {
         if (task.taskStep === 'archive' && newState === 'done') {
             return res.status(400).json({ message: "!وضعیت نمیتواند از آرشیو به انجام شده تغییر کند" });
         }
-
+        if(newState=="quote"){
+            const orderNo = task.orderNo
+            await cart.updateOne({cartNo:orderNo},{$set:{isQuote:true}})
+            await tasks.updateOne({orderNo:orderNo},{$set:{isQuote:true}})
+        }
         const body = {
             taskStep: newState,
             prior: req.body.prior,
