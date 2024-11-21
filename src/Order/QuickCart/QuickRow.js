@@ -148,7 +148,7 @@ function QuickRow(props){
                 
             </td>
             <td data-cell="مبلغ کل">
-            <p>{normalPriceRound(data.total.total)}</p>
+            <p>{normalPriceRound(data.total&&data.total.total)}</p>
             </td>
             <td>
             {editMode?<div className="more-btn">

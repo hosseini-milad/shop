@@ -6,7 +6,7 @@ function FishPrintCart(props){
   const orderInfo = props.orderData
   const orderData = props.orderData.orderData
   const userInfo = props.orderData.userData?props.orderData.userData[0]:''
-    
+    console.log(orderData)
     if(!orderInfo)
       return(<main>{"orderError"}</main>)
     else return(
@@ -17,7 +17,7 @@ function FishPrintCart(props){
                 <h4>روانکاران شریف</h4>
               </div>
               <div className="hesabfaSection hesabBorder">
-                <small>ش.فاکتور: {orderInfo.Number}</small>
+                <small>ش.فاکتور: {orderInfo.cart[0].cartNo}</small>
                 <small>ش.ارجاع: {orderInfo.InvoiceID}</small>
               </div>
               <div className="hesabfaSection hesabBorder">
@@ -64,15 +64,15 @@ function FishPrintCart(props){
                 <tr>
                   <td rowSpan={3}>جمع اقلام: {orderInfo.totalCount}</td>
                   <td>جمع فاکتور </td>
-                  <td className="priceCell">{normalPriceCount(orderData.totalFee)}</td>
+                  <td className="priceCell">{normalPriceRound(orderData.totalFee)}</td>
                 </tr>
                 <tr>
                   <td>مالیات </td>
-                  <td className="priceCell">{normalPriceCount(orderData.totalTax,TAX)}</td>
+                  <td className="priceCell">{normalPriceRound(orderData.totalTax)}</td>
                 </tr>
                 <tr>
                   <td>قابل پرداخت </td>
-                  <td className="priceCell">{normalPriceCount(orderData.totalPrice,1+TAX)}</td>
+                  <td className="priceCell">{normalPriceRound(orderData.totalPrice)}</td>
                 </tr>
               </tbody>
             </table>

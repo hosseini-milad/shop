@@ -1241,6 +1241,9 @@ dialog {
 }
 .sharePart {
   display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 0.5rem;
 }
 .sharePart i {
   margin: 0px;
@@ -1258,7 +1261,9 @@ dialog {
   border: 1px solid gray;
   border-radius: 4px;
   height: 40px;
-  width: 100%;
+  padding: 0.5rem;
+  min-width: 100px;
+  font-size: 1rem;
 }
 @media screen and (max-width: 500px) {
   .fixed-plugin .card {

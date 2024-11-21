@@ -7,59 +7,60 @@ import { useState } from "react";
 function ProductFilters(props){
   const lang = props.lang
   const brands = props.options
-  const stock=[
-    {
-      "StockID": 5,
-      "Code": 1,
-      "Title": "انبار مرکزی",
-      "IsActive": true
-    },
-    {
-      "StockID": 6,
-      "Code": 2,
-      "Title": "انبار فروشگاه ",
-      "IsActive": true
-    },
-    {
-      "StockID": 9,
-      "Code": 3,
-      "Title": "انبار 3",
-      "IsActive": true
-    },
-    {
-      "StockID": 12,
-      "Code": 4,
-      "Title": "انبار غیر قابل فروش",
-      "IsActive": true
-    },
-    {
-      "StockID": 13,
-      "Code": 5,
-      "Title": "انبار فروشگاه جایگاه",
-      "IsActive": true
-    },
-    {
-      "StockID": 17,
-      "Code": 6,
-      "Title": "انبار پخش",
-      "IsActive": true
-    },
-    {
-      "StockID": 21,
-      "Code": 7,
-      "Title": "انبار سایت",
-      "IsActive": true
-    }
-  ]
-  const stockStore=[
+  const ListStock=props.data.stockList
+  // const stock=[
+  //   {
+  //     "StockID": 5,
+  //     "Code": 1,
+  //     "Title": "انبار مرکزی",
+  //     "IsActive": true
+  //   },
+  //   {
+  //     "StockID": 6,
+  //     "Code": 2,
+  //     "Title": "انبار فروشگاه ",
+  //     "IsActive": true
+  //   },
+  //   {
+  //     "StockID": 9,
+  //     "Code": 3,
+  //     "Title": "انبار 3",
+  //     "IsActive": true
+  //   },
+  //   {
+  //     "StockID": 12,
+  //     "Code": 4,
+  //     "Title": "انبار غیر قابل فروش",
+  //     "IsActive": true
+  //   },
+  //   {
+  //     "StockID": 13,
+  //     "Code": 5,
+  //     "Title": "انبار فروشگاه جایگاه",
+  //     "IsActive": true
+  //   },
+  //   {
+  //     "StockID": 17,
+  //     "Code": 6,
+  //     "Title": "انبار پخش",
+  //     "IsActive": true
+  //   },
+  //   {
+  //     "StockID": 21,
+  //     "Code": 7,
+  //     "Title": "انبار سایت",
+  //     "IsActive": true
+  //   }
+  // ]
+  // const stockStore=[
     
-    {
-      "StockID": 13,
-      "Code": 5,
-      "Title": "انبار فروشگاه جایگاه",
-      "IsActive": true
-    },
-  ]
+  //   {
+  //     "StockID": 13,
+  //     "Code": 5,
+  //     "Title": "انبار فروشگاه جایگاه",
+  //     "IsActive": true
+  //   },
+  // ]
   const handleFilterChange = (property, value) => {
     const newValue = value ? (value._id ? value._id : value) : "";
     props.setFilters((prevState) => ({
@@ -121,7 +122,7 @@ function ProductFilters(props){
 
         />
         <StyleSelect title={"انبار"} direction={props.lang.dir} 
-              options={props.token.profileCode == "sale"?stockStore:stock} label="Title"
+              options={ListStock} label="Title"
               
               action={(e)=>handleFilterChange("store", e)}/>
         <i className="tableIcon fas fa-ellipsis-v"></i>
