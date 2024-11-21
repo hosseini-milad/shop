@@ -106,9 +106,7 @@ router.post('/sendOtp', jsonParser, async (req, res) => {
       const newUser = await customers.updateOne(
         { phone: phone }, { $set: { otp: otpValue } });
       ////console.log((newUser)
-      res.status(200).json({ message: "sms sent for " + phone ,
-        smsResult
-      });
+      res.status(200).json({ message: "sms sent for " + phone });
     }
     else {
       smsResult = api.VerifyLookup({

@@ -33,6 +33,7 @@ const OrderToTask = require('../middleware/OrderToTask');
 const IsToday = require('../middleware/IsToday');
 const NewQuote = require('../middleware/NewQuote');
 const quote = require('../models/product/quote');
+const publicLinks = require ('../models/product/publicLinks')
 const { TaxRate } = process.env
 
 router.post('/products', async (req, res) => {
@@ -150,8 +151,8 @@ router.get('/list-filters', async (req, res) => {
 router.post('/find-products', auth, async (req, res) => {
     const search = req.body.search
     const userData = await users.findOne({ _id: req.headers['userid'] })
-    if (!userData) {
-        res.status(400).json({ error: "کاربر مجاز نیست" })
+    if(!userData){
+        res.status(400).json({error:"کاربر مجاز نیست"})
         return
     }
     const stockId = userData.StockId ? userData.StockId : "13"
@@ -252,7 +253,7 @@ router.post('/calc-count', auth, async (req, res) => {
                 $match: {
                     taskStep: {
                         $nin:
-                            allOrder ? ['cancel'] : ['archive', 'cancel', 'quote']
+                            allOrder ? ['cancel'] : ['archive', 'cancel','quote']
                     }
                 }
             },
@@ -395,7 +396,7 @@ router.post('/cart', auth, async (req, res) => {
 })
 const findCartFunction = async (userId, managerId) => {
     const isSale = await CheckSale(managerId)
-    if (managerId == userId) userId = ''
+    if(managerId==userId) userId = ''
     try {
         const cartData = await cart.aggregate([
             { $match: { manageId: managerId } },
@@ -435,7 +436,7 @@ const findCartFunction = async (userId, managerId) => {
                     try {
                         var cartTemp = cartData[c].cartItems[j]
                         const productData = await products.findOne({ sku: cartTemp.sku })
-                        const cartItemDetail = findCartItemDetail(cartTemp, cartData[c].payValue, cartData[c].discount)
+                        const cartItemDetail = findCartItemDetail(cartTemp, cartData[c].payValue,cartData[c].discount)
                         cartData[c].cartItems[j].total = cartItemDetail
                         cartData[c].cartItems[j].productData = productData
                     }
@@ -519,7 +520,7 @@ const findQuoteFunction = async (userId, managerId) => {
                     try {
                         var cartTemp = cartData[c].cartItems[j]
                         const productData = await products.findOne({ sku: cartTemp.sku })
-                        const cartItemDetail = findCartItemDetail(cartTemp, cartData[c].payValue, cartData[c].discount)
+                        const cartItemDetail = findCartItemDetail(cartTemp, cartData[c].payValue,cartData[c].discount)
                         cartData[c].cartItems[j].total = cartItemDetail
                         cartData[c].cartItems[j].productData = productData
                     }
@@ -577,9 +578,9 @@ const findCartItemDetail = (cartItem, payValue, totalDiscount) => {
     var discount = 0
     var totalPrice = 0
     var count = cartItem.count
-    if (cartItem.discount || totalDiscount) {
+    if (cartItem.discount||totalDiscount) {
         var off = 0
-        if (cartItem.discount)
+        if(cartItem.discount)
             off += parseInt(cartItem.discount.toString().replace(/,/g, '').replace(/^\D+/g, ''))
         if (totalDiscount) {
             off += parseInt(totalDiscount.toString().replace(/,/g, '').replace(/^\D+/g, ''))
@@ -893,7 +894,7 @@ router.post('/cart-find', async (req, res) => {
                 }
                 catch { }
 
-                cartList[0].cartItems[i].total = findCartItemDetail(cartItems[i], cartData.payValue, cartData.discount)
+                cartList[0].cartItems[i].total = findCartItemDetail(cartItems[i], cartData.payValue,cartData.discount)
 
 
 
@@ -1264,7 +1265,7 @@ router.post('/update-Item', jsonParser, async (req, res) => {
                 if (data.changes.discount)
                     oldCartItems[i].discount = data.changes.discount
 
-                const availItems = await checkAvailable(oldCartItems[i], "5")
+                const availItems = await checkAvailable( oldCartItems[i],"5")
 
                 if (!availItems) {
                     res.status(400).json({ error: "موجودی کافی نیست" })
@@ -1310,8 +1311,8 @@ router.post('/update-Item-cart', jsonParser, async (req, res) => {
                     oldCartItems[i].count = data.changes.count
                 if (data.changes.discount)
                     oldCartItems[i].discount = data.changes.discount
-                if (data.changes.stock) {
-                    newStock = data.changes.stock
+                if(data.changes.stock){
+                    newStock=data.changes.stock
                     oldCartItems[i].stock = data.changes.stock
                 }
 
@@ -1570,12 +1571,24 @@ router.post('/quote-to-initial', auth, jsonParser, async (req, res) => {
     const stockId = cartData.stockId
 
     // const availItems = await checkCart(cartItems, stockId)
+    let availItems = []
+    for (let i = 0; i < cartItems.length; i++) {
+        const result = await checkAvailable(cartItems[i], stockId)
+
+        if (!result) {
+            availItems.push({ error: "موجودی کالا کافی نمیباشد", sku: cartItems[i].sku })
+        }
+    }
+    if (availItems.length != 0) {
+        res.status(500).json({ error: availItems });
+        return
+    }
 
     try {
         const result = await tasks.updateOne(
             { orderNo: orderNo },
             {
-                $set: { taskStep: 'initial', isQuote: false }
+                $set: { taskStep: 'initial' , isQuote: false }
             },
         );
 
@@ -1586,9 +1599,8 @@ router.post('/quote-to-initial', auth, jsonParser, async (req, res) => {
             },
         );
 
-        res.status(200).json({
-            message: "وضعیت با موفقیت به‌روزرسانی شد",
-            result, result2
+        res.status(200).json({ message: "وضعیت با موفقیت به‌روزرسانی شد" ,
+            result,result2
         });
     } catch (error) {
         console.error(error);
@@ -1833,7 +1845,7 @@ router.post('/update-faktor', jsonParser, async (req, res) => {
 
             }
         }
-
+ 
         (cartID && cartID.length) ? await cart.deleteMany({ _id: { $in: cartID } }) :
             await cart.deleteMany({ manageId: userId })
 
@@ -1888,7 +1900,7 @@ const SepidarFunc = async (data, faktorNo) => {
     for (var i = 0; i < data.cartItems.length; i++)
         data.cartItems[i].count ?
             notNullCartItem.push(data.cartItems[i]) : ''
-    const totalDiscount = parseInt(data && data.discount)
+    const totalDiscount = parseInt(data&&data.discount)
     var query = {
         "GUID": "124ab075-fc79-417f-b8cf-2a" + faktorNo,
         "CustomerRef": toInt(data.userId),
@@ -1908,7 +1920,7 @@ const SepidarFunc = async (data, faktorNo) => {
                     "Quantity": toInt(item.count),
                     "Fee": toInt(item.price),
                     "Price": normalPriceCount(item.price, item.count, 1),
-                    "Discount": findDiscount(item, totalDiscount),
+                    "Discount": findDiscount(item,totalDiscount),
                     "Tax": normalPriceCount(item.price, item.count, TaxRate),
                     "Duty": 0.0000,
                     "Addition": 0.0000
@@ -1975,13 +1987,13 @@ const normalPriceCount = (priceText, count, tax) => {
         (rawPrice.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",").replace(/^\D+/g, ''))
     )
 }
-const findDiscount = (item, totalDiscount) => {
+const findDiscount = (item,totalDiscount) => {
     if (!item.discount) return (0.00)
-    var total = totalDiscount ? Number(totalDiscount) : 0
-    var off = item.discount ? Number(item.discount) : 0
+    var total = totalDiscount?Number(totalDiscount):0
+    var off = item.discount?Number(item.discount):0
     var discount = off
     if (off < 100) {
-        discount = Number(item.price) * Number(item.count) * (discount + total) / 100
+        discount = Number(item.price) * Number(item.count) * (discount+total) / 100
     }
     return ((discount))
 }
@@ -2232,6 +2244,130 @@ router.post('/edit-payValue', jsonParser, async (req, res) => {
         res.status(500).json({ message: error.message })
     }
 })
+
+router.post('/public-cart-find', async (req, res) => {
+    const cartNo = req.body.cartNo;
+
+    try {
+        const publicLink = await publicLinks.findOne({ cartNo: cartNo });
+
+        if (!publicLink || new Date(publicLink.expirationDate) <= new Date()) {
+            return res.status(400).json({ error: "error", message: "لینک عمومی نامعتبر است یا منقضی شده است." });
+        }
+
+        const cartList = await cart.aggregate([
+            { $match: { cartNo: cartNo } },
+            { $addFields: { "manageId": { "$toObjectId": "$manageId" } } },
+            { $addFields: { "userId": { "$toObjectId": "$userId" } } },
+            {
+                $lookup: {
+                    from: "customers",
+                    localField: "userId",
+                    foreignField: "_id",
+                    as: "userData"
+                }
+            },
+            {
+                $lookup: {
+                    from: "users",
+                    localField: "manageId",
+                    foreignField: "_id",
+                    as: "managerData"
+                }
+            }
+        ]);
+
+        const cartData = cartList && cartList[0];
+        var canEdit = 0;
+        var taskData = await OrderToTask(cartData.cartNo);
+
+        if (taskData && (
+            taskData.taskStep == "initial" || 
+            taskData.taskStep == "edit" || 
+            taskData.taskStep == "quote")) {
+            canEdit = 1;
+        }
+
+        if (!cartData) {
+            res.status(400).json({ error: "error", message: "آیتم ها با مشکل مواجه شدند" });
+            return;
+        }
+
+        var cartItems = cartData.cartItems;
+        if (cartItems) {
+            for (var i = 0; i < cartItems.length; i++) {
+                try {
+                    var cartTemp = cartItems[i];
+                    const productData = await products.findOne({ sku: cartTemp.sku });
+                    cartList[0].cartItems[i].productData = productData;
+                } catch { }
+
+                cartList[0].cartItems[i].total = findCartItemDetail(cartItems[i], cartData.payValue, cartData.discount);
+            }
+        }
+
+        var orderData = findQuickCartSum(cartItems, cartData.payValue, cartData.discount);
+
+        res.json({ cart: cartList, orderData: orderData, canEdit, taskData });
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+});
+
+
+router.post("/create-public-link", auth, async (req, res) => {
+    try {
+      const { cartNo, expirationDate } = req.body;
+      const creatorUserId = req.headers['userid'];
+  
+      // Validate if cartNo is provided
+      if (!cartNo) {
+        return res.status(400).json({ error: "CartNo را وارد کنید" });
+      }
+  
+      // Validate if user ID is provided in the headers
+      if (!creatorUserId) {
+        return res.status(400).json({ error: "شناسه کاربری در هدر الزامی است." });
+      }
+  
+      // Fetch user details by user ID
+      const userDetail = await users.findOne({ _id: creatorUserId });
+      if (!userDetail) {
+        return res.status(404).json({ error: "کاربر یافت نشد." });
+      }
+  
+      // Check if a record with the same cartNo exists and its expiration date is still valid
+      const existingLink = await publicLinks.findOne({
+        cartNo: cartNo,
+        expirationDate: { $gte: new Date() }, // Check if the link has not expired
+      });
+  
+      if (existingLink) {
+        return res.json({ message: "لینک عمومی با این شماره کارت قبلاً ایجاد شده و هنوز منقضی نشده است." });
+      }
+  
+      // Default expiration date to 30 days from now if not provided
+      const defaultExpirationDate = expirationDate || new Date(Date.now() + 30 * 24 * 60 * 60 * 1000);
+  
+      // Create a new public link
+      const newLink = new publicLinks({
+        cartNo: cartNo,
+        creatorUserId,
+        expirationDate: defaultExpirationDate,
+      });
+  
+      // Save the new public link
+      await newLink.save();
+  
+      // Respond with success message in Persian
+      res.status(201).json({ 
+        message: "لینک عمومی با موفقیت ایجاد شد.", 
+        data: newLink 
+      });
+    } catch (error) {
+      res.status(500).json({ error: "ایجاد لینک عمومی با شکست مواجه شد." });
+    }
+  });  
 
 router.post('/sepidar-find', jsonParser, async (req, res) => {
     const faktorId = req.body.faktorId;
