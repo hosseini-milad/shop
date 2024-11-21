@@ -271,6 +271,7 @@ router.post('/editProduct',jsonParser,async(req,res)=>{
             perBox:req.body.perBox,
             filters:req.body.filters,
             value:req.body.value,
+            active:req.body.active,
             enTitle:req.body.enTitle,
             description:req.body.description,
             fullDesc:req.body.fullDesc,
