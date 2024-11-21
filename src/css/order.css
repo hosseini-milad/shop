@@ -1037,10 +1037,26 @@
   padding: 0.3rem 0.8rem;
   outline: none;
   border: none;
-  background-color: var(--dark-blue-main);
+  background-color: #4b5258;
   border-radius: 0.3rem;
   cursor: pointer;
   color: white;
+  z-index: 2;
+}
+.sharif-order-main .product-table-sec .more-btn button p{
+  font-size: 0.65rem;
+  color: white;
+}
+.sharif-order-main .product-table-sec .more-btn input{
+  width: 45px;
+  height: 34px;
+  border: none;
+  text-align: center;
+  outline: 0;
+  border-radius: 0 0.3rem 0.3rem 0;
+  border: 1px solid #4b5258;
+  border-left: 0;
+  transform:translateX(-3px);
 }
 .sharif-order-main .product-table-sec .more-btn i {
   width: 30px;

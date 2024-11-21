@@ -234,6 +234,10 @@ root.render(
           element={<FaktorSitePrint lang={"fa"} />}
         />
         <Route
+          path="/orders/fishprint/:orderId"
+          element={<FaktorSitePrint lang={"fa"} />}
+        />
+        <Route
           path="/print/sepidar/:orderId"
           element={<PrintSepidar lang={"fa"} />}
         />
