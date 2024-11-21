@@ -3,7 +3,7 @@ import env, { payValue, stockValue } from "../../env"
 
 function ProductSingleSale(props) {
   const [starStatus,setStarStatus] = useState(0)
-  const [count,setCount] = useState(0)
+  const [count,setCount] = useState(1)
   const [pack,setPack] = useState(0)
   const token = props.token
   const stockId = token.stockId?token.stockId:"5"
