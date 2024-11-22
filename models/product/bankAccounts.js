@@ -7,5 +7,6 @@ const BankAccountSchema = new Schema({
     DlCode: String,
     DlTitle:String,
     CurrencyRef:Number,
+    limit:String
 })
 module.exports = mongoose.model('bankAccount',BankAccountSchema);

@@ -1117,7 +1117,7 @@ router.post('/update-Item-cart', jsonParser, async (req, res) => {
             { cartNo: data.cartNo }, { $set: { cartItems: oldCartItems } })
         status = "update cart"
         const cartDetails = await findCartData(data.cartNo)
-        var canEdit = 0
+        var canEdit = 0 
         var taskData = await OrderToTask(data.cartNo)
         if (taskData && (
             taskData.taskStep == "initial" || taskData.taskStep == "edit" || taskData.taskStep == "quote"))

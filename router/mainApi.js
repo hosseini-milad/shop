@@ -303,35 +303,57 @@ router.get('/sepidar-city', async (req, res) => {
 router.get('/sepidar-bank', async (req, res) => {
     const url = req.body.url
     try {
-        const sepidarBankResult = await sepidarFetch("data", "/api/BankAccounts")
-        if (sepidarBankResult.error || !sepidarBankResult.length) {
+        const sepidarResult = await sepidarFetch("data", "/api/BankAccounts")
+        if (sepidarResult.error || !sepidarResult.length) {
             res.json({
                 error: "error occure",
-                data: sepidarBankResult, message: "خطا در بروزرسانی"
+                data: sepidarResult, message: "خطا در بروزرسانی"
             })
             return
         }
         //var successItem=[];
         //var failure = 0;
-        0 && await bankAccounts.deleteMany({})
-        for (var i = 0; i < sepidarBankResult.length; i++) {
-            //sepidarPriceResult[i].SaleTypeRef===5&& 
-            0 && await bankAccounts.create({
-                BankAccountID: sepidarBankResult[i].BankAccountID,
-                DlCode: sepidarBankResult[i].DlCode,
-                DlTitle: sepidarBankResult[i].DlTitle,
-                CurrencyRef: sepidarBankResult[i].CurrencyRef
-            })
+        var newCustomer = 0;
+        var updateCustomer = 0
+        var notUpdateCustomer = 0
 
+        for (var i = 0; i < sepidarResult.length; i++) {
+            const custResult = await bankAccounts.updateOne({
+                BankAccountID: sepidarResult[i].BankAccountID
+            }, {
+                $set: {
+                    DlCode: sepidarResult[i].DlCode,
+                    DlTitle: sepidarResult[i].DlTitle,
+                    CurrencyRef: sepidarResult[i].CurrencyRef
+                }
+            })
+            var modified = custResult.modifiedCount
+            var matched = custResult.matchedCount
+            if (matched) { notUpdateCustomer++ }
+            if (modified) { updateCustomer++ }
+            if (!matched) {
+                await bankAccounts.create({
+                    BankAccountID: sepidarResult[i].BankAccountID,
+                    DlCode: sepidarResult[i].DlCode,
+                    DlTitle: sepidarResult[i].DlTitle,
+                    CurrencyRef: sepidarResult[i].CurrencyRef
+                })
+                newCustomer++
+
+            }
         }
+
+        res.json({
+            sepidar: {
+                newBank: newCustomer,
+                updateBank: updateCustomer,
+                notUpdateBank: notUpdateCustomer
+            }, message: "بانک ها بروز شدند"
+        })
         await updateLog.create({
             updateQuery: "sepidar-bank",
             date: Date.now()
         })
-        res.json({
-            sepidar: sepidarBankResult.length,
-            data: sepidarBankResult, message: "غیر فعال است"
-        })//"بانک ها بروز شدند"})
     }
     catch (error) {
         res.status(500).json({ message: error.message })

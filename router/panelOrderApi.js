@@ -12,6 +12,7 @@ const users = require('../models/auth/users');
 const Invoice = require('../models/product/Invoice');
 const bankData = require('../publicPay/bank.json')
 const crmlist = require('../models/crm/crmlist');
+const bankAccounts = require('../models/product/bankAccounts');
 const { TaxRate } = process.env
 
 router.post('/sku/find', jsonParser, async (req, res) => {
@@ -221,7 +222,8 @@ router.post('/list', jsonParser, async (req, res) => {
                     status:tempStatus});
             }
             status = [{title:"انجام نشده",enTitle:"undone",id:0},{title:"انجام شده",enTitle:"done",id:1}]
-            bankList = bankData
+            bankList = await bankAccounts.find({limit:{$ne:adminData.username}})
+
             brandUnique = [...new Set(showCart &&
                 showCart.map((item) => item.brand))];
             size = showCart && showCart.length;
