@@ -1,6 +1,6 @@
 const RecieptFunc=async(data,FaktorInfo,faktorNo)=>{
     var query ={
-        "GUID": "124ab075-fc79-417f-b8cf-2a"+faktorNo,
+        "GUID": "124ab075-fc79-417f-b8cf-2a"+faktorNo.replace("s","e"),
         "InvoiceID": (FaktorInfo.InvoiceID),
         "Description": (FaktorInfo.Number),
         "Date":new Date(),
