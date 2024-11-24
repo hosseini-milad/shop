@@ -30,7 +30,6 @@ function OrderFilters(props) {
     
     
   });
-  console.log(SubCat)
   const updateFilter = (kind, value) => {
     //console.log(kind ,value)
     props.setFilters((prevState) => ({

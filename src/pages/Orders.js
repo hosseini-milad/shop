@@ -28,6 +28,7 @@ function Orders(props) {
   const [StatusList, setStatusList] = useState("");
   const [StatusSale, setStatusSale] = useState("");
   const [TransData,setTransData]=useState("")
+  const [TransRemain,setTransRemain]=useState("")
   const [tab, setTab] = useState(localStorage.getItem("orderTab"));
   const [Error, setError] = useState("");
   const token = cookies.get(env.cookieName);
@@ -76,7 +77,8 @@ function Orders(props) {
           setTimeout(() => setContent(result), 200);
           setbankList(result.bankList)
           setStatusSale(result.status)
-          setTransData(result.transactions)
+          setTransData(result.transData)
+          setTransRemain(result.remain)
           setError('')
           }
         },
@@ -154,7 +156,7 @@ function Orders(props) {
           {loading ? (
             env.loader
           ) : (
-            Error?<p>دسترسی ندارید</p>:<OrderTable bankList={bankList} orders={content ? content.filter : {}} lang={lang} 
+            Error?<p>دسترسی ندارید</p>:<OrderTable setTransRemain={setTransRemain} TransRemain={TransRemain} TransData={TransData} bankList={bankList} orders={content ? content.filter : {}} lang={lang} setTransData={setTransData} data={content}
             isSale={content&&content.isSale} token={token}/>
           )}
         </div>

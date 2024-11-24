@@ -118,7 +118,6 @@ function OrderHolder(props) {
         }
       );
   }, [appFilter]);
-  console.log(token.profileCode)
   return (
     <div className="sharif new-sharif" style={{ direction: "rtl" }}>
       <header className="sharif-order-header">

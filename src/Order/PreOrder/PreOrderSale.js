@@ -12,32 +12,29 @@ function PreOrderSale(props){
   const setSepidarTotal=()=>{
     //console.log(cart)
     if(!orders||!orders.length){
-      if(!cart||!cart.length)
+      
         return('no order selected')
     }
-    var body={}
-    if(orders&&orders.length)
-      body={orderNo:orders.map(item=>item.cartNo)}
-    else
-      body={orderNo:cart.map(item=>item.cartNo)}
+    
     const postOptions={
         method:'post',
         headers: {'Content-Type': 'application/json',
         "x-access-token":token&&token.token,"userId":token&&token.userId},
-        body:JSON.stringify(body)
+        body:JSON.stringify({orderNo:orders})
       }
       console.log(postOptions)
   fetch(env.siteApi + "/setting/multi-sepidar",postOptions)
   .then(res => res.json())
   .then(
     (result) => {
-      console.log(result)
+      console.log(result);
     },
     (error) => {
       console.log(error);
     })
     
   }
+  console.log(orders)
   //console.log(cart)
   if(!cart) return(<></>)
   else return(
@@ -50,12 +47,13 @@ function PreOrderSale(props){
         </div>
         {cart.map((cart,i)=>(
           <OpenOrderItem key={i} data={cart}
-            total={total} index={i} setOrders={setOrders}/>
+            total={total} index={i} setOrders={setOrders} orders={orders}/>
         ))}
-        {/* {(access=="edit"||access=="full")?<div className="orderButtonHolder">
+        {(access=="edit"||access=="full")?<div className="orderButtonHolder">
         <input type="button" className="orderButton" value={"ثبت سپیدار"}
+        onClick={()=>setSepidarTotal()}
         />
-        </div>:<></>} */}
+        </div>:<></>}
         
       </section>
     )

@@ -8,7 +8,6 @@ function FilterGrid(props) {
   const [brandIndex, setBrandIndex] = useState(-1);
   const [catIndex, setCatIndex] = useState(-1);
   const [subIndex, setSubIndex] = useState(-1);
-  console.log(props.SubCat)
   const updateBrand = (brand, index) => {
     if (brandIndex === index) {
       setBrandIndex(-1);

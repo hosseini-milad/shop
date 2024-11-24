@@ -9,7 +9,8 @@ function OpenOrderItem(props){
     const total=props.total&&props.total[props.index]
     const [showDetail,setDetail] = useState(0)
     const [changes,setChanges]= useState()
-    console.log(changes)
+    const [active,setActive]= useState(0)
+    const [checkState, setCheckState] = useState(0);
     const updateField=(cartNo,id)=>{
 
     
@@ -34,15 +35,42 @@ function OpenOrderItem(props){
           (error) => {
               console.log(error)
           })
-  }
-    console.log(data)
+    }
+    const updateCheckBox=(field,action)=>{
+      setCheckState(action?false:true)
+      if(!action){
+        if(props.selectedOrder){
+          var index = props.selectedOrder&&
+            props.selectedOrder.length
+          props.setOrders(existingItems => {
+            return [
+              ...existingItems.slice(0, index),
+              field,
+              ...existingItems.slice(index + 1),
+            ]
+          }) 
+        }
+        else{
+            props.setOrders([...props.orders,field])
+          
+        }
+      }
+      else{
+        //const cartNo = e.target.getAttribute("cartNo")
+        props.setOrders(l => 
+          l.filter(item => item !== field));
+      }
+      
+    }
+  
+
     return(
         <div className="order-wrapper">
           <div className="border-title" >
-          {/* <div className={active?"orderCheck activeCheck":"orderCheck"} 
-            onClick={()=>setActive(active?0:1)}>
+          <div className={checkState?"orderCheck activeCheck":"orderCheck"} 
+            onClick={()=>updateCheckBox(data.cartNo,checkState)}>
             <i className="fa fa-check"></i>
-          </div> */}
+          </div>
 
             <div className="bu-name"
             onClick={()=>showDetail?setDetail(0):setDetail(1)}>

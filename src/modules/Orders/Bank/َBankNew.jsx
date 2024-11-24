@@ -27,7 +27,8 @@ function BankNew(props){
   .then(res => res.json())
   .then(
     (result) => {
-      console.log(result)
+      props.setTransData(result.transData)
+      props.setTransRemain(result.remain)
       
     },
     (error) => {
