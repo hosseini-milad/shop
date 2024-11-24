@@ -53,7 +53,7 @@ function BankNew(props){
           label="DlTitle"
           action={(e)=>setSendBank(prevState => ({
             ...prevState,
-            title:e.DlTitle,bankCode:e.DlCode
+            title:e.DlTitle,bankCode:e.BankAccountID
           }))}
         />
       

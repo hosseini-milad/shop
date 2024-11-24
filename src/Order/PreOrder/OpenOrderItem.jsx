@@ -30,7 +30,7 @@ function OpenOrderItem(props){
       .then(res => res.json())
       .then(
           (result) => {
-              window.location.reload()
+              // window.location.reload()
           },
           (error) => {
               console.log(error)
@@ -197,7 +197,7 @@ function OpenOrderItem(props){
                       type="number" 
                       onChange={(e)=>setChanges(prevState => ({
                         ...prevState,
-                        count:(item.count - e.target.value)
+                        count:(item.count - e.target.value).toString()
                         }))}
                       
                       />
