@@ -3,6 +3,7 @@ import StyleInput from "../../../components/Button/Input"
 import env from "../../../env"
 import StyleSelect from "../../../components/Button/AutoComplete"
 import CheckList from "./CheckList"
+import TaskUpload from "./TaskUpload";
 
 function TaskMainPart(props){
     const [showNote,setShowNote] = useState()
@@ -34,7 +35,17 @@ function TaskMainPart(props){
         </div>
         <CheckList checkList ={checkList} 
             setCheckList={setCheckList} taskId={data&&data._id}/>
-        
+        <div class="mobile-upload">
+            <TaskUpload
+                    defaultValue={data && data.attach ? data.attach : ""}
+                    action={(e) =>
+                    props.setData((prevState) => ({
+                        ...prevState,
+                        attach: e,
+                        }))
+                    }
+                />
+        </div>
         <div className="ac-wrapper">
             <div className="ac-tabs">
                 <div onClick={()=>setacShow(false)} className={acShow?"tab-item":"tab-item active-tab"}>کامنت</div>

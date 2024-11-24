@@ -1106,3 +1106,52 @@ li.board-task {
   margin: auto 7px;
   text-align: center;
 }
+.mobile-upload{
+  display: none;
+}
+.member-btn-wrapper i{
+  display: block !important;
+}
+@media screen and (max-width:800px) {
+  .task-popup{
+    width: 100%;
+  }
+  .nt-header{
+    flex-direction: column;
+    padding: 0.5rem;
+  }
+  .nt-col-2{
+    display: none;
+  }
+  .nt-col-1{
+    width: 100%;
+  }
+  .assign-input{
+    flex-direction: column;
+    align-items: flex-start;
+    margin-top: 1rem;
+  }
+  .assign-wrapper{
+    flex-direction: column !important;
+    margin: 0 !important;
+  }
+  .mobile-upload{
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+
+
+    i{
+      display: none;
+    }
+    .file-input{
+      margin-inline: auto;
+    }
+  }
+  .nt-btn-wrapper .wrapper{
+    width: 100% !important;
+  }
+  .nt-btn-wrapper .filler{
+    display: none;
+  }
+}

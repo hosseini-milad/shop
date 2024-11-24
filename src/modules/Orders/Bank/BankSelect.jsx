@@ -9,8 +9,8 @@ function BankSelect(props){
   const TransData=props.TransData
   const setTransData=props.setTransData
   const [loadBank,setLoadBank]=useState(1)
-  
-  
+  const OrderNumList=props.orders.map((order)=>order.cartNo)
+  console.log(OrderNumList)
   useEffect(()=>{
     if(TransData){
       setLoadBank(0)
@@ -20,7 +20,7 @@ function BankSelect(props){
   return(<>
     <div>
       {loadBank?<BankNew bankList={bankList} setTransData={setTransData} user={user} loadBank={loadBank} TransData={TransData}
-      setLoadBank={setLoadBank} token={token}/>:<></>}
+      setLoadBank={setLoadBank} token={token} OrderNumList={OrderNumList}/>:<></>}
       {TransData?<BankTable TransData={TransData} setTransData={setTransData} user={user} token={token}/>:<></>}
     </div>
     

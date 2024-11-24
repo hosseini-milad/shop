@@ -4,9 +4,11 @@ import BankSelect from "../Bank/BankSelect"
 
 function OrderMultiReg(props){
     const [Loader,setLoader]=useState("")
-    const [TransData,setTransData]=useState("")
+    
     const token = props.token
     const orders = props.orders
+    const TransData=props.TransData
+    const setTransData=props.setTransData
     const totalPrice = normalArrayRound(orders&&
       orders.map(item=>(item.totalCart&&item.totalCart.totalPrice)))
     const TotalTrans=normalArrayRound(TransData&&
@@ -41,14 +43,14 @@ function OrderMultiReg(props){
       })
       
     }
-    
+    console.log(props.orders)
     return(
       <>
           {props.orders&&props.orders.length?
             <div className="bank-wrapper">
               <h6>روش پرداخت</h6>
               <p>مبلغ کل سفارش: {totalPrice}</p>
-              <div className="bank-form"><BankSelect TransData={TransData} setTransData={setTransData} token={token} bankList={props.bankList}/></div>
+              <div className="bank-form"><BankSelect orders={orders} TransData={TransData} setTransData={setTransData} token={token} bankList={props.bankList}/></div>
               <div class="amount">
                 <p>جمع پرداختی: {TotalTrans}</p>
                 <p>باقی مانده: {RemainTotal&&RemainTotal}</p>

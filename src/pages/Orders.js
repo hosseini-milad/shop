@@ -27,6 +27,7 @@ function Orders(props) {
   const [loading, setLoading] = useState(0);
   const [StatusList, setStatusList] = useState("");
   const [StatusSale, setStatusSale] = useState("");
+  const [TransData,setTransData]=useState("")
   const [tab, setTab] = useState(localStorage.getItem("orderTab"));
   const [Error, setError] = useState("");
   const token = cookies.get(env.cookieName);
@@ -75,6 +76,7 @@ function Orders(props) {
           setTimeout(() => setContent(result), 200);
           setbankList(result.bankList)
           setStatusSale(result.status)
+          setTransData(result.transactions)
           setError('')
           }
         },
