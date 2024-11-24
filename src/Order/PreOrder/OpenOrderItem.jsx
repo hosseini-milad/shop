@@ -30,7 +30,7 @@ function OpenOrderItem(props){
       .then(res => res.json())
       .then(
           (result) => {
-              window.location.reload()
+              // window.location.reload()
           },
           (error) => {
               console.log(error)
@@ -39,7 +39,7 @@ function OpenOrderItem(props){
     const updateCheckBox=(field,action)=>{
       setCheckState(action?false:true)
       if(!action){
-        if(props.selectedOrder){
+        if(props.order){
           var index = props.selectedOrder&&
             props.selectedOrder.length
           props.setOrders(existingItems => {
@@ -67,10 +67,10 @@ function OpenOrderItem(props){
     return(
         <div className="order-wrapper">
           <div className="border-title" >
-          <div className={checkState?"orderCheck activeCheck":"orderCheck"} 
+          {data.official?<div className={checkState?"orderCheck activeCheck":"orderCheck"} 
             onClick={()=>updateCheckBox(data.cartNo,checkState)}>
             <i className="fa fa-check"></i>
-          </div>
+          </div>:<></>}
 
             <div className="bu-name"
             onClick={()=>showDetail?setDetail(0):setDetail(1)}>
@@ -197,7 +197,7 @@ function OpenOrderItem(props){
                       type="number" 
                       onChange={(e)=>setChanges(prevState => ({
                         ...prevState,
-                        count:(item.count - e.target.value)
+                        count:(item.count - e.target.value).toString()
                         }))}
                       
                       />

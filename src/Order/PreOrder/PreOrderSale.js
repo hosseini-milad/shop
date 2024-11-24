@@ -9,13 +9,14 @@ function PreOrderSale(props){
   const access = props.access
   const token = props.token
   const [orders,setOrders] = useState([])
+  const [Loader,setLoader]=useState(1)
   const setSepidarTotal=()=>{
     //console.log(cart)
     if(!orders||!orders.length){
       
         return('no order selected')
     }
-    
+    setLoader(0)
     const postOptions={
         method:'post',
         headers: {'Content-Type': 'application/json',
@@ -28,6 +29,8 @@ function PreOrderSale(props){
   .then(
     (result) => {
       console.log(result);
+      props.setError(result.message)
+      setLoader(1)
     },
     (error) => {
       console.log(error);
@@ -49,10 +52,12 @@ function PreOrderSale(props){
           <OpenOrderItem key={i} data={cart}
             total={total} index={i} setOrders={setOrders} orders={orders}/>
         ))}
-        {(access=="edit"||access=="full")?<div className="orderButtonHolder">
+        {(access=="edit"||access=="full")&&(orders.length)?<div className="orderButtonHolder">
+        {Loader? 
         <input type="button" className="orderButton" value={"ثبت سپیدار"}
         onClick={()=>setSepidarTotal()}
-        />
+        />:
+        <button className="orderButton">در حال پردازش</button>}
         </div>:<></>}
         
       </section>

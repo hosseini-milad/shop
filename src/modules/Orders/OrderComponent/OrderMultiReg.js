@@ -28,7 +28,7 @@ function OrderMultiReg(props){
           "x-access-token":token&&token.token,"userId":token&&token.userId},
           body:JSON.stringify(body)
         }
-        console.log(postOptions)
+        
     fetch(env.siteApi + "/setting/multi-sepidar",postOptions)
     .then(res => res.json())
     .then(
