@@ -21,7 +21,7 @@ function PreOrderSale(props){
         method:'post',
         headers: {'Content-Type': 'application/json',
         "x-access-token":token&&token.token,"userId":token&&token.userId},
-        body:JSON.stringify({orderNo:orders})
+        body:JSON.stringify({orderNo:orders,official:true})
       }
       console.log(postOptions)
   fetch(env.siteApi + "/setting/multi-sepidar",postOptions)
