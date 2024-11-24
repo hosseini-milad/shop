@@ -48,10 +48,12 @@ function CheckList(props){
     }
     const removeItem=(id)=>{
         var index = id
-        //props.checkList.splice(index, 1)
-        //props.setCheckList(e=>{return [props.checkList]})
+        let clone =[...props.checkList]
+        clone.splice(index, 1)
+        props.setCheckList(clone)
         console.log("Check remove")
     }
+    console.log(props.checkList)
     return(
         <div className="list-input center">
         <h6>چک لیست</h6>

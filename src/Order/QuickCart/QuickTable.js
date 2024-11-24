@@ -5,7 +5,6 @@ import QuickRow from "./QuickRow"
 function QuickTable(props){
   const qCart= props.cart
   const setTab = props.setTab
-  console.log(props)
   const [reload,setReload] = useState(1)
     return(
     <table>

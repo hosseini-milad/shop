@@ -192,6 +192,7 @@ function Products(props) {
           filters={filters}
           currentFilters={filters}
           token={token}
+          data={content}
         />
         <div className="user-list">
           {loading ? (

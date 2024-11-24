@@ -46,7 +46,7 @@ function CheckItem(props){
                 <i className="fa-regular fa-pencil fa-sm" style={{color: "#c0c0c0"}}
                 onClick={()=>setEdit(1)}></i>
                 <i className="fa-solid fa-trash fa-sm" style={{color: "#c0c0c0"}}
-                    onClick={()=>props.removeItem()}></i>
+                    onClick={()=>props.removeItem(props.id)}></i>
                 
             </div>:<></>}
         </div>

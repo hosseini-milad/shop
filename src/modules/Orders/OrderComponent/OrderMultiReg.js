@@ -4,16 +4,17 @@ import BankSelect from "../Bank/BankSelect"
 
 function OrderMultiReg(props){
     const [Loader,setLoader]=useState("")
-    const [TransData,setTransData]=useState("")
+    const data=props.data
     const token = props.token
     const orders = props.orders
+    const TransData=props.TransData
+    const setTransData=props.setTransData
     const totalPrice = normalArrayRound(orders&&
       orders.map(item=>(item.totalCart&&item.totalCart.totalPrice)))
     const TotalTrans=normalArrayRound(TransData&&
         TransData.map(item=>(parseInt(item.payValue))))
-    const RemainTotal=minusArrayRound(
-      totalPrice,TotalTrans
-    )
+    const RemainTotal=props.TransRemain&&props.TransRemain
+    console.log(data)
     const setSepidarTotal=()=>{
       setLoader(1)
       if(!orders||!orders.length)
@@ -41,14 +42,14 @@ function OrderMultiReg(props){
       })
       
     }
-    
+    console.log(props.orders)
     return(
       <>
           {props.orders&&props.orders.length?
             <div className="bank-wrapper">
               <h6>روش پرداخت</h6>
               <p>مبلغ کل سفارش: {totalPrice}</p>
-              <div className="bank-form"><BankSelect TransData={TransData} setTransData={setTransData} token={token} bankList={props.bankList}/></div>
+              <div className="bank-form"><BankSelect orders={orders} TransData={TransData} setTransData={setTransData} token={token} bankList={props.bankList} TransRemain={props.TransRemain} setTransRemain={props.setTransRemain}/></div>
               <div class="amount">
                 <p>جمع پرداختی: {TotalTrans}</p>
                 <p>باقی مانده: {RemainTotal&&RemainTotal}</p>
@@ -56,7 +57,7 @@ function OrderMultiReg(props){
                 
               </div>
               
-              {(totalPrice==TotalTrans)?<div className="regSepidar">
+              {(RemainTotal<=0)?<div className="regSepidar">
                 {Loader?
                 <div><p>درحال پردازش</p></div>:
                 <div style=  {{cursor:"pointer"}} className="regSepidar"

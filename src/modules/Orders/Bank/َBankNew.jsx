@@ -2,13 +2,41 @@ import { useState,useEffect } from "react"
 import env, { normalPriceCount, normalPriceRound } from "../../../env"
 import StyleSelect from "../../../components/Button/AutoComplete"
 function BankNew(props){
+  const token=props.token
   const bankList=props.bankList
   const setTransData=props.setTransData
   const TransData=props.TransData
   const [SendBank,setSendBank]=useState("")
-  
+
   const addBank=()=>{
-    setTransData([...TransData,SendBank])
+    const body={
+      title:SendBank.title,
+      bankCode:SendBank.bankCode,
+      payValue:SendBank.payValue,
+      orderNo:props.OrderNumList,
+      description:SendBank.description
+    }
+    const postOptions={
+        method:'post',
+        headers: {'Content-Type': 'application/json',
+        "x-access-token":token&&token.token,"userId":token&&token.userId},
+        body:JSON.stringify(body)
+      }
+      console.log(postOptions)
+  fetch(env.siteApi + "/setting/add-bank-to-cart",postOptions)
+  .then(res => res.json())
+  .then(
+    (result) => {
+      props.setTransData(result.transData)
+      props.setTransRemain(result.remain)
+      
+    },
+    (error) => {
+      console.log(error);
+      
+    })
+    
+    
     setSendBank("")
    }
 
@@ -25,7 +53,7 @@ function BankNew(props){
           label="DlTitle"
           action={(e)=>setSendBank(prevState => ({
             ...prevState,
-            title:e.DlTitle
+            title:e.DlTitle,bankCode:e.DlCode
           }))}
         />
       

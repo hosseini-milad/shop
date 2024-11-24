@@ -14,6 +14,18 @@ function ProductSKU(props){
       console.log(result)
       props.setFilters(result)
     }
+      const StatusList=[
+    
+    {
+      "Title": "فعال",
+      "Active": true
+    },
+    {
+      "Title": "غیر فعال",
+      "Active": false
+    },
+  ]
+  console.log(def.active)
     return(
         <div className="pd-row">
           <div className="row-title">
@@ -49,6 +61,13 @@ function ProductSKU(props){
                     ...prevState,
                     quantity:e
                   }))}/>*/}
+                <StyleSelect title={tabletrans.status[props.lang]} direction={props.direction}
+                 class={"formInput halfWidth"} defaultValue={!def.active?"غیرفعال":"فعال"} 
+                 options={StatusList} label={"Title"}
+                 action={(e)=>props.setProductChange(prevState => ({
+                    ...prevState,
+                    active:e?e.Active:''
+                  }))}/>
                 <StyleSelect title={tabletrans.brand[props.lang]} direction={props.direction}
                  class={"formInput halfWidth"} defaultValue={content?content.brandData:''} 
                  options={brand?brand:[]} label={"title"}

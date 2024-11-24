@@ -2,16 +2,73 @@ import { useState } from "react"
 import { PriceDiscountTax, TAX, normalPriceCount, normalPriceRound } from "../../env"
 import env from "../../env"
 function OpenOrderItem(props){
+    const token=props.token
+    const user=props.user
     const data = props.data
+    const setCart=props.setCart
     const total=props.total&&props.total[props.index]
     const [showDetail,setDetail] = useState(0)
-    const [active,setActive] = useState(0)
-    //console.log(data.userData)
+    const [changes,setChanges]= useState()
+    const [active,setActive]= useState(0)
+    const [checkState, setCheckState] = useState(0);
+    const updateField=(cartNo,id)=>{
+
+    
+      const postOptions={
+          method:'post',
+          headers: { 'Content-Type': 'application/json' ,
+          "x-access-token": token&&token.token,
+          "userId":token&&token.userId},
+          body:JSON.stringify({userId:user?user.Code?user.Code:
+              user._id:(token&&token.userId),
+              cartNo:cartNo,
+              cartID:id,
+              changes})
+      }
+      
+      fetch(env.siteApi + "/panel/faktor/update-Item-cart" ,postOptions)
+      .then(res => res.json())
+      .then(
+          (result) => {
+              window.location.reload()
+          },
+          (error) => {
+              console.log(error)
+          })
+    }
+    const updateCheckBox=(field,action)=>{
+      setCheckState(action?false:true)
+      if(!action){
+        if(props.selectedOrder){
+          var index = props.selectedOrder&&
+            props.selectedOrder.length
+          props.setOrders(existingItems => {
+            return [
+              ...existingItems.slice(0, index),
+              field,
+              ...existingItems.slice(index + 1),
+            ]
+          }) 
+        }
+        else{
+            props.setOrders([...props.orders,field])
+          
+        }
+      }
+      else{
+        //const cartNo = e.target.getAttribute("cartNo")
+        props.setOrders(l => 
+          l.filter(item => item !== field));
+      }
+      
+    }
+  
+
     return(
         <div className="order-wrapper">
           <div className="border-title" >
-          <div className={active?"orderCheck activeCheck":"orderCheck"} 
-            onClick={()=>setActive(active?0:1)}>
+          <div className={checkState?"orderCheck activeCheck":"orderCheck"} 
+            onClick={()=>updateCheckBox(data.cartNo,checkState)}>
             <i className="fa fa-check"></i>
           </div>
 
@@ -94,7 +151,7 @@ function OpenOrderItem(props){
                   <th data-cell="مبلغ کل">
                     <p>مبلغ کل</p>
                   </th>
-                  
+                  <th></th>
                 </tr>
               </thead>
               <tbody>
@@ -134,11 +191,19 @@ function OpenOrderItem(props){
                   <td data-cell="مبلغ کل">
                     <p>{normalPriceRound(item.total&&item.total.total)}</p>
                   </td>
-                  {/*<td>
-                    <div className="more-btn">
-                      <i className="fa-solid fa-trash" style={{color: "red"}}></i>
+                  <td>
+                    <div className="more-btn" style={{gap:0}}>
+                      <input 
+                      type="number" 
+                      onChange={(e)=>setChanges(prevState => ({
+                        ...prevState,
+                        count:(item.count - e.target.value)
+                        }))}
+                      
+                      />
+                      <button onClick={()=>updateField(data.cartNo,item.id)}><p>بازگشت از سفارش</p></button>
                     </div>
-                    </td>*/}
+                    </td>
                 </tr>))}
               </tbody>
             </table>

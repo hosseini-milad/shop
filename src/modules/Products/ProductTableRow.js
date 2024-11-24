@@ -32,6 +32,7 @@ function ProductTableRow(props){
       })
 
   }
+  console.log(product.active)
   var newStockCount = (product.countTotal.length?product.countTotal:'')
   var stockIndex = stockId?product.countTotal.findIndex(item=>item.Stock==stockId.StockID):-1
   if(newStockCount&&stockIndex!==-1) newStockCount = newStockCount[stockIndex].quantity
@@ -91,7 +92,7 @@ function ProductTableRow(props){
                 </div>
               </td>
               <td>
-                <Status status={product.status} class={"order-status"} 
+                <Status status={product.active} class={"order-status"} 
                   lang={props.lang}/>
               </td>
             <td>

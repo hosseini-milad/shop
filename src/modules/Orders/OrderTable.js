@@ -5,6 +5,7 @@ import OrderMultiReg from "./OrderComponent/OrderMultiReg"
 import OrderMultiDone from "./OrderComponent/OrderMultiDone"
 
 function OrderTable(props){
+  const data =props.data
   const orders = props.orders
   const lang=props.lang;
   const [selectedOrder,setSelectedOrder] = useState()
@@ -56,7 +57,7 @@ function OrderTable(props){
           {orders?orders.map((order,i)=>(
             <OrderTableRow detail={detail} showDetail={showDetail} 
               cart={props.cart} setSelectedOrder={setSelectedOrder}
-              selectedOrder={selectedOrder}
+              selectedOrder={selectedOrder} data={data}
               order={order} index={i} key={i} lang={lang} allcheck={AllCheck}/>
           )):''}
           
@@ -64,7 +65,7 @@ function OrderTable(props){
         
       </table>
       {props.isSale?
-        <OrderMultiReg bankList={props.bankList} orders={selectedOrder} token={props.token}/>:
+        <OrderMultiReg TransRemain={props.TransRemain} setTransRemain={props.setTransRemain} data={data} TransData={props.TransData} setTransData={props.setTransData} bankList={props.bankList} orders={selectedOrder} token={props.token}/>:
         <OrderMultiDone orders={selectedOrder} token={props.token}/>}
       </>
 
