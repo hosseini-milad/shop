@@ -5,10 +5,13 @@ import { normalPriceCount, normalPriceRound, rxFindCount } from "../../env";
 import OrderQuickDetail from "./OrderComponent/OrderQuickDetail";
 import tabletrans from "../../translate/tables";
 import OrderQuickCart from "./OrderComponent/OrderQuickCart";
-
+import LinkModal from "../../components/Modal/LinkModal";
+import env from "../../env";
 function OrderTableRow(props) {
   const [openOption, setOpenOption] = useState(false);
   const [checkState, setCheckState] = useState(0);
+  const [LinkShare, setLinkShare] = useState("");
+  const token = props.token
   const activeAcc = props.index === props.detail;
   const order = props.order;
   const lang = props.lang;
@@ -61,6 +64,26 @@ function OrderTableRow(props) {
     }
     console.log(props.selectedOrder)
   }
+  const CreateLink =(()=>{
+    const postOptions={
+        method:'post',
+        headers: { 'Content-Type': 'application/json' ,
+        "x-access-token": token&&token.token,
+        "userId":token&&token.userId},
+        body:JSON.stringify({cartNo:order.cartNo})
+      }
+    fetch(env.siteApi + "/panel/faktor/create-public-link",postOptions)
+    .then(res => res.json())
+    .then(
+        (result) => {
+            console.log(result)
+            setLinkShare("/public-print/"+order.cartNo)
+        },
+        (error) => {
+            console.log(error)
+        })
+    })
+
   return (
     <React.Fragment>
       <tr className={activeAcc ? "activeAccordion" : "accordion"}>
@@ -154,12 +177,6 @@ function OrderTableRow(props) {
               }`}
               onClick={() => props.showDetail(activeAcc ? "-1" : props.index)}
             ></i>
-            {/* <i
-              className="tableIcon fas fa-edit"
-              onClick={() =>
-                (window.location.href = "/orders/detail/" + order.cartNo)
-              }
-            ></i> */}
             <i
               className="tableIcon fas fa-print"
               onClick={() =>(setOpenOption(openOption?0:1))}
@@ -167,6 +184,10 @@ function OrderTableRow(props) {
             <i
               className="tableIcon fas fa-tag"
               onClick={()=>window.location.href = "/orders/fishprint/" + order.cartNo}>
+            </i>
+            <i
+              className="tableIcon fas fa-paper-plane" onClick={()=>CreateLink()}
+              >
             </i>
             
           </div>
@@ -202,6 +223,7 @@ function OrderTableRow(props) {
       ) : (
         <React.Fragment></React.Fragment>
       )}
+      {LinkShare?<LinkModal LinkShare={LinkShare} setLinkShare={setLinkShare}/>:<></>}
     </React.Fragment>
   );
 }
