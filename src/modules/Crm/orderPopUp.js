@@ -15,6 +15,7 @@ function OrderPopUp(props){
     const [Loading,setLoading]=useState(1)
     const [payValue,setPayValue] = useState(defPay)
     const [content,setContent] = useState()
+    const [ErrorAmount,setErrorAmount] = useState("")
     const [tab,setTab]=useState(0)
     //console.log(content)
     const [error,setError] = useState({message:'',color:"brown"})
@@ -161,7 +162,7 @@ function OrderPopUp(props){
                     onClick={props.close}></i>
                 <div className="sharif" style={{padding: "70px 10px 10px"}}>
                     <main className="sharif-order-main">
-                        {content?<QuickCartHolder tab={tab} setTab={setTab} OrderPop={props.OrderPop} token={token} 
+                        {content?<QuickCartHolder ErrorAmount={ErrorAmount} tab={tab} setTab={setTab} OrderPop={props.OrderPop} token={token} 
                         user={content.cart&&content.cart.userId}
                         payValue={payValue} setPayValue={setPayValue}
                         cartNo={data?data.orderNo:''} access={props.access}
@@ -180,9 +181,16 @@ function OrderPopUp(props){
                 </div>
             {props.access&&props.access==="edit"?
             <div className="crmAction">
-                {props.data.taskStep=="quote"?<QuoteTaskAction content={content} token={token}
-                data={props.data} setBoard={(e)=>props.setBoardArray(e)}
-                close={props.close}/>:
+                {props.data.taskStep=="quote"?
+                <QuoteTaskAction 
+                ErrorAmount={ErrorAmount}
+                setErrorAmount={setErrorAmount}
+                content={content} 
+                token={token}
+                data={props.data} 
+                setBoard={(e)=>props.setBoardArray(e)}
+                close={props.close}
+                setError={setError}/>:
                 <TaskAction content={content} token={token}
                 data={props.data} setBoard={(e)=>props.setBoardArray(e)}
                 close={props.close}/>}
