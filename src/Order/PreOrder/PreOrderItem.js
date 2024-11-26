@@ -1,11 +1,34 @@
 import { useState } from "react"
-import { PriceDiscountTax, TAX, normalPriceCount, normalPriceRound } from "../../env"
-
+import env,{ PriceDiscountTax, TAX, normalPriceCount, normalPriceRound } from "../../env"
+import LinkModal from "../../components/Modal/LinkModal"
 function PreOrderItem(props){
+    const token=props.token
     const data = props.data
     const total=props.total&&props.total[props.index]
     const [showDetail,setDetail] = useState(0)
+    const [LinkShare, setLinkShare] = useState("");
+
     //console.log(data.userData)
+    const CreateLink =(()=>{
+      const postOptions={
+          method:'post',
+          headers: { 'Content-Type': 'application/json' ,
+          "x-access-token": token&&token.token,
+          "userId":token&&token.userId},
+          body:JSON.stringify({cartNo:data.cartNo})
+        }
+      fetch(env.siteApi + "/panel/faktor/create-public-link",postOptions)
+      .then(res => res.json())
+      .then(
+          (result) => {
+              console.log(result)
+              setLinkShare("/public-print/"+data.cartNo)
+          },
+          (error) => {
+              console.log(error)
+          })
+      })
+
     return(
         <div className="order-wrapper">
           <div className="border-title" 
@@ -34,8 +57,14 @@ function PreOrderItem(props){
             </div>
             <div className="newCol" style={{}}>
               <p>شماره سفارش: {data.cartNo}</p>
-              <a className="orderNoCol" href={"/orders/print/"+data.cartNo}>
-                چاپ سفارش</a>
+              <div class="btn-wrapper">
+                <a className="orderNoCol" href={"/orders/print/"+data.cartNo}>
+                  چاپ سفارش</a>
+                  <i
+                className="tableIcon fas fa-paper-plane" onClick={()=>CreateLink()}
+                >
+                </i>
+              </div>
               {/*<p>{normalPriceCount(total.totalPrice,1)}</p>*/}
             </div>
             <div className="newCol">
@@ -138,6 +167,7 @@ function PreOrderItem(props){
             </table>
 
           </div>:<></>}
+          {LinkShare?<LinkModal LinkShare={LinkShare} setLinkShare={setLinkShare}/>:<></>}
         </div>
     )
 }
