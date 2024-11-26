@@ -20,8 +20,8 @@ function LinkModal(props){
               <i class="fa fa-times" aria-hidden="true" onClick={()=>props.setLinkShare("")}></i>
             </div>
             <div className="d-m-content">
-              <p className="popTitle">{env.siteApi+props.LinkShare}</p>
-              <CopyToClipboard text={env.siteApi+props.LinkShare} onCopy={onCopyText}>
+              <p className="popTitle">{"https://panel.sharifoilco.com"+props.LinkShare}</p>
+              <CopyToClipboard text={"https://panel.sharifoilco.com"+props.LinkShare} onCopy={onCopyText}>
                 <div className="btn-wrappper">
                   <button className="del-btn">کپی</button>
                 </div>
