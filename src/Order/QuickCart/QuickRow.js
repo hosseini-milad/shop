@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useState,useEffect } from "react"
 import ErrorAction from "../../components/Modal/ErrorAction"
 import env, { normalPriceCount, payValue ,normalPriceRound} from "../../env"
 import DataModal from "../../components/Modal/dataModal"
@@ -12,13 +12,15 @@ function QuickRow(props){
     const tab = props.tab
     const type = props.cart.isQuote
     const setTab = props.setTab??props.setTab
+    const ErrorAmount = props.ErrorAmount
     const [showDesc,setShowDesc] = useState(0)
     const [editMode,setEditMode] = useState(0)
     const [changes,setChanges]= useState()
+    const [AmountState,setAmountState]= useState(false)
     console.log(props)
     if(type==true){
         setTab(true)
-        console.log(type)
+        
     }
     
     const updateField=(changes)=>{
@@ -101,8 +103,19 @@ function QuickRow(props){
         console.log(changes)
         setEditMode(0)
     }
+    
+    
+    useEffect(()=>{
+        if(ErrorAmount&&ErrorAmount.filter(l=>(l.sku===data.sku)).length){
+            setAmountState(true)
+        }
+        else{
+            setAmountState(false)
+        }
+    },[ErrorAmount])
+    
     return(<>
-        <tr className="product-tr">
+        <tr className={`product-tr ${AmountState?"red-bg":""}`}>
             <td data-cell="ردیف">
             <p>{props.index}</p>
             </td>

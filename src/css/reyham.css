@@ -1747,3 +1747,6 @@ dialog {
     width: 100%;
   }
 
+.red-bg{
+  background-color: rgba(253, 83, 83, 0.568) !important;
+}

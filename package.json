@@ -20,6 +20,7 @@
     "num2persian": "^3.2.2",
     "react": "^18.2.0",
     "react-beautiful-dnd": "^13.1.1",
+    "react-copy-to-clipboard": "^5.1.0",
     "react-custom-scrollbars": "^4.2.1",
     "react-dom": "^18.2.0",
     "react-geolocated": "^4.2.0",

@@ -58,7 +58,7 @@ function OrderTable(props){
             <OrderTableRow detail={detail} showDetail={showDetail} 
               cart={props.cart} setSelectedOrder={setSelectedOrder}
               selectedOrder={selectedOrder} data={data}
-              order={order} index={i} key={i} lang={lang} allcheck={AllCheck}/>
+              order={order} index={i} key={i} lang={lang} allcheck={AllCheck} token={props.token}/>
           )):''}
           
         </tbody>

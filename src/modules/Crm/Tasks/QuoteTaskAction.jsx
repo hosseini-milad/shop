@@ -24,7 +24,13 @@ function QuoteTaskAction(props){
       .then(
         (result) => {
             if(result.error){
-
+                
+                props.setErrorAmount(result.error)
+                setLoader(0)
+                props.setError({message:'موجودی کالاهای قرمز کافی نمیباشد',color:"brown"})
+                setTimeout(()=>props.setError({message:'',
+                    color:"brown"}),2000)
+                
             }
             else{
 
