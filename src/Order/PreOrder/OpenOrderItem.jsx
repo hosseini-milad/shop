@@ -1,6 +1,7 @@
 import { useState } from "react"
 import { PriceDiscountTax, TAX, normalPriceCount, normalPriceRound } from "../../env"
 import env from "../../env"
+import LinkModal from "../../components/Modal/LinkModal"
 function OpenOrderItem(props){
     const token=props.token
     const user=props.user
@@ -11,6 +12,8 @@ function OpenOrderItem(props){
     const [changes,setChanges]= useState()
     const [active,setActive]= useState(0)
     const [checkState, setCheckState] = useState(0);
+    const [LinkShare, setLinkShare] = useState("");
+    
     const updateField=(cartNo,id)=>{
 
     
@@ -30,7 +33,7 @@ function OpenOrderItem(props){
       .then(res => res.json())
       .then(
           (result) => {
-              // window.location.reload()
+              window.location.reload()
           },
           (error) => {
               console.log(error)
@@ -62,6 +65,25 @@ function OpenOrderItem(props){
       }
       
     }
+    const CreateLink =(()=>{
+      const postOptions={
+          method:'post',
+          headers: { 'Content-Type': 'application/json' ,
+          "x-access-token": token&&token.token,
+          "userId":token&&token.userId},
+          body:JSON.stringify({cartNo:data.cartNo})
+        }
+      fetch(env.siteApi + "/panel/faktor/create-public-link",postOptions)
+      .then(res => res.json())
+      .then(
+          (result) => {
+              console.log(result)
+              setLinkShare("/public-print/"+data.cartNo)
+          },
+          (error) => {
+              console.log(error)
+          })
+      })
   
 
     return(
@@ -97,9 +119,15 @@ function OpenOrderItem(props){
             </div>
             <div className="newCol">
               <p>شماره سفارش: {data.cartNo}</p>
-              <a className="orderNoCol" href={"/orders/print/"+data.cartNo}>
-                چاپ سفارش</a>
-              {/*<p>{normalPriceCount(total.totalPrice,1)}</p>*/}
+              <div className="btn-wrapper">
+                <a className="orderNoCol" href={"/orders/print/"+data.cartNo}>
+                  چاپ سفارش</a>
+                  <i
+                className="tableIcon fas fa-paper-plane" onClick={()=>CreateLink()}
+                >
+                </i>
+              </div>
+              
             </div>
             <div className="newCol">
               <small>مبلغ کل:  <strong>{total?
@@ -130,12 +158,6 @@ function OpenOrderItem(props){
                   <th data-cell="شرح کالا">
                     <p>شرح کالا</p>
                   </th>
-                  {/*<th data-cell="کد کالا">
-                    <p>کد کالا</p>
-          </th>*/}
-                  {/*<th data-cell="کارتن">
-                    <p>کارتن</p>
-        </th>*/}
                   <th data-cell="واحد اصلی">
                     <p>واحد اصلی</p>
                   </th>
@@ -207,8 +229,9 @@ function OpenOrderItem(props){
                 </tr>))}
               </tbody>
             </table>
-
+            
           </div>:<></>}
+          {LinkShare?<LinkModal LinkShare={LinkShare} setLinkShare={setLinkShare}/>:<></>}
         </div>
     )
 }

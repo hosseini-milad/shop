@@ -49,7 +49,7 @@ function PreOrderSale(props){
           </div>
         </div>
         {cart.map((cart,i)=>(
-          <OpenOrderItem key={i} data={cart}
+          <OpenOrderItem key={i} data={cart} token={token}
             total={total} index={i} setOrders={setOrders} orders={orders}/>
         ))}
         {(access=="edit"||access=="full")&&(orders.length)?<div className="orderButtonHolder">

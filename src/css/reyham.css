@@ -752,6 +752,16 @@ dialog {
   flex-direction: column;
   color: #111;
 }
+.newCol .btn-wrapper{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  width: 100%;
+  i{
+    margin: 0;
+  }
+}
 .orderNoCol {
   padding: 0.2rem 0.8rem;
   border: 2px solid var(--gold);
@@ -1289,10 +1299,12 @@ dialog {
   .border-title i {
     font-size: inherit !important;
   }
-  .orderNoCol {
+  .newCol .btn-wrapper {
     position: absolute;
     bottom: 10px;
     left: 70px;
+    width: unset;
+    gap: 1rem;
   }
   .newCol {
     flex-direction: initial;

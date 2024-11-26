@@ -21,7 +21,7 @@ function LinkModal(props){
             </div>
             <div className="d-m-content">
               <p className="popTitle">{env.siteApi+props.LinkShare}</p>
-              <CopyToClipboard text={props.LinkShare} onCopy={onCopyText}>
+              <CopyToClipboard text={env.siteApi+props.LinkShare} onCopy={onCopyText}>
                 <div className="btn-wrappper">
                   <button className="del-btn">کپی</button>
                 </div>
