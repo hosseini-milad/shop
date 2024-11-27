@@ -149,9 +149,10 @@ router.post('/multi-sepidar', jsonParser, auth, async (req, res) => {
         var recieptQuery=''
         var sepidarResult = await sepidarPOST(sepidarQuery, "/api/invoices", 
             official?orderDetails[0].userId:adminData._id)
+        var recieptResult
         if (sepidarResult && sepidarResult.InvoiceID) {
             recieptQuery = await RecieptFunc(bankDetail,sepidarResult,faktorNo)
-            var recieptResult = await sepidarPOST(recieptQuery, "/api/Receipts/BasedOnInvoice", adminData._id)
+            recieptResult = await sepidarPOST(recieptQuery, "/api/Receipts/BasedOnInvoice", adminData._id)
             //console.log(recieptResult)
             /*await Invoice.create({ ...sepidarResult, manageId: adminData._id })
             var invoiceItems = sepidarResult.InvoiceItems
@@ -171,6 +172,7 @@ router.post('/multi-sepidar', jsonParser, auth, async (req, res) => {
             })
         }
         res.json({ data: sepidarResult,query:sepidarQuery, 
+            recieptResult:recieptResult,
             recieptQuery:recieptQuery,message: "orders process" })
     }
     catch (error) {
