@@ -135,13 +135,16 @@ router.post('/list-city', jsonParser, async (req, res) => {
 router.post('/multi-sepidar', jsonParser, auth, async (req, res) => {
     const orderList = req.body.orderNo
     const manageId = req.headers['userid']
-    const official = req.body.official
+    var official = req.body.official?req.body.official:1
+    
     var error=''
     try {
         const orderDetails = await cart.find({ cartNo: { $in: orderList } })
         const mergeOrder = await MergeOrder(orderDetails.map(item => item.cartItems))
         const adminData = await users.findOne({ _id: ObjectID(manageId) })
         const customerData = await customers.findOne({ _id: ObjectID(orderDetails[0].userId) })
+        if(customerData&&customerData.username&&customerData.username.includes("مصرف"))
+            official =0
         const faktorNo = "F321" + orderDetails[0].cartNo
         var sepidarQuery = await CartToSepidar(mergeOrder, faktorNo,
             official?customerData:adminData, 
