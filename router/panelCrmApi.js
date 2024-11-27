@@ -63,6 +63,70 @@ const calcTasks = async (userId) => {
         //{$match:limitTask?{profile:limitTask}:{}},
         { $match: { crmId: crmId } },
         { $match:access<5?{creator:userId}:{}},
+        {
+            $addFields: {
+                "user_Id": {
+                    $convert: {
+                        input: "$assign",
+                        to: 'objectId', onError: '', onNull: ''
+                    }
+                }
+            }
+        },
+        {
+            $lookup: {
+                from: "users",
+                localField: "user_Id", foreignField: "_id", as: "userInfo"
+            }
+        },
+        {
+            $addFields: {
+                "profile_Id": {
+                    $convert: {
+                        input: "$profile",
+                        to: 'objectId', onError: '', onNull: ''
+                    }
+                }
+            }
+        },
+        {
+            $lookup: {
+                from: "profiles",
+                localField: "profile_Id", foreignField: "_id", as: "profileInfo"
+            }
+        },
+        {
+            $addFields: {
+                "creator_Id": {
+                    $convert: {
+                        input: "$creator",
+                        to: 'objectId', onError: '', onNull: ''
+                    }
+                }
+            }
+        },
+        {
+            $lookup: {
+                from: "users",
+                localField: "creator_Id", foreignField: "_id", as: "creatorInfo"
+            }
+        },
+        {
+            $addFields: {
+                "customer_Id": {
+                    $convert: {
+                        input: "$customer",
+                        to: 'objectId', onError: '', onNull: ''
+                    }
+                }
+            }
+        },
+        {
+            $lookup: {
+                from: "customers",
+                localField: "customer_Id", foreignField: "_id", as: "customerInfo"
+            }
+        },
         { $sort: { progressDate: -1 } }
     ])
     //const taskList = await tasks.find({crmCode:crmData._id})
