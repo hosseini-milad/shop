@@ -920,7 +920,7 @@ router.post('/edit-cart', jsonParser, async (req, res) => {
     var status = "";
     //const cartData = await cart.find({userId:data.userId})
     const qCartData = await quoteApi.findOne({ userId: userId })
-    const availItems = await checkAvailable(req.body.cartItem)
+    const availItems = 1//await checkAvailable(req.body.cartItem)
 
     if (!availItems) {
         res.status(400).json({ error: "موجودی کافی نیست" })
@@ -1742,7 +1742,7 @@ router.post('/edit-addCart', async (req, res) => {
         //const cartData = await cart.find({userId:userId})
         const CartData = await cart.findOne({ cartNo: cartNo })
 
-        const availItems = await checkAvailable(data, CartData.stockId)
+        const availItems = 1//await checkAvailable(data, CartData.stockId)
         if (!availItems) {
             res.status(400).json({ error: "موجودی کافی نیست" })
             return

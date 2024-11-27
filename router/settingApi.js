@@ -18,6 +18,7 @@ const Invoice = require('../models/product/Invoice');
 const InvoiceItems = require('../models/product/InvoiceItems');
 const transaction = require('../models/product/transaction');
 const RecieptFunc = require('../middleware/RecieptFunc');
+const customers = require('../models/auth/customers');
 
 router.post('/sliders', async (req, res) => {
     try {
@@ -134,20 +135,24 @@ router.post('/list-city', jsonParser, async (req, res) => {
 router.post('/multi-sepidar', jsonParser, auth, async (req, res) => {
     const orderList = req.body.orderNo
     const manageId = req.headers['userid']
+    const official = req.body.official
     try {
         const orderDetails = await cart.find({ cartNo: { $in: orderList } })
         const mergeOrder = await MergeOrder(orderDetails.map(item => item.cartItems))
         const adminData = await users.findOne({ _id: ObjectID(manageId) })
+        const customerData = await customers.findOne({ _id: ObjectID(orderDetails[0].userId) })
         const faktorNo = "F321" + orderDetails[0].cartNo
         var sepidarQuery = await CartToSepidar(mergeOrder, faktorNo,
-            adminData, adminData.StockId,orderDetails[0].discount)
+            official?customerData:adminData, 
+            adminData.StockId,orderDetails[0].discount)
         var bankDetail = await transaction.find({userId:manageId,sepidarID:{$exists:false}})
         var recieptQuery=''
-        var sepidarResult = await sepidarPOST(sepidarQuery, "/api/invoices", adminData._id)
+        var sepidarResult = await sepidarPOST(sepidarQuery, "/api/invoices", 
+            official?orderDetails[0].userId:adminData._id)
         if (sepidarResult && sepidarResult.InvoiceID) {
             recieptQuery = await RecieptFunc(bankDetail,sepidarResult,faktorNo)
             var recieptResult = await sepidarPOST(recieptQuery, "/api/Receipts/BasedOnInvoice", adminData._id)
-            console.log(recieptResult)
+            //console.log(recieptResult)
             /*await Invoice.create({ ...sepidarResult, manageId: adminData._id })
             var invoiceItems = sepidarResult.InvoiceItems
             for (var i = 0; i < invoiceItems.length; i++)
