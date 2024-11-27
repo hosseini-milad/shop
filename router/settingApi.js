@@ -162,15 +162,15 @@ router.post('/multi-sepidar', jsonParser, auth, async (req, res) => {
                     ...invoiceItems[i],
                     InvoiceID: sepidarResult.InvoiceID
                 })*/
-            await transaction.updateMany({userId:manageId,sepidarID:{$exists:false}},
-                {$set:{sepidarID:recieptResult&&recieptResult.ReceiptID}}
-            )
             await cart.updateMany({ cartNo: { $in: orderList } }, {
                 $set: { 
                     Number: sepidarResult.Number,
                     InvoiceID: sepidarResult.InvoiceID
                 } 
             })
+            await transaction.updateMany({userId:manageId,sepidarID:{$exists:false}},
+                {$set:{sepidarID:recieptResult&&recieptResult.ReceiptID}}
+            )
         }
         else{
 
