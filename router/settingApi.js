@@ -173,7 +173,7 @@ router.post('/multi-sepidar', jsonParser, auth, async (req, res) => {
             )
         }
         else{
-
+            error = sepidarResult && sepidarResult.Message
         }
         res.json({ data: sepidarResult,query:sepidarQuery, 
             recieptResult:recieptResult, error,
