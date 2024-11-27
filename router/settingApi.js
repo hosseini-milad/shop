@@ -136,6 +136,7 @@ router.post('/multi-sepidar', jsonParser, auth, async (req, res) => {
     const orderList = req.body.orderNo
     const manageId = req.headers['userid']
     const official = req.body.official
+    var error=''
     try {
         const orderDetails = await cart.find({ cartNo: { $in: orderList } })
         const mergeOrder = await MergeOrder(orderDetails.map(item => item.cartItems))
@@ -171,9 +172,12 @@ router.post('/multi-sepidar', jsonParser, auth, async (req, res) => {
                 } 
             })
         }
+        else{
+
+        }
         res.json({ data: sepidarResult,query:sepidarQuery, 
-            recieptResult:recieptResult,
-            recieptQuery:recieptQuery,message: "orders process" })
+            recieptResult:recieptResult, error,
+            recieptQuery:recieptQuery,message: error?'':"سفارش در سپیدار ثبت شد" })
     }
     catch (error) {
         res.status(500).json({ message: error.message })
