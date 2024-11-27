@@ -62,7 +62,7 @@ const calcTasks = async (userId) => {
     taskList = await tasks.aggregate([
         //{$match:limitTask?{profile:limitTask}:{}},
         { $match: { crmId: crmId } },
-        { $match:access<5?{creator:userId}:{}},
+        //{ $match:access<5?{creator:userId}:{}},
         {
             $addFields: {
                 "user_Id": {
