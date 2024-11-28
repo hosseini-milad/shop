@@ -16,6 +16,7 @@ const CartToSepidar = require('../middleware/CartToSepidar');
 const sepidarPOST = require('../middleware/SepidarPost');
 const Invoice = require('../models/product/Invoice');
 const InvoiceItems = require('../models/product/InvoiceItems');
+const RecieptFunc = require('../middleware/Reciept');
 
 router.post('/sliders', async (req, res) => {
     try {
@@ -135,6 +136,7 @@ router.post('/multi-sepidar', jsonParser, auth, async (req, res) => {
     try {
         const orderDetails = await cart.find({ cartNo: { $in: orderList } })
         const mergeOrder = await MergeOrder(orderDetails.map(item => item.cartItems))
+        const recResult = await RecieptFunc()
         const adminData = await users.findOne({ _id: ObjectID(manageId) })
         const faktorNo = "F321" + orderDetails[0].cartNo
         var sepidarQuery = await CartToSepidar(mergeOrder, faktorNo,

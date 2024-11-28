@@ -443,7 +443,12 @@ const findCartFunction = async (userId, managerId) => {
                     catch { }
                 }
                 const userData = await customers.findOne({ _id: ObjectID(cartData[c].userId) })
-                cartData[c] = { ...cartData[c], userData: userData }
+                var official = 1
+                if(!userData.CustomerID) official = 0
+            if(userData.cName&&userData.cName.includes("مصرف")){
+                official = 0
+            }
+                cartData[c] = { ...cartData[c], userData: userData ,official}
                 cartDetail.push(findCartSum(cartData[c].cartItems))
             }
             catch { }
