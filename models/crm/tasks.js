@@ -17,6 +17,8 @@ const taskSchema = new mongoose.Schema({
   dueDate:{ type: Object},
   priority:{type:String},
   attach:{type:String},
+  imageUrl:{type:Array},
+  thumbUrl:{type:Array},
   type:{type:String},
   query:{type:Object},
   result:{type:Object},
