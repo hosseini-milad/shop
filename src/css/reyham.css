@@ -1762,3 +1762,17 @@ dialog {
 .red-bg{
   background-color: rgba(253, 83, 83, 0.568) !important;
 }
+.printArea .btn-wrapper{
+  padding: 1rem;
+  i{
+    font-size: 1.5rem;
+    cursor: pointer;
+  }
+}
+.print-container .btn-wrapper{
+  padding:0rem 1rem;
+  i{
+    font-size: 1.5rem;
+    cursor: pointer;
+  }
+}

@@ -10,25 +10,6 @@ function PrintCart(props){
   const total = orderInfo?orderInfo.orderData:''
   const userInfo = orderInfo?orderInfo.userData[0]:''
   const manInfo = orderInfo?orderInfo.manData[0]:''
-  const CreateLink =(()=>{
-    const postOptions={
-        method:'post',
-        headers: { 'Content-Type': 'application/json' ,
-        "x-access-token": token&&token.token,
-        "userId":token&&token.userId},
-        body:JSON.stringify({cartNo:props.url})
-      }
-    fetch(env.siteApi + "/panel/faktor/create-public-link",postOptions)
-    .then(res => res.json())
-    .then(
-        (result) => {
-            console.log(result)
-            window.open("/public-print/"+props.url)
-        },
-        (error) => {
-            console.log(error)
-        })
-    })
 
     return(
         <div className="printArea">
@@ -145,8 +126,7 @@ function PrintCart(props){
                   onClick={()=>window.print()}>
                   چاپ</button>
                   <button type="button" className="print-btn-crm" onClick={()=>window.location.href="/cart/fishprint/"+props.url}>فیش پرینت</button>
-                  <i className="fa fa-share-alt"
-                  onClick={()=>CreateLink()}></i>
+                  
                   </div>    
                   </div>
                 </div>

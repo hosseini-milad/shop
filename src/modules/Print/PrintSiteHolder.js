@@ -4,15 +4,17 @@ import Cookies from 'universal-cookie';
 import FishPrintCart from "./FishPrintCart";
 import PrintCart from "./PrintCart";
 import PrintInvoice from "./PrintInvoice";
+import LinkModal from "../../components/Modal/LinkModal";
 const cookies = new Cookies();
 const url = document.location.pathname.split('/')[3]
 const type = document.location.pathname.split('/')[2]
 
 const FaktorSitePrint = (props)=>{
-    
+    const [LinkShare, setLinkShare] = useState("");
+
     const [faktorList,setFaktorList] = useState() 
     
-    const token=cookies.get('faktor-login')
+    const token=cookies.get(env.cookieName)
     const printNow = () => {
         window.print();
       };
@@ -46,6 +48,26 @@ const FaktorSitePrint = (props)=>{
                 console.log(error)
             })
     },[])
+    const CreateLink =(()=>{
+        const postOptions={
+            method:'post',
+            headers: { 'Content-Type': 'application/json' ,
+            "x-access-token": token&&token.token,
+            "userId":token&&token.userId},
+            body:JSON.stringify({cartNo:url})
+          }
+        fetch(env.siteApi + "/panel/faktor/create-public-link",postOptions)
+        .then(res => res.json())
+        .then(
+            (result) => {
+                console.log(result)
+                setLinkShare("/public-print/"+url)
+            },
+            (error) => {
+                console.log(error)
+            })
+        })
+    
     return(
         <div className="printArea">
             {faktorList?type==="fishprint"?
@@ -57,9 +79,12 @@ const FaktorSitePrint = (props)=>{
                 <PrintInvoice orderData={faktorList} 
                 userInfo={''} url={url}/> :
             <main>در حال دریافت اطلاعات</main>}
-            {/* <div className="btn-wrapper">
-                <button className="print-btn" onClick={()=>printNow()}>چاپ A4</button>
-            </div> */}
+            <div className="btn-wrapper">
+                <i className="tableIcon fas fa-paper-plane" onClick={()=>CreateLink    ()}
+                    >
+                </i>
+            </div>
+            {LinkShare?<LinkModal LinkShare={LinkShare} setLinkShare={setLinkShare}/>:<></>}
         </div>
     )
 }

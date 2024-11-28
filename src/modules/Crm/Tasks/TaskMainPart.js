@@ -35,7 +35,7 @@ function TaskMainPart(props){
         </div>
         <CheckList checkList ={checkList} 
             setCheckList={setCheckList} taskId={data&&data._id}/>
-        <div class="mobile-upload">
+        {/* <div class="mobile-upload">
             <TaskUpload
                     defaultValue={data && data.attach ? data.attach : ""}
                     action={(e) =>
@@ -45,7 +45,7 @@ function TaskMainPart(props){
                         }))
                     }
                 />
-        </div>
+        </div> */}
         <div className="ac-wrapper">
             <div className="ac-tabs">
                 <div onClick={()=>setacShow(false)} className={acShow?"tab-item":"tab-item active-tab"}>کامنت</div>

@@ -33,8 +33,10 @@ function OrderMultiReg(props){
     .then(res => res.json())
     .then(
       (result) => {
+        if(result.error)
         console.log(result)
         setLoader(0)
+        // window.location.reload()
       },
       (error) => {
         console.log(error);

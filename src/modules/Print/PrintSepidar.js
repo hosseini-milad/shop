@@ -4,15 +4,17 @@ import Cookies from 'universal-cookie';
 import SepidarPrint from "./SepidarPrint";
 import SepidarFishPrint from "./SepidarFishPrint";
 import OfficialPrintSepidar from "./OfficialPrintSepidar";
+import LinkModal from "../../components/Modal/LinkModal";
 const cookies = new Cookies();
 const url = document.location.pathname.split('/')[3]
 const type = document.location.pathname.split('/')[2]
 
 const PrintSepidar = (props)=>{
-    
+    const [LinkShare, setLinkShare] = useState("");
+
     const [faktorList,setFaktorList] = useState() 
     const [userData,setUserData] =  useState() 
-    const token=cookies.get('faktor-login')
+    const token=cookies.get(env.cookieName)
     const [error,setError] = useState('')
     console.log(faktorList)
     useEffect(()=>{
@@ -44,6 +46,26 @@ const PrintSepidar = (props)=>{
                 console.log(error)
             })
     },[])
+    const CreateLink =(()=>{
+        const postOptions={
+            method:'post',
+            headers: { 'Content-Type': 'application/json' ,
+            "x-access-token": token&&token.token,
+            "userId":token&&token.userId},
+            body:JSON.stringify({cartNo:url})
+          }
+        fetch(env.siteApi + "/panel/faktor/create-public-link",postOptions)
+        .then(res => res.json())
+        .then(
+            (result) => {
+                console.log(result)
+                setLinkShare("/public-print/"+url)
+            },
+            (error) => {
+                console.log(error)
+            })
+        })
+
     if(error){
         return(
             <div className="container">
@@ -53,10 +75,23 @@ const PrintSepidar = (props)=>{
     else
     return(
         <div className="print-container">
-            {faktorList?type==="fishprint"?<SepidarFishPrint 
-                orderData={faktorList.cart} userInfo={userData} />
-            :<OfficialPrintSepidar orderData={faktorList.cart[0]} userInfo={userData} data={faktorList} />:
-            <main>در حال دریافت اطلاعات</main>}
+            {faktorList?type==="fishprint"?<>
+            <SepidarFishPrint orderData={faktorList.cart} userInfo={userData} />
+            <div className="btn-wrapper">
+                <i className="tableIcon fas fa-paper-plane" onClick={()=>CreateLink    ()}
+                    >
+                </i>
+            </div>
+            </>
+            :<><OfficialPrintSepidar orderData={faktorList.cart[0]} userInfo={userData} data={faktorList} />
+            <div className="btn-wrapper">
+                <i className="tableIcon fas fa-paper-plane" onClick={()=>CreateLink    ()}
+                    >
+                </i>
+            </div>
+            </> 
+            :<main>در حال دریافت اطلاعات</main>}
+            {LinkShare?<LinkModal LinkShare={LinkShare} setLinkShare={setLinkShare}/>:<></>}
         </div>
     )
 }
