@@ -17,7 +17,7 @@ const sepidarPOST=async(data,action,user,admin)=>{
             {method: 'POST' ,headers:JSON.parse(header),
         body:JSON.stringify(data)});
         const result = await response.json();
-        return(result)
+        return({...result,header})
     } 
     catch(error){
         console.log("error: ",error) 

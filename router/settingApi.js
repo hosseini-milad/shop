@@ -140,8 +140,13 @@ router.post('/multi-sepidar', jsonParser, auth, async (req, res) => {
     var error=''
     try {
         const orderDetails = await cart.find({ cartNo: { $in: orderList } })
+        if(!orderDetails||!orderDetails.length){
+            res.status(400).json({error:"سفارش پیدا نشد"})
+            return
+        }
+        console.log(orderDetails)
         const mergeOrder = await MergeOrder(orderDetails.map(item => item.cartItems))
-        const recResult = await RecieptFunc()
+        //const recResult = await RecieptFunc()
         const adminData = await users.findOne({ _id: ObjectID(manageId) })
         const customerData = await customers.findOne({ _id: ObjectID(orderDetails[0].userId) })
         if(customerData&&customerData.username&&customerData.username.includes("مصرف"))
@@ -158,6 +163,7 @@ router.post('/multi-sepidar', jsonParser, auth, async (req, res) => {
         if (sepidarResult && sepidarResult.InvoiceID) {
             recieptQuery = await RecieptFunc(bankDetail,sepidarResult,faktorNo)
             recieptResult = await sepidarPOST(recieptQuery, "/api/Receipts/BasedOnInvoice", ObjectID(adminData._id))
+            
             //console.log(recieptResult)
             /*await Invoice.create({ ...sepidarResult, manageId: adminData._id })
             var invoiceItems = sepidarResult.InvoiceItems
@@ -218,7 +224,7 @@ router.post('/remove-bank-from-cart', async (req,res)=>{
         res.json({transData:bankDetail,remain:134500
             ,totalPay:4350000
         })
-    }
+    } 
     catch(error){
         res.status(500).json({message: error.message})
     }
