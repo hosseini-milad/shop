@@ -16,7 +16,9 @@ const CartToSepidar = require('../middleware/CartToSepidar');
 const sepidarPOST = require('../middleware/SepidarPost');
 const Invoice = require('../models/product/Invoice');
 const InvoiceItems = require('../models/product/InvoiceItems');
-const RecieptFunc = require('../middleware/Reciept');
+const transaction = require('../models/product/transaction');
+const RecieptFunc = require('../middleware/RecieptFunc');
+const customers = require('../models/auth/customers');
 
 router.post('/sliders', async (req, res) => {
     try {
@@ -133,36 +135,92 @@ router.post('/list-city', jsonParser, async (req, res) => {
 router.post('/multi-sepidar', jsonParser, auth, async (req, res) => {
     const orderList = req.body.orderNo
     const manageId = req.headers['userid']
+    var official = req.body.official?req.body.official:1
+    
+    var error=''
     try {
         const orderDetails = await cart.find({ cartNo: { $in: orderList } })
         const mergeOrder = await MergeOrder(orderDetails.map(item => item.cartItems))
         const recResult = await RecieptFunc()
         const adminData = await users.findOne({ _id: ObjectID(manageId) })
+        const customerData = await customers.findOne({ _id: ObjectID(orderDetails[0].userId) })
+        if(customerData&&customerData.username&&customerData.username.includes("مصرف"))
+            official =0
         const faktorNo = "F321" + orderDetails[0].cartNo
         var sepidarQuery = await CartToSepidar(mergeOrder, faktorNo,
-            adminData, adminData.StockId,orderDetails[0].discount)
-        //console.log(sepidarQuery) 
-        var sepidarResult = await sepidarPOST(sepidarQuery, "/api/invoices", adminData._id)
+            official?customerData:adminData, 
+            adminData.StockId,orderDetails[0].discount)
+        var bankDetail = await transaction.find({userId:manageId,sepidarID:{$exists:false}})
+        var recieptQuery=''
+        var sepidarResult = await sepidarPOST(sepidarQuery, "/api/invoices", 
+            ObjectID(adminData._id))
+        var recieptResult
         if (sepidarResult && sepidarResult.InvoiceID) {
-            await Invoice.create({ ...sepidarResult, manageId: adminData._id })
+            recieptQuery = await RecieptFunc(bankDetail,sepidarResult,faktorNo)
+            recieptResult = await sepidarPOST(recieptQuery, "/api/Receipts/BasedOnInvoice", ObjectID(adminData._id))
+            //console.log(recieptResult)
+            /*await Invoice.create({ ...sepidarResult, manageId: adminData._id })
             var invoiceItems = sepidarResult.InvoiceItems
             for (var i = 0; i < invoiceItems.length; i++)
                 await InvoiceItems.create({
                     ...invoiceItems[i],
                     InvoiceID: sepidarResult.InvoiceID
-                })
-
+                })*/
             await cart.updateMany({ cartNo: { $in: orderList } }, {
-                $set: {
+                $set: { 
                     Number: sepidarResult.Number,
                     InvoiceID: sepidarResult.InvoiceID
-                }
+                } 
             })
+            await transaction.updateMany({userId:manageId,sepidarID:{$exists:false}},
+                {$set:{sepidarID:recieptResult&&recieptResult.ReceiptID}}
+            )
         }
-        res.json({ data: sepidarResult,query:sepidarQuery, message: "orders process" })
+        else{
+            error = sepidarResult && sepidarResult.Message
+        }
+        res.json({ data: sepidarResult,query:sepidarQuery, 
+            recieptResult:recieptResult, error,
+            recieptQuery:recieptQuery,message: error?'':"سفارش در سپیدار ثبت شد" })
     }
     catch (error) {
         res.status(500).json({ message: error.message })
+    }
+})
+
+router.post('/add-bank-to-cart',auth, async (req,res)=>{
+    
+    const data = {
+        userId: req.headers['userid'],
+        title: req.body.title,
+        bankCode: req.body.bankCode,
+        payValue: req.body.payValue,
+        orderNo:req.body.orderNo,
+        description: req.body.description
+    }
+    try{ 
+        await transaction.create(data)
+        var bankDetail = await transaction.find({userId:data.userId,sepidarID:{$exists:false}})
+        res.json({transData:bankDetail,remain:134500
+            ,totalPay:4350000
+        })
+    }
+    catch(error){
+        res.status(500).json({message: error.message})
+    }
+})
+router.post('/remove-bank-from-cart', async (req,res)=>{
+    const userId = req.headers['userid']
+    const id = req.body.id
+    try{ 
+        await transaction.deleteOne({_id:ObjectID(id),userId:userId})
+        var bankDetail = await transaction.find({userId:userId,sepidarID:{$exists:false}})
+        res.json({transData:bankDetail,remain:134500
+            ,totalPay:4350000
+        })
+    }
+    catch(error){
+        res.status(500).json({message: error.message})
     }
 })
 module.exports = router;

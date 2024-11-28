@@ -13,6 +13,7 @@ const Invoice = require('../models/product/Invoice');
 const bankData = require('../publicPay/bank.json')
 const crmlist = require('../models/crm/crmlist');
 const bankAccounts = require('../models/product/bankAccounts');
+const transaction = require('../models/product/transaction');
 const { TaxRate } = process.env
 
 router.post('/sku/find', jsonParser, async (req, res) => {
@@ -73,6 +74,7 @@ router.post('/list', jsonParser, async (req, res) => {
         var size = 0;
         var status = []
         var bankList = []
+        var transactions = []
 
         if (!type || type == "Visitor") {
             if (adminData.access == "sale") {
@@ -222,8 +224,8 @@ router.post('/list', jsonParser, async (req, res) => {
                     status:tempStatus});
             }
             status = [{title:"انجام نشده",enTitle:"undone",id:0},{title:"انجام شده",enTitle:"done",id:1}]
-            bankList = await bankAccounts.find({limit:{$ne:adminData.username}})
-
+            bankList = await bankAccounts.find({limit:{$ne:adminData.username}})    
+            transactions = await transaction.find({userId:req.headers["userid"],sepidarID:{$exists:false}})
             brandUnique = [...new Set(showCart &&
                 showCart.map((item) => item.brand))];
             size = showCart && showCart.length;
@@ -272,7 +274,7 @@ router.post('/list', jsonParser, async (req, res) => {
 
         res.json({
             filter: resultData, brand: brandUnique, isSale,
-            size,adminData,status,bankList
+            size,adminData,status,bankList,transData:transactions
         });
     } catch (error) {
         res.status(500).json({ message: error.message });

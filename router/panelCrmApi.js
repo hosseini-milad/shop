@@ -37,9 +37,9 @@ router.post('/fetch-crm', jsonParser, async (req, res) => {
 router.post('/fetch-tasks', auth, jsonParser, async (req, res) => {
     const crmId = req.body.crmId
     const userId = req.headers["userid"]
-    try {
+    
         const tasksList = await calcTasks(userId)
-
+try {
         res.json(tasksList)
     }
     catch (error) {
@@ -48,18 +48,21 @@ router.post('/fetch-tasks', auth, jsonParser, async (req, res) => {
 })
 const calcTasks = async (userId) => {
     const userData = await user.findOne({ _id: ObjectID(userId) })
-    var admin = 0
-    if (userData.access === "manager") admin = 1
+    var access = 0
+    if (userData.access === "manager") access = 10
+    if (userData.access === "admin") access = 7
+    if (userData.access === "client") access = 3
     const userAccess = await FindAccess(userData.profile)
     const allow = userAccess.find(item => item.title === "Tasks")
-    if (!allow && !admin) return
+    //console.log(userAccess)
+    if (!allow && access!==10) return
 
-    //if(userData&&userData.access!=="manager") limitTask= userData.profile
     const crmData = await crmlist.findOne()
     const crmId = crmData && (crmData._id).toString()
     taskList = await tasks.aggregate([
         //{$match:limitTask?{profile:limitTask}:{}},
         { $match: { crmId: crmId } },
+        //{ $match:access<5?{creator:userId}:{}},
         {
             $addFields: {
                 "user_Id": {
@@ -131,10 +134,10 @@ const calcTasks = async (userId) => {
     var showColumn = []
     var columns = {}
     for (var i = 0; i < columnOrder.length; i++) {
-        const access = (userAccess.find(item => item.title === columnOrder[i].enTitle))
+        const accessTemp = (userAccess.find(item => item.title === columnOrder[i].enTitle))
         //console.log(access)
-        if (access || admin) {
-            columnOrder[i].access = admin ? "edit" : access.state
+        if (accessTemp || access>8) {
+            columnOrder[i].access = access ? "edit" : accessTemp.state
             showColumn.push(columnOrder[i])
             columns[columnOrder[i].enTitle] = []
         }
