@@ -8,9 +8,12 @@ import TaskUpload from "./Tasks/TaskUpload";
 import { Autocomplete, TextField } from "@mui/material";
 
 function TaskPopUp(props) {
+  const [Loader,setLoader]=useState(0)
   const [data, setData] = useState(props.data);
   const token = props.token;
   const [content, setContent] = useState();
+  const [image,setImage]= useState();
+  const [imageUrl,setImageUrl]= useState(data&&data.imageUrl);
   useEffect(() => {
     const postOptions = {
       method: "post",
@@ -29,6 +32,7 @@ function TaskPopUp(props) {
       );
   }, []);
   const updateTotal = () => {
+    setLoader(1)
     const postOptions = {
       method: "post",
       headers: {
@@ -36,15 +40,22 @@ function TaskPopUp(props) {
         "x-access-token": token && token.token,
         userId: token && token.userId,
       },
-      body: JSON.stringify({ ...data, crmId: props.crm ? props.crm._id : "" }),
+      body: JSON.stringify({ 
+        ...data, 
+        crmId: props.crm ? props.crm._id : "" ,
+        imageUrl:imageUrl
+      }),
     };
     fetch(env.siteApi + "/panel/crm/update-tasks", postOptions)
       .then((res) => res.json())
       .then(
         (result) => {
           if (result.error) {
+            setLoader(0)
           } else {
-            props.setBoardArray(result.taskData);
+            props.setBoardArray(result);
+            props.close()
+            setLoader(0)
           }
         },
         (error) => {
@@ -86,6 +97,10 @@ function TaskPopUp(props) {
           <div className="nt-wrapper">
             {content ? (
               <TaskMainPart
+                setImageUrl={setImageUrl}
+                imageUrl={imageUrl}
+                setImage={setImage}
+                image={image}
                 data={data}
                 setData={setData}
                 crm={props.crm}
@@ -145,13 +160,17 @@ function TaskPopUp(props) {
                 </div>
               </div>
               <TaskUpload
+                setImageUrl={setImageUrl}
+                imageUrl={imageUrl}
+                setImage={setImage}
+                image={image}
                 defaultValue={data && data.attach ? data.attach : ""}
-                action={(e) =>
-                  setData((prevState) => ({
-                    ...prevState,
-                    attach: e,
-                  }))
-                }
+                // action={(e) =>
+                //   setData((prevState) => ({
+                //     ...prevState,
+                //     attach: e,
+                //   }))
+                // }
               />
               
             </div>
@@ -159,12 +178,17 @@ function TaskPopUp(props) {
           </div>
           <div className="nt-btn-wrapper">
             <div class="wrapper">
-                <div
+                {Loader?<div
                   className="create-btn-task center-task"
-                  onClick={() => (updateTotal(), props.close())}
+                  
+                >
+                  <p>در حال پردازش</p>
+                </div>:<div
+                  className="create-btn-task center-task"
+                  onClick={() => (updateTotal())}
                 >
                   <p>{props.btnText}</p>
-                </div>
+                </div>}
                 <div className="nt-btns center-task">
                   <div
                     className="cancel-btn-task center-task"

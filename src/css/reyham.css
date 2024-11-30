@@ -1776,3 +1776,19 @@ dialog {
     cursor: pointer;
   }
 }
+
+.image-popup{
+  position: relative;
+  cursor: unset;
+  img{
+    display: block;
+    width: 90%;
+    max-width: 900px;
+  }
+  i{
+    position: absolute;
+    top: 5px;
+    left: 5px;
+    font-size: 1rem;
+  }
+}

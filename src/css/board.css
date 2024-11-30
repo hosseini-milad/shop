@@ -1212,3 +1212,21 @@ li.board-task {
     }
   }
 }
+.image-box{
+  width: 180px;
+  height: 80px;
+  background-color: lightgray;
+  border-radius: 0.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  gap: 6px;
+  margin-bottom: 0.5rem;
+  overflow: hidden;
+  padding: 0.5rem;
+
+  img{
+    width: 50px;
+    display: block;
+  }
+}
