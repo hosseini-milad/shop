@@ -2405,7 +2405,7 @@ router.post('/public-sepidar-find', jsonParser, async (req, res) => {
     const faktorId = req.body.faktorId;
 
     try {
-        const publicLink = await publicLinks.findOne({ faktorId: faktorId });
+        const publicLink = await publicLinks.findOne({ cartNo: faktorId });
 
         if (!publicLink || new Date(publicLink.expirationDate) <= new Date()) {
             return res.status(400).json({ error: "error", message: "لینک عمومی نامعتبر است یا منقضی شده است." });
