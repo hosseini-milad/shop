@@ -167,7 +167,8 @@ router.get('/list-filters-panel',auth, async (req, res) => {
                     { parent: null }]
             }
         }])
-        res.json({ brands: brandData, cats: catData ,defaultUser:customerData})
+        res.json({ brands: brandData, cats: catData ,
+            defaultUser:customerData,user})
     }
     catch (error) {
         res.status(500).json({ message: error.message })
