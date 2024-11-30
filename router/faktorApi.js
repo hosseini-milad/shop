@@ -157,7 +157,7 @@ router.get('/list-filters-panel',auth, async (req, res) => {
         return
     }
     
-    const customerData = await customers.findOne({customerID:user.CustomerID})
+    const customerData = await customers.findOne({CustomerID:user.CustomerID})
     try {
         const brandData = await brand.find()
         const catData = await category.aggregate([{
