@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useState,useEffect } from "react"
 import env, { normalPriceCount, normalPriceRound } from "../../env"
 import ErrorAction from "../../components/Modal/ErrorAction"
 function QuickTotal(props){
@@ -40,7 +40,6 @@ function QuickTotal(props){
               console.log(error)
           })
   }
-  
   const defAction=()=>{
     props.action({message:"acting"})
   }
@@ -70,12 +69,14 @@ function QuickTotal(props){
           <p>{normalPriceRound(qCart.totalPrice)}</p>
         </div>
       </div>
+      
       {props.action?<></>:
       <div className="total-btn-wrapper">
-        {props.tab?<button type="button" className="product-table-btn temp-btn"
+        {props.tab?<button id="add-cart" type="button" className="product-table-btn temp-btn"
         onClick={()=>setPopUp({action:true,title:"ثبت پیش فاکتور"})}>
           <p>ثبت پیش فاکتور</p>
-        </button>:<button type="button" className="product-table-btn temp-btn"
+        </button>:<button
+    tabIndex="0" id="add-cart" type="button" className="product-table-btn temp-btn"
         onClick={()=>setPopUp({action:false,title:"ثبت فاکتور"})}>
           <p>ثبت فاکتور</p>
         </button>}

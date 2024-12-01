@@ -91,7 +91,7 @@ function OrderHeader(props) {
             type="search"
             name=""
             id="f-search"
-            placeholder="مشتری"
+            placeholder="همه"
             onChange={(e) => findCustomer(e.target.value)}
             onFocus={() => setShowDrop(1)}
             onBlur={() => setTimeout(() => setShowDrop(0), 200)}

@@ -66,36 +66,33 @@ function OrderHolder(props) {
   useEffect(() => {
     const postOptions = {
       method: "get",
-      headers: { "Content-Type": "application/json" },
+      headers: {
+        "Content-Type": "application/json",
+        "x-access-token": token && token.token,
+        userId: token && token.userId,
+      },
     };
-    fetch(env.siteApi + "/panel/faktor/list-filters", postOptions)
+    fetch(env.siteApi + "/panel/faktor/list-filters-panel", postOptions)
       .then((res) => res.json())
       .then(
         (result) => {
-          if (result)
-            if (result.error) {
+          if (result){
+
+            if(token.profileCode == "sale"){
+              setUser(result.defaultUser&&result.defaultUser)
+            }
+            else if (result.error) {
             } else {
               setFilters(result);
             }
+          }
           else setFilters("");
         },
         (error) => {
           console.log(error);
         }
       );
-    if(token.profileCode == "sale") 
-      setUser(
-      // {"_id":"66128faa5820d102747ed259",
-      //   "username":"مصرف کننده نهایی",
-      //   "cName":"مصرف کننده نهایی",
-      //   "phone":"09121697421",
-      //   "cCode":"12124",
-      //   "CustomerID":"1639"
-      // },
-      {"_id":"67385624326b3fa045147729",
-        "username":"مصرف کننده نهایی"
-      },
-    )
+    
   }, []);
   useEffect(() => {
     if (!appFilter) return;
