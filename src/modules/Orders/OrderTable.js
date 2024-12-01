@@ -65,7 +65,18 @@ function OrderTable(props){
         
       </table>
       {props.isSale?
-        <OrderMultiReg TransRemain={props.TransRemain} setTransRemain={props.setTransRemain} data={data} TransData={props.TransData} setTransData={props.setTransData} bankList={props.bankList} orders={selectedOrder} token={props.token}/>:
+        <OrderMultiReg 
+        TransRemain={props.TransRemain} 
+        setTransRemain={props.setTransRemain} 
+        data={data} TransData={props.TransData} 
+        setTransData={props.setTransData} 
+        bankList={props.bankList} 
+        orders={selectedOrder} 
+        token={props.token}
+        setErrorPop={props.setErrorPop}
+        errorPop={props.errorPop}
+        
+        />:
         <OrderMultiDone orders={selectedOrder} token={props.token}/>}
       </>
 

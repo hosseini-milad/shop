@@ -1,6 +1,6 @@
-import { useState,useEffect } from "react"
+import { useState,useEffect,useRef } from "react"
 import env, { normalPriceCount, normalPriceRound } from "../../env"
-import ErrorAction from "../../components/Modal/ErrorAction"
+import ErrorActionKey from "../../components/Modal/ErrorActionKey"
 function QuickTotal(props){
   const token = props.token
   const qCart = props.data
@@ -8,6 +8,16 @@ function QuickTotal(props){
   const tab = props.tab
   const [loading ,setLoading]=useState(0)  
   const [PopUp ,setPopUp]=useState("") 
+  const focusBtn=useRef()
+  const focusPop=useRef()
+  const [preKey,setPreKey] = useState('')
+  useEffect(() => {
+    
+    if(!props.action){
+      focusBtn.current&&focusBtn.current.focus();
+    }
+
+  }, [qCart]);
   //console.log(qCart)
   const SetOrder=(isQuote)=>{
     setLoading(1)
@@ -72,17 +82,34 @@ function QuickTotal(props){
       
       {props.action?<></>:
       <div className="total-btn-wrapper">
-        {props.tab?<button id="add-cart" type="button" className="product-table-btn temp-btn"
+        {loading?
+        <button className="product-table-btn temp-btn">
+          <p>در حال پردازش</p>
+        </button>:
+        props.tab?
+        <button 
+        ref={focusBtn} 
+        onKeyDown={(e)=>e.keyCode===13?setPopUp({action:true,title:"ثبت پیش فاکتور"}):null} 
+        id="add-cart" 
+        type="button" 
+        className="product-table-btn temp-btn"
         onClick={()=>setPopUp({action:true,title:"ثبت پیش فاکتور"})}>
           <p>ثبت پیش فاکتور</p>
-        </button>:<button
-    tabIndex="0" id="add-cart" type="button" className="product-table-btn temp-btn"
-        onClick={()=>setPopUp({action:false,title:"ثبت فاکتور"})}>
+        </button>:
+        <button 
+        ref={focusBtn} 
+        onKeyDown={(e)=>e.keyCode===13?setPopUp({action:false,title:"ثبت فاکتور"}):null} id="add-cart" 
+        type="button" 
+        className="product-table-btn temp-btn"
+        onClick={()=>(setPopUp({action:false,title:"ثبت فاکتور"}))}>
           <p>ثبت فاکتور</p>
         </button>}
         
       </div>}
-      {PopUp?<ErrorAction
+      {PopUp?<ErrorActionKey
+        preKey={preKey} 
+        setPreKey={setPreKey}
+        focusPop={focusPop}
         status={"DELETE"}
         title={PopUp.title}
         text={"آیا از ثبت سفارش مطمئن هستید؟"} 

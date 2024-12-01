@@ -125,7 +125,7 @@ function PrintCart(props){
                   <button type="button" className="print-btn-crm"
                   onClick={()=>window.print()}>
                   چاپ</button>
-                  <button type="button" className="print-btn-crm" onClick={()=>window.location.href="/cart/fishprint/"+props.url}>فیش پرینت</button>
+                  <button type="button" className="print-btn-crm" onClick={()=>window.location.href="/orders/fishprint/"+props.url}>فیش پرینت</button>
                   
                   </div>    
                   </div>

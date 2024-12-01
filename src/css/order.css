@@ -1457,8 +1457,11 @@ input[type="number"] {
 
     i {
       align-self: flex-end;
-      font-size: 1.5rem;
+      font-size: 1.5rem ;
     }
+  }
+  .newCol .btn-wrapper .tableIcon{
+    font-size: 1.5rem !important;
   }
   .sharif-order-main .order-wrapper .product-table-sec {
     thead {

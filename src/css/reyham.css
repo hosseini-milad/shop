@@ -1304,7 +1304,7 @@ dialog {
     bottom: 10px;
     left: 70px;
     width: unset;
-    gap: 1rem;
+    gap: 2rem;
   }
   .newCol {
     flex-direction: initial;

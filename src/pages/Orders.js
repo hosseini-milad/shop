@@ -9,7 +9,7 @@ import { useState } from "react";
 import env from "../env";
 import tabletrans from "../translate/tables";
 import OrderTab from "../modules/Orders/OrderComponent/OrderTab";
-
+import ShowError from "../components/Modal/ShowError";
 import {
   getFiltersFromUrl,
   updateUrlWithFilters,
@@ -21,6 +21,7 @@ const cookies = new Cookies();
 function Orders(props) {
   const direction = props.lang ? props.lang.dir : errortrans.defaultDir;
   const lang = props.lang ? props.lang.lang : errortrans.defaultLang;
+  const [errorPop, setErrorPop] = useState({ message: "", color: "brown" });
   const [content, setContent] = useState("");
   const [bankList, setbankList] = useState("");
   const [filters, setFilters] = useState(getFiltersFromUrl());
@@ -156,8 +157,21 @@ function Orders(props) {
           {loading ? (
             env.loader
           ) : (
-            Error?<p>دسترسی ندارید</p>:<OrderTable setTransRemain={setTransRemain} TransRemain={TransRemain} TransData={TransData} bankList={bankList} orders={content ? content.filter : {}} lang={lang} setTransData={setTransData} data={content}
-            isSale={content&&content.isSale} token={token}/>
+            Error?<p>دسترسی ندارید</p>:
+            <OrderTable 
+            setTransRemain={setTransRemain} 
+            TransRemain={TransRemain} 
+            TransData={TransData} 
+            bankList={bankList} 
+            orders={content ? content.filter : {}} 
+            lang={lang} 
+            setTransData={setTransData} 
+            data={content}
+            isSale={content&&content.isSale} 
+            token={token}
+            errorPop={errorPop}
+            setErrorPop={setErrorPop}
+            />
           )}
         </div>
       
@@ -170,6 +184,15 @@ function Orders(props) {
           updateUrlWithFilters={updateUrlWithFilters} // Pass the function as a prop
           />
       </div>
+      {errorPop && errorPop.message ? (
+        <ShowError
+          color={errorPop.color}
+          status={"سفارشات"}
+          text={errorPop.message}
+        />
+      ) : (
+        <></>
+      )}
     </div>
   );
 }

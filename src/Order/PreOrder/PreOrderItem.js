@@ -57,14 +57,7 @@ function PreOrderItem(props){
             </div>
             <div className="newCol" style={{}}>
               <p>شماره سفارش: {data.cartNo}</p>
-              <div class="btn-wrapper">
-                <a className="orderNoCol" href={"/orders/print/"+data.cartNo}>
-                  چاپ سفارش</a>
-                  <i
-                className="tableIcon fas fa-paper-plane" onClick={()=>CreateLink()}
-                >
-                </i>
-              </div>
+              
               {/*<p>{normalPriceCount(total.totalPrice,1)}</p>*/}
             </div>
             <div className="newCol">
@@ -82,6 +75,13 @@ function PreOrderItem(props){
               {data.description?<small>توضیحات: </small>:<></>}
               <small>{data.description}</small>
             </div>
+            <div class="btn-wrapper">
+              <i className="tableIcon fas fa-print" onClick={()=>window.open("/orders/print/"+data.cartNo,'_blank')}></i>
+                  <i
+                className="tableIcon fas fa-paper-plane" onClick={()=>CreateLink()}
+                >
+                </i>
+              </div>
             <i className={showDetail?"fa-solid fa-angle-up":
                 "fa-solid fa-angle-down"}></i>
           </div>
