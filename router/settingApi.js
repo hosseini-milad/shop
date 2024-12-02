@@ -19,6 +19,7 @@ const InvoiceItems = require('../models/product/InvoiceItems');
 const transaction = require('../models/product/transaction');
 const RecieptFunc = require('../middleware/RecieptFunc');
 const customers = require('../models/auth/customers');
+const SumArray = require('../middleware/SumArray');
 
 router.post('/sliders', async (req, res) => {
     try {
@@ -207,8 +208,9 @@ router.post('/add-bank-to-cart',auth, async (req,res)=>{
     try{ 
         await transaction.create(data)
         var bankDetail = await transaction.find({userId:data.userId,sepidarID:{$exists:false}})
+        const sumBank = SumArray(bankDetail.find(item=>item.payValue))
         res.json({transData:bankDetail,remain:134500
-            ,totalPay:4350000
+            ,totalPay:4350000,sumBank
         })
     }
     catch(error){
