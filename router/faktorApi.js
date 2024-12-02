@@ -2431,4 +2431,44 @@ router.post('/sepidar-find', jsonParser, async (req, res) => {
         res.status(500).json({ error: error.message })
     }
 })
+
+router.post('/public-sepidar-find', jsonParser, async (req, res) => {
+    const faktorId = req.body.faktorId;
+
+    try {
+        const publicLink = await publicLinks.findOne({ cartNo: faktorId });
+
+        if (!publicLink || new Date(publicLink.expirationDate) <= new Date()) {
+            return res.status(400).json({ error: "error", message: "لینک عمومی نامعتبر است یا منقضی شده است." });
+        }
+
+        if (!faktorId) {
+            return res.status(400).json({ error: "not Found", message: "فاکتور یافت نشد." });
+        }
+
+        const OnlineFaktor = await sepidarFetch("data", "/api/invoices/" + faktorId);
+
+        if (!OnlineFaktor.InvoiceItems) {
+            return res.status(400).json({ error: OnlineFaktor.Message });
+        }
+
+        const userDetail = await customerSchema.findOne({ CustomerID: OnlineFaktor.CustomerRef });
+
+        const invoice = OnlineFaktor.InvoiceItems;
+        for (let i = 0; i < invoice.length; i++) {
+            const faktorItem = invoice[i];
+            try {
+                const itemDetail = await products.findOne({ ItemID: faktorItem.ItemRef });
+                OnlineFaktor.InvoiceItems[i].itemDetail = itemDetail;
+            } catch (err) {
+                console.warn(`Error fetching product details for ItemRef: ${faktorItem.ItemRef}`, err.message);
+            }
+        }
+
+        res.json({ faktor: OnlineFaktor, userDetail: userDetail, itemRefs: invoice });
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+});
+
 module.exports = router;
