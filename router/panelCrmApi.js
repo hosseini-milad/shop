@@ -59,10 +59,13 @@ const calcTasks = async (userId) => {
 
     const crmData = await crmlist.findOne()
     const crmId = crmData && (crmData._id).toString()
+    const myCreator = access==7?
+        await user.find({profile:userData.profile}):
+        access==3?[userId]:[]
     taskList = await tasks.aggregate([
         //{$match:limitTask?{profile:limitTask}:{}},
         { $match: { crmId: crmId } },
-        //{ $match:access<5?{creator:userId}:{}},
+        { $match:access<8?{creator:{$in:myCreator}}:{}},
         {
             $addFields: {
                 "user_Id": {
