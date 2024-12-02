@@ -80,6 +80,7 @@ function OrderHolder(props) {
 
             if(token.profileCode == "sale"){
               setUser(result.defaultUser&&result.defaultUser)
+              setFilters(result);
             }
             else if (result.error) {
             } else {
