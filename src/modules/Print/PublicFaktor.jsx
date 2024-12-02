@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 var token = JSON.parse(localStorage.getItem('token-lenz'));
 
 
-function PublicPrint(props){
+function PublicFaktor(props){
   const [orderInfo,setOrderInfo]=useState('')
   
   const url = document.location.pathname.split('/')[2]
@@ -165,4 +165,4 @@ function PublicPrint(props){
 
   }
 
-export default PublicPrint
+export default PublicFaktor
