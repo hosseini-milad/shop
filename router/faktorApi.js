@@ -148,6 +148,32 @@ router.get('/list-filters', async (req, res) => {
         res.status(500).json({ message: error.message })
     }
 })
+
+router.get('/list-filters-panel',auth, async (req, res) => {
+    const userId = req.headers['userid']
+    const user = await users.findOne({_id:ObjectID(userId)})
+    if(!user||!user.CustomerID){
+        res.status(400).json({error:"user has no default"})
+        return
+    }
+    
+    const customerData = await customers.findOne({CustomerID:user.CustomerID})
+    try {
+        const brandData = await brand.find()
+        const catData = await category.aggregate([{
+            $match: {
+                $or: [
+                    { parent: { $exists: false } },
+                    { parent: null }]
+            }
+        }])
+        res.json({ brands: brandData, cats: catData ,
+            defaultUser:customerData,user})
+    }
+    catch (error) {
+        res.status(500).json({ message: error.message })
+    }
+})
 router.post('/find-products', auth, async (req, res) => {
     const search = req.body.search
     const userData = await users.findOne({ _id: req.headers['userid'] })
