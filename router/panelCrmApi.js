@@ -68,7 +68,7 @@ const calcTasks = async (userId) => {
     if(access==3){
         myCreator = [userId]
     }
-    taskList = await tasks.aggregate([
+    var taskList = await tasks.aggregate([
         //{$match:limitTask?{profile:limitTask}:{}},
         { $match: { crmId: crmId } },
         { $match:access<8?{creator:{$in:myCreator}}:{}},
