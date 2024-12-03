@@ -59,9 +59,15 @@ const calcTasks = async (userId) => {
 
     const crmData = await crmlist.findOne()
     const crmId = crmData && (crmData._id).toString()
-    const myCreator = access==7?
-        await user.find({profile:userData.profile}):
-        access==3?[userId]:[]
+    
+    var myCreator = []
+    if(access==7){
+        var userList = await user.find({profile:userData.profile})
+        myCreator = userList.map(item=>item._id.toString())
+    }
+    if(access==3){
+        myCreator = [userId]
+    }
     taskList = await tasks.aggregate([
         //{$match:limitTask?{profile:limitTask}:{}},
         { $match: { crmId: crmId } },
@@ -174,7 +180,7 @@ const calcTasks = async (userId) => {
     }
     return ({
         crmData: crmData, tasks: tasksToShow, crm: crmData,
-        columnOrder: showColumn, columns: columns
+        columnOrder: showColumn, columns: columns,myCreator
     })
 }
 router.post('/update-tasks', auth, jsonParser, async (req, res) => {
