@@ -59,6 +59,13 @@ function OrderHeader(props) {
         }
       );
   };
+  const setPay =(customer)=>{
+    if(customer.CustomerID){
+      props.setPayValue(3)
+    }else{
+      props.setPayValue(4)
+    }
+  }
   return (
     <div className="nav-bar">
       <p>سفارشات</p>
@@ -131,7 +138,7 @@ function OrderHeader(props) {
               <div
                 className="menu-item"
                 key={i}
-                onClick={() => props.setUser(customer)}
+                onClick={() => (props.setUser(customer),setPay(customer))}
               >
                 <p className="bu-name">
                   {customer.username}

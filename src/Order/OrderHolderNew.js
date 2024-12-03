@@ -82,6 +82,9 @@ function OrderHolder(props) {
             if(token.profileCode == "sale"){
               setUser(result.defaultUser&&result.defaultUser)
               setFilters(result);
+              if(result.defaultUser&&result.defaultUser.CustomerID){
+                setPayValue(3)
+              }
             }
             else if (result.error) {
             } else {
@@ -135,6 +138,7 @@ function OrderHolder(props) {
           user={user}
           setUser={setUser}
           setFilters={setFilters}
+          setPayValue={setPayValue}
         />
         <OrderFilters
           grid={grid}

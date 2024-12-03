@@ -1530,6 +1530,27 @@ input[type="number"] {
     flex-direction: row;
     gap: 1rem;
   }
+  .sharif,.new-sharif {
+    padding: 0.5rem !important;
+  }
+  .sharif-order-header .filter-tile{
+    width: 100px;
+    height: 60px;
+    padding-top: 0.2rem;
+    margin: 0;
+    margin: 0.2rem;
+  }
+  .sharif-order-header .filter-tile img{
+    width: 35px;
+    min-height: 35px;
+  }
+  .sharif-order-header .filter-tile p{
+    font-size: 0.7rem;
+    margin: 0;
+  }
+  .sharif-order-header .tile-filter-wrapper .product-filter-tile-wrapper{
+    margin: 0;
+  }
 }
 
 .view-open-order {

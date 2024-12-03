@@ -24,7 +24,7 @@ const env={
     editorApi:'qosmvwu6wq395cpq7ay8ud8j9d21cf4cdgkxwmpz317vpy2i'
 }
 export const TAX=0.1
-export const defPay=3
+export const defPay=4
 export function jalali_to_gregorian(jy, jm, jd) {
     var sal_a, gy, gm, gd, days;
     jy += 1595;
