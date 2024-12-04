@@ -1330,36 +1330,37 @@ router.post('/update-Item-cart', jsonParser, async (req, res) => {
         var status = "";
         //const cartData = await cart.find({userId:data.userId})
         const CartData = await cart.findOne({ cartNo: data.cartNo })
-        var oldCartItems = CartData.cartItems
-        var newStock = ''
-        var manId = await users.findOne({ _id: ObjectID(CartData.manageId) })
-        for (var i = 0; i < oldCartItems.length; i++) {
-            if (!data.changes) break
-            if (oldCartItems[i].id == data.cartID) {
-                if (data.changes.description)
-                    oldCartItems[i].description = data.changes.description
-                if (data.changes.count)
-                    oldCartItems[i].count = data.changes.count
-                if (data.changes.discount)
-                    oldCartItems[i].discount = data.changes.discount
-                if(data.changes.stock){
-                    newStock=data.changes.stock
-                    oldCartItems[i].stock = data.changes.stock
-                }
+        var oldCartItems
+        if(data.changes&&data.changes.count=="0"){
+            oldCartItems = removeCart(CartData, data.cartID)
 
-                const availItems = await checkAvailable(oldCartItems[i], 
-                    oldCartItems[i].stock?oldCartItems[i].stock:manId.StockId,data.cartNo)
-                if (!availItems) {
-                    res.status(400).json({ error: "موجودی کافی نیست" })
-                    return
+        }
+        else{
+            oldCartItems = CartData.cartItems
+            var manId = await users.findOne({ _id: ObjectID(CartData.manageId) })
+            for (var i = 0; i < oldCartItems.length; i++) {
+                if (!data.changes) break
+                if (oldCartItems[i].id == data.cartID) {
+                    if (data.changes.description)
+                        oldCartItems[i].description = data.changes.description
+                    if (data.changes.count)
+                        oldCartItems[i].count = data.changes.count
+                    if (data.changes.discount)
+                        oldCartItems[i].discount = data.changes.discount
+                    if(data.changes.stock){
+                        newStock=data.changes.stock
+                        oldCartItems[i].stock = data.changes.stock
+                    }
+
+                    const availItems = await checkAvailable(oldCartItems[i], 
+                        oldCartItems[i].stock?oldCartItems[i].stock:manId.StockId,data.cartNo)
+                    if (!availItems) {
+                        res.status(400).json({ error: "موجودی کافی نیست" })
+                        return
+                    }
                 }
             }
         }
-
-
-        //const cartItems = removeCart(qCartData,req.body.cartID)
-        //data.cartItems =(cartItems)
-
         cartLog.create({ ...data, ItemID: req.body.cartID, action: "update" })
         await cart.updateOne(
             { cartNo: data.cartNo }, { $set: { cartItems: oldCartItems } })
