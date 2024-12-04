@@ -768,7 +768,7 @@ router.post('/report-total',jsonParser,auth,async(req,res)=>{
                     var cNumber = parseInt(productList[index].count)
                     cNumber += parseInt(myItem.count)
                     productList[index].count = cNumber
-                    productList[index].orderList.push({title:reportList[i].cartNo,count:cNumber})
+                    productList[index].orderList.push({title:reportList[i].cartNo,count:myItem.count})
                     
                     var cPrice = parseInt(productList[index].totalPrice)
                     cPrice += parseInt(myItem.totalPrice)
