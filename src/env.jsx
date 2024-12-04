@@ -1,11 +1,11 @@
 
 const env={
     //siteApi:'http://localhost:6090/api',
-    // siteApi:'https://testadmin.sharifoilco.com/api',
+    // siteApi:'https://admin.dkmehr.com/api',
     siteApi:'https://shopadmin.sharifoilco.com/api',
     
      //siteApiUrl:'http://localhost:6090',
-    //siteApiUrl:'https://testadmin.sharifoilco.com',
+    //siteApiUrl:'https://admin.dkmehr.com',
     siteApiUrl:'https://shopadmin.sharifoilco.com',
     cookieName:'shop-login',
     //cookieName:'panel-login',
