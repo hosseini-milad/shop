@@ -185,7 +185,8 @@ router.post('/find-products', auth, async (req, res) => {
     var filter = ''
     //if(userData.group === "bazaryab") filter = "fs"
     const searchProducts = await productSchema.
-        aggregate([{
+        aggregate([{$match:{active:true}},
+            {
             $match:
                 search ? {
                     $or: [
