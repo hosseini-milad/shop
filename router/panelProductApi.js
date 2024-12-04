@@ -759,7 +759,7 @@ router.post('/report-total',jsonParser,auth,async(req,res)=>{
                     myItem.totalPrice,brandData,cartItems[j].product)
                 marketData = resultData.marketArray
                 myItem.orderList=[{title:reportList[i].cartNo,count:myItem.count,
-                    user:reportList[i].userInfo}]
+                    user:(reportList[i].userInfo&&reportList[i].userInfo[0])&&reportList[i].userInfo[0].username}]
                 brandData = resultData.brandArray
                 var index = productList.findIndex(item=>item.sku==myItem.sku)
                 if(index == -1){
@@ -770,7 +770,7 @@ router.post('/report-total',jsonParser,auth,async(req,res)=>{
                     cNumber += parseInt(myItem.count)
                     productList[index].count = cNumber
                     productList[index].orderList.push({title:reportList[i].cartNo,count:myItem.count,
-                        user:reportList[i].userInfo})
+                        user:(reportList[i].userInfo&&reportList[i].userInfo[0])&&reportList[i].userInfo[0].username})
                     
                     var cPrice = parseInt(productList[index].totalPrice)
                     cPrice += parseInt(myItem.totalPrice)
