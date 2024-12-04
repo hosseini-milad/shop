@@ -18,7 +18,7 @@ function Login(props){
           method:'post',
           headers: {'Content-Type': 'application/json',
           'Access-Control-Allow-Origin': '*'},
-          body:JSON.stringify({username:user,password:pass})
+          body:JSON.stringify({username:user.toLowerCase(),password:pass})
         }
       fetch(env.siteApi + "/auth/login",postOptions, {mode:'cors'})
     .then(res => res.json())

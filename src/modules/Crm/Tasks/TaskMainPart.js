@@ -37,14 +37,18 @@ function TaskMainPart(props){
             setCheckList={setCheckList} taskId={data&&data._id}/>
         <div class="mobile-upload">
             <TaskUpload
-                    defaultValue={data && data.attach ? data.attach : ""}
-                    action={(e) =>
-                    props.setData((prevState) => ({
-                        ...prevState,
-                        attach: e,
-                        }))
-                    }
-                />
+                setImageUrl={props.setImageUrl}
+                imageUrl={props.imageUrl}
+                setImage={props.setImage}
+                image={props.image}
+                defaultValue={data && data.attach ? data.attach : ""}
+                // action={(e) =>
+                //   setData((prevState) => ({
+                //     ...prevState,
+                //     attach: e,
+                //   }))
+                // }
+              />
         </div>
         <div className="ac-wrapper">
             <div className="ac-tabs">

@@ -17,7 +17,6 @@ function QuickRow(props){
     const [editMode,setEditMode] = useState(0)
     const [changes,setChanges]= useState()
     const [AmountState,setAmountState]= useState(false)
-    console.log(props)
     if(type==true){
         setTab(true)
         

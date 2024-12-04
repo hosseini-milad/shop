@@ -1,10 +1,14 @@
 import { useEffect, useState } from "react";
 import env from "../../../env";
 import ImageSimple from '../../../components/ImageSimple'
-
+import PicModal from "../../../components/Modal/PicModal";
 function TaskUpload(props){
-    const [image,setImage]= useState();
-    const [imageUrl,setImageUrl]= useState(props.defaultValue);
+    const [imgPop,setimgPop]=useState("")
+    const image =props.image
+    const setImage =props.setImage
+    const imageUrl =props.imageUrl
+    const setImageUrl =props.setImageUrl
+    
     useEffect(() => {
         //console.log("part1")
           const postOptions={
@@ -21,8 +25,8 @@ function TaskUpload(props){
               .then(
                 (result) => {
                   //console.log(result)
-                  props.action(env.siteApiUrl+"/"+ result.url)
-                  setImageUrl(env.siteApiUrl+"/"+ result.url)
+                  // props.action(env.siteApiUrl+"/"+ result.url)
+                  setImageUrl([...imageUrl,env.siteApiUrl+"/"+ result.url])
               },
                 (error) => {
                   console.log(error);
@@ -33,6 +37,7 @@ function TaskUpload(props){
               })
   
           },[image])
+    console.log(imageUrl)
     return(<>
     <div className="prob-wrapper image-wrapper">
     <i className="fa-solid fa-upload" style={{color: "#c0c0c0"}}></i>
@@ -47,7 +52,8 @@ function TaskUpload(props){
             <input type="file" name="" id="file"/>
 
         </div></div>
-        {imageUrl?<img src={imageUrl} className="imageTask"/>:<></>}
+        {imageUrl&&imageUrl.map((img,i)=><div onClick={()=>setimgPop(img)} class="image-box"><img src={img} key={i} className="imageTask"/><p>تصویر ({i+1})</p></div>)}
+        {imgPop?<PicModal imgurl={imgPop} close={setimgPop}/>:<></>}
         </>
     )
 }

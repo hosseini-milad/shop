@@ -1304,7 +1304,7 @@ dialog {
     bottom: 10px;
     left: 70px;
     width: unset;
-    gap: 1rem;
+    gap: 2rem;
   }
   .newCol {
     flex-direction: initial;
@@ -1761,4 +1761,34 @@ dialog {
 
 .red-bg{
   background-color: rgba(253, 83, 83, 0.568) !important;
+}
+.printArea .btn-wrapper{
+  padding: 1rem;
+  i{
+    font-size: 1.5rem;
+    cursor: pointer;
+  }
+}
+.print-container .btn-wrapper{
+  padding:0rem 1rem;
+  i{
+    font-size: 1.5rem;
+    cursor: pointer;
+  }
+}
+
+.image-popup{
+  position: relative;
+  cursor: unset;
+  img{
+    display: block;
+    width: 90%;
+    max-width: 900px;
+  }
+  i{
+    position: absolute;
+    top: 5px;
+    left: 5px;
+    font-size: 1rem;
+  }
 }

@@ -45,7 +45,7 @@ const Users = (props) => {
   const userId = token.userId; // userId
   const body = {
     offset: filters.offset || "0",
-    pageSize: filters.pageSize || "5",
+    pageSize: filters.pageSize || "25",
     cName: filters.cName,
     sName: filters.sName,
     access: filters.access,

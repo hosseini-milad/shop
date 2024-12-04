@@ -29,16 +29,16 @@ function PreOrderSale(props){
   .then(
     (result) => {
       console.log(result);
-      props.setError(result.message)
+      props.setError({message:result.message,color:"green"})
+      setTimeout(()=>props.setError({message:'',color:"brown"}),3000)
       setLoader(1)
+      setTimeout(()=>window.location.reload(),1000)
     },
     (error) => {
       console.log(error);
     })
     
   }
-  console.log(orders)
-  //console.log(cart)
   if(!cart) return(<></>)
   else return(
         <section className="orders-sec">

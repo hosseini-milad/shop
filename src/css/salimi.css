@@ -5540,9 +5540,10 @@ table {
   align-items: flex-start;
   flex-wrap: wrap;
   gap: 20px;
-  margin-top: 5px;
+  margin-block: 5px;
   width: 100%;
   overflow: auto;
+  padding: 1rem 0.5rem;
 }
 .user-card {
   border-radius: 3px;

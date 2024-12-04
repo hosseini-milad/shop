@@ -57,7 +57,9 @@ import Printofficial from "./modules/Print/Printofficial";
 import Discount from "./pages/Discount";
 import OffCustomer from "./pages/Offcustomer";
 import PrintStore from "./modules/Crm/PrintStore";
-import PublicPrint from "./modules/Print/PublicPrint";
+import PublicFaktor from "./modules/Print/PublicFaktor";
+import PublicOfficial from "./modules/Print/PublicOfficial";
+import PublicSepidar from "./modules/Print/PublicSepidar";
 const cookies = new Cookies();
 const style = document.getElementById("style-direction");
 var lang = JSON.parse(localStorage.getItem(env.cookieLang));
@@ -409,9 +411,25 @@ root.render(
         <Route
           path="/public-print/:orderId"
           element={
-            
-              <PublicPrint lang={lang}/>
-            
+            <LayoutLogin>
+              <PublicFaktor lang={lang}/>
+            </LayoutLogin>
+          }
+        />
+        <Route
+          path="/public-official/:orderId"
+          element={
+            <LayoutLogin>
+              <PublicOfficial lang={lang}/>
+            </LayoutLogin>
+          }
+        />
+        <Route
+          path="/public-sepidar/:orderId"
+          element={
+            <LayoutLogin>
+              <PublicSepidar lang={lang}/>
+            </LayoutLogin>
           }
         />
       </Routes>
@@ -454,7 +472,23 @@ root.render(
           path="/public-print/:orderId"
           element={
             <LayoutLogin>
-              <PublicPrint lang={lang}/>
+              <PublicFaktor lang={lang}/>
+            </LayoutLogin>
+          }
+        />
+        <Route
+          path="/public-official/:orderId"
+          element={
+            <LayoutLogin>
+              <PublicOfficial lang={lang}/>
+            </LayoutLogin>
+          }
+        />
+        <Route
+          path="/public-sepidar/:orderId"
+          element={
+            <LayoutLogin>
+              <PublicSepidar lang={lang}/>
             </LayoutLogin>
           }
         />
