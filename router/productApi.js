@@ -44,6 +44,7 @@ router.post('/getlist', async (req,res)=>{
             res.status(400).json({categoryList,error:"کد دسته بندی پیدا نشد"})
             return
         }
+        const filterAll = await Filters.find({})
         const filterData = await Filters.find({'category.link':catData.link})
         const allProducts = await productSchema.aggregate([
             {$match:{catId:catData.catCode}},
@@ -75,7 +76,7 @@ router.post('/getlist', async (req,res)=>{
         }
 
         res.json({data:products,message:"Products List",size:availableItems.length,
-        pages:Math.floor(availableItems.length/parseInt(pageSize)),filterData,
+        pages:Math.floor(availableItems.length/parseInt(pageSize)),filterData,filterAll,
         catData:catData,quantity:quantity,price:price,categories:categoryList})
     }
     catch(error){
