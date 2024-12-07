@@ -38,7 +38,7 @@ router.post('/getlist', async (req,res)=>{
             const countDataRaw = await productCount.findOne(
                 {ItemID:allProducts[a].ItemID,Stock:"21"})
             const countData =(countDataRaw&&countDataRaw.quantity)?
-                parseInt(countDataRaw.quantity):0
+                parseInt(countDataRaw.quantity):12
             if(countData){
                 allProducts[a].count = countData
                 availableItems.push(allProducts[a])
