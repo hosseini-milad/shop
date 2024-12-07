@@ -5,9 +5,9 @@ var ObjectID = require('mongodb').ObjectID;
 const FindRemainBank=async(transactions,total)=>{
     var remain = 0
     var totalPay = total
-    for(var i=0;i<transactions.length;i++){
+    /*for(var i=0;i<transactions&&transactions.length;i++){
         remain ++
-    }
+    }*/
     return({remain,totalPay})
 }
 
