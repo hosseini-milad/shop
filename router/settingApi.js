@@ -209,8 +209,8 @@ router.post('/add-bank-to-cart',auth, async (req,res)=>{
         await transaction.create(data)
         var bankDetail = await transaction.find({userId:data.userId,sepidarID:{$exists:false}})
         var payArray = bankDetail.map(item=>item.payValue)
-        var total = 1475000
-        var transRemain = FindRemainBank(bankDetail,total?total:100000)
+        var total = req.body.totalCartValue
+        var transRemain = FindRemainBank(bankDetail,total)
         res.json({transData:bankDetail,transRemain,payArray
         })
     }
@@ -221,11 +221,11 @@ router.post('/add-bank-to-cart',auth, async (req,res)=>{
 router.post('/remove-bank-from-cart', async (req,res)=>{
     const userId = req.headers['userid']
     const id = req.body.id
-    const total = req.body.total
+    const total = req.body.totalCartValue
     try{ 
         await transaction.deleteOne({_id:ObjectID(id),userId:userId})
         var bankDetail = await transaction.find({userId:userId,sepidarID:{$exists:false}})
-        var transRemain = FindRemainBank(bankDetail,total?total:100000)
+        var transRemain = FindRemainBank(bankDetail,total)
         res.json({transData:bankDetail,transRemain})
     } 
     catch(error){

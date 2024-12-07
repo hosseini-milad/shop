@@ -231,7 +231,7 @@ router.post('/list', jsonParser, async (req, res) => {
             brandUnique = [...new Set(showCart &&
                 showCart.map((item) => item.brand))];
             size = showCart && showCart.length;
-            transRemain = FindRemainBank(transactions,1233400)
+            transRemain = FindRemainBank(transactions,req.body.totalCartValue)
             const orderList = showCart && showCart.slice(offset,
                 (parseInt(offset) + parseInt(pageSize)));
             resultData = orderList;

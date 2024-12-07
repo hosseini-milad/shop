@@ -5,7 +5,7 @@ var ObjectID = require('mongodb').ObjectID;
 const FindRemainBank=(transactions,total)=>{
     var remain = 0
     var totalPay = 0
-    var orderPrice = total
+    var orderPrice = total?total:1000000
     for(var i=0;i<transactions&&transactions.length;i++){
         if(transactions[i]&&transactions[i].payValue)
             totalPay += parseInt(transactions[i].payValue)
