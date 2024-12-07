@@ -4,11 +4,14 @@ var ObjectID = require('mongodb').ObjectID;
 
 const FindRemainBank=(transactions,total)=>{
     var remain = 0
-    var totalPay = total
-    /*for(var i=0;i<transactions&&transactions.length;i++){
-        remain ++
-    }*/
-    return({remain,totalPay})
+    var totalPay = 0
+    var orderPrice = total
+    for(var i=0;i<transactions&&transactions.length;i++){
+        if(transactions[i]&&transactions[i].payValue)
+            totalPay += parseInt(transactions[i].payValue)
+    }
+    var remain = orderPrice - totalPay
+    return({remain,totalPay,orderPrice})
 }
 
 module.exports =FindRemainBank
