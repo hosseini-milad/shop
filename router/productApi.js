@@ -21,6 +21,7 @@ const bankAccounts = require('../models/product/bankAccounts');
 const sepidarFetch = require('../middleware/Sepidar');
 const NormalTax = require('../middleware/NormalTax');
 const openOrders = require('../models/orders/openOrders');
+const Filters = require('../models/product/Filters');
 const {TaxRate} = process.env
 
 router.post('/getlist', async (req,res)=>{
@@ -43,8 +44,11 @@ router.post('/getlist', async (req,res)=>{
             res.status(400).json({categoryList,error:"کد دسته بندی پیدا نشد"})
             return
         }
-        const allProducts = await productSchema.find(
-            {catId:catData.catCode,enTitle:{$exists:true}})
+        const filterData = await Filters.find({'category.link':catData.link})
+        const allProducts = await productSchema.aggregate([
+            {$match:{catId:catData.catCode}},
+            {$match:{enTitle:{$exists:true}}}
+        ])
         const availableItems = [];
         for(var a=0;a<allProducts.length;a++){
 
@@ -71,7 +75,7 @@ router.post('/getlist', async (req,res)=>{
         }
 
         res.json({data:products,message:"Products List",size:availableItems.length,
-        pages:Math.floor(availableItems.length/parseInt(pageSize)),
+        pages:Math.floor(availableItems.length/parseInt(pageSize)),filterData,
         catData:catData,quantity:quantity,price:price,categories:categoryList})
     }
     catch(error){
