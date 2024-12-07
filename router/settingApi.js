@@ -209,6 +209,7 @@ router.post('/add-bank-to-cart',auth, async (req,res)=>{
         await transaction.create(data)
         var bankDetail = await transaction.find({userId:data.userId,sepidarID:{$exists:false}})
         var payArray = bankDetail.map(item=>item.payValue)
+        var total = 1475000
         var transRemain = FindRemainBank(bankDetail,total?total:100000)
         res.json({transData:bankDetail,...transRemain,payArray
         })
