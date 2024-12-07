@@ -25,7 +25,8 @@ router.post('/find-products', auth, async (req, res) => {
                 }:{}
             },
             {$match:filters&&filters.brand?{brandId:filters.brand}:{}},
-            {$match:filters&&filters.category?{catId:filters.category	}:{}},
+            {$match:filters?filters.subCat?{catId:filters.subCat}:
+                filters.category?{catId:filters.category}:{}:{}},
             filter ? { $match: { sku: { $in: [/fs/i, /cr/i, /pr/i] } } } :
                 { $match: { sku: { $exists: true } } },
             {
