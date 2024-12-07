@@ -17,11 +17,12 @@ import {
   handleFilterChange,
 } from "../utils/filterUtils"; // Import the utility functions
 const cookies = new Cookies();
-
+var TabOrder = JSON.parse(localStorage.getItem("orderTab"));
 function Orders(props) {
   const direction = props.lang ? props.lang.dir : errortrans.defaultDir;
   const lang = props.lang ? props.lang.lang : errortrans.defaultLang;
   const [errorPop, setErrorPop] = useState({ message: "", color: "brown" });
+  
   const [content, setContent] = useState("");
   const [bankList, setbankList] = useState("");
   const [filters, setFilters] = useState(getFiltersFromUrl());
@@ -30,12 +31,20 @@ function Orders(props) {
   const [StatusSale, setStatusSale] = useState("");
   const [TransData,setTransData]=useState("")
   const [TransRemain,setTransRemain]=useState("")
-  const [tab, setTab] = useState(localStorage.getItem("orderTab"));
+  const [tab, setTab] = useState(TabOrder.Tab);
   const [Error, setError] = useState("");
   const token = cookies.get(env.cookieName);
   useEffect(()=>{
-    localStorage.setItem("orderTab",tab)
-  },[tab])
+    TabOrder?
+      localStorage.setItem("orderTab",JSON.stringify({
+        ...TabOrder,
+        Tab: tab,mange:filters.manage,type:filters.category
+      })):
+      localStorage.setItem("orderTab",JSON.stringify({
+        
+        Tab: tab,mange:filters.manage,type:filters.category
+      }))
+  },[tab,filters.manage])
   function handleFilterChange(newFilters) {
     setFilters(newFilters);
     updateUrlWithFilters(newFilters);
@@ -52,8 +61,8 @@ function Orders(props) {
       brand: filters.brand,
       dateFrom: filters.date && filters.date.dateFrom,
       dateTo: filters.date && filters.date.dateTo,
-      type:filters.category,
-      manager:filters.manage && filters.manage,
+      type:filters.category?filters.category:TabOrder.type,
+      manager:filters.manage?filters.manage:TabOrder.mange,
       index:tab
     };
     const postOptions = {

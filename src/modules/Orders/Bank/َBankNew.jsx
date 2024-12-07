@@ -7,7 +7,6 @@ function BankNew(props){
   const setTransData=props.setTransData
   const TransData=props.TransData
   const [SendBank,setSendBank]=useState("")
-
   const addBank=()=>{
     const body={
       title:SendBank.title,
@@ -61,11 +60,13 @@ function BankNew(props){
         <input
           type="number"
           placeholder="مبلغ"
+          
           className="pay-input"
           onChange={(e)=>setSendBank(prevState => ({
             ...prevState,
             payValue:e.target.value
           }))}
+          
         />
     
       

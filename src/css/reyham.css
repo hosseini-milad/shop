@@ -1000,7 +1000,7 @@ dialog {
 
 .userInfo {
   display: flex;
-  min-height: 100px;
+  min-height: 85px;
 }
 .fishPrintArea .userInfo{
   display: block;
@@ -1467,6 +1467,18 @@ dialog {
 .activeCheck {
   color: #fff;
   background-color: green;
+}
+.little-check{
+  width: 25px;
+  height: 25px;
+  font-size: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  i{
+    margin: 0;
+  }
 }
 .orderButtonHolder {
   width: 100%;

@@ -89,11 +89,15 @@ function OpenOrderItem(props){
     return(
         <div className="order-wrapper">
           <div className="border-title" >
-          {data.official?<div className={checkState?"orderCheck activeCheck":"orderCheck"} 
+          {!data.InvoiceID&&data.official?<div className={checkState?"orderCheck activeCheck":"orderCheck"} 
             onClick={()=>updateCheckBox(data.cartNo,checkState)}>
             <i className="fa fa-check"></i>
           </div>:<></>}
-
+          {data.InvoiceID	&&(
+            <div className="orderCheck activeCheck little-check" >
+            <i className="fa fa-check"></i>
+          </div>
+          )}
             <div className="bu-name"
             onClick={()=>showDetail?setDetail(0):setDetail(1)}>
               {data.userData?<div className="col">
@@ -215,7 +219,7 @@ function OpenOrderItem(props){
                     <p>{normalPriceRound(item.total&&item.total.total)}</p>
                   </td>
                   <td>
-                    <div className="more-btn" style={{gap:0}}>
+                    {!data.InvoiceID&&(<div className="more-btn" style={{gap:0}}>
                       <input 
                       type="number" 
                       onChange={(e)=>setChanges(prevState => ({
@@ -225,7 +229,7 @@ function OpenOrderItem(props){
                       
                       />
                       <button onClick={()=>updateField(data.cartNo,item.id)}><p>بازگشت از سفارش</p></button>
-                    </div>
+                    </div>)}
                     </td>
                 </tr>))}
               </tbody>
