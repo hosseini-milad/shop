@@ -29,7 +29,20 @@ router.post('/getlist', async (req,res)=>{
 
     const filter = req.body
     try{
+        var categoryList = await category.aggregate([
+            {$match:{$or:[{parent:{$exists:false}},{parent:null}]}}
+        ])
+        for(var i=0;i<categoryList.length;i++){
+            const catID = categoryList[i]._id
+            var childList = await category.find({parent:catID.toString()})
+            categoryList[i].children = childList
+        }
+
         const catData = await category.findOne({link:filter.category})
+        if(!catData){
+            res.status(400).json({categoryList,error:"کد دسته بندی پیدا نشد"})
+            return
+        }
         const allProducts = await productSchema.find(
             {catId:catData.catCode,enTitle:{$exists:true}})
         const availableItems = [];
@@ -56,7 +69,6 @@ router.post('/getlist', async (req,res)=>{
             products[i].price = priceData.price?NormalTax(priceData.price)/10:''
             
         }
-        const categoryList = await category.find()
 
         res.json({data:products,message:"Products List",size:availableItems.length,
         pages:Math.floor(availableItems.length/parseInt(pageSize)),
