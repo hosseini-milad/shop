@@ -20,6 +20,7 @@ const transaction = require('../models/product/transaction');
 const RecieptFunc = require('../middleware/RecieptFunc');
 const customers = require('../models/auth/customers');
 const SumArray = require('../middleware/SumArray');
+const FindRemainBank = require('../middleware/FindRemainBank');
 
 router.post('/sliders', async (req, res) => {
     try {
@@ -208,9 +209,8 @@ router.post('/add-bank-to-cart',auth, async (req,res)=>{
         await transaction.create(data)
         var bankDetail = await transaction.find({userId:data.userId,sepidarID:{$exists:false}})
         var payArray = bankDetail.map(item=>item.payValue)
-        const sumBank = 0&&SumArray(payArray)
-        res.json({transData:bankDetail,remain:134500
-            ,totalPay:4350000,sumBank,payArray
+        var transRemain = FindRemainBank(bankDetail,total?total:100000)
+        res.json({transData:bankDetail,...transRemain,payArray
         })
     }
     catch(error){
@@ -220,12 +220,12 @@ router.post('/add-bank-to-cart',auth, async (req,res)=>{
 router.post('/remove-bank-from-cart', async (req,res)=>{
     const userId = req.headers['userid']
     const id = req.body.id
+    const total = req.body.total
     try{ 
         await transaction.deleteOne({_id:ObjectID(id),userId:userId})
         var bankDetail = await transaction.find({userId:userId,sepidarID:{$exists:false}})
-        res.json({transData:bankDetail,remain:134500
-            ,totalPay:4350000
-        })
+        var transRemain = FindRemainBank(bankDetail,total?total:100000)
+        res.json({transData:bankDetail,...transRemain})
     } 
     catch(error){
         res.status(500).json({message: error.message})

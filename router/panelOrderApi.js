@@ -14,6 +14,7 @@ const bankData = require('../publicPay/bank.json')
 const crmlist = require('../models/crm/crmlist');
 const bankAccounts = require('../models/product/bankAccounts');
 const transaction = require('../models/product/transaction');
+const FindRemainBank = require('../middleware/FindRemainBank');
 const { TaxRate } = process.env
 
 router.post('/sku/find', jsonParser, async (req, res) => {
@@ -75,6 +76,7 @@ router.post('/list', jsonParser, async (req, res) => {
         var status = []
         var bankList = []
         var transactions = []
+        var transRemain={remain:0,totalPay:1234000}
 
         if (!type || type == "Visitor") {
             if (adminData.access == "sale") {
@@ -229,6 +231,7 @@ router.post('/list', jsonParser, async (req, res) => {
             brandUnique = [...new Set(showCart &&
                 showCart.map((item) => item.brand))];
             size = showCart && showCart.length;
+            transRemain = FindRemainBank(transactions,1233400)
             const orderList = showCart && showCart.slice(offset,
                 (parseInt(offset) + parseInt(pageSize)));
             resultData = orderList;
@@ -273,7 +276,7 @@ router.post('/list', jsonParser, async (req, res) => {
         }
 
         res.json({
-            filter: resultData, brand: brandUnique, isSale,
+            filter: resultData, brand: brandUnique, isSale, ...transRemain,
             size,adminData,status,bankList,transData:transactions
         });
     } catch (error) {
