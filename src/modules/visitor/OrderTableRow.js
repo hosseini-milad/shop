@@ -8,11 +8,7 @@ function DTableRow(props){
   const order =props.order
   const [Vpop,setVpop]=useState("")
 
-  // let totalPrice = 0
-  // const total = order.price.map(price)=>(
-  //   totalPrice =totalPrice + price
-  // )
-  
+  console.log(order)
     return(
     <>
         <tr onClick={()=>setVpop(order.sku)}>
@@ -23,7 +19,7 @@ function DTableRow(props){
           <td>{order.count}</td>
           <td>{normalPriceCount(order.totalPrice)}</td>
         </tr>
-        {Vpop?<VisitorPopup content={Vpop} setVpop={setVpop}/>:<></>}
+        {Vpop?<VisitorPopup content={order} setVpop={setVpop}/>:<></>}
         
     </>
     )
