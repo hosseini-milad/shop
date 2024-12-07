@@ -211,7 +211,7 @@ router.post('/add-bank-to-cart',auth, async (req,res)=>{
         var payArray = bankDetail.map(item=>item.payValue)
         var total = 1475000
         var transRemain = FindRemainBank(bankDetail,total?total:100000)
-        res.json({transData:bankDetail,...transRemain,payArray
+        res.json({transData:bankDetail,transRemain,payArray
         })
     }
     catch(error){
@@ -226,7 +226,7 @@ router.post('/remove-bank-from-cart', async (req,res)=>{
         await transaction.deleteOne({_id:ObjectID(id),userId:userId})
         var bankDetail = await transaction.find({userId:userId,sepidarID:{$exists:false}})
         var transRemain = FindRemainBank(bankDetail,total?total:100000)
-        res.json({transData:bankDetail,...transRemain})
+        res.json({transData:bankDetail,transRemain})
     } 
     catch(error){
         res.status(500).json({message: error.message})
