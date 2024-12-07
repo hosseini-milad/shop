@@ -573,6 +573,7 @@ router.post('/edit-filter',jsonParser,async(req,res)=>{
             title:req.body.title,
             enTitle:req.body.enTitle,
             type:req.body.type,
+            multi:req.body.multi,
             optionsP:req.body.optionsP,
             optionsN:req.body.optionsN,
             sort:req.body.sort
