@@ -9,6 +9,9 @@ function BankSelect(props){
   const TransData=props.TransData
   const setTransData=props.setTransData
   const [loadBank,setLoadBank]=useState(1)
+  
+  const setAmount =props.setAmount
+  const Amount =props.Amount
   const OrderNumList=props.orders.map((order)=>order.cartNo)
   console.log(TransData)
   useEffect(()=>{
@@ -17,11 +20,36 @@ function BankSelect(props){
       setTimeout(()=>setLoadBank(1),100)
     }
   },[TransData])
+  
+  useEffect(()=>{
+    const postOptions={
+      method:'post',
+      headers: {'Content-Type': 'application/json',
+      "x-access-token":token&&token.token,"userId":token&&token.userId},
+      body:JSON.stringify({totalCartValue:parseInt(props.totalPrice.toString().replace(/\D/g,''))})
+    }
+    console.log(postOptions)
+  fetch(env.siteApi + "/setting/fetch-bank-of-cart",postOptions)
+  .then(res => res.json())
+  .then(
+  (result) => {
+    console.log(result)
+    setAmount(result.transRemain)
+  },
+  (error) => {
+    console.log(error);
+    
+  })
+  },[props.order])
   return(<>
     <div>
-      {loadBank?<BankNew bankList={bankList} setTransData={setTransData} user={user} loadBank={loadBank} TransData={TransData}
+      {loadBank?<BankNew Amount={Amount} setAmount={setAmount} totalPrice={props.totalPrice} bankList={bankList} setTransData={setTransData} user={user} loadBank={loadBank} TransData={TransData}
       setLoadBank={setLoadBank} token={token} OrderNumList={OrderNumList} TransRemain={props.TransRemain} setTransRemain={props.setTransRemain}/>:<></>}
-      {TransData?<BankTable TransRemain={props.TransRemain} setTransRemain={props.setTransRemain} TransData={TransData} setTransData={setTransData} user={user} token={token}/>:<></>}
+      <div class="amount">
+        <p>جمع پرداختی: {Amount.totalPay&&normalPriceCount(Amount.totalPay)}</p>
+        <p>باقی مانده: {Amount.remain&&normalPriceCount(Amount.remain)}</p>
+      </div>
+      {TransData?<BankTable totalPrice={props.totalPrice} Amount={Amount} setAmount={setAmount} TransData={TransData} setTransData={setTransData} user={user} token={token}/>:<></>}
     </div>
     
     </>

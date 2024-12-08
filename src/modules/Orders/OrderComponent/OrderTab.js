@@ -2,6 +2,7 @@ import { useState } from "react"
 
 function OrderTab(props){
     //const [tab,setTab] = useState(0)
+    console.log(props.tab)
     return(
       <nav className="slidemenu">
 

@@ -41,7 +41,7 @@ function FilterGrid(props) {
 
     props.setFilters((prevState) => ({
       ...prevState,
-      subCategory: "",
+      subCat: "",
     }));
     props.setAppFilter((prevState) => ({
       ...prevState,
@@ -50,7 +50,7 @@ function FilterGrid(props) {
 
     props.setAppFilter((prevState) => ({
       ...prevState,
-      subCategory: "",
+      subCat: "",
     }));
   };
   const updateCategory = (category, index) => {
@@ -83,11 +83,11 @@ function FilterGrid(props) {
 
     props.setFilters((prevState) => ({
       ...prevState,
-      subCategory: "",
+      subCat: "",
     }));
     props.setAppFilter((prevState) => ({
       ...prevState,
-      subCategory: "",
+      subCat: "",
     }));
   };
   const updateSubCategory = (subCategory, index) => {
@@ -95,22 +95,22 @@ function FilterGrid(props) {
       setSubIndex(-1);
       props.setFilters((prevState) => ({
         ...prevState,
-        subCategory: subCategory,
+        subCat: subCategory,
       }));
       props.setAppFilter((prevState) => ({
         ...prevState,
-        subCategory: "",
+        subCat: "",
       }));
     } else {
       setSubIndex(index);
       props.setFilters((prevState) => ({
         ...prevState,
-        subCategory: subCategory,
+        subCat: subCategory,
       }));
 
       props.setAppFilter((prevState) => ({
         ...prevState,
-        subCategory: subCategory ? subCategory.catCode : "",
+        subCat: subCategory ? subCategory.catCode : "",
       }));
     }
   };

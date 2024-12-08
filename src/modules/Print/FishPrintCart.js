@@ -12,10 +12,10 @@ function FishPrintCart(props){
     else return(
         <div className="printArea fishPrintArea">
           <div className="userInfo hesabSection">
-              <div className="hesabfaSection hesabBorder">
+              {/* <div className="hesabfaSection hesabBorder">
                 <h4>فاکتور فروش</h4>
                 <h4>روانکاران شریف</h4>
-              </div>
+              </div> */}
               <div className="hesabfaSection hesabBorder">
                 <small>ش.فاکتور: {orderInfo.cart[0].cartNo}</small>
                 <small>ش.ارجاع: {orderInfo.InvoiceID}</small>
@@ -61,7 +61,7 @@ function FishPrintCart(props){
             </table>
             <table className="hesabfaMainTable sumTable"> 
               <tbody>
-                <tr>
+                {/* <tr>
                   <td rowSpan={3}>جمع اقلام: {orderInfo.totalCount}</td>
                   <td>جمع فاکتور </td>
                   <td className="priceCell">{normalPriceRound(orderData.totalFee)}</td>
@@ -69,8 +69,9 @@ function FishPrintCart(props){
                 <tr>
                   <td>مالیات </td>
                   <td className="priceCell">{normalPriceRound(orderData.totalTax)}</td>
-                </tr>
+                </tr> */}
                 <tr>
+                <td>جمع اقلام: {orderInfo.totalCount}</td>
                   <td>قابل پرداخت </td>
                   <td className="priceCell">{normalPriceRound(orderData.totalPrice)}</td>
                 </tr>

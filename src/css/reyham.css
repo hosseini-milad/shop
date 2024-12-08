@@ -1000,7 +1000,7 @@ dialog {
 
 .userInfo {
   display: flex;
-  min-height: 100px;
+  min-height: 85px;
 }
 .fishPrintArea .userInfo{
   display: block;
@@ -1468,6 +1468,18 @@ dialog {
   color: #fff;
   background-color: green;
 }
+.little-check{
+  width: 25px;
+  height: 25px;
+  font-size: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  i{
+    margin: 0;
+  }
+}
 .orderButtonHolder {
   width: 100%;
   direction: ltr;
@@ -1735,7 +1747,9 @@ dialog {
   padding-right: 6px;
   gap: 6px;
 }
-  
+.bank-wrapper .add-bank .MuiInputBase-root{
+  margin-top: 0;
+} 
   
   
 .bank-wrapper .bank-item {
@@ -1743,6 +1757,11 @@ dialog {
     border-radius: 0.2rem;
     border: 1px solid grey;
     min-width: 200px;
+    max-width: 200px;
+    height: 45px;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
 }
 .bank-wrapper input {
     width: unset;
@@ -1751,9 +1770,15 @@ dialog {
     border: 1px solid grey;
     outline: none;
 }
-.bank-wrapper .MuiInputBase-input {
-    height: unset;
-    width: unset !important;
+.bank-wrapper .MuiFormControl-root {
+    height: 45px;
+    width: 200px !important;
+    min-width: 200px !important;
+}
+.bank-wrapper .MuiInputBase-input{
+  height:unset;
+
+
 }
 .bank-wrapper .MuiAutocomplete-root {
     width: 100%;
