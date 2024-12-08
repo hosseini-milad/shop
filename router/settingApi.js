@@ -232,4 +232,16 @@ router.post('/remove-bank-from-cart', async (req,res)=>{
         res.status(500).json({message: error.message})
     }
 })
+router.post('/fetch-bank-of-cart', async (req,res)=>{
+    const userId = req.headers['userid']
+    const total = req.body.totalCartValue
+    try{ 
+        var bankDetail = await transaction.find({userId:userId,sepidarID:{$exists:false}})
+        var transRemain = FindRemainBank(bankDetail,total)
+        res.json({transData:bankDetail,transRemain})
+    } 
+    catch(error){
+        res.status(500).json({message: error.message})
+    }
+})
 module.exports = router;

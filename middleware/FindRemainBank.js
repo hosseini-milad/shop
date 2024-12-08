@@ -7,7 +7,6 @@ const FindRemainBank=(transactions,total)=>{
     var totalPay = 0
     var orderPrice = total?total:1000000
     for(var i=0;i<(transactions&&transactions.length);i++){
-        console.log(transactions[i].payValue)
         if(transactions[i]&&transactions[i].payValue)
             totalPay += parseInt(transactions[i].payValue)
     }
