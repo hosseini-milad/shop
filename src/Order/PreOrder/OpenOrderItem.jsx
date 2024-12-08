@@ -1,8 +1,12 @@
-import { useState } from "react"
+import { useState,useRef } from "react"
 import { PriceDiscountTax, TAX, normalPriceCount, normalPriceRound } from "../../env"
 import env from "../../env"
 import LinkModal from "../../components/Modal/LinkModal"
+// import ReactToPrint from "react-to-print";
+import { useReactToPrint } from "react-to-print";
+import PrintFish from "../../modules/Print/PrintFish";
 function OpenOrderItem(props){
+    
     const token=props.token
     const user=props.user
     const data = props.data
@@ -13,7 +17,8 @@ function OpenOrderItem(props){
     const [active,setActive]= useState(0)
     const [checkState, setCheckState] = useState(0);
     const [LinkShare, setLinkShare] = useState("");
-    
+    var contentRef = useRef();
+    const reactToPrintFn = useReactToPrint({ contentRef });
     const updateField=(cartNo,id)=>{
 
     
@@ -147,6 +152,18 @@ function OpenOrderItem(props){
                 className="tableIcon fas fa-paper-plane" onClick={()=>CreateLink()}
                 >
                 </i>
+                <div>
+                  {/* <ReactToPrint
+                  trigger={() => {
+                    return (<button className="submit"><i className="tableIcon fas fa-tag">
+                    </i></button>);
+                  }}
+                  content={() => contentRef}
+                  /> */}
+                  <i className="tableIcon fas fa-tag" onClick={reactToPrintFn}>
+                  </i>
+                </div>
+                
               </div>
 
             <i className={showDetail?"fa-solid fa-angle-up":
@@ -237,6 +254,11 @@ function OpenOrderItem(props){
             
           </div>:<></>}
           {LinkShare?<LinkModal LinkShare={LinkShare} setLinkShare={setLinkShare}/>:<></>}
+          <div className="onlyPrint">
+            <div ref={contentRef}>
+              <PrintFish url={data.cartNo}/>
+            </div>
+          </div>
         </div>
     )
 }
