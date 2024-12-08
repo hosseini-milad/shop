@@ -21,7 +21,6 @@ function OrderTableRow(props) {
     let handler = (e)=>{
       if(!menuRef.current.contains(e.target)){
         setOpenOption(false);
-        console.log(menuRef.current);
       }      
     };
 

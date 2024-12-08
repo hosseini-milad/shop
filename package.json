@@ -26,6 +26,7 @@
     "react-geolocated": "^4.2.0",
     "react-image-file-resizer": "^0.4.8",
     "react-modern-calendar-datepicker": "^3.1.6",
+    "react-number-format": "^5.4.2",
     "react-quill": "^2.0.0",
     "react-router-dom": "^6.10.0",
     "react-rte": "^0.16.3",

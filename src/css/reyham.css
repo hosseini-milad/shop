@@ -1747,7 +1747,9 @@ dialog {
   padding-right: 6px;
   gap: 6px;
 }
-  
+.bank-wrapper .add-bank .MuiInputBase-root{
+  margin-top: 0;
+} 
   
   
 .bank-wrapper .bank-item {
@@ -1755,6 +1757,11 @@ dialog {
     border-radius: 0.2rem;
     border: 1px solid grey;
     min-width: 200px;
+    max-width: 200px;
+    height: 45px;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
 }
 .bank-wrapper input {
     width: unset;
@@ -1763,9 +1770,15 @@ dialog {
     border: 1px solid grey;
     outline: none;
 }
-.bank-wrapper .MuiInputBase-input {
-    height: unset;
-    width: unset !important;
+.bank-wrapper .MuiFormControl-root {
+    height: 45px;
+    width: 200px !important;
+    min-width: 200px !important;
+}
+.bank-wrapper .MuiInputBase-input{
+  height:unset;
+
+
 }
 .bank-wrapper .MuiAutocomplete-root {
     width: 100%;

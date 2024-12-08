@@ -1,6 +1,7 @@
 import { useState,useEffect } from "react"
 import env, { normalPriceCount, normalPriceRound } from "../../../env"
 import StyleSelect from "../../../components/Button/AutoComplete"
+import FormattedInputs from "../../../components/Button/FormattedInputs"
 function BankNew(props){
   const token=props.token
   const bankList=props.bankList
@@ -13,7 +14,8 @@ function BankNew(props){
       bankCode:SendBank.bankCode,
       payValue:SendBank.payValue,
       orderNo:props.OrderNumList,
-      description:SendBank.description
+      description:SendBank.description,
+      totalCartValue:parseInt(props.totalPrice.toString().replace(/\D/g,''))
     }
     const postOptions={
         method:'post',
@@ -27,7 +29,7 @@ function BankNew(props){
   .then(
     (result) => {
       props.setTransData(result.transData)
-      props.setTransRemain(result.remain)
+      props.setAmount(result.transRemain)
       
     },
     (error) => {
@@ -38,7 +40,7 @@ function BankNew(props){
     
     setSendBank("")
    }
-
+   console.log(SendBank)
   return(
     <div className="add-bank">
     
@@ -57,7 +59,7 @@ function BankNew(props){
         />
       
       
-        <input
+        {/* <input
           type="number"
           placeholder="مبلغ"
           
@@ -67,8 +69,8 @@ function BankNew(props){
             payValue:e.target.value
           }))}
           
-        />
-    
+        /> */}
+        <FormattedInputs setSendBank={setSendBank} SendBank={SendBank}/>
       
         <input
           type="text"
