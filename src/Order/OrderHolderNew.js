@@ -10,6 +10,7 @@ import Cookies from "universal-cookie";
 import ShowError from "../components/Modal/ShowError";
 import PreQuickHolder from "./PreOrder/PreQuickList";
 import ProductListSale from "./Components/ProductListSale";
+
 const cookies = new Cookies();
 var shopVar = JSON.parse(localStorage.getItem(env.shopExpert));
 

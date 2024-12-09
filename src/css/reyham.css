@@ -1817,3 +1817,6 @@ dialog {
     font-size: 1rem;
   }
 }
+.onlyPrint{
+  display: none;
+}
