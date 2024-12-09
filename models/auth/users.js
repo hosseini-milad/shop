@@ -23,6 +23,7 @@ const userSchema = new mongoose.Schema({
 
   StockId: { type: String },
   CustomerID: { type: String },
+  default:{ type: String },
   date: { type: Date }
 });
 

@@ -556,6 +556,7 @@ router.post('/change-user', auth, jsonParser, async (req, res) => {
       meliCode: req.body.meliCode,
       mobile: req.body.mobile,
       active: req.body.active,
+      default: req.body.default,
       date: Date.now()
     }
     // Validate if user exist in our database

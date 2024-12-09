@@ -88,6 +88,7 @@ router.post("/update-user", jsonParser, async (req, res) => {
         classess: req.body.classes,
         profile: req.body.profile,
         access: req.body.access,
+        default: req.body.default,
         password: req.body.password,
         StockId: req.body.StockId,
         CustomerID: req.body.CustomerID,
