@@ -89,7 +89,7 @@ router.post('/getProduct', async (req,res)=>{
         const productData = await productSchema.findOne({sku:req.body.sku})
         const catData = productData.catId&&await category.findOne({catCode:productData.catId})
         const quantity = await productCount.findOne(
-            {ItemID:productData.ItemID,Stock:StockId})
+            {ItemID:productData.ItemID,Stock:"6"})
         const price = await productPrice.findOne(
             {ItemID:productData.ItemID,saleType:SaleType})
         
