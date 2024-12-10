@@ -244,4 +244,15 @@ router.post('/fetch-bank-of-cart', async (req,res)=>{
         res.status(500).json({message: error.message})
     }
 })
+router.post('/clear-bank-of-cart', async (req,res)=>{
+    const userId = req.headers['userid']
+    try{ 
+        var bankDetail = await transaction.deleteMany({userId:userId,sepidarID:{$exists:false}})
+        var transRemain = 0//FindRemainBank(bankDetail,total)
+        res.json({transData:bankDetail})
+    } 
+    catch(error){
+        res.status(500).json({message: error.message})
+    }
+})
 module.exports = router;
