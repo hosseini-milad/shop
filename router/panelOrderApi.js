@@ -54,7 +54,7 @@ router.post('/list', jsonParser, async (req, res) => {
         var now2 = new Date();
         var now3 = new Date();
 
-        const type = req.body.type ? req.body.type : "";
+        var type = req.body.type ? req.body.type : "";
 
         const adminData = await users.findOne({ _id: ObjectID(req.headers["userid"]) });
 
@@ -67,7 +67,16 @@ router.post('/list', jsonParser, async (req, res) => {
             res.status(400).json({ error: "کاربر معتبر نیست" });
             return;
         }
-
+        var tabs =adminData.access !== "manager"?[]: [
+            {title:"ویزیتور", type:"bazaryab"},
+            {title:"فروشگاه زهره", type:"zohre"},
+            {title:"فروشگاه حصارک", type:"hesarak"},
+            {title:"فروشگاه مرکزی", type:"markazi"},
+            {title:"وب سایت", type:"Website"},
+        ]
+        if(1){
+            
+        }
         var brandUnique = [];
         var resultData = [];
         var fullSize = 0;

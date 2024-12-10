@@ -84,7 +84,7 @@ router.post('/getlist', async (req,res)=>{
     }
 })
 router.post('/getProduct', async (req,res)=>{
-    const stockId="21"
+    const stockId="6"
     try{
         const productData = await productSchema.findOne({sku:req.body.sku})
         const catData = productData.catId&&await category.findOne({catCode:productData.catId})
