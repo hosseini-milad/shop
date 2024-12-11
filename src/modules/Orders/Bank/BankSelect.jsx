@@ -13,7 +13,6 @@ function BankSelect(props){
   const setAmount =props.setAmount
   const Amount =props.Amount
   const OrderNumList=props.orders.map((order)=>order.cartNo)
-  console.log(props.orders)
   useEffect(()=>{
     if(TransData){
       setLoadBank(0)
@@ -71,7 +70,7 @@ function BankSelect(props){
     <div>
       {loadBank?<BankNew Amount={Amount} setAmount={setAmount} totalPrice={props.totalPrice} bankList={bankList} setTransData={setTransData} user={user} loadBank={loadBank} TransData={TransData}
       setLoadBank={setLoadBank} token={token} OrderNumList={OrderNumList} TransRemain={props.TransRemain} setTransRemain={props.setTransRemain}/>:<></>}
-      <div class="amount">
+      <div className="amount">
         <p>جمع پرداختی: {Amount.totalPay&&normalPriceCount(Amount.totalPay)}</p>
         <p>باقی مانده: {Amount.remain&&normalPriceCount(Amount.remain)}</p>
       </div>

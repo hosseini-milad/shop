@@ -57,6 +57,9 @@ function OrderTableRow(props) {
       }
     }
     else{
+        if(props.selectedOrder&&props.selectedOrder.length==1){
+          console.log("action Here")
+        }
       //const cartNo = e.target.getAttribute("cartNo")
       props.setSelectedOrder(l => 
         l.filter(item => item.cartNo !== field.cartNo));

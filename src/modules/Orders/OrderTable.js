@@ -11,6 +11,7 @@ function OrderTable(props){
   const [selectedOrder,setSelectedOrder] = useState([])
   const [detail,showDetail] = useState(-1)
   const [AllCheck,setAllCheck] = useState(0)
+  
   const CheckHandel=(e)=>{
     setAllCheck(e.target.checked?1:0)
     var OrderList=props.orders.filter(item=>item.status=="undone")
@@ -28,6 +29,7 @@ function OrderTable(props){
           <th>ردیف</th>
           <th className="checkBoxStyle">
               <input type="checkbox" checked={AllCheck} 
+              onChange={(e)=>{}}
               onClick={(e)=>CheckHandel(e)}/></th>
             <th>
               <p>{tabletrans.orderNumber[lang]}</p>

@@ -41,7 +41,6 @@ const Header = (props) => {
       );
   }, []);
 
-  console.log(token.username.split("undefined")[0])
   return (
     <nav
       className="navbar topMenu navbar-main navbar-expand-lg px-0 mx-4 shadow-none border-radius-xl"
