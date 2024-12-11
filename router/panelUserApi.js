@@ -154,7 +154,7 @@ const StoreList = () => {
 router.post("/fetch-customer", jsonParser, async (req, res) => {
     var pageSize = req.body.pageSize ? req.body.pageSize : "10";
     var userId = req.body.userId;
-    try {
+    try { 
         const userData = await customer.findOne({ _id: ObjectID(userId) });
         res.json({ data: userData });
     } catch (error) {
@@ -233,6 +233,7 @@ router.post("/update-customer", jsonParser, async (req, res) => {
         nif: req.body.nif,
         perBox: req.body.perBox,
         active: req.body.active,
+        default: req.body.default,
         official: req.body.official,
 
         birthDay: req.body.birthDay,
