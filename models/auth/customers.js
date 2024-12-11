@@ -18,6 +18,7 @@ const customerSchema = new mongoose.Schema({
   otp:{ type: String , default: null },
   nif: { type: String },
   agent:{ type: String },
+  default:{ type: String },
   creator:{ type: String },
   roleId:{ type: String },
   active:{ type: Boolean },
