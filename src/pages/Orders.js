@@ -31,7 +31,8 @@ function Orders(props) {
   const [StatusSale, setStatusSale] = useState("");
   const [TransData,setTransData]=useState("")
   const [TransRemain,setTransRemain]=useState("")
-  const [tab, setTab] = useState(TabOrder.Tab);
+  const [tab, setTab] = useState(TabOrder&&TabOrder.Tab);
+  const [TabList, setTabList] = useState("");
   const [Error, setError] = useState("");
   const token = cookies.get(env.cookieName);
   useEffect(()=>{
@@ -62,7 +63,6 @@ function Orders(props) {
       dateFrom: filters.date && filters.date.dateFrom,
       dateTo: filters.date && filters.date.dateTo,
       type:filters.category?filters.category:TabOrder.type,
-      manager:filters.manage?filters.manage:TabOrder.mange,
       index:tab
     };
     const postOptions = {
@@ -90,6 +90,7 @@ function Orders(props) {
           setTransData(result.transData)
           setTransRemain(result.remain)
           setError('')
+          setTabList(result.tabs)
           }
         },
         (error) => {
@@ -150,7 +151,7 @@ function Orders(props) {
           setFilters={setFilters}
         /> */}
         <OrderTab setFilters={handleFilterChange} filters={filters} 
-        setTab={setTab} tab={tab}/>
+        setTab={setTab} tab={tab} TabList={TabList}/>
 
         <OrderFilters
           lang={props.lang}

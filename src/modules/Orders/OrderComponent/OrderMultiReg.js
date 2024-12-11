@@ -10,12 +10,11 @@ function OrderMultiReg(props){
     const orders = props.orders
     const TransData=props.TransData
     const setTransData=props.setTransData
-    const totalPrice = normalPriceRound(orders&&
+    const totalPrice = normalArrayRound(orders&&
       orders.map(item=>(item.totalCart&&item.totalCart.totalPrice)))
     const TotalTrans=normalArrayRound(TransData&&
         TransData.map(item=>(parseInt(item.payValue))))
     const RemainTotal=props.TransRemain&&props.TransRemain
-    console.log(data)
     const setSepidarTotal=()=>{
       setLoader(1)
       if(!orders||!orders.length)
@@ -48,7 +47,6 @@ function OrderMultiReg(props){
       })
       
     }
-    console.log(parseInt(totalPrice.toString().replace(/\D/g,'')))
     return(
       <>
           {props.orders&&props.orders.length?

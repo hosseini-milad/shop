@@ -61,7 +61,7 @@ function OrderTableRow(props) {
       props.setSelectedOrder(l => 
         l.filter(item => item.cartNo !== field.cartNo));
     }
-    console.log(props.selectedOrder)
+    
   }
   const CreateLink =(()=>{
     const postOptions={

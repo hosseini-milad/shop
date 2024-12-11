@@ -174,7 +174,8 @@ function Users(props) {
           </div>
         </div>
       </div>
-      <Box>
+      {loading?<div className="Loader">{env.loader}</div>
+      :<Box>
         <Grid container spacing={2}>
           <Grid item xs={12} md={6}>
             <Grid item xs={12} md={12} className="wrapper-visitor-chart">
@@ -278,7 +279,7 @@ function Users(props) {
             </Grid>
           </Grid>
         </Grid>
-      </Box>
+      </Box>}
 
       {/* <Box>
         <Grid container spacing={2}>

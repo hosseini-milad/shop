@@ -30,6 +30,7 @@ function CustomerGeneral(props) {
   }, [userData]);
   // drop downs
   const [states, setStates] = useState([]);
+  const [Agents, setAgents] = useState([]);
   const [search, setSearch] = useState("");
   const [cities, setCities] = useState([]);
   const [stateSearch, setStateSearch] = useState("");
@@ -37,6 +38,7 @@ function CustomerGeneral(props) {
 
   useEffect(() => {
     fetchStates();
+    fetchAgent();
   }, []);
 
   // fetches the states to populate dropdown
@@ -53,6 +55,22 @@ function CustomerGeneral(props) {
       .then((response) => response.json())
       .then((data) => {
         setStates(data.data);
+      })
+      .catch((error) => console.error("Error fetching states:", error));
+  };
+  const fetchAgent = () => {
+    fetch(env.siteApi + "/panel/user/list", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "x-access-token": token && token.token,
+        userId: token && token.userId,
+      },
+      body: JSON.stringify(),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        setAgents(data.filter);
       })
       .catch((error) => console.error("Error fetching states:", error));
   };
@@ -272,6 +290,20 @@ function CustomerGeneral(props) {
                 }))
               }
             />
+            <StyleSelect
+              title={formtrans.agent[props.lang]}
+              direction={props.direction}
+              defaultValue={userData.default || ""}
+              class={"formInput"}
+              options={Agents}
+              label="username"
+              action={(e) =>
+                setFormData((prevState) => ({
+                  ...prevState,
+                  default:e?e.username:"",
+                }))
+              }
+            />
             <StyleInput
               title={formtrans.postalCode[props.lang]}
               direction={props.direction}
@@ -297,7 +329,7 @@ function CustomerGeneral(props) {
                 }))
               }
             />
-<StyleSelect
+            <StyleSelect
               title={formtrans.state[props.lang]}
               direction={props.direction}
               defaultValue={userData.state || ""}

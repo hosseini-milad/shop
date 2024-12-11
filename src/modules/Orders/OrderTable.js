@@ -8,9 +8,18 @@ function OrderTable(props){
   const data =props.data
   const orders = props.orders
   const lang=props.lang;
-  const [selectedOrder,setSelectedOrder] = useState()
+  const [selectedOrder,setSelectedOrder] = useState([])
   const [detail,showDetail] = useState(-1)
   const [AllCheck,setAllCheck] = useState(0)
+  const CheckHandel=(e)=>{
+    setAllCheck(e.target.checked?1:0)
+    var OrderList=props.orders.filter(item=>item.status=="undone")
+    if(e.target.checked){
+      setSelectedOrder(OrderList)
+    }else{
+      setSelectedOrder([])
+    }
+  }
   if(!orders||!orders.length) return <main>waiting</main>
   else  return(<>
         <table>
@@ -19,8 +28,7 @@ function OrderTable(props){
           <th>ردیف</th>
           <th className="checkBoxStyle">
               <input type="checkbox" checked={AllCheck} 
-              onClick={(e)=>{setSelectedOrder(e.target.checked?props.orders:[]);
-              setAllCheck(e.target.checked?1:0)}}/></th>
+              onClick={(e)=>CheckHandel(e)}/></th>
             <th>
               <p>{tabletrans.orderNumber[lang]}</p>
               <i></i>
