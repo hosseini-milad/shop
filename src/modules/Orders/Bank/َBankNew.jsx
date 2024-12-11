@@ -39,8 +39,7 @@ function BankNew(props){
     
     
     setSendBank("")
-   }
-   console.log(SendBank)
+  }
   return(
     <div className="add-bank">
     

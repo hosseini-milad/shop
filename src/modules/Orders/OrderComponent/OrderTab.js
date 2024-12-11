@@ -1,12 +1,22 @@
 import { useState } from "react"
 
 function OrderTab(props){
-    //const [tab,setTab] = useState(0)
-    console.log(props.tab)
+    console.log(props.TabList)
+    
     return(
       <nav className="slidemenu">
-
-      <input type="radio" name="slideItem" id="slide-item-1" className="slide-toggle" checked />
+        {props.TabList&&props.TabList.map((tabItem,i)=>(
+          <>
+            <input type="radio" name="slideItem" id={`slide-item-${i+1}`} className="slide-toggle"/>
+            <label htmlFor={`slide-item-${i+1}`} onClick={()=>{props.setFilters(prevState => ({
+                      ...prevState,category:tabItem.type
+                    }));props.setTab(i)}} className={props.tab===i?"sliderMenuSelect":"sliderMenu"}>
+              <span>{tabItem.title}</span>
+              <div className="sliderMenu"></div>
+            </label>
+          </>
+        ))}
+      {/* <input type="radio" name="slideItem" id="slide-item-1" className="slide-toggle" checked />
       <label htmlFor="slide-item-1" onClick={()=>{props.setFilters(prevState => ({
                 ...prevState, category:"Visitor",manage:"333sina"
               }));props.setTab(0)}} className={props.tab===0?"sliderMenuSelect":"sliderMenu"}>
@@ -46,14 +56,9 @@ function OrderTab(props){
         className={props.tab===4?"sliderMenuSelect":""}>
         <span>وب سایت</span>
         <div className="sliderMenu"></div>
-      </label>
+      </label> */}
 
-      {/*
-      <div className="clear"></div>
-
-      <div className="slider">
-        <div className="bar" htmlFor="slide-item-5"></div>
-    </div>*/}
+      
 
     </nav>
     )

@@ -13,34 +13,60 @@ function BankSelect(props){
   const setAmount =props.setAmount
   const Amount =props.Amount
   const OrderNumList=props.orders.map((order)=>order.cartNo)
-  console.log(TransData)
+  console.log(props.orders)
   useEffect(()=>{
     if(TransData){
       setLoadBank(0)
       setTimeout(()=>setLoadBank(1),100)
     }
   },[TransData])
-  
-  useEffect(()=>{
+  const FetchBank=()=>{
     const postOptions={
       method:'post',
       headers: {'Content-Type': 'application/json',
       "x-access-token":token&&token.token,"userId":token&&token.userId},
       body:JSON.stringify({totalCartValue:parseInt(props.totalPrice.toString().replace(/\D/g,''))})
     }
-    console.log(postOptions)
-  fetch(env.siteApi + "/setting/fetch-bank-of-cart",postOptions)
-  .then(res => res.json())
-  .then(
-  (result) => {
-    console.log(result)
-    setAmount(result.transRemain)
-  },
-  (error) => {
-    console.log(error);
+    fetch(env.siteApi + "/setting/fetch-bank-of-cart",postOptions)
+    .then(res => res.json())
+    .then(
+    (result) => {
+      
+      setAmount(result.transRemain)
+    },
+    (error) => {
+      console.log(error);
+      
+    })
+  }
+  const ClearBank=()=>{
+    const postOptions={
+      method:'get',
+      headers: {'Content-Type': 'application/json',
+      "x-access-token":token&&token.token,"userId":token&&token.userId},
+      
+    }
+    fetch(env.siteApi + "/setting/clear-bank-of-cart",postOptions)
+    .then(res => res.json())
+    .then(
+    (result) => {
+      console.log(result)
+      setTransData("")
+    },
+    (error) => {
+      console.log(error);
+      
+    })
+  }
+  useEffect(()=>{
+    if(props.orders.length){
+      FetchBank()
+    }else{
+      console.log("object")
+      ClearBank()
+    }
     
-  })
-  },[props.order])
+  },[props.orders])
   return(<>
     <div>
       {loadBank?<BankNew Amount={Amount} setAmount={setAmount} totalPrice={props.totalPrice} bankList={bankList} setTransData={setTransData} user={user} loadBank={loadBank} TransData={TransData}

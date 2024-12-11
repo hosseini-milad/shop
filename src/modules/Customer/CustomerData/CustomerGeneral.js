@@ -273,6 +273,18 @@ function CustomerGeneral(props) {
               }
             />
             <StyleInput
+              title={formtrans.agent[props.lang]}
+              direction={props.direction}
+              defaultValue={userData.agent}
+              class={"formInput"}
+              action={(e) =>
+                setFormData((prevState) => ({
+                  ...prevState,
+                  agent: e,
+                }))
+              }
+            />
+            <StyleInput
               title={formtrans.postalCode[props.lang]}
               direction={props.direction}
               defaultValue={userData.postalCode}
@@ -297,7 +309,7 @@ function CustomerGeneral(props) {
                 }))
               }
             />
-<StyleSelect
+            <StyleSelect
               title={formtrans.state[props.lang]}
               direction={props.direction}
               defaultValue={userData.state || ""}

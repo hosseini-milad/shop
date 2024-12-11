@@ -225,7 +225,7 @@ root.render(
           }
         />
 
-        <Route path="/orders/business" element={<OrderHolder lang={"fa"} />} />
+        <Route path="/orders/business" element={<OrderHolderNew lang={"fa"} />} />
         <Route path="/orders/open" element={<OpenOrders lang={"fa"} />} />
         <Route
           path="/orders/print/:orderId"

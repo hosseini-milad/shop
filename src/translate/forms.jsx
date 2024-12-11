@@ -131,6 +131,10 @@ const formtrans ={
         english: "About",
         persian: "درباره"
     },
+    agent:{
+        english: "Agent",
+        persian: "کاربر"
+    },
     saveChanges:{
         english: "Save Changes",
         persian: "ذخیره تغییرات"
