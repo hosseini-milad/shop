@@ -75,7 +75,7 @@ router.post('/list', jsonParser, async (req, res) => {
             {title:"وب سایت", type:"Website"},
         ]
         if(1){
-            
+
         }
         var brandUnique = [];
         var resultData = [];
@@ -286,7 +286,7 @@ router.post('/list', jsonParser, async (req, res) => {
 
         res.json({
             filter: resultData, brand: brandUnique, isSale, ...transRemain,
-            size,adminData,status,bankList,transData:transactions
+            size,adminData,status,bankList,transData:transactions,tabs
         });
     } catch (error) {
         res.status(500).json({ message: error.message });
