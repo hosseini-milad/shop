@@ -74,8 +74,10 @@ router.post('/list', jsonParser, async (req, res) => {
             {title:"فروشگاه مرکزی", type:"markazi"},
             {title:"وب سایت", type:"Website"},
         ]
-        if(1){
-
+        if(adminData.access !== "manager"){
+            if(adminData.username=="zohre"|| adminData.username=="hesarak") 
+                type="Sale"
+            else type="Visitor"
         }
         var brandUnique = [];
         var resultData = [];
