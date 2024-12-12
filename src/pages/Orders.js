@@ -39,13 +39,13 @@ function Orders(props) {
     TabOrder?
       localStorage.setItem("orderTab",JSON.stringify({
         ...TabOrder,
-        Tab: tab,mange:filters.manage,type:filters.category
+        Tab: tab,manager:filters.manager,type:filters.category
       })):
       localStorage.setItem("orderTab",JSON.stringify({
         
-        Tab: tab,mange:filters.manage,type:filters.category
+        Tab: tab,manager:filters.manager,type:filters.category
       }))
-  },[tab,filters.manage])
+  },[tab,filters.manager])
   function handleFilterChange(newFilters) {
     setFilters(newFilters);
     updateUrlWithFilters(newFilters);
@@ -63,6 +63,7 @@ function Orders(props) {
       dateFrom: filters.date && filters.date.dateFrom,
       dateTo: filters.date && filters.date.dateTo,
       type:filters.category?filters.category:TabOrder.type,
+      manager:filters.manager?filters.manager:TabOrder.manager,
       index:tab
     };
     const postOptions = {

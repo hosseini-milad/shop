@@ -17,6 +17,7 @@ function OrderTableRow(props) {
   const lang = props.lang;
   const cart = props.cart;
   let menuRef = useRef();
+  console.log(props.selectedOrder)
   useEffect(() => {
     let handler = (e)=>{
       if(!menuRef.current.contains(e.target)){
@@ -36,10 +37,36 @@ function OrderTableRow(props) {
   useEffect(()=>{
     setCheckState(props.allcheck)
   },[props.allcheck])
-  
+  const ClearBank=()=>{
+    const postOptions={
+      method:'get',
+      headers: {'Content-Type': 'application/json',
+      "x-access-token":token&&token.token,"userId":token&&token.userId},
+      
+    }
+    fetch(env.siteApi + "/setting/clear-bank-of-cart",postOptions)
+    .then(res => res.json())
+    .then(
+    (result) => {
+      console.log(result)
+    },
+    (error) => {
+      console.log(error);
+      
+    })
+  }
+
   const updateCheckBox=(field,action)=>{
     setCheckState(action?false:true)
     if(!action){
+      if(field.userInfo[0]&&field.userInfo[0].CustomerID){
+        return(
+          props.setSelectedOrder([field]),
+          props.setDisableAll(0)
+          
+        )
+
+      }
       if(props.selectedOrder){
         var index = props.selectedOrder&&
           props.selectedOrder.length
@@ -58,11 +85,13 @@ function OrderTableRow(props) {
     }
     else{
         if(props.selectedOrder&&props.selectedOrder.length==1){
-          console.log("action Here")
+          ClearBank()
         }
-      //const cartNo = e.target.getAttribute("cartNo")
       props.setSelectedOrder(l => 
         l.filter(item => item.cartNo !== field.cartNo));
+      if(field.userInfo[0]&&field.userInfo[0].CustomerID){
+        props.setDisableAll(1)
+      }
     }
     
   }
@@ -85,18 +114,19 @@ function OrderTableRow(props) {
             console.log(error)
         })
     })
-
+  
   return (
     <React.Fragment>
       <tr className={activeAcc ? "activeAccordion" : "accordion"}>
         <td>{props.index+1}</td>
         {order.isSale?<td className="checkBoxStyle">
           {order.status&&order.status=="undone"?
-          <input
+          ((order.userInfo[0]&&order.userInfo[0].CustomerID||props.DisableAll)?<input
+            
             type="checkbox"
             checked={checkState}
             onChange={(e) =>  updateCheckBox(order,checkState)}
-          />:<></>}
+          />:<></>):<></>}
         </td>:
         <td className="checkBoxStyle">
           {order.status&&order.status=="done"?

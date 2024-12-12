@@ -281,12 +281,12 @@ function CustomerGeneral(props) {
             <StyleInput
               title={formtrans.customercode[props.lang]}
               direction={props.direction}
-              defaultValue={userData.cCode}
+              defaultValue={userData.CustomerID}
               class={"formInput"}
               action={(e) =>
                 setFormData((prevState) => ({
                   ...prevState,
-                  cCode: e,
+                  CustomerID: e,
                 }))
               }
             />

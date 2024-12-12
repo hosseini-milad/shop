@@ -11,6 +11,7 @@ function OrderTable(props){
   const [selectedOrder,setSelectedOrder] = useState([])
   const [detail,showDetail] = useState(-1)
   const [AllCheck,setAllCheck] = useState(0)
+  const [DisableAll,setDisableAll] = useState(1)
   
   const CheckHandel=(e)=>{
     setAllCheck(e.target.checked?1:0)
@@ -65,7 +66,7 @@ function OrderTable(props){
         </thead>
         <tbody>
           {orders?orders.map((order,i)=>(
-            <OrderTableRow detail={detail} showDetail={showDetail} 
+            <OrderTableRow setDisableAll={setDisableAll} DisableAll={DisableAll} detail={detail} showDetail={showDetail} 
               cart={props.cart} setSelectedOrder={setSelectedOrder}
               selectedOrder={selectedOrder} data={data}
               order={order} index={i} key={i} lang={lang} allcheck={AllCheck} token={props.token}/>
