@@ -68,10 +68,10 @@ router.post('/list', jsonParser, async (req, res) => {
             return;
         }
         var tabs =adminData.access !== "manager"?[]: [
-            {title:"ویزیتور", type:"bazaryab"},
-            {title:"فروشگاه زهره", type:"zohre"},
-            {title:"فروشگاه حصارک", type:"hesarak"},
-            {title:"فروشگاه مرکزی", type:"markazi"},
+            {title:"ویزیتور", type:"bazaryab",manager:""},
+            {title:"فروشگاه زهره", type:"Sale",manager:"zohre"},
+            {title:"فروشگاه حصارک", type:"Sale",manager:"hesarak"},
+            {title:"فروشگاه مرکزی", type:"Sale",manager:"markazi"},
             {title:"وب سایت", type:"Website"},
         ]
         if(adminData.access !== "manager"){
