@@ -102,7 +102,7 @@
   width: unset;
 }
 .sub-more-menu {
-  display:none;
+  display: none;
 }
 .formInput {
   margin: 15px !important;
@@ -752,13 +752,13 @@ dialog {
   flex-direction: column;
   color: #111;
 }
-.newCol .btn-wrapper{
+.newCol .btn-wrapper {
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 6px;
   width: 100%;
-  i{
+  i {
     margin: 0;
   }
 }
@@ -792,6 +792,14 @@ dialog {
 }
 .btn-crm-cancel {
   background-color: lightsalmon;
+}
+.btn-orderItem{
+  padding: 3px 10px;
+  background-color:rgb(255, 51, 51);
+  p{
+    font-size: 0.85rem;
+    color: rgb(255, 255, 255);
+  }
 }
 .btn-crm-edit {
   background-color: orange;
@@ -954,7 +962,7 @@ dialog {
   width: 90%;
   margin: 5px auto 0;
 }
-.fishPrintArea .hesabPrintTable{
+.fishPrintArea .hesabPrintTable {
   overflow: hidden;
 }
 .hesabPrintTable .verticalRow {
@@ -1002,7 +1010,7 @@ dialog {
   display: flex;
   min-height: 85px;
 }
-.fishPrintArea .userInfo{
+.fishPrintArea .userInfo {
   display: block;
 }
 .userSection {
@@ -1468,7 +1476,7 @@ dialog {
   color: #fff;
   background-color: green;
 }
-.little-check{
+.little-check {
   width: 25px;
   height: 25px;
   font-size: 12px;
@@ -1476,7 +1484,7 @@ dialog {
   align-items: center;
   justify-content: center;
 
-  i{
+  i {
     margin: 0;
   }
 }
@@ -1727,7 +1735,6 @@ dialog {
   display: flex;
   flex-direction: column;
   padding-right: 6px;
-  
 }
 .bank-wrapper .bank-list .bank-tr {
   width: 100%;
@@ -1747,80 +1754,77 @@ dialog {
   padding-right: 6px;
   gap: 6px;
 }
-.bank-wrapper .add-bank .MuiInputBase-root{
+.bank-wrapper .add-bank .MuiInputBase-root {
   margin-top: 0;
-} 
-  
-  
+}
+
 .bank-wrapper .bank-item {
-    padding: 0.5rem;
-    border-radius: 0.2rem;
-    border: 1px solid grey;
-    min-width: 200px;
-    max-width: 200px;
-    height: 45px;
-    white-space: nowrap;
-    text-overflow: ellipsis;
-    overflow: hidden;
+  padding: 0.5rem;
+  border-radius: 0.2rem;
+  border: 1px solid grey;
+  min-width: 200px;
+  max-width: 200px;
+  height: 45px;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
 }
 .bank-wrapper input {
-    width: unset;
-    height: 45px;
-    border-radius: 0.2rem;
-    border: 1px solid grey;
-    outline: none;
+  width: unset;
+  height: 45px;
+  border-radius: 0.2rem;
+  border: 1px solid grey;
+  outline: none;
 }
 .bank-wrapper .MuiFormControl-root {
-    height: 45px;
-    width: 200px !important;
-    min-width: 200px !important;
+  height: 45px;
+  width: 200px !important;
+  min-width: 200px !important;
 }
-.bank-wrapper .MuiInputBase-input{
-  height:unset;
-
-
+.bank-wrapper .MuiInputBase-input {
+  height: unset;
 }
 .bank-wrapper .MuiAutocomplete-root {
-    width: 100%;
-  }
+  width: 100%;
+}
 
-.red-bg{
+.red-bg {
   background-color: rgba(253, 83, 83, 0.568) !important;
 }
-.printArea .btn-wrapper{
+.printArea .btn-wrapper {
   padding: 1rem;
-  i{
+  i {
     font-size: 1.5rem;
     cursor: pointer;
   }
 }
-.print-container .btn-wrapper{
-  padding:0rem 1rem;
-  i{
+.print-container .btn-wrapper {
+  padding: 0rem 1rem;
+  i {
     font-size: 1.5rem;
     cursor: pointer;
   }
 }
 
-.image-popup{
+.image-popup {
   position: relative;
   cursor: unset;
-  img{
+  img {
     display: block;
     width: 90%;
     max-width: 900px;
   }
-  i{
+  i {
     position: absolute;
     top: 5px;
     left: 5px;
     font-size: 1rem;
   }
 }
-.onlyPrint{
+.onlyPrint {
   display: none;
 }
-.Loader{
+.Loader {
   width: 100%;
   height: 100%;
   display: flex;
