@@ -46,7 +46,7 @@ router.post('/find-products', auth, async (req, res) => {
                 }
             }])
         var searchProductResult = []
-        const cartList = await cart.find(stockId ? { stockId: stockId } : {})
+        const cartList = await cart.find(stockId ? { stockId: stockId ,InvoiceID:{$exists:false}} : {})
         const qCartList = await qCart.find(stockId ? { stockId: stockId } : {})
         var index = 0
         for (var i = 0; i < searchProducts.length; i++) {
@@ -54,7 +54,7 @@ router.post('/find-products', auth, async (req, res) => {
             var desc = ''
             var cartCount = findCartCount(searchProducts[i].sku, cartList.concat(qCartList), stockId)
             if (count) count.quantity = parseInt(count.quantity) - parseInt(cartCount)
-            if (count && count.quantity) {
+            if (count && count.quantity>0) {
                 index++
                 desc = searchProducts[i].title +
                     "(" + searchProducts[i].sku + ")" +
