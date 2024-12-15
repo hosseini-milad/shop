@@ -243,6 +243,7 @@ router.post("/update-customer", jsonParser, async (req, res) => {
         contractCall: req.body.contractCall,
         zone: req.body.zone,
         gps: req.body.gps,
+        CustomerID: req.body.CustomerID,
         workTime: req.body.workTime,
         website: req.body.website,
     };
