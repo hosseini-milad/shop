@@ -30,7 +30,7 @@ function BankSelect(props){
     .then(res => res.json())
     .then(
     (result) => {
-      
+      setTransData(result.transData)
       setAmount(result.transRemain)
     },
     (error) => {
