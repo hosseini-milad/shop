@@ -232,11 +232,12 @@ router.post('/list', jsonParser, async (req, res) => {
             ]);
 
             for (var i = 0; i < (openList && openList.length); i++) {
+                const userData = userInfo&&userInfo[0]&&userInfo[0].CustomerID
                 var totalPrice = findCartSum(openList[i].cartItems,
                     openList[i].payValue);
                 var tempStatus = openList[i].InvoiceID?"done":"undone"
                 showCart.push({ ...openList[i], totalCart: totalPrice ,
-                    status:tempStatus});
+                    status:tempStatus,isOfficial:userData?1:0});
             }
             status = [{title:"انجام نشده",enTitle:"undone",id:0},{title:"انجام شده",enTitle:"done",id:1}]
             bankList = await bankAccounts.find({limit:{$ne:adminData.username}})    
