@@ -68,7 +68,7 @@ router.post('/list', jsonParser, async (req, res) => {
             return;
         }
         var tabs =adminData.access !== "manager"?[]: [
-            {title:"ویزیتور", type:"bazaryab",manager:""},
+            {title:"ویزیتور", type:"Visitor",manager:""},
             {title:"فروشگاه زهره", type:"Sale",manager:"zohre"},
             {title:"فروشگاه حصارک", type:"Sale",manager:"hesarak"},
             {title:"فروشگاه مرکزی", type:"Sale",manager:"markazi"},
