@@ -127,7 +127,7 @@ function OpenOrderItem(props) {
 
   return (
     <div className="order-wrapper">
-      <div className="border-title">
+      <div className="border-title" onClick={() => (showDetail ? setDetail(0) : setDetail(1))}>
         {!data.InvoiceID && data.official ? (
           <div
             className={checkState ? "orderCheck activeCheck" : "orderCheck"}
@@ -145,7 +145,7 @@ function OpenOrderItem(props) {
         )}
         <div
           className="bu-name"
-          onClick={() => (showDetail ? setDetail(0) : setDetail(1))}
+          
         >
           {data.userData ? (
             <div className="col">

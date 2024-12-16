@@ -59,7 +59,7 @@ function OrderTableRow(props) {
   const updateCheckBox=(field,action)=>{
     setCheckState(action?false:true)
     if(!action){
-      if(field.userInfo[0]&&field.userInfo[0].CustomerID){
+      if(props.tab&&field.isOfficial){
         return(
           props.setSelectedOrder([field]),
           props.setDisableAll(0)
@@ -89,7 +89,7 @@ function OrderTableRow(props) {
         }
       props.setSelectedOrder(l => 
         l.filter(item => item.cartNo !== field.cartNo));
-      if(field.userInfo[0]&&field.userInfo[0].CustomerID){
+      if(field.isOfficial){
         props.setDisableAll(1)
       }
     }

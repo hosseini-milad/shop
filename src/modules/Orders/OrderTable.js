@@ -15,7 +15,11 @@ function OrderTable(props){
   
   const CheckHandel=(e)=>{
     setAllCheck(e.target.checked?1:0)
-    var OrderList=props.orders.filter(item=>item.status=="undone")
+    if(props.tab==0){
+      var OrderList=props.orders.filter(item=>(item.status=="done"))
+      return(setSelectedOrder(OrderList))
+    }
+    var OrderList=props.orders.filter(item=>(item.status=="undone")&&(!item.isOfficial))
     if(e.target.checked){
       setSelectedOrder(OrderList)
     }else{
@@ -66,7 +70,7 @@ function OrderTable(props){
         </thead>
         <tbody>
           {orders?orders.map((order,i)=>(
-            <OrderTableRow setDisableAll={setDisableAll} DisableAll={DisableAll} detail={detail} showDetail={showDetail} 
+            <OrderTableRow tab={props.tab} setDisableAll={setDisableAll} DisableAll={DisableAll} detail={detail} showDetail={showDetail} 
               cart={props.cart} setSelectedOrder={setSelectedOrder}
               selectedOrder={selectedOrder} data={data}
               order={order} index={i} key={i} lang={lang} allcheck={AllCheck} token={props.token}/>

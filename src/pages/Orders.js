@@ -169,7 +169,8 @@ function Orders(props) {
             env.loader
           ) : (
             Error?<p>دسترسی ندارید</p>:
-            <OrderTable 
+            <OrderTable
+            tab={tab}
             setTransRemain={setTransRemain} 
             TransRemain={TransRemain} 
             TransData={TransData} 
