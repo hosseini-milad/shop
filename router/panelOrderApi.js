@@ -232,6 +232,7 @@ router.post('/list', jsonParser, async (req, res) => {
             ]);
 
             for (var i = 0; i < (openList && openList.length); i++) {
+                var userInfo = openList[i].userInfo
                 const userData = userInfo&&userInfo[0]&&userInfo[0].CustomerID
                 var totalPrice = findCartSum(openList[i].cartItems,
                     openList[i].payValue);
