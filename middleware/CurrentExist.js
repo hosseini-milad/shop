@@ -12,8 +12,6 @@ const FindCurrentExist=async(itemId,cartNo,stockNo)=>{
         var cartItems = []
         if(orderData) cartItems = orderData.cartItems
         if(!cartItems) continue
-        console.log("orderNo: ",orderData)
-        console.log("stock: ",stockId)
         for(var j=0;j<cartItems.length;j++){
             
             if(cartItems[j].id === itemId){

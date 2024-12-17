@@ -1034,6 +1034,8 @@ router.post('/update-cart', jsonParser, async (req, res) => {
         const userData = await users.findOne({ _id: req.headers['userid'] })
         const stockId = userData.StockId ? userData.StockId : "13"
         var status = "";
+        console.log("userData: ",userData)
+        console.log("stockId: ",stockId)
         //const cartData = await cart.find({userId:userId})
         const qCartData = await quickCart.findOne({ userId: userId })
         const availItems = await checkAvailable(req.body.cartItem, stockId)
@@ -1195,8 +1197,6 @@ const checkAvailable = async (items, stockId,cartNo) => {
         "- req: ",items.count
     )*/
     var minusCount = currentOrder + items.count
-    console.log("total: "+totalCount)
-    console.log("current: "+currentOrder)
     return (compareCount(totalCount, minusCount))
 }
 const createCart = (cartData, cartItem) => {
