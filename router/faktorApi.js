@@ -1194,7 +1194,8 @@ const checkAvailable = async (items, stockId,cartNo) => {
         "- req: ",items.count
     )*/
     var minusCount = currentOrder + items.count
-
+    console.log("total: "+totalCount)
+    console.log("item: "+items.count)
     return (compareCount(totalCount, minusCount))
 }
 const createCart = (cartData, cartItem) => {
