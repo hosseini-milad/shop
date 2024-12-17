@@ -11,7 +11,8 @@ const FindCurrentExist=async(itemId,cartNo,stockNo)=>{
         if(currentTasks[i].orderNo == cartNo) continue
         const orderData = await cart.findOne({cartNo:currentTasks[i].orderNo,stockId:stockId})
         const cartItems = orderData&&orderData.cartItems
-        for(var j=0;j<(cartItems&&cartItems.length);j++){
+        if(!cartItems) continue
+        for(var j=0;j<cartItems.length;j++){
             
             console.log("count: ",cartItems[j].count)
             if(cartItems[j].id === itemId){
