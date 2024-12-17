@@ -7,11 +7,11 @@ const FindCurrentExist=async(itemId,cartNo,stockNo)=>{
     console.log(currentTasks.length)
     var countOrder =0
     for(var i=0;i<currentTasks.length;i++){
+        console.log(currentTasks[i].orderNo)
         if(currentTasks.isQuote) continue;
         if(currentTasks[i].orderNo == cartNo) continue
         const orderData = await cart.findOne({cartNo:currentTasks[i].orderNo,stockId:stockId})
         const cartItems = orderData&&orderData.cartItems
-        console.log(cartItems.length)
         for(var j=0;j<(cartItems&&cartItems.length);j++){
             if(cartItems[j].id === itemId){
                 //validOrder.push(cartItems[j]) 
