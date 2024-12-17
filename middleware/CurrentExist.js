@@ -4,7 +4,7 @@ const cart = require("../models/product/cart")
 const FindCurrentExist=async(itemId,cartNo,stockNo)=>{
     const currentTasks = await tasks.find({taskStep:{$nin:["cancel","archive","quote"]}})
     var stockId=stockNo?stockNo:"13"
-    //var validOrder = [] 
+    console.log(currentTasks.length)
     var countOrder =0
     for(var i=0;i<currentTasks.length;i++){
         if(currentTasks.isQuote) continue;
