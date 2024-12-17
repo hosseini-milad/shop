@@ -12,7 +12,7 @@ const FindCurrentExist=async(itemId,cartNo,stockNo)=>{
         var cartItems = []
         if(orderData) cartItems = orderData.cartItems
         if(!cartItems) continue
-        console.log("item count: ",cartItems.length)
+        console.log("item count: ",cartItems)
         for(var j=0;j<cartItems.length;j++){
             
             console.log("count: ",cartItems[j].count)
