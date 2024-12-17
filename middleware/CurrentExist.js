@@ -14,6 +14,7 @@ const FindCurrentExist=async(itemId,cartNo,stockNo)=>{
         for(var j=0;j<(cartItems&&cartItems.length);j++){
             if(cartItems[j].id === itemId){
                 //validOrder.push(cartItems[j]) 
+                console.log(cartItems[j].count)
                 countOrder+=parseInt(cartItems[j].count)
             }
         }
