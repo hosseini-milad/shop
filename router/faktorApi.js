@@ -1029,7 +1029,6 @@ router.post('/update-cart', jsonParser, async (req, res) => {
         payValue: req.body.payValue,
         progressDate: Date.now()
     }
-    console.log("data")
     try {
         const userData = await users.findOne({ _id: req.headers['userid'] })
         const stockId = userData.StockId ? userData.StockId : "13"
@@ -1179,7 +1178,7 @@ router.post('/edit-quote', jsonParser, async (req, res) => {
 })
 const checkAvailable = async (items, stockId,cartNo) => {
 
-    console.log(stockId)
+    //console.log(stockId)
     if (!stockId) stockId = "13"
     const existItem = await productcounts.findOne({ ItemID: items.id, Stock: stockId })
     const existItem3 = await productcounts.findOne({ ItemID: items.id, Stock: "9" })

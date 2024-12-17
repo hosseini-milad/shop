@@ -3,6 +3,7 @@ const cart = require("../models/product/cart")
 
 const FindCurrentExist=async(itemId,cartNo,stockNo)=>{
     const currentTasks = await tasks.find({taskStep:{$nin:["cancel","archive","quote"]}})
+    console.log(stockId)
     var stockId=stockNo?stockNo:"13"
     var countOrder =0
     for(var i=0;i<currentTasks.length;i++){
