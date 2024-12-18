@@ -25,7 +25,7 @@ const CartToSepidar=async(data,faktorNo,user,stock,cartOff)=>{
                 return({
                 "ItemRef": toInt(item.id),
                 "TracingRef": null,
-                "Description":item.title+"|"+item.sku,
+                "Description":item.title+"|"+item.sku+"("+faktorNo+")",
                 "StockRef":item.stock?item.stock:stock,
                 "Quantity": toInt(item.count),
                 "Fee": toInt(price),
