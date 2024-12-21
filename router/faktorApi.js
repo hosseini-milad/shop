@@ -52,7 +52,8 @@ router.post('/list-products', async (req, res) => {
     const brandId = filter ? filter.brand : ''
     const catId = filter ? filter.category : ''
     console.log(catId)
-    const subId = filter ? filter.subCategory : ''
+    //const subId = filter ? filter.subCategory : ''
+    const subId = filter ? filter.subCat : ''
     const stockId = req.body.stockId
     //const categoryData = await category.findOne({catCode:catId})
     const subChild = subId ? [] : await category.find({ "parent.catCode": catId })
