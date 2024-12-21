@@ -477,7 +477,7 @@ const findCartFunction = async (userId, managerId) => {
                 official = 0
             }
                 cartData[c] = { ...cartData[c], userData: userData ,official}
-                cartDetail.push(findCartSum(cartData[c].cartItems))
+                cartDetail.push(findCartSum(cartData[c].cartItems,cartData[c].payValue))
             }
             catch { }
             todayCartData.push(cartData[c])
