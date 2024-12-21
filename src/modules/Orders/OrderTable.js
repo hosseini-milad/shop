@@ -3,11 +3,12 @@ import OrderTableRow from "./OrderTableRow"
 import tabletrans from "../../translate/tables"
 import OrderMultiReg from "./OrderComponent/OrderMultiReg"
 import OrderMultiDone from "./OrderComponent/OrderMultiDone"
-
+import env from "../../env"
 function OrderTable(props){
   const data =props.data
   const orders = props.orders
   const lang=props.lang;
+  const token = props.token
   const [selectedOrder,setSelectedOrder] = useState([])
   const [detail,showDetail] = useState(-1)
   const [AllCheck,setAllCheck] = useState(0)
@@ -24,8 +25,30 @@ function OrderTable(props){
       setSelectedOrder(OrderList)
     }else{
       setSelectedOrder([])
+      setDisableAll(1)
+      ClearBank()
+      console.log("here")
     }
   }
+  const ClearBank=()=>{
+    const postOptions={
+      method:'get',
+      headers: {'Content-Type': 'application/json',
+      "x-access-token":token&&token.token,"userId":token&&token.userId},
+      
+    }
+    fetch(env.siteApi + "/setting/clear-bank-of-cart",postOptions)
+    .then(res => res.json())
+    .then(
+    (result) => {
+      console.log(result)
+    },
+    (error) => {
+      console.log(error);
+      
+    })
+  }
+
   if(!orders||!orders.length) return <main>waiting</main>
   else  return(<>
         <table>
@@ -73,7 +96,7 @@ function OrderTable(props){
             <OrderTableRow tab={props.tab} setDisableAll={setDisableAll} DisableAll={DisableAll} detail={detail} showDetail={showDetail} 
               cart={props.cart} setSelectedOrder={setSelectedOrder}
               selectedOrder={selectedOrder} data={data}
-              order={order} index={i} key={i} lang={lang} allcheck={AllCheck} token={props.token}/>
+              order={order} index={i} key={i} lang={lang} allcheck={AllCheck} token={props.token} ClearBank={ClearBank}/>
           )):''}
           
         </tbody>
