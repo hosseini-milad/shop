@@ -460,7 +460,7 @@ router.post('/fetch-category',jsonParser,async (req,res)=>{
         const catData = await category.findOne({_id: ObjectID(catId)}).lean()
         const parentName = catData&&catData.parent?
             await category.findOne({_id:ObjectID(catData.parent)}):''
-        catData.parentName = parentName
+        catData.parentName = parentName&&parentName.title
         const catList = await category.find()
        res.json({filter:catData,options:catList})
     }
