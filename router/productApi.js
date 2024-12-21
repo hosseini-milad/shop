@@ -167,7 +167,7 @@ router.post('/subcategory', async (req,res)=>{
     try{  
         const categoryData = await category.findOne({link:catName})
         const catId =  categoryData&&categoryData._id.toString()
-        const subCategory= categoryData?await category.find({"parent._id":catId}):[]
+        const subCategory= categoryData?await category.find({"parent":catId}):[]
         const catPool = subCategory.map(item=>item.catCode)
         const catProduct = await productSchema.aggregate([
             {$match:{catId:{$in:catPool}}},
