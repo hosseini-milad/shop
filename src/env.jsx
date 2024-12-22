@@ -1,10 +1,10 @@
 import Cookies from "universal-cookie";
 
 const siteUrl='http://localhost:3000';
-//export const siteApi='https://shopadmin.sharifoilco.com/api';
-//export const siteApiUrl='https://shopadmin.sharifoilco.com';
-export const siteApi = 'http://localhost:6090/api'
-export const siteApiUrl='http://localhost:6090';
+export const siteApi='https://shopadmin.sharifoilco.com/api';
+export const siteApiUrl='https://shopadmin.sharifoilco.com';
+// export const siteApi = 'http://localhost:6090/api'
+// export const siteApiUrl='http://localhost:6090';
 
 const env ={
     siteUrl:'https://sharifoilco.com',

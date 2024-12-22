@@ -299,19 +299,19 @@ label {
 .slick-next::before,
 .slick-prev::before {
   color: gray;
-  font-family: 'Font Awesome 4';
+  font-family: "Font Awesome 4";
 }
 .packageSlider .slick-prev::before {
-  content: '\f053' !important;
+  content: "\f053" !important;
 }
 .packageSlider .slick-next::before {
-  content: '\f054' !important;
+  content: "\f054" !important;
 }
 .menuMain .slick-next::before {
-  content: '\f054' !important;
+  content: "\f054" !important;
 }
 .menuMain .slick-prev::before {
-  content: '\f053' !important;
+  content: "\f053" !important;
 }
 
 .menuMain .megaItem img {
@@ -365,7 +365,7 @@ label {
 }
 .megaMenuBanner {
   background: #eee;
-  background-image: url('https://www.amsoil.com/medias/gasoline-motor-oil-us.jpg?context=bWFzdGVyfHJvb3R8MTc2Njh8aW1hZ2UvanBlZ3xoZWMvaDhkLzg4MTQ3MjQ0ODEwNTQuanBnfDIyMDViOWJmMDNkYjIwNWZkMzQ2ZmFhZWNiODY4ZjJiNzZiNjFlYjM1MmEwMzAxOTAwOWI4NDlhOTMzNzNjZjQ');
+  background-image: url("https://www.amsoil.com/medias/gasoline-motor-oil-us.jpg?context=bWFzdGVyfHJvb3R8MTc2Njh8aW1hZ2UvanBlZ3xoZWMvaDhkLzg4MTQ3MjQ0ODEwNTQuanBnfDIyMDViOWJmMDNkYjIwNWZkMzQ2ZmFhZWNiODY4ZjJiNzZiNjFlYjM1MmEwMzAxOTAwOWI4NDlhOTMzNzNjZjQ");
   background-position: bottom left;
   background-repeat: no-repeat;
   background-size: auto 100%;
@@ -948,7 +948,7 @@ label {
 
 .postParts {
   padding: 80px 0;
-  background-image: url('https://hiprinter.com/images/static/blogBack.png');
+  background-image: url("https://hiprinter.com/images/static/blogBack.png");
 }
 
 .postPart {
@@ -1285,7 +1285,7 @@ label {
 }
 .priceBold li::before {
   color: var(--bullot-color);
-  content: '\2022';
+  content: "\2022";
   font-weight: bold;
   display: inline-block;
   width: 1em;
@@ -2027,8 +2027,8 @@ footer {
   padding-right: 10px;
 }
 .agentPage li::marker {
-  content: '\f041';
-  font-family: 'Font Awesome 4';
+  content: "\f041";
+  font-family: "Font Awesome 4";
   font-size: 18px;
 }
 .imageContainer {
@@ -2108,18 +2108,18 @@ footer {
 .popup-arrow {
   color: rgb(255, 255, 255);
 }
-[role='tooltip'] .popup-content {
+[role="tooltip"] .popup-content {
   width: 200px;
   box-shadow: rgba(0, 0, 0, 0.16) 0px 0px 3px;
 }
 .popup-overlay {
   background: rgba(0, 0, 0, 0.5);
 }
-[data-popup='tooltip'] .popup-overlay {
+[data-popup="tooltip"] .popup-overlay {
   background: transparent;
 }
 .modal {
-  font-family: 'iran';
+  font-family: "iran";
   position: relative;
 }
 .modal-content {
@@ -2211,6 +2211,14 @@ footer {
   display: flex;
   align-items: flex-start;
   margin-top: 50px;
+}
+.imgPopUpHolder .close-modal-btn{
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  border: none;
+  background-color: transparent;
+  font-size: 2rem;
 }
 .modal-content input {
   width: 100%;
@@ -2421,7 +2429,7 @@ footer {
   color: rgba(0, 0, 0, 0.25);
 }
 .phoneHover:after {
-  content: 'ویرایش';
+  content: "ویرایش";
   color: var(--main-color);
   top: 0px; /* position the top  edge of the element at the middle of the parent */
   left: 0%; /* position the left edge of the element at the middle of the parent */
@@ -2650,7 +2658,7 @@ footer {
   font-size: 13px;
 }
 .commentAdvanced li::before {
-  content: '\2022';
+  content: "\2022";
   color: green;
   margin: auto 5px;
   font-weight: bold;
@@ -2771,7 +2779,7 @@ footer {
   height: 150px;
   object-fit: contain;
 }
-.disabled{
+.disabled {
   background-color: silver;
 }
 
@@ -3132,6 +3140,7 @@ footer {
     width: 56px;
     border-radius: 0 5px 5px 0;
   }
+
   .modal-product-detail {
     bottom: -25px;
   }
@@ -3189,6 +3198,29 @@ footer {
   .Brand {
     margin: auto;
   }
+  .imgPopUpHolder{
+    flex-direction:column;
+    align-items: center;
+    justify-content: center;
+    margin-top: 0;
+  }
+  .imgPopUpHolder .modalImg{
+    margin-inline: auto;
+  }
+  .imgPopUpHolder .modal{
+    margin: 0;
+    
+  }
+  .imgPopUpHolder .modal-header{
+    display: none;
+    
+  }
+  .cartMainHandler{
+    flex-direction: column;
+  }
+  .cartHandler{
+    width: 100%;
+  }
 }
 
 .slick-dots {
@@ -3223,26 +3255,26 @@ footer {
   width: 30px;
 }
 
-.etc3{
+.etc3 {
   max-width: 150px;
   overflow: hidden;
   white-space: nowrap; /* Don't forget this one */
   text-overflow: ellipsis;
 }
 
-.userPass{
+.userPass {
   text-align: left;
   font-size: 12px;
   margin-bottom: -10px;
 }
-.userPass:hover{
-  color:var(--main-color);
+.userPass:hover {
+  color: var(--main-color);
   cursor: pointer;
   font-weight: bold;
   font-size: 11px;
   line-height: 1.6;
 }
 
-.disBtn{
+.disBtn {
   background-color: silver;
 }
