@@ -98,6 +98,62 @@ const statustrans ={
         color: "rgb(17, 141, 87)",
         background: "rgba(34, 197, 94, 0.16)"
     },
+    website:{
+        english: "website",
+        persian: "فروش سایت",
+        index:5,
+        color: "rgb(17, 141, 87)",
+        background: "rgba(34, 197, 94, 0.16)"
+    },
+    suuport:{
+        english: "suuport",
+        persian: "پشتیبانی",
+        index:5,
+        color: "rgb(17, 141, 87)",
+        background: "rgba(34, 197, 94, 0.16)"
+    },
+    sending:{
+        english: "sending",
+        persian: "ارسال",
+        index:5,
+        color: "rgb(17, 141, 87)",
+        background: "rgba(34, 197, 94, 0.16)"
+    },
+    prepare:{
+        english: "prepare",
+        persian: "آماده سازی اجناس",
+        index:5,
+        color: "rgb(17, 141, 87)",
+        background: "rgba(34, 197, 94, 0.16)"
+    },
+    accepted:{
+        english: "accepted",
+        persian: "تایید شده",
+        index:5,
+        color: "rgb(17, 141, 87)",
+        background: "rgba(34, 197, 94, 0.16)"
+    },
+    edit:{
+        english: "edit",
+        persian: "نیاز به اصلاح",
+        index:5,
+        color: "rgb(17, 141, 87)",
+        background: "rgba(34, 197, 94, 0.16)"
+    },
+    initial:{
+        english: "initial",
+        persian: "ثبت اولیه",
+        index:5,
+        color: "rgb(17, 141, 87)",
+        background: "rgba(34, 197, 94, 0.16)"
+    },
+    quote:{
+        english: "quote",
+        persian: "پیش فاکتور",
+        index:5,
+        color: "rgb(17, 141, 87)",
+        background: "rgba(34, 197, 94, 0.16)"
+    },
     storeSent:{
         english: "Shop",
         persian: "تحویل به انبار",
