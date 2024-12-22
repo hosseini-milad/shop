@@ -139,6 +139,9 @@ function OrderTableRow(props) {
                   ? order.userInfo[0].cName + "---" + order.userInfo[0].sName
                   : "---"}
               </p>
+              <p className="name">
+                {order.userInfo[0]?.Address}
+              </p>
             </div>
             {order.moreInformation ? (
               <i className="fa fa-comment-o" title={order.moreInformation}></i>
