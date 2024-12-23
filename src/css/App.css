@@ -2928,6 +2928,7 @@ footer {
     padding-right: 0;
     overflow-x: auto;
     max-width: 100vw;
+    position: unset;
   }
   .menuNavBar ul:hover {
   }
@@ -3134,11 +3135,17 @@ footer {
   }
   .offerButton {
     position: absolute;
-    left: -12px;
-    top: 57px;
+    right: 12px;
+    bottom: 10px;
     height: 35px;
-    width: 56px;
-    border-radius: 0 5px 5px 0;
+    width: 50px;
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .offerButton{
+    padding-right: 15px;
   }
 
   .modal-product-detail {

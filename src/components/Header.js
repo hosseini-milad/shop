@@ -8,24 +8,27 @@ import MegaMenuOil from '../modules/allPages/MegaMenuOil'
 import QuickSearch from "../modules/allPages/SearchPart/quickSearch";
 import SearchArea from '../modules/allPages/SearchPart/SearchArea'
 import SimpleAuth from "./simpleAuth";
-var token = JSON.parse(localStorage.getItem('token-oil'));
+import Cookies from 'universal-cookie';
+const cookies = new Cookies();
+
 
 function Header(props){
+	const token=cookies.get(env.cookieName)
 	const setting = props.setting;
 	//console.log(cart)
 	var url = '';
 	try{ url = document.location.pathname.split('/')[1]}
 	catch{}
-	const cart = ''//SimpleAuth(siteApi+env.cartDetailApi)
-	/*const [cart,setCart] = useState('');
+	// const cart = ''//SimpleAuth(siteApi+env.cartDetailApi)
+const [cart,setCart] = useState('');
 	useEffect(() => {
 		if(!token) return;
 		const postOptions={
-		  method:'get',
+		  method:'post',
 		  headers: { 'Content-Type': 'application/json' ,
 		  "Authorization": "Bearer "+token&&token.token}
 		}
-		fetch(siteApi+env.cartDetailApi,postOptions)
+		fetch(siteApi + "/cart/cart-detail",postOptions)
 		.then(res => res.json())
 		.then(
 		  (result) => {
@@ -34,8 +37,7 @@ function Header(props){
 		  (error) => {
 			console.log(error)
 		  })
-	},[])*/
-	//console.log(cart)
+	},[])
 	const [oilMenu,setOilMenu] = useState("none");
 	const [lubMenu,setLubMenu] = useState("none");
 	const [accMenu,setAccMenu] = useState("none");
@@ -142,14 +144,14 @@ function Header(props){
 				<div className="mainHolder" onMouseOver={handleCartHover}
 						onMouseOut={handleCartOut}
 						onClick={()=>window.location.href="/cart"}>
-							{cart&&cart.data&&cart.data.orderLists.length?<b className="cartNum">{cart.data.orderLists.length}</b>:''}
+							{cart&&cart.cart&&cart.cart.length?<b className="cartNum">{cart.cart.length}</b>:''}
 					<i className="icon-size circleIcon fas fa-shopping-cart"  style={{backgroundColor:currentHover===4?"var(--second-color)":""}}></i>
 					<span className="cart-heading">سبد خرید</span>
 					{/*<div className="megaMenuHeader megaMenuSingle" style={{visibility:cartMenu}}>
 						{cart&&!cart.error&&cart!=="register"?<CartMenu cart={cart.data}/>:''}
 						<span style={{color:"gray"}}>{cart==="register"&&"لطفا ثبت نام کنید."}</span>
 				</div>*/}
-					<small>{cart&&!cart.error&&cart!=="register"?cart.data.orderLists.totalPrice:''}</small>
+					<small>{cart&&!cart.error&&cart!=="register"?cart.totalPrice:''}</small>
 					
 				</div>
 			</div>

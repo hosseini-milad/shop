@@ -116,7 +116,7 @@ function Category() {
                   <SideBar
                     productQuery={JSON.parse(productQuery)}
                     catId={pathName.split('/')[2]}
-                    filters={products.filtersSideBar}
+                    filters={products.filterData}
                     categories={products.categories}
                     brands={products.brands}
                   />
