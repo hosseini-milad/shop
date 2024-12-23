@@ -28,7 +28,9 @@ router.post('/getlist', async (req,res)=>{
     var pageSize = req.body.pageSize?req.body.pageSize:"12";
     var offset = req.body.offset?(parseInt(req.body.offset)):0;
 
-    const filter = req.body
+    const filter = req.body.filter?req.body.filter:{}
+    filter.vs = "20w50"
+    const category = req.body.category
     try{
         var categoryList = await category.aggregate([
             {$match:{$or:[{parent:{$exists:false}},{parent:null}]}}
@@ -39,7 +41,7 @@ router.post('/getlist', async (req,res)=>{
             categoryList[i].children = childList
         }
 
-        const catData = await category.findOne({link:filter.category})
+        const catData = await category.findOne({link:category})
         if(!catData){
             res.status(400).json({categoryList,error:"کد دسته بندی پیدا نشد"})
             return
@@ -48,7 +50,8 @@ router.post('/getlist', async (req,res)=>{
         const filterData = await Filters.find({'category.link':catData.link})
         const allProducts = await productSchema.aggregate([
             {$match:{catId:catData.catCode}},
-            {$match:{enTitle:{$exists:true}}}
+            {$match:{enTitle:{$exists:true}}},
+            {$match:(filter&&filter.vs)?{"filters.vs":filter.vs}:{}}
         ])
         const availableItems = [];
         for(var a=0;a<allProducts.length;a++){

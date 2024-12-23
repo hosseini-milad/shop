@@ -236,7 +236,7 @@ router.post('/find-products', auth, async (req, res) => {
                     ...searchProducts[i],
                     count: count, description: desc
                 })
-                if (index === 15) break
+                if (index === 30) break
             }
         }
         res.json({ products: searchProductResult })
