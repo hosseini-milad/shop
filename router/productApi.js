@@ -30,7 +30,7 @@ router.post('/getlist', async (req,res)=>{
 
     const filter = req.body.filter?req.body.filter:{}
     filter.vs = "20w50"
-    const category = req.body.category
+    const catName = req.body.category
     try{
         var categoryList = await category.aggregate([
             {$match:{$or:[{parent:{$exists:false}},{parent:null}]}}
@@ -41,7 +41,7 @@ router.post('/getlist', async (req,res)=>{
             categoryList[i].children = childList
         }
 
-        const catData = await category.findOne({link:category})
+        const catData = await category.findOne({link:catName})
         if(!catData){
             res.status(400).json({categoryList,error:"کد دسته بندی پیدا نشد"})
             return
