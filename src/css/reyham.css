@@ -793,10 +793,10 @@ dialog {
 .btn-crm-cancel {
   background-color: lightsalmon;
 }
-.btn-orderItem{
+.btn-orderItem {
   padding: 3px 10px;
-  background-color:rgb(255, 51, 51);
-  p{
+  background-color: rgb(255, 51, 51);
+  p {
     font-size: 0.85rem;
     color: rgb(255, 255, 255);
   }
@@ -1831,4 +1831,17 @@ dialog {
   align-items: center;
   justify-content: center;
   background-color: white;
+}
+.BtnToBot {
+  position: fixed;
+  top: 90vh;
+  left: 10px;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  font-size: 1.5rem;
+  outline: none;
+  border: none;
+  background-color: #ec407986;
+  z-index: 99;
 }

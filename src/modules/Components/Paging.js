@@ -41,11 +41,11 @@ function Paging(props) {
             const pageSize = e.target.value;
             props.setFilters((prevState) => ({
               ...prevState,
-              pageSize: pageSize.toString(),
+              pageSize: pageSize.toString(),offset:"0"
             }));
             props.updateUrlWithFilters({
               ...props.filters,
-              pageSize: pageSize.toString(),
+              pageSize: pageSize.toString(),offset:"0"
             });
           }}
         >
@@ -55,6 +55,8 @@ function Paging(props) {
           </option>
           <option value="25" selected={true}>25</option>
           <option value="50">50</option>
+          <option value="100">100</option>
+          <option value="500">500</option>
         </select>
       </div>
       {pageInfo && pageInfo.show ? (
