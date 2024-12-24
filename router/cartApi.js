@@ -26,6 +26,8 @@ const openOrders = require('../models/orders/openOrders');
 var {StockId,SaleType} = process.env;
 
 router.post('/addToCart', async (req,res)=>{
+    res.status(400).json({error:"call admin"})
+    return
     const userId =req.headers['userid'];
     const sku = req.body.sku
     const ItemID = req.body.ItemID
