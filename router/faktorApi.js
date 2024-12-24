@@ -430,7 +430,8 @@ const findCartFunction = async (userId, managerId) => {
             { $match: { manageId: managerId } },
             { $match: userId ? { userId: userId } : {} },
             { $match: { result: { $exists: false } } },
-            { $sort: { "initDate": -1 } }
+            { $sort: { "initDate": -1 } },
+            {$limit:10}
         ])
 
         const qCartData = await qCart.findOne({ userId: userId ? userId : managerId }).lean()
