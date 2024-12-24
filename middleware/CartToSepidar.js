@@ -29,7 +29,7 @@ const CartToSepidar=async(data,faktorNo,user,stock,cartOff,orderNo,official)=>{
                 "StockRef":item.stock?item.stock:stock,
                 "Quantity": toInt(item.count),
                 "Fee": toInt(price),
-                "Price": normalPriceCount(price,item.count,1),
+                "Price": normalPriceFix(price,item.count,1),
                 "Discount": discount?normalPriceFix(discount,item.count):0.0000,
                 "Tax": normalPriceFix(price-discount,item.count,TaxRate),
                 "Duty": 0.0000,
