@@ -18,6 +18,7 @@ function SalesQuickSearch(props){
             type="text" 
             placeholder="شرح کالا"
             onChange={(e)=>setQuery(e.target.value)}
+            autoFocus
             />
             <i className="fa-solid fa-angle-down"></i>
         </div>
