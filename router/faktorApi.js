@@ -1504,8 +1504,8 @@ router.post('/quick-to-cart', jsonParser, async (req, res) => {
         //const cartAll = await cart.find()
         const userData = await customers.findOne({ _id: ObjectID(userId) })
         const qCartData = await quickCart.findOne({ userId: userId })
-
-        data.payValue = qCartData && qCartData.payValue
+        const defaultPay = customers.CustomerID?"3":"4"
+        data.payValue = (qCartData && qCartData.payValue)?qCartData.payValue:defaultPay
         data.description = qCartData && qCartData.description
         data.discount = qCartData && qCartData.discount
         const quickCartItems = qCartData && qCartData.cartItems
