@@ -156,7 +156,7 @@ router.post('/multi-sepidar', jsonParser, auth, async (req, res) => {
         var sepidarQuery = await CartToSepidar(mergeOrder, faktorNo,
             official?customerData:adminData, 
             adminData.StockId,orderDetails[0].discount,
-            orderDetails[0].cartNo)
+            orderDetails[0].cartNo, orderDetails[0].payValue)
         var bankDetail = await transaction.find({userId:manageId,sepidarID:{$exists:false}})
         var recieptQuery=''
         var sepidarResult = await sepidarPOST(sepidarQuery, "/api/invoices", 
