@@ -75,6 +75,7 @@ const newCount=(count1,count2)=>{
 }
 
 router.post('/cart-detail', async (req,res)=>{
+    res.status(400).json({error:"call admin"})
     const userId =req.headers['userid'];
     try{
         const cartDetails = await sepCart.aggregate([
