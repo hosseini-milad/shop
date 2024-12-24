@@ -839,7 +839,7 @@
   width: 100%;
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  gap: 1rem;
 }
 .sharif-order-main .orders-sec .title p {
   font-size: 20px;
@@ -850,6 +850,7 @@
   padding: 0.5rem 0.7rem;
   background-color: var(--dark-blue-main);
   border-radius: 0.3rem;
+  margin-right: auto;
 }
 .sharif-order-main .orders-sec .title .orders-total p {
   font-size: 1rem;
@@ -1754,6 +1755,7 @@ input[type="number"] {
   .orders-sec .title {
     P {
       color: black !important;
+      margin: 0;
     }
     .orders-total {
       background-color: #4b5258;

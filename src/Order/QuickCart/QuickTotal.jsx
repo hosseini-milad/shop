@@ -22,6 +22,7 @@ function QuickTotal(props) {
       focusBtn.current && focusBtn.current.focus();
     }
   }, [qCart]);
+  console.log(focusBtn)
   //console.log(qCart)
   const SetOrder = (isQuote, print) => {
     setLoading(1);
@@ -59,8 +60,8 @@ function QuickTotal(props) {
 
             setLoading(0);
             if (print) {
-              setPrintPop(result.cart[0].cartNo)
-              
+              setPrintPop(result.cart[0].cartNo);
+
               console.log(PrintPop);
               setTimeout(() => {
                 reactToPrintFn();
@@ -132,7 +133,6 @@ function QuickTotal(props) {
                       })
                     : null
                 }
-                id="add-cart"
                 type="button"
                 className="product-table-btn temp-btn"
                 onClick={() =>
@@ -148,7 +148,6 @@ function QuickTotal(props) {
             ) : (
               <>
                 <button
-                  id="add-cart"
                   type="button"
                   className="product-table-btn temp-btn"
                   onClick={() =>
@@ -172,7 +171,6 @@ function QuickTotal(props) {
                         })
                       : null
                   }
-                  id="add-cart"
                   type="button"
                   className="product-table-btn temp-btn"
                   onClick={() =>

@@ -1845,3 +1845,19 @@ dialog {
   background-color: #ec407986;
   z-index: 99;
 }
+.order-search{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border: 1px solid grey;
+  border-radius: 999px;
+  overflow: hidden;
+  padding-inline: 0.5rem;
+
+  input{
+    border: none;
+    padding:0.4rem 0.65rem;
+    outline: none;
+    font-size: 0.85rem;
+  }
+}

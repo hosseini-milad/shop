@@ -44,6 +44,10 @@ function PreOrderSale(props){
         <section className="orders-sec">
         <div className="title">
           <p>سفارشات باز</p>
+          <div className="order-search">
+            <input className="fold-search" type="search" placeholder="جستجو"/>
+            <i class="fa fa-search" aria-hidden="true"></i>
+          </div>
           <div className="orders-total">
             <p>تعداد سفارشات : {cart.length}</p>
           </div>
