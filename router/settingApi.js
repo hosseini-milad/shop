@@ -187,6 +187,7 @@ router.post('/multi-sepidar', jsonParser, auth, async (req, res) => {
         else{
             error = sepidarResult && sepidarResult.Message
         }
+        console.log(sepidarQuery)
         res.json({ data: sepidarResult,query:sepidarQuery, 
             recieptResult:recieptResult, error,
             recieptQuery:recieptQuery,message: error?'':"سفارش در سپیدار ثبت شد" })
