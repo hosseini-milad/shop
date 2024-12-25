@@ -414,18 +414,19 @@ router.post('/update-category', jsonParser, auth, async (req, res) => {
 
 router.post('/cart', auth, async (req, res) => {
     var pageSize = req.body.pageSize?req.body.pageSize:"10";
+    var search = req.body.search;
     var offset = req.body.offset?(parseInt(req.body.offset)):0;
     const userId = req.body.userId
     try {
         const cartDetails = await findCartFunction(userId, 
-            req.headers['userid'],pageSize,offset)
+            req.headers['userid'],pageSize,offset,search)
         res.json(cartDetails)
     }
     catch (error) {
         res.status(500).json({ message: error.message })
     }
 })
-const findCartFunction = async (userId, managerId,pageSize,offset) => {
+const findCartFunction = async (userId, managerId,pageSize,offset,search) => {
     const isSale = await CheckSale(managerId)
     if(managerId==userId) userId = ''
     try {
@@ -464,9 +465,14 @@ const findCartFunction = async (userId, managerId,pageSize,offset) => {
                 continue
             }
             try {
+                var found = 0
                 for (var j = 0; j < cartData[c].cartItems.length; j++) {
                     try {
                         var cartTemp = cartData[c].cartItems[j]
+                        if(search){
+                            if(cartTemp.sku&&!cartTemp.sku.includes(search))
+                                continue
+                        }                        
                         const productData = await products.findOne({ sku: cartTemp.sku })
                         const cartItemDetail = findCartItemDetail(cartTemp, cartData[c].payValue,cartData[c].discount)
                         cartData[c].cartItems[j].total = cartItemDetail
@@ -484,7 +490,12 @@ const findCartFunction = async (userId, managerId,pageSize,offset) => {
                 cartDetail.push(findCartSum(cartData[c].cartItems,cartData[c].payValue))
             }
             catch { }
-            todayCartData.push(cartData[c])
+            if(search){
+                if(found)
+                    todayCartData.push(cartData[c])
+            }
+            else
+                todayCartData.push(cartData[c])
 
         }
         if (qCartData) {
