@@ -61,7 +61,7 @@ function PreOrderSale(props) {
             <i class="fa fa-search" aria-hidden="true"></i>
           </div>
           <div className="orders-total">
-            <p>تعداد سفارشات : {cart.length}</p>
+            <p>تعداد سفارشات : {props.cart.size}</p>
           </div>
         </div>
         {props.Loader ?

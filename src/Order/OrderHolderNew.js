@@ -55,7 +55,7 @@ function OrderHolder(props) {
             : user._id
           : token && token.userId,
         offset: Pages.offset ? Pages.offset : "0",
-        pageSize: Pages.pageSize ? Pages.pageSize : "25",
+        pageSize: Pages.pageSize ? Pages.pageSize : "10",
         search: Search,
       }),
     };
@@ -242,6 +242,7 @@ function OrderHolder(props) {
             lang={props.lang}
             setFilters={handleFilterChange}
             updateUrlWithFilters={updateUrlWithFilters}
+            Selected={10}
           />
         ) : (
           <>{env.loader}</>
