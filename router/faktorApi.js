@@ -431,7 +431,7 @@ const findCartFunction = async (userId, managerId) => {
             { $match: userId ? { userId: userId } : {} },
             { $match: { result: { $exists: false } } },
             { $sort: { "initDate": -1 } },
-            {$limit:10}
+            //{$limit:10}
         ])
 
         const qCartData = await qCart.findOne({ userId: userId ? userId : managerId }).lean()
@@ -457,7 +457,7 @@ const findCartFunction = async (userId, managerId) => {
         var description = ''
         var todayCartData = []
         for (var c = 0; c < (cartData && cartData.length); c++) {
-            if ((IsToday(cartData[c].initDate) !== 1)) {//!userId && 
+            if ((!userId&&!isSale) &&(IsToday(cartData[c].initDate) !== 1)) {// 
                 continue
             }
             try {
