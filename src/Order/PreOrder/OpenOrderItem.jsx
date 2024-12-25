@@ -219,7 +219,12 @@ function OpenOrderItem(props) {
 
           <i
             className="tableIcon fas fa-tag"
-            onClick={() => (setPrintShow(1),setTimeout(()=>{reactToPrintFn()},1000))}
+            onClick={() => (
+              setPrintShow(1),
+              setTimeout(() => {
+                reactToPrintFn();
+              }, 1000)
+            )}
           ></i>
 
           {!data.InvoiceID && (
@@ -279,7 +284,7 @@ function OpenOrderItem(props) {
                       <div className="product-title">
                         <img
                           src={
-                            item.productData.imageUrl
+                            item.productData && item.productData.imageUrl
                               ? env.siteApiUrl + item.productData.imageUrl
                               : "/img/business/oil1.png"
                           }
@@ -358,7 +363,9 @@ function OpenOrderItem(props) {
             <PrintFish url={data.cartNo} />
           </div>
         </div>
-      ):<></>}
+      ) : (
+        <></>
+      )}
       {showRemove ? (
         <ErrorAction
           status={"DELETE"}

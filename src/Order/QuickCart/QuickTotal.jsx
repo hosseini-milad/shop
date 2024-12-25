@@ -9,6 +9,7 @@ function QuickTotal(props) {
   const qCart = props.data;
   const user = props.user;
   const tab = props.tab;
+  
   const [loading, setLoading] = useState(0);
   const [PrintPop, setPrintPop] = useState("");
   const [PopUp, setPopUp] = useState("");
