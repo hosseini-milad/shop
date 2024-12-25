@@ -1,7 +1,7 @@
 const MultiplySum = require("./MultiplySum")
 
 const {TaxRate} = process.env
-const CartToSepidar=async(data,faktorNo,user,stock,cartOff,orderNo,official)=>{
+const CartToSepidar=async(data,faktorNo,user,stock,cartOff,orderNo,payValue)=>{
         const notNullCartItem = []
         const totalOff= cartOff?parseInt(cartOff):0
         for(var i=0;i<data.length;i++)
@@ -12,14 +12,14 @@ const CartToSepidar=async(data,faktorNo,user,stock,cartOff,orderNo,official)=>{
             "CustomerRef": toInt(user.CustomerID),
             "AddressRef": user.AddressID?user.AddressID:'',
             "CurrencyRef":1,
-            "SaleTypeRef": official?3:4,
+            "SaleTypeRef": payValue?payValue:4,
             "Duty":0.0000,
             "Description":faktorNo,
             "DescriptionRef":faktorNo,
             "Discount": 0.00,
             "Items": 
             notNullCartItem.map((item,i)=>{
-                const price = findPayValuePrice(item.price,official?3:4)
+                const price = findPayValuePrice(item.price,payValue?payValue:4)
                 const itemDiscount = MultiplySum(item.discount,totalOff,1)
                 const discount =itemDiscount?normalPriceFix(price,itemDiscount)/100:0
                 return({

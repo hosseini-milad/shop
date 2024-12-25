@@ -156,7 +156,7 @@ router.post('/multi-sepidar', jsonParser, auth, async (req, res) => {
         var sepidarQuery = await CartToSepidar(mergeOrder, faktorNo,
             official?customerData:adminData, 
             adminData.StockId,orderDetails[0].discount,
-            orderDetails[0].cartNo, official)
+            orderDetails[0].cartNo,orderDetails[0]&&orderDetails[0].payValue)
         var bankDetail = await transaction.find({userId:manageId,sepidarID:{$exists:false}})
         var recieptQuery=''
         var sepidarResult = await sepidarPOST(sepidarQuery, "/api/invoices", 
@@ -187,7 +187,6 @@ router.post('/multi-sepidar', jsonParser, auth, async (req, res) => {
         else{
             error = sepidarResult && sepidarResult.Message
         }
-        console.log(sepidarQuery)
         res.json({ data: sepidarResult,query:sepidarQuery, 
             recieptResult:recieptResult, error,
             recieptQuery:recieptQuery,message: error?'':"سفارش در سپیدار ثبت شد" })
