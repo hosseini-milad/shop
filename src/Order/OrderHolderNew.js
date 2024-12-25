@@ -25,6 +25,7 @@ function OrderHolder(props) {
   const [grid, setGrid] = useState(shopVar ? shopVar.grid : 0);
   const [filters, setFilters] = useState();
   const [Search, setSearch] = useState("");
+  const [Date, setDate] = useState("");
   const [Loader, setLoader] = useState(0);
   const [user, setUser] = useState();
   const [cart, setCart] = useState();
@@ -57,6 +58,8 @@ function OrderHolder(props) {
         offset: Pages.offset ? Pages.offset : "0",
         pageSize: Pages.pageSize ? Pages.pageSize : "10",
         search: Search,
+        dateFrom: Date && Date.dateFrom,
+        dateTo: Date && Date.dateTo,
       }),
     };
     fetch(env.siteApi + `/panel/${tab ? "quote" : "faktor"}/cart`, postOptions)
@@ -230,6 +233,8 @@ function OrderHolder(props) {
             setSearch={setSearch}
             Search={Search}
             Loader={Loader}
+            setDate={setDate}
+            lang={props.lang}
           />
         ) : (
           <PreOrderHolder token={token} user={user} cart={cart} />

@@ -1861,3 +1861,7 @@ dialog {
     font-size: 0.85rem;
   }
 }
+.DatePicker__calendarContainer>*{
+  background-color: red !important;
+  
+}

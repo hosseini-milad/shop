@@ -2,7 +2,8 @@ import { useState } from "react";
 import OpenOrderItem from "./OpenOrderItem";
 import PreOrderItem from "./PreOrderItem";
 import env from "../../env";
-
+import tabletrans from "../../translate/tables";
+import StyleDatePicker from "../../components/Button/DatePicker";
 function PreOrderSale(props) {
   const cart = props.cart && props.cart.cart;
   const total = props.cart && props.cart.cartDetail;
@@ -10,7 +11,7 @@ function PreOrderSale(props) {
   const token = props.token;
   const [orders, setOrders] = useState([]);
   const [Loader, setLoader] = useState(1);
-
+  console.log(props.lang)
   const setSepidarTotal = () => {
     //console.log(cart)
     if (!orders || !orders.length) {
@@ -60,6 +61,15 @@ function PreOrderSale(props) {
             />
             <i class="fa fa-search" aria-hidden="true"></i>
           </div>
+          <StyleDatePicker
+          title={tabletrans.selectDate[props.lang.lang]}
+          class="filterComponent"
+          direction={props.lang.dir}
+          local={props.lang.dir === "ltr" ? "en" : "fa"}
+          action={(e) =>
+            props.setData(e)
+          }
+        />
           <div className="orders-total">
             <p>تعداد سفارشات : {props.cart.size}</p>
           </div>
