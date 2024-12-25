@@ -473,7 +473,7 @@ const findCartFunction = async (userId, managerId,pageSize,offset,search) => {
                         
                         if(search){
                             var reg = new RegExp(search,"i")
-                            var skuSearch = reg.test(cartTemp.sku&&!cartTemp.sku)
+                            var skuSearch = reg.test(cartTemp.sku)
                             var nameSearch = productData&&reg.test(productData.title)
                             if(!nameSearch&&!skuSearch)
                                 continue
