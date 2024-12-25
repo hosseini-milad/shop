@@ -475,9 +475,7 @@ const findCartFunction = async (userId, managerId,pageSize,offset,search) => {
                             var reg = new RegExp(search,"i")
                             var skuSearch = reg.test(cartTemp.sku)
                             var nameSearch = productData&&reg.test(productData.title)
-                            if(!nameSearch&&!skuSearch)
-                                continue
-                            else
+                            if(nameSearch||skuSearch)
                                 found = 1
                         }  
                         const cartItemDetail = findCartItemDetail(cartTemp, cartData[c].payValue,cartData[c].discount)
