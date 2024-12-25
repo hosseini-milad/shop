@@ -8,7 +8,7 @@ const CartToSepidar=async(data,faktorNo,user,stock,cartOff,orderNo,payValue)=>{
             data[i].count?
             notNullCartItem.push(data[i]):''
         var query ={
-            "GUID": "124ab075-fc79-417f-b8cf-1"+faktorNo,
+            "GUID": "124ab075-fc79-417f-b8cf-2"+faktorNo,
             "CustomerRef": toInt(user.CustomerID),
             "AddressRef": user.AddressID?user.AddressID:'',
             "CurrencyRef":1,
@@ -19,13 +19,13 @@ const CartToSepidar=async(data,faktorNo,user,stock,cartOff,orderNo,payValue)=>{
             "Discount": 0.00,
             "Items": 
             notNullCartItem.map((item,i)=>{
-                const price = findPayValuePrice(item.price,payValue?payValue:4)
+                const price = item.price//findPayValuePrice(item.price,payValue?payValue:4)
                 const itemDiscount = MultiplySum(item.discount,totalOff,1)
                 const discount =itemDiscount?normalPriceFix(price,itemDiscount)/100:0
                 return({
                 "ItemRef": toInt(item.id),
                 "TracingRef": null,
-                "Description":item.title+"|"+item.sku+"("+orderNo+")",
+                "Description":item.title+"|"+item.sku+"("+item.desc+")",
                 "StockRef":item.stock?item.stock:stock,
                 "Quantity": toInt(item.count),
                 "Fee": toInt(price),

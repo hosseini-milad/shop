@@ -146,7 +146,8 @@ router.post('/multi-sepidar', jsonParser, auth, async (req, res) => {
             res.status(400).json({error:"سفارش پیدا نشد"})
             return
         }
-        const mergeOrder = await MergeOrder(orderDetails.map(item => item.cartItems))
+        const mergeOrder = await MergeOrder(orderDetails.map(item => item.cartItems),orderDetails)
+        
         //const recResult = await RecieptFunc()
         const adminData = await users.findOne({ _id: ObjectID(manageId) })
         const customerData = await customers.findOne({ _id: ObjectID(orderDetails[0].userId) })
