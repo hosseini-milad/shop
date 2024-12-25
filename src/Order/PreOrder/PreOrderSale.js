@@ -66,7 +66,7 @@ function PreOrderSale(props) {
           direction={props.lang.dir}
           local={props.lang.dir === "ltr" ? "en" : "fa"}
           action={(e) =>
-            props.setData(e)
+            props.setDate(e)
           }
         />
           <div className="orders-total">
