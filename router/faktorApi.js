@@ -468,14 +468,18 @@ const findCartFunction = async (userId, managerId,pageSize,offset,search) => {
                 var found = 0
                 for (var j = 0; j < cartData[c].cartItems.length; j++) {
                     try {
-                        var cartTemp = cartData[c].cartItems[j]
+                        var cartTemp = cartData[c].cartItems[j]                      
+                        const productData = await products.findOne({ sku: cartTemp.sku })
+                        
                         if(search){
-                            if(cartTemp.sku&&!cartTemp.sku.includes(search))
+                            var reg = new RegExp(search,"i")
+                            var skuSearch = reg.test(cartTemp.sku&&!cartTemp.sku)
+                            var nameSearch = productData&&reg.test(productData.title)
+                            if(!nameSearch&&!skuSearch)
                                 continue
                             else
                                 found = 1
-                        }                        
-                        const productData = await products.findOne({ sku: cartTemp.sku })
+                        }  
                         const cartItemDetail = findCartItemDetail(cartTemp, cartData[c].payValue,cartData[c].discount)
                         cartData[c].cartItems[j].total = cartItemDetail
                         cartData[c].cartItems[j].productData = productData
@@ -485,20 +489,17 @@ const findCartFunction = async (userId, managerId,pageSize,offset,search) => {
                 const userData = await customers.findOne({ _id: ObjectID(cartData[c].userId) })
                 var official = 1
                 if(!userData.CustomerID) official = 0
-            if(userData.cName&&userData.cName.includes("مصرف")){
-                official = 0
-            }
+                if(userData.cName&&userData.cName.includes("مصرف"))official = 0
+
+                
+            
+            if(search&&!found)continue
+            else
+                todayCartData.push(cartData[c])
                 cartData[c] = { ...cartData[c], userData: userData ,official}
                 cartDetail.push(findCartSum(cartData[c].cartItems,cartData[c].payValue))
             }
             catch { }
-            if(search){
-                if(found)
-                    todayCartData.push(cartData[c])
-            }
-            else
-                todayCartData.push(cartData[c])
-
         }
         if (qCartData) {
             for (var j = 0; j < qCartData.cartItems.length; j++) {
