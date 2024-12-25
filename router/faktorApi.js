@@ -413,16 +413,19 @@ router.post('/update-category', jsonParser, auth, async (req, res) => {
 })
 
 router.post('/cart', auth, async (req, res) => {
+    var pageSize = req.body.pageSize?req.body.pageSize:"10";
+    var offset = req.body.offset?(parseInt(req.body.offset)):0;
     const userId = req.body.userId
     try {
-        const cartDetails = await findCartFunction(userId, req.headers['userid'])
+        const cartDetails = await findCartFunction(userId, 
+            req.headers['userid'],pageSize,offset)
         res.json(cartDetails)
     }
     catch (error) {
         res.status(500).json({ message: error.message })
     }
 })
-const findCartFunction = async (userId, managerId) => {
+const findCartFunction = async (userId, managerId,pageSize,offset) => {
     const isSale = await CheckSale(managerId)
     if(managerId==userId) userId = ''
     try {
@@ -500,8 +503,11 @@ const findCartFunction = async (userId, managerId) => {
             qCartDetail = findQuickCartSum(qCartData.cartItems,
                 qCartData.payValue, qCartData.discount)
         }
+        const pageCart = todayCartData.slice(offset,
+            (parseInt(offset)+parseInt(pageSize)))  
         return ({
-            cart: todayCartData, cartDetail: cartDetail, userData: "userData", isSale,
+            cart: pageCart, cartDetail: cartDetail, userData: "userData", isSale,
+            size:todayCartData&&todayCartData.length,
             quickCart: qCartData, qCartDetail: qCartDetail, qCartAdmin: qCartAdmin
         })
     }
