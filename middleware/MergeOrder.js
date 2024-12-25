@@ -23,7 +23,7 @@ const MergeOrder=async(orderDetail,fullDetail)=>{
                 cart[index].count = pureSum(cart[index].count,
                     orderData[j].count
                 )
-                cart[index].desc = desc
+                //cart[index].desc = desc
             }
         }
     } 
