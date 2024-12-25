@@ -472,6 +472,8 @@ const findCartFunction = async (userId, managerId,pageSize,offset,search) => {
                         if(search){
                             if(cartTemp.sku&&!cartTemp.sku.includes(search))
                                 continue
+                            else
+                                found = 1
                         }                        
                         const productData = await products.findOne({ sku: cartTemp.sku })
                         const cartItemDetail = findCartItemDetail(cartTemp, cartData[c].payValue,cartData[c].discount)
