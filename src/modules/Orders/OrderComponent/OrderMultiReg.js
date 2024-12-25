@@ -39,7 +39,7 @@ function OrderMultiReg(props){
         }
         console.log(result)
         setLoader(0)
-        setTimeout(()=>window.location.reload(),1000)
+        //setTimeout(()=>window.location.reload(),1000)
       },
       (error) => {
         console.log(error);

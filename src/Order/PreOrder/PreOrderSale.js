@@ -11,7 +11,6 @@ function PreOrderSale(props) {
   const token = props.token;
   const [orders, setOrders] = useState([]);
   const [Loader, setLoader] = useState(1);
-  console.log(props.lang)
   const setSepidarTotal = () => {
     //console.log(cart)
     if (!orders || !orders.length) {

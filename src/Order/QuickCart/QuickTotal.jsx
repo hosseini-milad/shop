@@ -23,7 +23,7 @@ function QuickTotal(props) {
       focusBtn.current && focusBtn.current.focus();
     }
   }, [qCart]);
-  console.log(focusBtn)
+  console.log(PrintPop)
   //console.log(qCart)
   const SetOrder = (isQuote, print) => {
     setLoading(1);
@@ -62,8 +62,7 @@ function QuickTotal(props) {
             setLoading(0);
             if (print) {
               setPrintPop(result.cart[0].cartNo);
-
-              console.log(PrintPop);
+              console.log(result.cart[0].cartNo)
               setTimeout(() => {
                 reactToPrintFn();
               }, 5000);
@@ -206,8 +205,9 @@ function QuickTotal(props) {
         )}
         {PrintPop ? (
           <div className="onlyPrint">
-            <div ref={contentRef}>
-              <PrintFish url={PrintPop} />
+            <div>
+              <h1>Print Hrer {PrintPop}</h1>
+              {/*<PrintFish url={PrintPop} />*/}
             </div>
           </div>
         ) : (
