@@ -9,24 +9,25 @@ function QuickTotal(props) {
   const qCart = props.data;
   const user = props.user;
   const tab = props.tab;
-  
+  const setPrintPop = props.setPrintPop;
   const [loading, setLoading] = useState(0);
-  const [PrintPop, setPrintPop] = useState("");
+
   const [PopUp, setPopUp] = useState("");
   const focusBtn = useRef();
   const focusPop = useRef();
-  var contentRef = useRef();
+
   const [preKey, setPreKey] = useState("");
-  const reactToPrintFn = useReactToPrint({ contentRef });
+
   useEffect(() => {
     if (!props.action) {
       focusBtn.current && focusBtn.current.focus();
     }
   }, [qCart]);
-  console.log(focusBtn)
-  //console.log(qCart)
+
   const SetOrder = (isQuote, print) => {
     setLoading(1);
+    setPrintPop("");
+
     const postOptions = {
       method: "post",
       headers: {
@@ -62,11 +63,9 @@ function QuickTotal(props) {
             setLoading(0);
             if (print) {
               setPrintPop(result.cart[0].cartNo);
-
-              console.log(PrintPop);
               setTimeout(() => {
-                reactToPrintFn();
-              }, 5000);
+                props.reactToPrintFn();
+              }, 1000);
             }
           } else {
             props.setError({ message: result.error, color: "brown" });
@@ -177,7 +176,7 @@ function QuickTotal(props) {
                   onClick={() =>
                     setPopUp({
                       action: false,
-                      title: "ثبت فاکتور",
+                      title: "ثبت فاکتور و پرینت",
                       print: true,
                     })
                   }
@@ -201,15 +200,6 @@ function QuickTotal(props) {
             color="orange"
             action={() => SetOrder(PopUp.action, PopUp.print)}
           />
-        ) : (
-          <></>
-        )}
-        {PrintPop ? (
-          <div className="onlyPrint">
-            <div ref={contentRef}>
-              <PrintFish url={PrintPop} />
-            </div>
-          </div>
         ) : (
           <></>
         )}

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import OrderFilters from "./Components/Filters";
 import OrderHeader from "./Components/Header";
 import ProductList from "./Components/ProductList";
@@ -17,6 +17,8 @@ import {
   defaultFilterValues,
   handleFilterChange,
 } from "../utils/filterUtils";
+import { useReactToPrint } from "react-to-print";
+import PrintFish from "../modules/Print/PrintFish";
 const cookies = new Cookies();
 var shopVar = JSON.parse(localStorage.getItem(env.shopExpert));
 
@@ -36,6 +38,9 @@ function OrderHolder(props) {
   const [tab, setTab] = useState(0);
   const access = CheckAccess(token, "orders");
   const [Pages, setPages] = useState(getFiltersFromUrl());
+  const [PrintPop, setPrintPop] = useState("");
+  var contentRef = useRef();
+  const reactToPrintFn = useReactToPrint({ contentRef });
   function handleFilterChange(newFilters) {
     setPages(newFilters);
     updateUrlWithFilters(newFilters);
@@ -84,7 +89,7 @@ function OrderHolder(props) {
           console.log(error);
         }
       );
-  }, [user, tab, Pages, Search]);
+  }, [user, tab, Pages, Search, Date]);
   useEffect(() => {
     const postOptions = {
       method: "get",
@@ -216,7 +221,18 @@ function OrderHolder(props) {
             setCart={setCart}
             setError={setError}
             cartDetail={cart && cart.qCartDetail}
+            setPrintPop={setPrintPop}
+            reactToPrintFn={reactToPrintFn}
           />
+        ) : (
+          <></>
+        )}
+        {PrintPop ? (
+          <div className="onlyPrint">
+            <div ref={contentRef}>
+              <PrintFish url={PrintPop} />
+            </div>
+          </div>
         ) : (
           <></>
         )}

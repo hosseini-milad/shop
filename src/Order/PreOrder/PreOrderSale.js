@@ -11,7 +11,6 @@ function PreOrderSale(props) {
   const token = props.token;
   const [orders, setOrders] = useState([]);
   const [Loader, setLoader] = useState(1);
-  console.log(props.lang)
   const setSepidarTotal = () => {
     //console.log(cart)
     if (!orders || !orders.length) {
@@ -67,7 +66,7 @@ function PreOrderSale(props) {
           direction={props.lang.dir}
           local={props.lang.dir === "ltr" ? "en" : "fa"}
           action={(e) =>
-            props.setData(e)
+            props.setDate(e)
           }
         />
           <div className="orders-total">

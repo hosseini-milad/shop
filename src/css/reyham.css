@@ -1845,7 +1845,7 @@ dialog {
   background-color: #ec407986;
   z-index: 99;
 }
-.order-search{
+.order-search {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -1854,14 +1854,20 @@ dialog {
   overflow: hidden;
   padding-inline: 0.5rem;
 
-  input{
+  input {
     border: none;
-    padding:0.4rem 0.65rem;
+    padding: 0.4rem 0.65rem;
     outline: none;
     font-size: 0.85rem;
   }
 }
-.DatePicker__calendarContainer>*{
-  background-color: red !important;
-  
+.Calendar .Calendar__sectionWrapper {
+  min-height: 25.8em !important;
+}
+.orders-sec .title .DatePicker__input {
+  border-radius: 999px;
+  border: 1px solid grey !important;
+}
+.orders-sec .title .DatePicker__input  {
+  padding: 0.4rem 0.65rem !important; 
 }

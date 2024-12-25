@@ -6,7 +6,6 @@ function FishPrintCart(props){
   const orderInfo = props.orderData
   const orderData = props.orderData.orderData
   const userInfo = props.orderData.userData?props.orderData.userData[0]:''
-    console.log(orderData)
     if(!orderInfo)
       return(<main>{"orderError"}</main>)
     else return(

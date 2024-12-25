@@ -9,7 +9,7 @@ const PrintFish = (props)=>{
     const [faktorList,setFaktorList] = useState() 
     const token=cookies.get(env.cookieName)
     const url=props.url
-    
+    console.log(url)
     useEffect(()=>{
         //console.log(search)
         const postOptions={
@@ -38,7 +38,7 @@ const PrintFish = (props)=>{
             (error) => {
                 console.log(error)
             })
-    },[])
+    },[url])
     
     return(
         <div className="printArea">
