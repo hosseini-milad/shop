@@ -515,8 +515,8 @@ const findCartFunction = async (userId, managerId,pageSize,offset,search) => {
             qCartDetail = findQuickCartSum(qCartData.cartItems,
                 qCartData.payValue, qCartData.discount)
         }
-        const pageCart = todayCartData.slice(offset,
-            (parseInt(offset)+parseInt(pageSize)))  
+        const pageCart = todayCartData.slice(offset?offset:0,
+            (parseInt(offset?offset:0)+parseInt(pageSize?pageSize:10)))  
         return ({
             cart: pageCart, cartDetail: cartDetail, userData: "userData", isSale,
             size:todayCartData&&todayCartData.length,
