@@ -1683,7 +1683,7 @@ router.post('/cancel-faktor', auth, jsonParser, async (req, res) => {
 const checkCart = async (cartItems, stockId, payValue) => {
     const cartList = await tasks.find({ taskStep: { $nin: ['archive'] } })
     var currentCart = await FindCurrentCart(cartList.map(item => item.orderNo))
-
+    if(!cartItems) return
     const qCartList = await qCart.find(stockId ? { stockId: stockId } : {})
     var checkCart = ''
     for (var i = 0; i < cartItems.length; i++) {
@@ -1871,6 +1871,9 @@ router.post('/update-faktor', jsonParser, async (req, res) => {
         for (var i = 0; i < faktorDetail.length; i++) {
             faktorNo = await createfaktorNo("F", "02", "21")
             sepidarQuery[i] = await SepidarFunc(faktorDetail[i], faktorNo)
+            console.log(sepidarQuery[i])
+            res.status(400).json(sepidarQuery[i])
+            return
             //console.log(sepidarQuery[i])
             addFaktorResult[i] = await sepidarPOST(sepidarQuery[i], "/api/invoices", req.headers['userid'])
             //console.log(addFaktorResult[i])

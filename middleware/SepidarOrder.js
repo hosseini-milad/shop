@@ -8,13 +8,14 @@ var ObjectID = require('mongodb').ObjectID;
 const sepidarPOST = require("./SepidarPost")
 
 
-const SepidarOrder=async(orderNo)=>{
+const SepidarOrder=async(orderNo,fullPrice)=>{
     const cartData = await cart.findOne({cartNo:orderNo})
     const faktorNo= "F123"+orderNo
     var userData = cartData.userId&&await customers.findOne({_id:ObjectID(cartData.userId)})
     var adminData = cartData.manageId&&await users.findOne({_id:ObjectID(cartData.manageId)})
     var sepidarQuery = await CartToSepidar(cartData.cartItems,faktorNo,
-        userData.CustomerID?userData:adminData,adminData.StockId,cartData.discount)
+        userData.CustomerID?userData:adminData,adminData.StockId,cartData.discount,'',
+        cartData.payValue,fullPrice)
     
     var sepidarResult = await sepidarPOST(sepidarQuery,"/api/invoices",adminData._id)
     if(sepidarResult&&!sepidarResult.Message){
