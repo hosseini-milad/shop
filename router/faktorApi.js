@@ -1683,7 +1683,7 @@ router.post('/cancel-faktor', auth, jsonParser, async (req, res) => {
 const checkCart = async (cartItems, stockId, payValue) => {
     const cartList = await tasks.find({ taskStep: { $nin: ['archive'] } })
     var currentCart = await FindCurrentCart(cartList.map(item => item.orderNo))
-
+    if(!cartItems) return
     const qCartList = await qCart.find(stockId ? { stockId: stockId } : {})
     var checkCart = ''
     for (var i = 0; i < cartItems.length; i++) {
