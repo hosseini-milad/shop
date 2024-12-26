@@ -8,7 +8,7 @@ const CartToSepidar=async(data,faktorNo,user,stock,cartOff,orderNo,payValue)=>{
             data[i].count?
             notNullCartItem.push(data[i]):''
         var query ={
-            "GUID": "124ab075-fc79-417f-b8cf-2"+faktorNo,
+            "GUID": "124ab075-fc79-417f-b8cf-3"+faktorNo,
             "CustomerRef": toInt(user.CustomerID),
             "AddressRef": user.AddressID?user.AddressID:'',
             "CurrencyRef":1,
