@@ -1871,6 +1871,7 @@ router.post('/update-faktor', jsonParser, async (req, res) => {
         for (var i = 0; i < faktorDetail.length; i++) {
             faktorNo = await createfaktorNo("F", "02", "21")
             sepidarQuery[i] = await SepidarFunc(faktorDetail[i], faktorNo)
+            console.log(sepidarQuery[i])
             res.status(400).json(sepidarQuery[i])
             return
             //console.log(sepidarQuery[i])
