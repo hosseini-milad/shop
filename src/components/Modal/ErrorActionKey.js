@@ -22,7 +22,7 @@ function ErrorActionKey(props){
     
     if(!props.title)
       {focusPop.current&&focusPop.current.focus()}
-      console.log(props.title)
+      
       props.setPreKey&&props.setPreKey(1)
 
   }, [props.title]);
@@ -40,7 +40,7 @@ function ErrorActionKey(props){
               <p className="popTitle">{props.title}</p>
               <div className="sure-checkbox">
                 {/* <input type="checkbox" name="sure checkbox" id="sure"/> */}
-                <label for="sure">{props.text}</label>
+                <label htmlFor="sure">{props.text}</label>
 
               </div>
               <div className="btn-wrappper">

@@ -87,7 +87,7 @@ root.render(
           path="/"
           element={
             findFPage(cookies) === "market" ? (
-              <OrderHolder lang={lang} />
+              <OrderHolderNew lang={lang} />
             ) : (
               <Layout>
                 <Dashboard lang={lang} />
@@ -143,14 +143,7 @@ root.render(
             </Layout>
           }
         />
-        <Route
-          path="/PrintStore"
-          element={
-            
-              <PrintStore lang={lang} />
-            
-          }
-        />
+        <Route path="/PrintStore" element={<PrintStore lang={lang} />} />
         <Route
           path="/crmlist"
           element={
@@ -212,7 +205,7 @@ root.render(
           path="/setOrders"
           element={
             <Layout>
-              <OrderHolderNew lang={"fa"} />
+              <OrderHolderNew lang={lang} />
             </Layout>
           }
         />
@@ -225,7 +218,10 @@ root.render(
           }
         />
 
-        <Route path="/orders/business" element={<OrderHolderNew lang={"fa"} />} />
+        <Route
+          path="/orders/business"
+          element={<OrderHolderNew lang={"fa"} />}
+        />
         <Route path="/orders/open" element={<OpenOrders lang={"fa"} />} />
         <Route
           path="/orders/print/:orderId"
@@ -412,7 +408,7 @@ root.render(
           path="/public-print/:orderId"
           element={
             <LayoutLogin>
-              <PublicFaktor lang={lang}/>
+              <PublicFaktor lang={lang} />
             </LayoutLogin>
           }
         />
@@ -420,7 +416,7 @@ root.render(
           path="/public-official/:orderId"
           element={
             <LayoutLogin>
-              <PublicOfficial lang={lang}/>
+              <PublicOfficial lang={lang} />
             </LayoutLogin>
           }
         />
@@ -428,14 +424,13 @@ root.render(
           path="/public-sepidar/:orderId"
           element={
             <LayoutLogin>
-              <PublicSepidar lang={lang}/>
+              <PublicSepidar lang={lang} />
             </LayoutLogin>
           }
         />
       </Routes>
     ) : (
       <Routes>
-        
         <Route
           path="/"
           element={
@@ -472,7 +467,7 @@ root.render(
           path="/public-print/:orderId"
           element={
             <LayoutLogin>
-              <PublicFaktor lang={lang}/>
+              <PublicFaktor lang={lang} />
             </LayoutLogin>
           }
         />
@@ -480,7 +475,7 @@ root.render(
           path="/public-official/:orderId"
           element={
             <LayoutLogin>
-              <PublicOfficial lang={lang}/>
+              <PublicOfficial lang={lang} />
             </LayoutLogin>
           }
         />
@@ -488,7 +483,7 @@ root.render(
           path="/public-sepidar/:orderId"
           element={
             <LayoutLogin>
-              <PublicSepidar lang={lang}/>
+              <PublicSepidar lang={lang} />
             </LayoutLogin>
           }
         />

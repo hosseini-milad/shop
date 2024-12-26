@@ -19,7 +19,7 @@ function OpenOrderItem(props) {
   const total = props.total && props.total[props.index];
   const [showDetail, setDetail] = useState(0);
   const [changes, setChanges] = useState();
-  const [active, setActive] = useState(0);
+  const [PrintShow, setPrintShow] = useState(0);
   const [checkState, setCheckState] = useState(0);
   const [LinkShare, setLinkShare] = useState("");
   const [showRemove, setShowRemove] = useState(0);
@@ -127,7 +127,10 @@ function OpenOrderItem(props) {
 
   return (
     <div className="order-wrapper">
-      <div className="border-title" onClick={() => (showDetail ? setDetail(0) : setDetail(1))}>
+      <div
+        className="border-title"
+        onClick={() => (showDetail ? setDetail(0) : setDetail(1))}
+      >
         {!data.InvoiceID && data.official ? (
           <div
             className={checkState ? "orderCheck activeCheck" : "orderCheck"}
@@ -143,10 +146,7 @@ function OpenOrderItem(props) {
             <i className="fa fa-check"></i>
           </div>
         )}
-        <div
-          className="bu-name"
-          
-        >
+        <div className="bu-name">
           {data.userData ? (
             <div className="col">
               <p>
@@ -217,15 +217,25 @@ function OpenOrderItem(props) {
             onClick={() => CreateLink()}
           ></i>
 
-          <i className="tableIcon fas fa-tag" onClick={reactToPrintFn}></i>
+          <i
+            className="tableIcon fas fa-tag"
+            onClick={() => (
+              setPrintShow(1),
+              setTimeout(() => {
+                reactToPrintFn();
+              }, 1000)
+            )}
+          ></i>
 
-          {!data.InvoiceID &&(<button
-            type="button"
-            className="btn-crm btn-orderItem"
-            onClick={() => setShowRemove(data.cartNo)}
-          >
-            <p>لغو سفارش</p>
-          </button>)}
+          {!data.InvoiceID && (
+            <button
+              type="button"
+              className="btn-crm btn-orderItem"
+              onClick={() => setShowRemove(data.cartNo)}
+            >
+              <p>لغو سفارش</p>
+            </button>
+          )}
         </div>
 
         <i
@@ -274,7 +284,7 @@ function OpenOrderItem(props) {
                       <div className="product-title">
                         <img
                           src={
-                            item.productData.imageUrl
+                            item.productData && item.productData.imageUrl
                               ? env.siteApiUrl + item.productData.imageUrl
                               : "/img/business/oil1.png"
                           }
@@ -347,11 +357,15 @@ function OpenOrderItem(props) {
       ) : (
         <></>
       )}
-      <div className="onlyPrint">
-        <div ref={contentRef}>
-          <PrintFish url={data.cartNo} />
+      {PrintShow ? (
+        <div className="onlyPrint">
+          <div ref={contentRef}>
+            <PrintFish url={data.cartNo} />
+          </div>
         </div>
-      </div>
+      ) : (
+        <></>
+      )}
       {showRemove ? (
         <ErrorAction
           status={"DELETE"}

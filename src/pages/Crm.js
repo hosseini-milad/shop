@@ -211,7 +211,7 @@ function CRM(props){
                         tasks={newTasks} token={token} direction={direction}
                         setBoardArray={setBoardArray} crm={boardArray.crm}/>:<></>)
                 })}
-            </DragDropContext>:<div>Updating</div>}
+            </DragDropContext>:<div>{env.loader}</div>}
         </div>
     </div>
     )

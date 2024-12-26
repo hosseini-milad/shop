@@ -16,6 +16,7 @@ function OrderTableRow(props) {
   const order = props.order;
   const lang = props.lang;
   const cart = props.cart;
+  const ClearBank = props.ClearBank
   let menuRef = useRef();
   console.log(props.selectedOrder)
   useEffect(() => {
@@ -35,26 +36,9 @@ function OrderTableRow(props) {
   });
 
   useEffect(()=>{
-    setCheckState(props.allcheck)
+    setCheckState(order.isOfficial?false:props.allcheck)
+    
   },[props.allcheck])
-  const ClearBank=()=>{
-    const postOptions={
-      method:'get',
-      headers: {'Content-Type': 'application/json',
-      "x-access-token":token&&token.token,"userId":token&&token.userId},
-      
-    }
-    fetch(env.siteApi + "/setting/clear-bank-of-cart",postOptions)
-    .then(res => res.json())
-    .then(
-    (result) => {
-      console.log(result)
-    },
-    (error) => {
-      console.log(error);
-      
-    })
-  }
 
   const updateCheckBox=(field,action)=>{
     setCheckState(action?false:true)
@@ -154,6 +138,9 @@ function OrderTableRow(props) {
                 {order.userInfo[0]
                   ? order.userInfo[0].cName + "---" + order.userInfo[0].sName
                   : "---"}
+              </p>
+              <p className="name">
+                {order.userInfo[0]?.Address}
               </p>
             </div>
             {order.moreInformation ? (

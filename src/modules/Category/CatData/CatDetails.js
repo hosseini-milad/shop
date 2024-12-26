@@ -31,7 +31,7 @@ function CatDetails(props){
           }))}/>
           <StyleSelect title={formtrans.catParent[props.lang]} direction={props.direction} 
           options={options||[]}
-          defaultValue={content?content.parent:''} class={"formInput"} label="title"
+          defaultValue={content?content.parentName:''} class={"formInput"} label="title"
           action={(e)=>props.setCatChange(prevState => ({
             ...prevState,
             parent:e

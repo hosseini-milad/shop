@@ -3,6 +3,7 @@ import tabletrans from "../../translate/tables";
 import Pagination from "material-ui-flat-pagination";
 
 function Paging(props) {
+  const Selected = props.Selected ? props.Selected : "25";
   const pageInfo =
     props.content && PageInfoFunction(props.content, props.filters);
 
@@ -42,19 +43,33 @@ function Paging(props) {
             props.setFilters((prevState) => ({
               ...prevState,
               pageSize: pageSize.toString(),
+              offset: "0",
             }));
             props.updateUrlWithFilters({
               ...props.filters,
               pageSize: pageSize.toString(),
+              offset: "0",
             });
           }}
         >
-          <option value="5">5</option>
-          <option value="10">
+          <option value="5" selected={Selected=="5"?true:false}>
+            5
+          </option>
+          <option value="10" selected={Selected=="10"?true:false}>
             10
           </option>
-          <option value="25" selected={true}>25</option>
-          <option value="50">50</option>
+          <option value="25" selected={Selected=="25"?true:false}>
+            25
+          </option>
+          <option value="50" selected={Selected=="50"?true:false}>
+            50
+          </option>
+          <option value="100" selected={Selected=="100"?true:false}>
+            100
+          </option>
+          <option value="500" selected={Selected=="500"?true:false}>
+            500
+          </option>
         </select>
       </div>
       {pageInfo && pageInfo.show ? (
@@ -64,7 +79,7 @@ function Paging(props) {
             offset={parseInt(props.filters.offset) || 0}
             otherPageColor={"default"}
             currentPageColor={"primary"}
-            total={props.size?props.size:pageInfo.totalItem}
+            total={props.size ? props.size : pageInfo.totalItem}
             onClick={(e, offset) => {
               props.setFilters((prevState) => ({
                 ...prevState,

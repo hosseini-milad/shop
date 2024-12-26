@@ -7,6 +7,13 @@ const statustrans ={
         color: "rgb(255, 255, 255)",
         background: "rgb(33, 43, 54)"
     },
+    paid:{
+        english: "paid",
+        persian: "پرداخت شده",
+        index:0,
+        color: "rgb(255, 255, 255)",
+        background: "rgb(33, 43, 54)"
+    },
     archive:{
         english: "Archive",
         persian: "آرشیو",
@@ -94,6 +101,62 @@ const statustrans ={
     shop:{
         english: "Shop",
         persian: "فروشگاه",
+        index:5,
+        color: "rgb(17, 141, 87)",
+        background: "rgba(34, 197, 94, 0.16)"
+    },
+    website:{
+        english: "website",
+        persian: "فروش سایت",
+        index:5,
+        color: "rgb(17, 141, 87)",
+        background: "rgba(34, 197, 94, 0.16)"
+    },
+    suuport:{
+        english: "suuport",
+        persian: "پشتیبانی",
+        index:5,
+        color: "rgb(17, 141, 87)",
+        background: "rgba(34, 197, 94, 0.16)"
+    },
+    sending:{
+        english: "sending",
+        persian: "ارسال",
+        index:5,
+        color: "rgb(17, 141, 87)",
+        background: "rgba(34, 197, 94, 0.16)"
+    },
+    prepare:{
+        english: "prepare",
+        persian: "آماده سازی اجناس",
+        index:5,
+        color: "rgb(17, 141, 87)",
+        background: "rgba(34, 197, 94, 0.16)"
+    },
+    accepted:{
+        english: "accepted",
+        persian: "تایید شده",
+        index:5,
+        color: "rgb(17, 141, 87)",
+        background: "rgba(34, 197, 94, 0.16)"
+    },
+    edit:{
+        english: "edit",
+        persian: "نیاز به اصلاح",
+        index:5,
+        color: "rgb(17, 141, 87)",
+        background: "rgba(34, 197, 94, 0.16)"
+    },
+    initial:{
+        english: "initial",
+        persian: "ثبت اولیه",
+        index:5,
+        color: "rgb(17, 141, 87)",
+        background: "rgba(34, 197, 94, 0.16)"
+    },
+    quote:{
+        english: "quote",
+        persian: "پیش فاکتور",
         index:5,
         color: "rgb(17, 141, 87)",
         background: "rgba(34, 197, 94, 0.16)"

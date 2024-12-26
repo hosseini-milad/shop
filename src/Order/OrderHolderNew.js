@@ -1,16 +1,24 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import OrderFilters from "./Components/Filters";
 import OrderHeader from "./Components/Header";
 import ProductList from "./Components/ProductList";
 import QuickCartHolder from "./QuickCart/QuickCartHolder";
 import PreOrderHolder from "./PreOrder/PreOrderList";
-import PreOrderSale from "./PreOrder/PreOrderSale"
-import env, {CheckAccess, defPay } from "../env";
+import PreOrderSale from "./PreOrder/PreOrderSale";
+import env, { CheckAccess, defPay } from "../env";
 import Cookies from "universal-cookie";
 import ShowError from "../components/Modal/ShowError";
 import PreQuickHolder from "./PreOrder/PreQuickList";
 import ProductListSale from "./Components/ProductListSale";
-
+import Paging from "../modules/Components/Paging";
+import {
+  getFiltersFromUrl,
+  updateUrlWithFilters,
+  defaultFilterValues,
+  handleFilterChange,
+} from "../utils/filterUtils";
+import { useReactToPrint } from "react-to-print";
+import PrintFish from "../modules/Print/PrintFish";
 const cookies = new Cookies();
 var shopVar = JSON.parse(localStorage.getItem(env.shopExpert));
 
@@ -18,15 +26,27 @@ function OrderHolder(props) {
   const token = cookies.get(env.cookieName);
   const [grid, setGrid] = useState(shopVar ? shopVar.grid : 0);
   const [filters, setFilters] = useState();
+  const [Search, setSearch] = useState("");
+  const [Date, setDate] = useState("");
+  const [Loader, setLoader] = useState(0);
   const [user, setUser] = useState();
   const [cart, setCart] = useState();
   const [appFilter, setAppFilter] = useState();
   const [products, setProduct] = useState();
   const [payValue, setPayValue] = useState(defPay);
   const [error, setError] = useState({ message: "", color: "brown" });
-  const [tab,setTab] = useState(0)
-  const access = CheckAccess(token,"orders")
+  const [tab, setTab] = useState(0);
+  const access = CheckAccess(token, "orders");
+  const [Pages, setPages] = useState(getFiltersFromUrl());
+  const [PrintPop, setPrintPop] = useState("");
+  var contentRef = useRef();
+  const reactToPrintFn = useReactToPrint({ contentRef });
+  function handleFilterChange(newFilters) {
+    setPages(newFilters);
+    updateUrlWithFilters(newFilters);
+  }
   useEffect(() => {
+    setLoader(0);
     const postOptions = {
       method: "post",
       headers: {
@@ -34,17 +54,20 @@ function OrderHolder(props) {
         "x-access-token": token && token.token,
         userId: token && token.userId,
       },
-      body: JSON.stringify(
-        {
-          
-          userId: user
+      body: JSON.stringify({
+        userId: user
           ? user.Code
             ? user.Code
             : user._id
           : token && token.userId,
-        }),
+        offset: Pages.offset ? Pages.offset : "0",
+        pageSize: Pages.pageSize ? Pages.pageSize : "10",
+        search: Search,
+        dateFrom: Date && Date.dateFrom,
+        dateTo: Date && Date.dateTo,
+      }),
     };
-    fetch(env.siteApi + `/panel/${tab?"quote":"faktor"}/cart`, postOptions)
+    fetch(env.siteApi + `/panel/${tab ? "quote" : "faktor"}/cart`, postOptions)
       .then((res) => res.json())
       .then(
         (result) => {
@@ -57,14 +80,16 @@ function OrderHolder(props) {
               }
             } else {
               setCart(result);
+              setLoader(1);
             }
           else setCart("");
+          setLoader(1);
         },
         (error) => {
           console.log(error);
         }
       );
-  }, [user,tab]);
+  }, [user, tab, Pages, Search, Date]);
   useEffect(() => {
     const postOptions = {
       method: "get",
@@ -78,40 +103,47 @@ function OrderHolder(props) {
       .then((res) => res.json())
       .then(
         (result) => {
-          if (result){
-
-            if(token.profileCode == "sale"){
-              setUser(result.defaultUser&&result.defaultUser)
+          if (result) {
+            if (token.profileCode == "sale") {
+              setUser(result.defaultUser && result.defaultUser);
               setFilters(result);
-              if(result.defaultUser&&result.defaultUser.CustomerID){
-                setPayValue(3)
+              if (result.defaultUser && result.defaultUser.CustomerID) {
+                setPayValue(3);
               }
-            }
-            else if (result.error) {
+            } else if (result.error) {
             } else {
               setFilters(result);
             }
-          }
-          else setFilters("");
+          } else setFilters("");
         },
         (error) => {
           console.log(error);
         }
       );
-    
   }, []);
   useEffect(() => {
     if (!appFilter) return;
     const postOptions = {
       method: "post",
-      headers: {'Content-Type': 'application/json',
-        "x-access-token":token&&token.token,"userId":token&&token.userId},
+      headers: {
+        "Content-Type": "application/json",
+        "x-access-token": token && token.token,
+        userId: token && token.userId,
+      },
       body: JSON.stringify({
         filters: appFilter,
         stockId: token.stockId ? token.stockId : "5",
       }),
     };
-    fetch(env.siteApi + `${token.profileCode == "sale"?"/sales/find-products":"/panel/faktor/list-products"}`, postOptions)
+    fetch(
+      env.siteApi +
+        `${
+          token.profileCode == "sale"
+            ? "/sales/find-products"
+            : "/panel/faktor/list-products"
+        }`,
+      postOptions
+    )
       .then((res) => res.json())
       .then(
         (result) => {
@@ -151,25 +183,27 @@ function OrderHolder(props) {
       </header>
       <main className="sharif-order-main">
         {filters && (filters.brand || filters.category) ? (
-          (token.profileCode == "sale")?
-          <ProductListSale
-            filters={filters}
-            products={products}
-            setCart={setCart}
-            user={user}
-            setError={setError}
-            payValue={payValue}
-            token={token}
-          />:
-          <ProductList
-            filters={filters}
-            products={products}
-            setCart={setCart}
-            user={user}
-            setError={setError}
-            payValue={payValue}
-            token={token}
-          />
+          token.profileCode == "sale" ? (
+            <ProductListSale
+              filters={filters}
+              products={products}
+              setCart={setCart}
+              user={user}
+              setError={setError}
+              payValue={payValue}
+              token={token}
+            />
+          ) : (
+            <ProductList
+              filters={filters}
+              products={products}
+              setCart={setCart}
+              user={user}
+              setError={setError}
+              payValue={payValue}
+              token={token}
+            />
+          )
         ) : (
           <></>
         )}
@@ -187,17 +221,53 @@ function OrderHolder(props) {
             setCart={setCart}
             setError={setError}
             cartDetail={cart && cart.qCartDetail}
+            setPrintPop={setPrintPop}
+            reactToPrintFn={reactToPrintFn}
           />
         ) : (
           <></>
         )}
+        {PrintPop ? (
+          <div className="onlyPrint">
+            <div ref={contentRef}>
+              <PrintFish url={PrintPop} />
+            </div>
+          </div>
+        ) : (
+          <></>
+        )}
         <PreQuickHolder token={token} user={user} cart={cart} />
-        
-        {(cart&&cart.isSale)?
-      <PreOrderSale token={token} user={user} setError={setError}
-      cart={cart} setCart={setCart} access={access}/>:
-      <PreOrderHolder token={token} user={user}
-        cart={cart}/>}
+
+        {cart && cart.isSale ? (
+          <PreOrderSale
+            token={token}
+            user={user}
+            setError={setError}
+            cart={cart}
+            setCart={setCart}
+            access={access}
+            setSearch={setSearch}
+            Search={Search}
+            Loader={Loader}
+            setDate={setDate}
+            lang={props.lang}
+          />
+        ) : (
+          <PreOrderHolder token={token} user={user} cart={cart} />
+        )}
+        {cart ? (
+          <Paging
+            content={cart}
+            size={cart.size}
+            filters={Pages}
+            lang={props.lang}
+            setFilters={handleFilterChange}
+            updateUrlWithFilters={updateUrlWithFilters}
+            Selected={10}
+          />
+        ) : (
+          <>{env.loader}</>
+        )}
       </main>
       {error && error.message ? (
         <ShowError
