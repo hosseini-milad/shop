@@ -226,8 +226,8 @@ router.post('/update-tasks-status', auth, jsonParser, async (req, res) => {
     if (status === "sepidar") {
 
         const faktorNo = "F123" + taskData.orderNo
-        var sepidarResult = await SepidarOrder(taskData.orderNo)
-        res.json(sepidarResult)
+        var sepidarResult = await SepidarOrder(taskData.orderNo,1)
+        res.json(sepidarResult) 
         if (sepidarResult&&sepidarResult.Message)
             await tasks.updateOne({ _id: ObjectID(taskId) },
                 {
