@@ -2,6 +2,7 @@
   --main-color: #002a54;
   --main-dark: rgb(48, 127, 226);
 }
+@import url("https://v1.fontapi.ir/css/VazirFD:500");
 .main-pad {
   padding-bottom: 50px;
   width: 100%;
@@ -76,6 +77,36 @@
   .hideMobile {
     display: none !important;
   }
+  .sharif-order-main .orders-sec .title{
+    flex-wrap: wrap;
+
+    p{
+      order: 1;
+      width: 45%;
+    }
+    .orders-total{
+      order: 2;
+      width: 45%;
+
+      p{
+        width: 100%;
+        font-size: 0.85rem;
+      }
+    }
+    .order-search{
+      order: 3;
+      width: 100%;
+    }
+    .DatePicker {
+      width: 100%;
+      order: 4;
+
+      .DatePicker__input{
+        width: 100%;
+      }
+    }
+  }
+  
 }
 
 /*Overide*/
@@ -1071,6 +1102,10 @@ dialog {
   }
   .hesabfaItem {
     padding-block: 0.6rem;
+
+    strong {
+      font-family: number;
+    }
   }
   .site-link {
     display: flex;
@@ -1850,7 +1885,7 @@ dialog {
   align-items: center;
   justify-content: space-between;
   border: 1px solid grey;
-  border-radius: 999px;
+  border-radius: 0.5rem;
   overflow: hidden;
   padding-inline: 0.5rem;
 
@@ -1865,9 +1900,25 @@ dialog {
   min-height: 25.8em !important;
 }
 .orders-sec .title .DatePicker__input {
-  border-radius: 999px;
+  border-radius: 0.5rem;
   border: 1px solid grey !important;
 }
-.orders-sec .title .DatePicker__input  {
-  padding: 0.4rem 0.65rem !important; 
+.orders-sec .title .DatePicker__input {
+  padding: 0.4rem 0.65rem !important;
+}
+.PrintBtn {
+  outline: none;
+  border: none;
+  padding: 0.2rem 0.5rem;
+  border-radius: 0.5rem;
+  min-width: 100px;
+  margin-right: 1rem;
+}
+@media print {
+  .PrintBtn {
+    visibility: hidden;
+  }
+  .noPrint{
+    visibility: hidden;
+  }
 }

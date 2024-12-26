@@ -79,10 +79,11 @@ const FaktorSitePrint = (props)=>{
                 <PrintInvoice orderData={faktorList} 
                 userInfo={''} url={url}/> :
             <main>در حال دریافت اطلاعات</main>}
-            <div className="btn-wrapper">
+            <div className="btn-wrapper noPrint">
                 <i className="tableIcon fas fa-paper-plane" onClick={()=>CreateLink    ()}
                     >
                 </i>
+                <button className="PrintBtn" onClick={()=>window.print()}>چاپ</button>
             </div>
             {LinkShare?<LinkModal LinkShare={LinkShare} setLinkShare={setLinkShare}/>:<></>}
         </div>
