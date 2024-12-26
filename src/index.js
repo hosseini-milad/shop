@@ -87,7 +87,7 @@ root.render(
           path="/"
           element={
             findFPage(cookies) === "market" ? (
-              <OrderHolder lang={lang} />
+              <OrderHolderNew lang={lang} />
             ) : (
               <Layout>
                 <Dashboard lang={lang} />
