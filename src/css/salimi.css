@@ -1327,7 +1327,6 @@ input:checked + .switch-label:after {
   display: flex;
   flex-direction: column;
   width: 100%;
-  
 }
 .user-list p {
   margin: 0;
@@ -1959,15 +1958,15 @@ input:checked + .switch-label:after {
   align-items: flex-start;
   justify-content: flex-start;
 }
-.search-wrapper{
+.search-wrapper {
   width: 100%;
   background-color: white;
   margin-top: 1rem;
   border-radius: 1rem;
-  .d-filter{
+  .d-filter {
     padding-block: 0;
   }
-  .serach-input{
+  .serach-input {
     padding: 0;
   }
 }
@@ -2895,7 +2894,7 @@ input:checked + .switch-label:after {
   white-space: nowrap;
   position: relative;
 }
-.dot-more-btn{
+.dot-more-btn {
   width: 20px;
   height: 20px;
   display: flex;
@@ -5468,7 +5467,6 @@ table {
   .filler {
     width: 220px;
     height: 100%;
-    
   }
 }
 .team-users {
@@ -5616,7 +5614,7 @@ table {
 .user-card i {
   color: #c0c0c0;
 }
-.user-btn i{
+.user-btn i {
   cursor: pointer;
 }
 .user-btn i:nth-child(2) {
@@ -5662,7 +5660,9 @@ table {
   font-weight: 500;
   padding-bottom: 10px;
 }
-.email-input , .profile-input , .role-input{
+.email-input,
+.profile-input,
+.role-input {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -5671,10 +5671,13 @@ table {
   padding-block-end: 0;
   position: relative;
 }
-.profile-input , .role-input{
+.profile-input,
+.role-input {
   margin-bottom: 15px;
 }
-.email-input input , .role-input select , .profile-input select{
+.email-input input,
+.role-input select,
+.profile-input select {
   width: 70%;
   background-color: transparent;
   padding-inline: 0.5rem;
@@ -5683,10 +5686,13 @@ table {
   border-bottom: 1px solid #f0f0f0;
   padding-bottom: 4.9px;
 }
-.role-input select , .profile-input select{
+.role-input select,
+.profile-input select {
   padding-bottom: 10.7px;
 }
-.email-input label , .role-input label , .profile-input label {
+.email-input label,
+.role-input label,
+.profile-input label {
   margin: 0;
   width: 30%;
   border-bottom: 1px solid #f0f0f0;
@@ -5741,7 +5747,7 @@ table {
   font-weight: 400;
 }
 .slidemenu {
-  background-color: rgba(99,99,99,.207);
+  background-color: rgba(99, 99, 99, 0.207);
   display: flex;
   max-width: 100%;
   overflow: hidden;
@@ -5759,10 +5765,11 @@ table {
   margin: 0;
   text-align: center;
 }
-.slidemenu label, .slider .bar {
-  transition: all .5s ease-in-out;
-  -webkit-transition: all .5s ease-in-out;
-  -moz-transition: all .5s ease-in-out;
+.slidemenu label,
+.slider .bar {
+  transition: all 0.5s ease-in-out;
+  -webkit-transition: all 0.5s ease-in-out;
+  -moz-transition: all 0.5s ease-in-out;
 }
 .slidemenu .slide-toggle:checked + label {
   opacity: 1;
@@ -5783,67 +5790,67 @@ table {
   position: absolute;
   right: 0;
   top: 0;
-  transition: all .3s;
+  transition: all 0.3s;
   width: 100%;
 }
 .slide-toggle {
   display: none;
 }
 
-.transfer-arrow{
+.transfer-arrow {
   display: flex;
   align-items: center;
   justify-content: center;
   border-radius: 50%;
   width: 20px;
   height: 20px;
-  border: 1px solid #00dd00 ;
+  border: 1px solid #00dd00;
   cursor: pointer;
   color: #00dd00;
   background-color: white;
 }
-.transfer-arrow:hover{
-  background-color: #00dd00 ;
+.transfer-arrow:hover {
+  background-color: #00dd00;
   color: white;
 }
-.gp-wrapper{
+.gp-wrapper {
   display: flex;
   flex-direction: column;
   padding-block: 0.5rem;
   gap: 10px;
 }
-.gp-header p{
+.gp-header p {
   color: #555;
   font-size: 1rem;
   cursor: pointer;
   font-weight: 500;
   padding-left: 0.8rem;
 }
-.gp-member{
+.gp-member {
   display: flex;
   align-items: center;
   gap: 5px;
   padding-inline: 0.8rem;
   padding-block: 0.2rem;
 }
-.gp-member label{
+.gp-member label {
   margin: 0;
   cursor: pointer;
   color: #555;
   font-size: 0.8rem;
   font-weight: 300;
 }
-.gp-member i{
+.gp-member i {
   display: none;
   margin-left: auto;
 }
-.gp-member:hover{
+.gp-member:hover {
   background-color: rgba(128, 128, 128, 0.392);
 }
-.gp-member:hover i{
+.gp-member:hover i {
   display: flex;
 }
-.default-line{
+.default-line {
   margin-bottom: 20px;
 }
 .default-line p {
@@ -5853,15 +5860,15 @@ table {
   border-bottom: 1px solid #2c7bd0;
   color: #2c7bd0;
 }
-.notify-input{
+.notify-input {
   margin-bottom: 15px;
 }
-.create-btn-wrapper{
+.create-btn-wrapper {
   display: flex;
   align-items: center;
   gap: 15px;
 }
-.add-btn{
+.add-btn {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -5872,7 +5879,7 @@ table {
   text-shadow: 1px 1px 0 rgba(0, 0, 0, 0.2);
   padding: 2px 15px;
 }
-.add-btn p{
+.add-btn p {
   margin: 0;
   font-size: 1rem;
   color: #fff;
@@ -5893,9 +5900,8 @@ table {
 .cancel-btn p {
   color: black;
 }
-.create-team-user input[type="checkbox"]{
+.create-team-user input[type="checkbox"] {
   accent-color: rgb(0, 134, 0);
-
 }
 /* User edit ---------------------------------------------*/
 @media (max-width: 800px) {
@@ -6969,7 +6975,7 @@ table {
   align-items: center;
   justify-content: center;
   gap: 8px;
-  border:none;
+  border: none;
   border-radius: 2px;
   cursor: pointer;
   text-shadow: 1px 1px 0 rgba(0, 0, 0, 0.2);
@@ -7095,40 +7101,49 @@ table {
 }
 .profile-table tr:hover .profiles-icons {
   display: flex;
-  
 }
 
 /* end of profile css  -----------------------------------------*/
 
 /* Visitor POP UP */
 
-.visitor-popup{
+.visitor-popup {
   background-color: white;
   width: 500px;
-  padding:1.5rem 1rem;
+  padding: 1.5rem 1rem;
+  padding-top: 0;
   border-radius: 0.5rem;
   position: relative;
   max-height: 600px;
   overflow-y: auto;
-  .fa-close{
-    position: fixed;
-    top: 5px;
+  .fa-close {
+    position: sticky;
+    top: 0px;
     left: 5px;
     font-size: 2rem;
-    color: white;
+    color: black;
     cursor: pointer;
+    z-index: 99;
+    width: 100%;
+    display: block;
+    background-color: white;
+    height: 40px;
   }
 }
-.visitor-popup table{
+.visitor-popup table {
   margin-top: 0.5rem;
   max-height: 600px;
-  
-  th,td{
+
+  th,
+  td {
     text-align: center;
     font-size: 1rem;
   }
-  th{
+  thead {
+    position: sticky;
+    top: 40px;
+  }
+  th {
     font-weight: 600;
-    
   }
 }

@@ -1130,6 +1130,10 @@ dialog {
   }
   td {
     border-width: 2px;
+    
+  }
+  .number-td{
+    font-family: number;
   }
 
   .table-total {
@@ -1143,6 +1147,7 @@ dialog {
     }
   }
 }
+
 .officialprint .table-footer {
   width: 100%;
   border: 1px solid black;
@@ -1250,7 +1255,9 @@ dialog {
     align-items: center;
     justify-content: flex-start;
     gap: 1rem;
-
+    .ac-num{
+      font-family: number;
+    }
     span {
       font-weight: 600;
       margin-right: 6px;

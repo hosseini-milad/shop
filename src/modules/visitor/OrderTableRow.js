@@ -3,12 +3,12 @@ import tabletrans from "../../translate/tables"
 import Status from "../Components/Status"
 import { normalPriceCount} from "../../env";
 import VisitorPopup from "./VisitorPopup";
-
+import OrderPopup from "./OrderPopup";
 function DTableRow(props){
   const order =props.order
   const [Vpop,setVpop]=useState("")
-
-  console.log(order)
+  const [OrderPop,setOrderPop]=useState("")
+  console.log(OrderPop)
     return(
     <>
         <tr onClick={()=>setVpop(order.sku)}>
@@ -19,8 +19,8 @@ function DTableRow(props){
           <td>{order.count}</td>
           <td>{normalPriceCount(order.totalPrice)}</td>
         </tr>
-        {Vpop?<VisitorPopup content={order} setVpop={setVpop}/>:<></>}
-        
+        {Vpop?<VisitorPopup content={order} setVpop={setVpop} setOrderPop={setOrderPop}/>:<></>}
+        {OrderPop?<OrderPopup CartNum={OrderPop} setOrderPop={setOrderPop}/>:<></>}
     </>
     )
 }
