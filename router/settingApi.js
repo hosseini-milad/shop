@@ -153,6 +153,7 @@ router.post('/multi-sepidar', jsonParser, auth, async (req, res) => {
         const customerData = await customers.findOne({ _id: ObjectID(orderDetails[0].userId) })
         if(customerData&&customerData.username&&customerData.username.includes("مصرف"))
             official =0
+        if(customerData&&!customerData.CustomerID) official = 0
         const faktorNo = "F321" + orderDetails[0].cartNo
         var sepidarQuery = await CartToSepidar(mergeOrder, faktorNo,
             official?customerData:adminData, 
