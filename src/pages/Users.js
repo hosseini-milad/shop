@@ -249,7 +249,7 @@ const Users = (props) => {
             }}
           />
 
-          <div class="formInput">
+          {/* <div class="formInput">
             <Autocomplete
               multiple
               options={storeList || []}
@@ -261,7 +261,7 @@ const Users = (props) => {
                 <TextField {...params} label="انبار" variant="outlined" />
               )}
             />
-          </div>
+          </div> */}
           <StyleInput
             title={formtrans.customercode[lang]}
             direction={direction}
