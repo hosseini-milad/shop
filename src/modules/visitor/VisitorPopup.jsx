@@ -1,16 +1,15 @@
-import React,{useState,useEffect} from "react"
-import env from "../../env"
+import React, { useState, useEffect } from "react";
+import env from "../../env";
 import Cookies from "universal-cookie";
 const cookies = new Cookies();
 
-
-function VisitorPopup(props){
-  const content = props.content
-  const [Order,setOrder]=useState("")
+function VisitorPopup(props) {
+  const content = props.content;
+  const [Order, setOrder] = useState("");
   const token = cookies.get(env.cookieName);
 
   // useEffect(() => {
-    
+
   //   const postOptions = {
   //     method: "post",
   //     headers: {
@@ -20,7 +19,7 @@ function VisitorPopup(props){
   //     },
   //     body: JSON.stringify({sku:orderNum,allOrder:"true"}),
   //   };
-    
+
   //   fetch(env.siteApi + "/panel/faktor/calc-count", postOptions)
   //     .then((res) => res.json())
   //     .then(
@@ -28,17 +27,19 @@ function VisitorPopup(props){
   //         setOrder(result.orderData);
   //       },
   //       (error) => {
-          
+
   //         console.log(error);
   //       }
   //     );
-  // }, []); 
-    return(
+  // }, []);
+  return (
     <div className="delete-modal">
       <div className="modal-backdrop show-modal">
-      
         <div className="visitor-popup">
-          <i className="fa-solid fa-close close-visit" onClick={()=>props.setVpop("")}></i>
+          <i
+            className="fa-solid fa-close close-visit"
+            onClick={() => props.setVpop("")}
+          ></i>
           <table>
             <thead>
               <tr>
@@ -49,21 +50,27 @@ function VisitorPopup(props){
               </tr>
             </thead>
             <tbody>
-              {
-                content&&content.orderList&&content.orderList.map((item,i)=>(
-                  <tr key={i}>
-                    <td>{i+1}</td>
-                    <td>{item.title?item.title:"-"}</td>
-                    <td>{item.user?item.user:"-"}</td>
-                    <td>{item.count?item.count:"-"}</td>
+              {content &&
+                content.orderList &&
+                content.orderList.map((item, i) => (
+                  <tr
+                    key={i}
+                    onClick={() => {
+                      props.setVpop("");
+                      props.setOrderPop(item.title);
+                    }}
+                  >
+                    <td>{i + 1}</td>
+                    <td>{item.title ? item.title : "-"}</td>
+                    <td>{item.user ? item.user : "-"}</td>
+                    <td>{item.count ? item.count : "-"}</td>
                   </tr>
-                ))
-              }
+                ))}
             </tbody>
           </table>
         </div>
       </div>
     </div>
-    )
+  );
 }
-export default VisitorPopup
+export default VisitorPopup;
