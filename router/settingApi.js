@@ -21,6 +21,7 @@ const RecieptFunc = require('../middleware/RecieptFunc');
 const customers = require('../models/auth/customers');
 const SumArray = require('../middleware/SumArray');
 const FindRemainBank = require('../middleware/FindRemainBank');
+const orderLog = require('../models/orders/orderLog');
 
 router.post('/sliders', async (req, res) => {
     try {
@@ -176,6 +177,17 @@ router.post('/multi-sepidar', jsonParser, auth, async (req, res) => {
                     ...invoiceItems[i],
                     InvoiceID: sepidarResult.InvoiceID
                 })*/
+            await orderLog.create({
+                    userId:manageId,
+                    orderNo: faktorNo,
+                    invoiceID:sepidarResult.InvoiceID,
+                    orderPrice: "123",
+                    orderCount:"12",
+                    orderItem:mergeOrder,
+                    
+                    errorMessage:'',
+                    query:sepidarQuery
+            })
             await cart.updateMany({ cartNo: { $in: orderList } }, {
                 $set: { 
                     Number: sepidarResult.Number,

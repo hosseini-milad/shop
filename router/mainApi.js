@@ -362,7 +362,7 @@ router.get('/sepidar-bank', async (req, res) => {
         res.status(500).json({ message: error.message })
     }
 })
-router.get('/sepidar-quantity',auth, async (req, res) => {
+router.post('/sepidar-quantity',auth, async (req, res) => {
     try {
         const sepidarQuantityResult = await sepidarFetch("data", "/api/Items/Inventories")
         if(!req.headers['userid']){
@@ -375,7 +375,7 @@ router.get('/sepidar-quantity',auth, async (req, res) => {
             return
         }
         var Stock = userData&&userData.StockId
-        if(userData.access==="manager") Stock = ''
+        if(userData.access==="manager") Stock = req.body.Stock?req.body.Stock:''
         if (sepidarQuantityResult.error || !sepidarQuantityResult.length) {
             res.json({
                 error: "error occure",
