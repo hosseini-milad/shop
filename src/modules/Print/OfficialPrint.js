@@ -178,7 +178,7 @@ function OfficialPrint(props){
                   <th>شرح کالا / خدمت</th>
                   <th>کارتن</th>
                   <th>واحد اصلی</th>
-                  <th>واحد اندازه گیری</th>
+                  <th> اندازه گیری اصلی</th>
                   <th>مبلغ واحد<br/></th>
                   <th>مبلغ کل<br/></th>
                   <th>مبلغ تخفیف<br/></th>
@@ -197,16 +197,16 @@ function OfficialPrint(props){
                   
                   <td>{items.itemDetail&&items.itemDetail.sku}</td>
                   <td>{items.itemDetail&&items.itemDetail.title}</td>
-                  <td className="centerCell">{items.ProductPackQuantity}</td>
+                  <td className="centerCell number-td">{items.ProductPackQuantity}</td>
                   <td className="centerCell">{items.ProductPackRef?items.ProductPackRef:"تعداد"}</td>
-                  <td className="centerCell">{items.Quantity}</td>
-                  <td>{normalPriceCount(items.Fee)}</td>
-                  <td>{normalPriceCount(items.Price)}</td>
-                  <td>{normalPriceCount(items.Discount)}</td>
-                  <td>{normalPriceCalc(items.Addition,items.Price,items.Discount)}</td>
-                  <td></td>
-                  <td>{normalPriceCount(items.Tax)}</td>
-                  <td>{normalPriceCount(items.NetPrice)}</td>
+                  <td className="centerCell number-td">{items.Quantity}</td>
+                  <td className="number-td">{normalPriceCount(items.Fee)}</td>
+                  <td className="number-td">{normalPriceCount(items.Price)}</td>
+                  <td className="number-td">{normalPriceCount(items.Discount)}</td>
+                  <td className="number-td">{normalPriceCalc(items.Addition,items.Price,items.Discount)}</td>
+                  <td className="number-td"></td>
+                  <td className="number-td">{normalPriceCount(items.Tax)}</td>
+                  <td className="number-td">{normalPriceCount(items.NetPrice)}</td>
                 </tr>))}
                 <tr>
                   <td colSpan={8}>
@@ -215,12 +215,12 @@ function OfficialPrint(props){
                       <p>جمع کل</p>
                     </div>
                   </td>
-                  <td>{normalPriceCount(orderInfo.Price)}</td>
-                  <td>{normalPriceCount(orderInfo.Discount)}</td>
-                  <td>{normalPriceCount(orderInfo.Addition)}</td>
-                  <td></td>
-                  <td>{normalPriceCount(orderInfo.Tax)}</td>
-                  <td>{normalPriceCount(orderInfo.NetPrice)}</td>
+                  <td className="number-td">{normalPriceCount(orderInfo.Price)}</td>
+                  <td className="number-td">{normalPriceCount(orderInfo.Discount)}</td>
+                  <td className="number-td">{normalPriceCount(orderInfo.Addition)}</td>
+                  <td className="number-td"></td>
+                  <td className="number-td">{normalPriceCount(orderInfo.Tax)}</td>
+                  <td className="number-td">{normalPriceCount(orderInfo.NetPrice)}</td>
                 </tr>
               </tbody>
             </table>
@@ -230,15 +230,15 @@ function OfficialPrint(props){
                   <p>شرایط و نحوه</p>
                   <div className="pay-item">
                     <p>نقدی</p>
-                    <span className="pay-checkbox"></span>
+                    <span className="pay-checkbox">{orderInfo.SaleTypeRef==3?(<div className="squre"></div>):<></>}</span>
                   </div>
                   <div className="pay-item">
                     <p>قراردادی</p>
-                    <span className="pay-checkbox"></span>
+                    <span className="pay-checkbox">{orderInfo.SaleTypeRef==5?(<div className="squre"></div>):<></>}</span>
                   </div>
                   <div className="pay-item">
                     <p>اعتباری</p>
-                    <span className="pay-checkbox"></span>
+                    <span className="pay-checkbox">{orderInfo.SaleTypeRef==4?(<div className="squre"></div>):<></>}</span>
                   </div>
                 </div>
                 <div className="bill-col">

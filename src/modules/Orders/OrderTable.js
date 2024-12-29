@@ -4,6 +4,7 @@ import tabletrans from "../../translate/tables";
 import OrderMultiReg from "./OrderComponent/OrderMultiReg";
 import OrderMultiDone from "./OrderComponent/OrderMultiDone";
 import env from "../../env";
+import { normalArrayCount } from "../../env";
 function OrderTable(props) {
   const data = props.data;
   const orders = props.orders;
@@ -13,6 +14,10 @@ function OrderTable(props) {
   const [detail, showDetail] = useState(-1);
   const [AllCheck, setAllCheck] = useState(0);
   const [DisableAll, setDisableAll] = useState(1);
+  const totalPrice = normalArrayCount(
+    selectedOrder &&
+      selectedOrder.map((item) => item.totalCart && item.totalCart.totalPrice)
+  );
   const scrollToBottom = () => {
     window.scrollTo({
       top: document.documentElement.scrollHeight,
@@ -65,6 +70,14 @@ function OrderTable(props) {
         <button className="BtnToBot" onClick={scrollToBottom}>
           <i class="fa fa-angle-down" aria-hidden="true"></i>
         </button>
+        {totalPrice ? (
+          <div className="total-top">
+            <span>جمع سفارشات انتخابی:</span>
+            <span>{totalPrice}</span>
+          </div>
+        ) : (
+          <></>
+        )}
         <table>
           <thead>
             <tr>

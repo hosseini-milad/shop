@@ -76,7 +76,7 @@ function TaskAction(props) {
             type="button"
             className="btn-crm btn-crm-accept"
             onClick={() =>
-              (window.location.href = "/print/sepidar/" + data.result.InvoiceID)
+              (window.location.href = "/print/official/" + data.result.InvoiceID)
             }
           >
             چاپ سپیدار
@@ -86,7 +86,7 @@ function TaskAction(props) {
             className="btn-crm btn-crm-accept btn-crm-official"
             onClick={() =>
               (window.location.href =
-                "/print/official/" + data.result.InvoiceID)
+                "/print/sepidar/" + data.orderNo)
             }
           >
             {" "}

@@ -8,6 +8,7 @@ import {
 import env from "../../env";
 import LinkModal from "../../components/Modal/LinkModal";
 import ErrorAction from "../../components/Modal/ErrorAction";
+import ShowError from "../../components/Modal/ShowError";
 // import ReactToPrint from "react-to-print";
 import { useReactToPrint } from "react-to-print";
 import PrintFish from "../../modules/Print/PrintFish";
@@ -23,6 +24,7 @@ function OpenOrderItem(props) {
   const [checkState, setCheckState] = useState(0);
   const [LinkShare, setLinkShare] = useState("");
   const [showRemove, setShowRemove] = useState(0);
+  const [ShowErorr, setShowErorr] = useState({ message: "", color: "brown" });
   var contentRef = useRef();
   const reactToPrintFn = useReactToPrint({ contentRef });
   const updateField = (cartNo, id) => {
@@ -114,9 +116,18 @@ function OpenOrderItem(props) {
       .then(
         (result) => {
           if (result.error) {
+            setShowErorr({ message: result.error, color: "brown" });
+            setTimeout(
+              () => setShowErorr({ message: "", color: "brown" }),
+              3000
+            );
           } else {
-            setTimeout(() => props.close(), 3000);
-            window.location.reload();
+            setShowErorr({ message: "سفارش با موفقیت لغو شد", color: "brown" });
+            setTimeout(
+              () => setShowErorr({ message: "", color: "brown" }),
+              2000
+            );
+            setTimeout(() => window.location.reload(), 2000);
           }
         },
         (error) => {
@@ -377,6 +388,15 @@ function OpenOrderItem(props) {
           close={() => setShowRemove(0)}
           color="red"
           action={() => deleteOrder(showRemove)}
+        />
+      ) : (
+        <></>
+      )}
+      {ShowErorr && ShowErorr.message ? (
+        <ShowError
+          color={ShowErorr.color}
+          status={"مدیریت"}
+          text={ShowErorr.message}
         />
       ) : (
         <></>

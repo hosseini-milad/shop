@@ -93,6 +93,19 @@ export function normalArrayRound(priceArray){
       (rawPrice.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",").replace( /^\D+/g, ''))
   )
 }
+export function normalArrayCount(priceArray){
+  if(!priceArray||!priceArray.length) return("")
+
+  var rawPrice = 0
+  for(var i=0;i<priceArray.length;i++){
+    var price = priceArray[i].toString().split('.')[0]
+    rawPrice += parseInt(price.replace(/\D/g,''))
+  }
+  // rawPrice = parseInt(Math.round(rawPrice/1000))*1000
+  return(
+      (rawPrice.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",").replace( /^\D+/g, ''))
+  )
+}
 export function minusArrayRound(price,minus){
   if(!price) return("")
   if(!minus) return(price)
