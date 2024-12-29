@@ -197,6 +197,23 @@ router.post("/list-customers", jsonParser, async (req, res) => {
                     }
                     : {},
             },
+            {
+                $addFields: {
+                    "creator": {
+                        $convert: {
+                            input: "$assign",
+                            to: 'objectId', onError: '', onNull: ''
+                        }
+                    }
+                }
+            },
+            {
+                $lookup: {
+                    from: "users",
+                    localField: "creator", foreignField: "_id", as: "creatorInfo"
+                }
+            },
+            	
         ]);
         const filter1Report = reportList;
         const orderList = filter1Report.slice(
