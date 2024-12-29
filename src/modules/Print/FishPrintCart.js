@@ -53,7 +53,11 @@ function FishPrintCart(props) {
               orderInfo.cartItems.map((items, i) => (
                 <tr key={i}>
                   <td className="centerCell">{i + 1}</td>
-                  <td className="titleCell">{items.title}</td>
+                  <td className="titleCell">
+                    {items.title.length > 20
+                      ? items.title.substring(0, 20) + ".."
+                      : items.title}
+                  </td>
                   <td className="centerCell">{items.count}</td>
                   <td className="priceCell">
                     {normalPriceRound(items.total.price)}
@@ -89,7 +93,9 @@ function FishPrintCart(props) {
               <td colSpan={3}>
                 <span>توضیحات:</span>
               </td>
-              <td><p>وضعیت</p></td>
+              <td>
+                <p>وضعیت</p>
+              </td>
               <td className="priceCell"></td>
             </tr>
           </tbody>
