@@ -199,7 +199,7 @@ router.post("/list-customers", jsonParser, async (req, res) => {
             },
             {
                 $addFields: {
-                    "creator": {
+                    "agent": {
                         $convert: {
                             input: "$assign",
                             to: 'objectId', onError: '', onNull: ''
@@ -210,7 +210,7 @@ router.post("/list-customers", jsonParser, async (req, res) => {
             {
                 $lookup: {
                     from: "users",
-                    localField: "creator", foreignField: "_id", as: "creatorInfo"
+                    localField: "agent", foreignField: "_id", as: "agentInfo"
                 }
             },
             	
