@@ -6,46 +6,6 @@ import env, {
 } from "../../../env";
 import BankSelect from "../Bank/BankSelect";
 
-<<<<<<< HEAD
-function OrderMultiReg(props){
-    const [Loader,setLoader]=useState("")
-    const [Amount,setAmount]=useState("")
-    const data=props.data
-    const token = props.token
-    const orders = props.orders
-    const TransData=props.TransData
-    const setTransData=props.setTransData
-    const totalPrice = normalArrayRound(orders&&
-      orders.map(item=>(item.totalCart&&item.totalCart.totalPrice)))
-    const TotalTrans=normalArrayRound(TransData&&
-        TransData.map(item=>(parseInt(item.payValue))))
-    const RemainTotal=props.TransRemain&&props.TransRemain
-    const setSepidarTotal=()=>{
-      setLoader(1)
-      if(!orders||!orders.length)
-        return('no order selected')
-      const body={
-        orderNo:orders.map(item=>item.cartNo)
-      }
-      const postOptions={
-          method:'post',
-          headers: {'Content-Type': 'application/json',
-          "x-access-token":token&&token.token,"userId":token&&token.userId},
-          body:JSON.stringify(body)
-        }
-        
-    fetch(env.siteApi + "/setting/multi-sepidar",postOptions)
-    .then(res => res.json())
-    .then(
-      (result) => {
-        if(result.error){
-          props.setErrorPop({message:result.message,color:"green"})
-          setTimeout(()=>props.setErrorPop({message:'',color:"brown"}),3000)
-        }
-        console.log(result)
-        setLoader(0)
-        //setTimeout(()=>window.location.reload(),1000)
-=======
 function OrderMultiReg(props) {
   const [Loader, setLoader] = useState("");
   const [Amount, setAmount] = useState("");
@@ -73,7 +33,6 @@ function OrderMultiReg(props) {
         "Content-Type": "application/json",
         "x-access-token": token && token.token,
         userId: token && token.userId,
->>>>>>> 3d795c2b45a2f0c3809e771724282bad03821a16
       },
       body: JSON.stringify(body),
     };
@@ -89,9 +48,10 @@ function OrderMultiReg(props) {
               3000
             );
           }
-          console.log(result);
-          setLoader(0);
+          else{
+            setLoader(0);
           setTimeout(() => window.location.reload(), 1000);
+          }
         },
         (error) => {
           console.log(error);
