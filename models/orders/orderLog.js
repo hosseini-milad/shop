@@ -10,7 +10,7 @@ const OrderLogSchema = new mongoose.Schema({
   orderList:{type: Array},
   
   errorMessage:{type: String},
-  query:{type: String},
+  query:{type: Object},
   date:{ type: Date,default:Date.now()}
 });
 
