@@ -7,6 +7,7 @@ const OrderLogSchema = new mongoose.Schema({
   orderPrice: {type: String},
   orderCount:{type: String},
   orderItem:{type: Array},
+  orderList:{type: Array},
   
   errorMessage:{type: String},
   query:{type: String},
