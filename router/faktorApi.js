@@ -493,8 +493,8 @@ const findCartFunction = async (userId, managerId,pageSize,offset,search) => {
             
             if(search&&!found)continue
             else
-                todayCartData.push(cartData[c])
-                cartData[c] = { ...cartData[c], userData: userData ,official}
+                todayCartData.push({...cartData[c], userData: userData})
+                cartData[c] = { ...cartData[c] ,official}
                 cartDetail.push(findCartSum(cartData[c].cartItems,cartData[c].payValue))
             }
             catch { }
