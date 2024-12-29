@@ -27,7 +27,7 @@ function Products(props) {
   const [tempProduct, setTempProduct] = useState("");
   const [loading, setLoading] = useState(0);
   const [counter, setCounter] = useState(0);
-  const [store,setStore] = useState(-1)
+  const [store, setStore] = useState(-1);
   const token = cookies.get(env.cookieName);
   // Function to handle filter changes
   function handleFilterChange(newFilters) {
@@ -45,7 +45,7 @@ function Products(props) {
       status: filters.status,
       active: filters.active,
       store: filters.store,
-      exist:filters.exist,
+      exist: filters.exist?filters.exist:"1",
       brand: filters.brand,
       brandId: filters.brandid,
       dateFrom: filters.date && filters.date.dateFrom,
@@ -198,7 +198,12 @@ function Products(props) {
           {loading ? (
             env.loader
           ) : (
-            <ProductTable product={content} lang={lang} store={store} token={token}/>
+            <ProductTable
+              product={content}
+              lang={lang}
+              store={store}
+              token={token}
+            />
           )}
         </div>
         <Paging
