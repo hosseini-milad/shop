@@ -31,6 +31,7 @@ const state = require('../models/main/state');
 const city = require('../models/main/city');
 const quickCart = require('../models/product/quickCart');
 const auth = require("../middleware/auth");
+const users = require('../models/auth/users');
 var ObjectID = require('mongodb').ObjectID;
 const { ONLINE_URL } = process.env;
 
@@ -368,7 +369,7 @@ router.get('/sepidar-quantity',auth, async (req, res) => {
             res.status(400).json({error:"error user id"})
             return
         }
-        const userData = await userApi.findOne({_id:ObjectID(req.headers['userid'])})
+        const userData = await users.findOne({_id:ObjectID(req.headers['userid'])})
         if(!userData){
             res.status(400).json({error:"error not found"})
             return
