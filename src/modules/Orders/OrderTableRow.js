@@ -1,4 +1,4 @@
-import React, { useState,useEffect,useRef } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import Status from "../Components/Status";
 import PayStatus from "../Components/PayStatus";
 import { normalPriceCount, normalPriceRound, rxFindCount } from "../../env";
@@ -11,123 +11,128 @@ function OrderTableRow(props) {
   const [openOption, setOpenOption] = useState(false);
   const [checkState, setCheckState] = useState(0);
   const [LinkShare, setLinkShare] = useState("");
-  const token = props.token
+  const token = props.token;
   const activeAcc = props.index === props.detail;
   const order = props.order;
   const lang = props.lang;
   const cart = props.cart;
-  const ClearBank = props.ClearBank
+  const ClearBank = props.ClearBank;
   let menuRef = useRef();
-  console.log(props.selectedOrder)
+  console.log(props.selectedOrder);
   useEffect(() => {
-    let handler = (e)=>{
-      if(!menuRef.current.contains(e.target)){
+    let handler = (e) => {
+      if (!menuRef.current.contains(e.target)) {
         setOpenOption(false);
-      }      
+      }
     };
 
     document.addEventListener("mousedown", handler);
-    
 
-    return() =>{
+    return () => {
       document.removeEventListener("mousedown", handler);
-    }
-
+    };
   });
 
-  useEffect(()=>{
-    setCheckState(order.isOfficial?false:props.allcheck)
-    
-  },[props.allcheck])
+  useEffect(() => {
+    setCheckState(order.isOfficial ? false : props.allcheck);
+  }, [props.allcheck]);
 
-  const updateCheckBox=(field,action)=>{
-    setCheckState(action?false:true)
-    if(!action){
-      if(props.tab&&field.isOfficial){
-        return(
-          props.setSelectedOrder([field]),
-          props.setDisableAll(0)
-          
-        )
-
+  const updateCheckBox = (field, action) => {
+    setCheckState(action ? false : true);
+    if (!action) {
+      if (props.tab && field.isOfficial) {
+        return props.setSelectedOrder([field]), props.setDisableAll(0);
       }
-      if(props.selectedOrder){
-        var index = props.selectedOrder&&
-          props.selectedOrder.length
-        props.setSelectedOrder(existingItems => {
+      if (props.selectedOrder) {
+        var index = props.selectedOrder && props.selectedOrder.length;
+        props.setSelectedOrder((existingItems) => {
           return [
             ...existingItems.slice(0, index),
             field,
             ...existingItems.slice(index + 1),
-          ]
-        }) 
+          ];
+        });
+      } else {
+        props.setSelectedOrder([field]);
       }
-      else{
-          props.setSelectedOrder([field])
-        
+    } else {
+      if (props.selectedOrder && props.selectedOrder.length == 1) {
+        ClearBank();
       }
-    }
-    else{
-        if(props.selectedOrder&&props.selectedOrder.length==1){
-          ClearBank()
-        }
-      props.setSelectedOrder(l => 
-        l.filter(item => item.cartNo !== field.cartNo));
-      if(field.isOfficial){
-        props.setDisableAll(1)
+      props.setSelectedOrder((l) =>
+        l.filter((item) => item.cartNo !== field.cartNo)
+      );
+      if (field.isOfficial) {
+        props.setDisableAll(1);
       }
     }
-    
-  }
-  const CreateLink =(()=>{
-    const postOptions={
-        method:'post',
-        headers: { 'Content-Type': 'application/json' ,
-        "x-access-token": token&&token.token,
-        "userId":token&&token.userId},
-        body:JSON.stringify({cartNo:order.cartNo})
-      }
-    fetch(env.siteApi + "/panel/faktor/create-public-link",postOptions)
-    .then(res => res.json())
-    .then(
+  };
+  const CreateLink = () => {
+    const postOptions = {
+      method: "post",
+      headers: {
+        "Content-Type": "application/json",
+        "x-access-token": token && token.token,
+        userId: token && token.userId,
+      },
+      body: JSON.stringify({ cartNo: order.cartNo }),
+    };
+    fetch(env.siteApi + "/panel/faktor/create-public-link", postOptions)
+      .then((res) => res.json())
+      .then(
         (result) => {
-            console.log(result)
-            setLinkShare("/public-print/"+order.cartNo)
+          console.log(result);
+          setLinkShare("/public-print/" + order.cartNo);
         },
         (error) => {
-            console.log(error)
-        })
-    })
-  
+          console.log(error);
+        }
+      );
+  };
+
   return (
     <React.Fragment>
       <tr className={activeAcc ? "activeAccordion" : "accordion"}>
-        <td>{props.index+1}</td>
-        {order.isSale?<td className="checkBoxStyle">
-          {order.status&&order.status=="undone"?
-          ((order.userInfo[0]&&order.userInfo[0].CustomerID||props.DisableAll)?<input
-            
-            type="checkbox"
-            checked={checkState}
-            onChange={(e) =>  updateCheckBox(order,checkState)}
-          />:<></>):<></>}
-        </td>:
-        <td className="checkBoxStyle">
-          {order.status&&order.status=="done"?
-          <input
-            type="checkbox"
-            checked={checkState}
-            onChange={(e) =>  updateCheckBox(order,checkState)}
-          />:<></>}
-        </td>}
+        <td>{props.index + 1}</td>
+        {order.isSale ? (
+          <td className="checkBoxStyle">
+            {order.status && order.status == "undone" ? (
+              (order.userInfo[0] && order.userInfo[0].CustomerID) ||
+              props.DisableAll ? (
+                <input
+                  type="checkbox"
+                  checked={checkState}
+                  onChange={(e) => updateCheckBox(order, checkState)}
+                />
+              ) : (
+                <></>
+              )
+            ) : (
+              <></>
+            )}
+          </td>
+        ) : (
+          <td className="checkBoxStyle">
+            {order.status && order.status == "done" ? (
+              <input
+                type="checkbox"
+                checked={checkState}
+                onChange={(e) => updateCheckBox(order, checkState)}
+              />
+            ) : (
+              <></>
+            )}
+          </td>
+        )}
         <td>
           <div className="order-id">
-            <p onClick={() =>
-                  (window.location.href = "/orders/detail/" + order.cartNo)
-                }>
-                {order.cartNo}
-              </p>
-            
+            <p
+              onClick={() =>
+                (window.location.href = "/orders/detail/" + order.cartNo)
+              }
+            >
+              {order.cartNo}
+            </p>
           </div>
         </td>
         <td>
@@ -139,9 +144,7 @@ function OrderTableRow(props) {
                   ? order.userInfo[0].cName + "---" + order.userInfo[0].sName
                   : "---"}
               </p>
-              <p className="name">
-                {order.userInfo[0]?.Address}
-              </p>
+              <p className="name">{order.userInfo[0]?.Address}</p>
             </div>
             {order.moreInformation ? (
               <i className="fa fa-comment-o" title={order.moreInformation}></i>
@@ -160,23 +163,22 @@ function OrderTableRow(props) {
           </div>
         </td>
         <td>
-            <div className="or-date">
-              <p className="date">
-                {new Date(order.initDate).toLocaleDateString(
-                  "fa")}
-              </p>
-              <p className="time">
-                {new Date(order.initDate).toLocaleTimeString(
-                  props.lang === "persian" ? "fa" : "en"
-                )}
-              </p>
-            </div>
-          
+          <div className="or-date">
+            <p className="date">
+              {new Date(order.initDate).toLocaleDateString("fa")}
+            </p>
+            <p className="time">
+              {new Date(order.initDate).toLocaleTimeString(
+                props.lang === "persian" ? "fa" : "en"
+              )}
+            </p>
+          </div>
         </td>
         <td>
           <div className="order-price">
-            <p>{normalPriceRound(order.totalCart&&
-              order.totalCart.totalPrice)}</p>
+            <p>
+              {normalPriceRound(order.totalCart && order.totalCart.totalPrice)}
+            </p>
           </div>
         </td>
         <td>
@@ -198,35 +200,58 @@ function OrderTableRow(props) {
             ></i>
             <i
               className="tableIcon fas fa-print"
-              onClick={() =>(setOpenOption(openOption?0:1))}
+              onClick={() => setOpenOption(openOption ? 0 : 1)}
             ></i>
             <i
               className="tableIcon fas fa-tag"
-              onClick={()=>window.location.href = "/orders/fishprint/" + order.cartNo}>
-            </i>
+              onClick={() =>
+                (window.location.href = "/orders/fishprint/" + order.cartNo)
+              }
+            ></i>
             <i
-              className="tableIcon fas fa-paper-plane" onClick={()=>CreateLink()}
-              >
-            </i>
-            
+              className="tableIcon fas fa-paper-plane"
+              onClick={() => CreateLink()}
+            ></i>
           </div>
-          
-            <div className={openOption==true?"sub-more-menu sub-active":"sub-more-menu"} ref={menuRef}>
-              <div className="sub-option" onClick={()=>window.location.href = "/orders/print/" + order.cartNo}>
-                
-                <p>چاپ فاکتور</p>
-              </div>
-              <div className="sub-option" onClick={()=>window.location.href="/print/sepidar/"+order.cartNo}>
-                
-                <p>چاپ رسمی</p>
-              </div>
-              {(order.InvoiceID)?<>
-              <div className="sub-option" onClick={()=>window.location.href="/print/official/"+order.InvoiceID}>
-                
-                <p>چاپ سپیدار</p>
-              </div></>:<></>}
+
+          <div
+            className={
+              openOption == true ? "sub-more-menu sub-active" : "sub-more-menu"
+            }
+            ref={menuRef}
+          >
+            <div
+              className="sub-option"
+              onClick={() =>
+                (window.location.href = "/orders/print/" + order.cartNo)
+              }
+            >
+              <p>چاپ فاکتور</p>
             </div>
-          
+            <div
+              className="sub-option"
+              onClick={() =>
+                (window.location.href = "/print/sepidar/" + order.cartNo)
+              }
+            >
+              <p>چاپ رسمی</p>
+            </div>
+            {order.InvoiceID ? (
+              <>
+                <div
+                  className="sub-option"
+                  onClick={() =>
+                    (window.location.href =
+                      "/print/official/" + order.InvoiceID)
+                  }
+                >
+                  <p>چاپ سپیدار</p>
+                </div>
+              </>
+            ) : (
+              <></>
+            )}
+          </div>
         </td>
       </tr>
       {activeAcc ? (
@@ -242,7 +267,11 @@ function OrderTableRow(props) {
       ) : (
         <React.Fragment></React.Fragment>
       )}
-      {LinkShare?<LinkModal LinkShare={LinkShare} setLinkShare={setLinkShare}/>:<></>}
+      {LinkShare ? (
+        <LinkModal LinkShare={LinkShare} setLinkShare={setLinkShare} />
+      ) : (
+        <></>
+      )}
     </React.Fragment>
   );
 }

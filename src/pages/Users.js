@@ -152,7 +152,7 @@ const Users = (props) => {
           "Content-Type": "application/json",
           "x-access-token": token && token.token,
         },
-        body: JSON.stringify(formData),
+        body: JSON.stringify({...formData,StockArr:extra}),
       });
       setShowCreatePanel(false);
       // Refresh the list of users
@@ -249,19 +249,20 @@ const Users = (props) => {
             }}
           />
 
-          {/* <div class="formInput">
+          <div class="formInput">
             <Autocomplete
               multiple
               options={storeList || []}
               getOptionLabel={(item) => item.Title || ""}
               //value={colorList.cover.find(item=>item.option===extraData.coverCode)||null}
               style={{ width: "100%" }}
+              defaultValue={userData.StockArr}
               onChange={(e, value) => setExtra(value)}
               renderInput={(params) => (
                 <TextField {...params} label="انبار" variant="outlined" />
               )}
             />
-          </div> */}
+          </div>
           <StyleInput
             title={formtrans.customercode[lang]}
             direction={direction}

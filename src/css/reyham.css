@@ -77,23 +77,23 @@
   .hideMobile {
     display: none !important;
   }
-  .sharif-order-main .orders-sec .title{
+  .sharif-order-main .orders-sec .title {
     flex-wrap: wrap;
 
-    p{
+    p {
       order: 1;
       width: 45%;
     }
-    .orders-total{
+    .orders-total {
       order: 2;
       width: 45%;
 
-      p{
+      p {
         width: 100%;
         font-size: 0.85rem;
       }
     }
-    .order-search{
+    .order-search {
       order: 3;
       width: 100%;
     }
@@ -101,12 +101,11 @@
       width: 100%;
       order: 4;
 
-      .DatePicker__input{
+      .DatePicker__input {
         width: 100%;
       }
     }
   }
-  
 }
 
 /*Overide*/
@@ -882,14 +881,16 @@ dialog {
 .hesabfaMainTable {
   font-family: vazir;
   border: 2px solid #333;
-  width: 90%;
+  width: 100%;
   margin: 6px auto;
   border-collapse: collapse;
+  margin-top: 0;
 }
 .hesabfaMainTable td {
   border: 1px solid #333;
   padding: 2px 7px;
   text-align: center;
+  font-weight: 500;
 }
 .hesabfaMainTable tbody {
   width: 100%;
@@ -903,6 +904,7 @@ dialog {
 }
 .centerCell {
   text-align: center;
+  font-size: 11px;
 }
 .verticalRow h3 {
   position: absolute;
@@ -993,8 +995,54 @@ dialog {
   width: 90%;
   margin: 5px auto 0;
 }
+.fishPrintArea .faktor-info {
+  border: 1px solid black;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  padding: 0.2rem 0.5rem;
+  margin-top: 1rem;
+}
+.fishPrintArea .faktor-info .title {
+  width: 100%;
+  text-align: center;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+.fishPrintArea .faktor-info .orderNum {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 2rem;
+  span {
+    font-size: 0.8rem;
+  }
+}
+.fishPrintArea .faktor-info .info-wrapper {
+  width: 100%;
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-start;
+  gap: 1rem;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  margin: 0;
+
+  p {
+    font-size: 0.8rem;
+    font-weight: 600;
+    margin: 0;
+  }
+  small {
+    margin-inline: 0.5rem;
+  }
+}
 .fishPrintArea .hesabPrintTable {
   overflow: hidden;
+
+  
 }
 .hesabPrintTable .verticalRow {
   width: 30px;
@@ -1005,8 +1053,12 @@ dialog {
 .priceCell {
   width: 105px;
   max-width: 105px;
-  font-size: 0.85rem;
+  font-size: 11px;
   text-align: center;
+}
+.titleCell {
+  font-size: 11px;
+  width: 100%;
 }
 .sumTable {
   font-size: 12px;
@@ -1035,6 +1087,21 @@ dialog {
 .fishPrintArea {
   max-width: 300px;
   margin: auto;
+}
+.fishPrintArea .hesabfaMainTable td p{
+  margin: 0;
+  text-align: left;
+  font-size: 11px;
+  font-weight: 500;
+}
+.fishPrintArea .hesabfaMainTable td{
+  position: relative;
+}
+.fishPrintArea .hesabfaMainTable td span{
+  position: absolute;
+  top: 0;
+  right: 0;
+  font-size: 0.75rem;
 }
 
 .userInfo {
@@ -1130,9 +1197,8 @@ dialog {
   }
   td {
     border-width: 2px;
-    
   }
-  .number-td{
+  .number-td {
     font-family: number;
   }
 
@@ -1199,6 +1265,13 @@ dialog {
       width: 25px;
       height: 25px;
       border: 2px solid black;
+      padding: 2px;
+
+      .squre {
+        width: 100%;
+        height: 100%;
+        background-color: black;
+      }
     }
   }
   .bill-col {
@@ -1255,7 +1328,7 @@ dialog {
     align-items: center;
     justify-content: flex-start;
     gap: 1rem;
-    .ac-num{
+    .ac-num {
       font-family: number;
     }
     span {
@@ -1925,7 +1998,7 @@ dialog {
   .PrintBtn {
     visibility: hidden;
   }
-  .noPrint{
+  .noPrint {
     visibility: hidden;
   }
 }
