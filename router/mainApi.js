@@ -387,7 +387,7 @@ router.get('/sepidar-quantity',auth, async (req, res) => {
         //var failure = 0;
         await productCount.deleteMany(Stock?{Stock:Stock}:{})
         for (var i = 0; i < sepidarQuantityResult.length; i++) {
-            if(Stock&&Stock!==sepidarQuantityResult[i].StockeRef)continue
+            if(Stock&&Stock!=sepidarQuantityResult[i].StockeRef)continue
             if (sepidarQuantityResult[i].UnitRef !== 3)
                 await productCount.create({
                     quantity: sepidarQuantityResult[i].Qunatity,
