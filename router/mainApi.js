@@ -374,7 +374,7 @@ router.get('/sepidar-quantity',auth, async (req, res) => {
             res.status(400).json({error:"error not found"})
             return
         }
-        const Stock = userData&&userData.StockId
+        var Stock = userData&&userData.StockId
         if(userData.access==="manager") Stock = ''
         if (sepidarQuantityResult.error || !sepidarQuantityResult.length) {
             res.json({
