@@ -199,6 +199,7 @@ router.post('/multi-sepidar', jsonParser, auth, async (req, res) => {
             )
         }
         else{
+            error = sepidarResult && sepidarResult.Message
             await orderLog.create({
                 userId:manageId,
                 orderNo: faktorNo,
@@ -210,7 +211,6 @@ router.post('/multi-sepidar', jsonParser, auth, async (req, res) => {
                 errorMessage:error,
                 query:sepidarQuery
         })
-            error = sepidarResult && sepidarResult.Message
         }
         res.json({ data: sepidarResult,query:sepidarQuery, 
             recieptResult:recieptResult, error,
