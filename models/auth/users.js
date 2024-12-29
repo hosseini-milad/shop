@@ -22,6 +22,7 @@ const userSchema = new mongoose.Schema({
   meli: { type: String },
 
   StockId: { type: String },
+  StockArr: { type: Array },
   CustomerID: { type: String },
   default:{ type: String },
   date: { type: Date }

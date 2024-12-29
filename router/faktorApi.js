@@ -889,14 +889,16 @@ router.post('/cart-delete', auth, async (req, res) => {
     const cartID = req.body.cartID
     const adminData = await users.findOne({ _id: ObjectID(userId) })
     try {
-        if (adminData.access !== "manager") {
+        if (!adminData) {
             res.status(500).json({ message: "دسترسی ندارید", error: "deny" })
+            return
         }
         await cart.deleteOne({ cartNo: cartID })
         await tasks.updateOne({ orderNo: cartID }, { $set: { taskStep: "cancel" } })
+        const cartDetails = await findCartFunction(userId, 
+            req.headers['userid'])
+        res.json(cartDetails)
 
-
-        res.json({ message: "سفارش حذف شد" })
     }
     catch (error) {
         res.status(500).json({ message: error.message })

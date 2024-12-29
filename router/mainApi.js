@@ -30,6 +30,8 @@ const updateLog = require('../models/product/updateLog');
 const state = require('../models/main/state');
 const city = require('../models/main/city');
 const quickCart = require('../models/product/quickCart');
+const auth = require("../middleware/auth");
+var ObjectID = require('mongodb').ObjectID;
 const { ONLINE_URL } = process.env;
 
 router.get('/main', async (req, res) => {
@@ -359,10 +361,20 @@ router.get('/sepidar-bank', async (req, res) => {
         res.status(500).json({ message: error.message })
     }
 })
-router.get('/sepidar-quantity', async (req, res) => {
+router.get('/sepidar-quantity',auth, async (req, res) => {
     try {
         const sepidarQuantityResult = await sepidarFetch("data", "/api/Items/Inventories")
-
+        if(!req.headers['userid']){
+            res.status(400).json({error:"error user id"})
+            return
+        }
+        const userData = await userApi.findOne({_id:ObjectID(req.headers['userid'])})
+        if(!userData){
+            res.status(400).json({error:"error not found"})
+            return
+        }
+        const Stock = userData&&userData.StockId
+        if(userData.access==="manager") Stock = ''
         if (sepidarQuantityResult.error || !sepidarQuantityResult.length) {
             res.json({
                 error: "error occure",
@@ -372,8 +384,9 @@ router.get('/sepidar-quantity', async (req, res) => {
         }
         //var successItem=[];
         //var failure = 0;
-        await productCount.deleteMany({})
+        await productCount.deleteMany(Stock?{Stock:Stock}:{})
         for (var i = 0; i < sepidarQuantityResult.length; i++) {
+            if(Stock&&Stock!==sepidarQuantityResult[i].StockeRef)continue
             if (sepidarQuantityResult[i].UnitRef !== 3)
                 await productCount.create({
                     quantity: sepidarQuantityResult[i].Qunatity,
