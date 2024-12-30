@@ -23,7 +23,6 @@ function QuickTotal(props) {
       focusBtn.current && focusBtn.current.focus();
     }
   }, [qCart]);
-
   const SetOrder = (isQuote, print) => {
     setLoading(1);
     setPrintPop("");
