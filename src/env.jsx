@@ -51,6 +51,7 @@ export function normalPriceCount(priceText,count){
     if(!priceText||priceText === null||priceText === undefined) return("")
 
     try{priceText =priceText.split(' ')[0];}catch{}
+    
     if(priceText === "0"||priceText === 0)return("-");
     var rawPrice = parseInt(priceText.toString().replace(/\D/g,''))*(count?count:1)
     //console.log(rawPrice,priceText)
@@ -58,15 +59,20 @@ export function normalPriceCount(priceText,count){
         (rawPrice.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",").replace( /^\D+/g, ''))
     )
 }
-export function normalPriceCalc(priceAdd,price,priceMinus){
-  //if(!priceAdd||priceAdd === null||priceAdd === undefined) return("")
+export function normalPriceCalc(priceText,count){
+    if(!priceText||priceText === null||priceText === undefined) return("")
 
-  
-  //console.log(rawPrice,priceText)
-  return(
-      (priceAdd)
-  )
+    // try{priceText =priceText.split(' ')[0];}catch{}
+    priceText = priceText.toString().split('.')[0]
+    console.log(priceText)
+    if(priceText === "0"||priceText === 0)return("-");
+    var rawPrice = parseInt(priceText.toString().replace(/\D/g,''))*(count?count:1)
+    //console.log(rawPrice,priceText)
+    return(
+        (rawPrice.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",").replace( /^\D+/g, ''))
+    )
 }
+
 export function normalPriceRound(priceText,count,tax){
     if(!priceText||priceText === null||priceText === undefined) return("")
 

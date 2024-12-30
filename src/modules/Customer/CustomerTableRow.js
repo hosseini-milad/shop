@@ -80,7 +80,7 @@ function CustomerTableRow(props){
             </td>
             <td>
               <div className="cu-company">
-                <p>{user.mobile}</p>
+                <p>{user.agentInfo[0].username}</p>
               </div>
             </td>
             <td>

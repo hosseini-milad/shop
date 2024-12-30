@@ -890,7 +890,7 @@ dialog {
   border: 1px solid #333;
   padding: 2px 7px;
   text-align: center;
-  font-weight: 500;
+  font-weight: 600;
 }
 .hesabfaMainTable tbody {
   width: 100%;
@@ -1087,6 +1087,12 @@ dialog {
 .fishPrintArea {
   max-width: 300px;
   margin: auto;
+}
+.fishPrintArea .hesabfaMainTable .faktor-total{
+  p,.priceCell{
+    font-size: 1rem;
+    font-weight: 600;
+  }
 }
 .fishPrintArea .hesabfaMainTable td p{
   margin: 0;
@@ -2001,4 +2007,7 @@ dialog {
   .noPrint {
     visibility: hidden;
   }
+}
+.sepidar-filter{
+  width: 25%;
 }

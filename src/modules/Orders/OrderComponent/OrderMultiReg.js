@@ -3,6 +3,7 @@ import env, {
   normalArrayCount,
   minusArrayRound,
   normalPriceRound,
+  normalPriceCalc,
 } from "../../../env";
 import BankSelect from "../Bank/BankSelect";
 
@@ -63,7 +64,7 @@ function OrderMultiReg(props) {
       {props.orders && props.orders.length ? (
         <div className="bank-wrapper">
           <h6>روش پرداخت</h6>
-          <p>مبلغ کل سفارش: {totalPrice}</p>
+          <p>مبلغ کل سفارش: {normalPriceCalc(props.Ttp.totalPrice)}</p>
           <div className="bank-form">
             <BankSelect
               Amount={Amount}
@@ -76,6 +77,8 @@ function OrderMultiReg(props) {
               bankList={props.bankList}
               TransRemain={props.TransRemain}
               setTransRemain={props.setTransRemain}
+              setTtp={props.setTtp}
+              Ttp={props.Ttp}
             />
           </div>
 

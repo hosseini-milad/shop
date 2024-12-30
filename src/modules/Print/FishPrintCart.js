@@ -1,11 +1,12 @@
 import { useState, useEffect } from "react";
 import env, { TAX, normalPriceCount, normalPriceRound } from "../../env";
-var token = JSON.parse(localStorage.getItem("token-lenz"));
-
+import Cookies from "universal-cookie";
+const cookies = new Cookies();
 function FishPrintCart(props) {
   const orderInfo = props.orderData;
   const orderData = props.orderData.orderData;
   const userInfo = props.orderData.userData ? props.orderData.userData[0] : "";
+  const token = cookies.get(env.cookieName);
   if (!orderInfo) return <main>{"orderError"}</main>;
   else
     return (
@@ -24,7 +25,7 @@ function FishPrintCart(props) {
               <p>مشتری:</p>
             </div>
             <div className="info-col">
-              <p>سرپرست</p>
+              <p>{token.profileName}</p>
               <p>قیمت پیش فرض</p>
               <p>
                 <small>
@@ -67,36 +68,18 @@ function FishPrintCart(props) {
                   </td>
                 </tr>
               ))}
-            <tr>
-              <td colSpan={4}>
+            <tr className="faktor-total">
+              <td colSpan={3}>
                 <p>جمع</p>
               </td>
-              <td className="priceCell">
+              <td colSpan={2} className="priceCell">
                 {normalPriceRound(orderData.totalPrice)}
               </td>
             </tr>
             <tr>
-              <td colSpan={4}>
-                <p>مانده حساب طرف حساب</p>
+              <td colSpan={5}>
+                <p style={{ textAlign: "right" }}>توضیحات:</p>
               </td>
-              <td className="priceCell">0</td>
-            </tr>
-            <tr>
-              <td colSpan={4}>
-                <p>مبلغ تسویه شده</p>
-              </td>
-              <td className="priceCell">
-                {normalPriceRound(orderData.totalPrice)}
-              </td>
-            </tr>
-            <tr>
-              <td colSpan={3}>
-                <span>توضیحات:</span>
-              </td>
-              <td>
-                <p>وضعیت</p>
-              </td>
-              <td className="priceCell"></td>
             </tr>
           </tbody>
         </table>

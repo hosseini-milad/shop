@@ -20,7 +20,7 @@ function CustomerTable(props){
               <i></i>
             </th>
             <th>
-              <p>{tabletrans.company[lang]}</p>
+              <p>{tabletrans.agent[lang]}</p>
               <i></i>
             </th>
             <th>

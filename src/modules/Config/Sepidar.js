@@ -3,12 +3,14 @@ import Cookies from "universal-cookie";
 import env from "../../env";
 import errortrans from "../../translate/error";
 import ShowError from "../../components/Modal/ShowError";
+import StyleSelect from "../../components/Button/AutoComplete";
 const cookies = new Cookies();
 function Sepidar(props) {
   const direction = props.lang ? props.lang.dir : errortrans.defaultDir;
   const lang = props.lang ? props.lang.lang : errortrans.defaultLang;
   const [error, setError] = useState({ message: "", color: "brown" });
   const [updateTime, setUpdateTime] = useState();
+  const [Stock, setStock] = useState();
   const token = cookies.get(env.cookieName);
   console.log(error);
   useEffect(() => {
@@ -39,12 +41,13 @@ function Sepidar(props) {
   }, []);
   const updateSepidar = (db) => {
     const postOptions = {
-      method: "get",
+      method: "post",
       headers: {
         "Content-Type": "application/json",
         "x-access-token": token && token.token,
         userId: token && token.userId,
       },
+      body: JSON.stringify({ stock: Stock }),
     };
     fetch(env.siteApi + "/sepidar-" + db, postOptions, { mode: "cors" })
       .then((res) => res.json())
@@ -81,8 +84,52 @@ function Sepidar(props) {
     },
     { title: "مشتریان", enTitle: "customer", description: "بروزرسانی مشتریان" },
   ];
+  const stockList = [
+    {
+      id: "673d8bb05adbdf04bdf4d063",
+      title: "انبار مرکزی",
+    },
+    {
+      id: "673d8c175adbdf04bdf4d064",
+      title: "انبار فروشگاه",
+    },
+    {
+      id: "673d8c2f5adbdf04bdf4d065",
+      title: " انبار 3",
+    },
+    {
+      id: "673d8c4b5adbdf04bdf4d066",
+      title: " انبار غیر قابل فروش",
+    },
+    {
+      id: "673d8c715adbdf04bdf4d067",
+      title: " انبار فروشگاه جایگاه",
+    },
+    {
+      id: "673d8cd15adbdf04bdf4d068",
+      title: " انبار پخش",
+    },
+    {
+      id: "673d8ce95adbdf04bdf4d069",
+      title: " انبار سایت",
+    },
+  ];
   return (
     <div className="profiles" style={{ direction: direction }}>
+      {token.access == "manager" ? (
+        <div class="sepidar-filter">
+          <StyleSelect
+            title={"انبار"}
+            class="filterComponent"
+            direction={props.lang.dir}
+            options={stockList}
+            label="title"
+            action={(e) => setStock(e.id)}
+          />
+        </div>
+      ) : (
+        <></>
+      )}
       <div
         className={
           direction === "ltr" ? "profile-table" : "profile-table profileRtl"
