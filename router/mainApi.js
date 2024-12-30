@@ -88,7 +88,7 @@ router.get('/delete-quick', async (req, res) => {
         res.status(500).json({ message: error.message })
     }
 })
-router.get('/sepidar-product', async (req, res) => {
+router.post('/sepidar-product', async (req, res) => {
     const url = req.body.url
     try {
         const sepidarResult = await sepidarFetch("data", "/api/Items")
@@ -146,7 +146,7 @@ router.get('/sepidar-product', async (req, res) => {
         res.status(500).json({ message: error.message })
     }
 })
-router.get('/sepidar-customer', async (req, res) => {
+router.post('/sepidar-customer', async (req, res) => {
     const url = req.body.url
     try {
         const sepidarResult = await sepidarFetch("data", "/api/Customers")
@@ -228,7 +228,7 @@ router.get('/sepidar-customer', async (req, res) => {
         res.status(500).json({ message: error.message })
     }
 })
-router.get('/sepidar-price', async (req, res) => {
+router.post('/sepidar-price', async (req, res) => {
     try {
         const sepidarPriceResult = await sepidarFetch("data", "/api/PriceNoteItems")
         if (sepidarPriceResult.error || !sepidarPriceResult.length) {
@@ -303,7 +303,7 @@ router.get('/sepidar-city', async (req, res) => {
         res.status(500).json({ message: error.message })
     }
 })
-router.get('/sepidar-bank', async (req, res) => {
+router.post('/sepidar-bank', async (req, res) => {
     const url = req.body.url
     try {
         const sepidarResult = await sepidarFetch("data", "/api/BankAccounts")
@@ -427,15 +427,15 @@ router.post('/sepidar-quantity',auth, async (req, res) => {
 router.get('/sepidar-all', async (req, res) => {
     try {
         response = await fetch(ONLINE_URL + "/sepidar-product",
-            { method: 'GET' });
+            { method: 'post' });
         response = await fetch(ONLINE_URL + "/sepidar-price",
-            { method: 'GET' });
+            { method: 'post' });
         response = await fetch(ONLINE_URL + "/sepidar-quantity",
-            { method: 'GET' });
+            { method: 'post' });
         response = await fetch(ONLINE_URL + "/sepidar-customers",
-            { method: 'GET' });
+            { method: 'post' });
         response = await fetch(ONLINE_URL + "/sepidar-bank",
-            { method: 'GET' });
+            { method: 'post' });
         res.json({ message: "تمامی جدول ها بروز شدند" })
     }
     catch (error) {
