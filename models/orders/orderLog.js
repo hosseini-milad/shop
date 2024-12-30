@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 
 const OrderLogSchema = new mongoose.Schema({
   userId:{type: String},
-  orderNo: {type: String},
+  orderNo: {type: String}, 
   invoiceID:{type: String},
   orderPrice: {type: String},
   orderCount:{type: String},

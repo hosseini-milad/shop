@@ -22,6 +22,7 @@ const customers = require('../models/auth/customers');
 const SumArray = require('../middleware/SumArray');
 const FindRemainBank = require('../middleware/FindRemainBank');
 const orderLog = require('../models/orders/orderLog');
+const CalcCartTotal = require('../middleware/CalcCartTotaljs');
 
 router.post('/sliders', async (req, res) => {
     try {
@@ -256,15 +257,21 @@ router.post('/remove-bank-from-cart', async (req,res)=>{
     } 
     catch(error){
         res.status(500).json({message: error.message})
-    }
-})
+    } 
+}) 
 router.post('/fetch-bank-of-cart', async (req,res)=>{
     const userId = req.headers['userid']
-    const total = req.body.totalCartValue
+    //const total = req.body.totalCartValue
+    var total = 0
+    const carts = req.body.cartList
     try{ 
+        if(!carts||!carts.length){
+            res.status(400).json({error:"no cart"})
+        }
+        const cartTotal = await CalcCartTotal(carts)
         var bankDetail = await transaction.find({userId:userId,sepidarID:{$exists:false}})
-        var transRemain = FindRemainBank(bankDetail,total)
-        res.json({transData:bankDetail,transRemain})
+        var transRemain = FindRemainBank(bankDetail,cartTotal&&cartTotal.totalPrice)
+        res.json({transData:bankDetail,transRemain,cartTotal})
     } 
     catch(error){
         res.status(500).json({message: error.message})
