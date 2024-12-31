@@ -61,7 +61,7 @@ function FishPrintCart(props) {
                   </td>
                   <td className="centerCell">{items.count}</td>
                   <td className="priceCell">
-                    {normalPriceRound(items.total.price)}
+                    {normalPriceRound(items.total.price,1.1)}
                   </td>
                   <td className="priceCell">
                     {normalPriceRound(items.total.total)}
