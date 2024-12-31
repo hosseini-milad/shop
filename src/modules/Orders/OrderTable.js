@@ -15,6 +15,7 @@ function OrderTable(props) {
   const [AllCheck, setAllCheck] = useState(0);
   const [DisableAll, setDisableAll] = useState(1);
   const [Ttp, setTtp] = useState("");
+  console.log(Ttp)
   const totalPrice = normalArrayCount(
     selectedOrder &&
       selectedOrder.map((item) => item.totalCart && item.totalCart.totalPrice)
@@ -74,7 +75,7 @@ function OrderTable(props) {
         {Ttp ? (
           <div className="total-top">
             <span>جمع سفارشات انتخابی:</span>
-            <span>{normalPriceCalc(Ttp.totalPrice)}</span>
+            <span>{normalPriceCount(Ttp)}</span>
           </div>
         ) : (
           <></>

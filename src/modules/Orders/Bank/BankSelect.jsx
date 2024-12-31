@@ -32,7 +32,7 @@ function BankSelect(props){
     (result) => {
       setTransData(result.transData)
       setAmount(result.transRemain)
-      props.setTtp(result.cartTotal.cartDetail[0])
+      props.setTtp(result.cartTotal.totalPrice)
     },
     (error) => {
       console.log(error);
