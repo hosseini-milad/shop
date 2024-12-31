@@ -54,7 +54,7 @@ const findCartSum = (cartItems, payValue) => {
         totalCount: cartCount,
         totalDiscount: cartDiscount,
         totalTax: cartTax,
-        totalPrice: (cartSum +totalTax - cartDiscount),
+        totalPrice: (cartSum +cartTax - cartDiscount),
         cartDescription: cartDescription
     })
 }
