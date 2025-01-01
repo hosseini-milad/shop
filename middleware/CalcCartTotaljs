@@ -34,7 +34,7 @@ const findCartSum = (cartItems, payValue) => {
     var cartDiscount = 0;
     var cartTax = 0;
     var cartDescription = ''
-    for (var i = 0; i < cartItems.length; i++) {
+    for (var i = 0; i < (cartItems&&cartItems.length); i++) {
         //console.log(payValue)
         var cartItemPrice = findPayValuePrice(cartItems[i].price, payValue)
         var countTemp = parseInt(cartItems[i].count.toString().replace(/,/g, '').replace(/^\D+/g, ''))
