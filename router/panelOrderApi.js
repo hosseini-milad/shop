@@ -15,7 +15,6 @@ const crmlist = require('../models/crm/crmlist');
 const bankAccounts = require('../models/product/bankAccounts');
 const transaction = require('../models/product/transaction');
 const FindRemainBank = require('../middleware/FindRemainBank');
-const MergeOrder = require('../middleware/MergeOrder');
 const { TaxRate } = process.env
 
 router.post('/sku/find', jsonParser, async (req, res) => {
@@ -231,7 +230,6 @@ router.post('/list', jsonParser, async (req, res) => {
                 { $match: !data.orderNo ? { initDate: { $lte: new Date(data.dateTo) } } : {} },
                 { $sort: { "initDate": -1 } }
             ]);
-            const mergeOrder = await MergeOrder(openList.map(item => item.cartItems),openList)
 
             for (var i = 0; i < (openList && openList.length); i++) {
                 var userInfo = openList[i].userInfo
