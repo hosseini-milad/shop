@@ -32,6 +32,7 @@ const city = require('../models/main/city');
 const quickCart = require('../models/product/quickCart');
 const auth = require("../middleware/auth");
 const users = require('../models/auth/users');
+const dashboard = require ('./Dashboard');
 var ObjectID = require('mongodb').ObjectID;
 const { ONLINE_URL } = process.env;
 
@@ -63,6 +64,7 @@ router.use('/panel/order', panelOrderApi)
 router.use('/panel/product', panelProductApi)
 router.use('/panel/faktor', panelFaktorApi)
 router.use('/panel/quote', panelQuoteApi)
+router.use('/dashboard', dashboard)
 
 router.use('/panel/crm', CRMPanelApi)
 schedule.scheduleJob('5 */2 * * *', async () => {
