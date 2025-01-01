@@ -214,12 +214,14 @@ router.post('/multi-sepidar', jsonParser, auth, async (req, res) => {
         })
         }
         res.json({ data: sepidarResult,query:sepidarQuery, 
-            recieptResult:recieptResult, error,
+            recieptResult:recieptResult, error, InvoiceID:sepidarResult.Number,
             recieptQuery:recieptQuery,message: error?'':"سفارش در سپیدار ثبت شد" })
     }
     catch (error) {
         res.status(500).json({ message: error.message })
     }
+})
+router.post('/reg-sanad-sepidar', jsonParser, auth, async (req, res) => {
 })
 
 router.post('/add-bank-to-cart',auth, async (req,res)=>{

@@ -5,6 +5,8 @@ var Schema = mongoose.Schema;
 const UpdateLogSchema = new Schema({
     userId:{ type: String },
     updateQuery:  { type : String },
+    updateUser : { type : String },
+    Stock : { type : String },
     
     date: { type: Date, default: Date.now }
 })
