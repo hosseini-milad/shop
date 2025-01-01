@@ -21,7 +21,7 @@ const CartToSepidar=async(data,faktorNo,user,stock,cartOff,orderNo,payValue,full
             notNullCartItem.map((item,i)=>{
                 const price = fullPrice?findPayValuePrice(item.price,payValue?payValue:4):item.price
                 const itemDiscount = MultiplySum(item.discount,totalOff,1)
-                const discount =itemDiscount?normalPriceFix(price,itemDiscount)/100:0
+                const discount =itemDiscount?normalPriceRound(price,itemDiscount)/100:0
                 return({
                 "ItemRef": toInt(item.id),
                 "TracingRef": null,
@@ -29,8 +29,8 @@ const CartToSepidar=async(data,faktorNo,user,stock,cartOff,orderNo,payValue,full
                 "StockRef":item.stock?item.stock:stock,
                 "Quantity": toInt(item.count),
                 "Fee": toInt(price),
-                "Price": normalPriceFix(price,item.count,1),
-                "Discount": discount?normalPriceFix(discount,item.count):0.0000,
+                "Price": normalPriceRound(price,item.count,1),
+                "Discount": discount?normalPriceRound(discount,item.count):0.0000,
                 "Tax": normalPriceRound(price-discount,item.count,TaxRate),
                 "Duty": 0.0000,
                 "Addition": 0.0000
@@ -72,7 +72,7 @@ const normalPriceCount=(priceText,count,tax)=>{
   }
   const normalPriceRound=(priceText,count,mult)=>{
     if(!priceText||priceText === null||priceText === undefined) return("")
-    var rawCount = parseFloat(count.toString())
+    var rawCount = parseInt(count.toString())
     var rawMult = mult?parseFloat(mult.toString()):1
     var purePrice = priceText.toString().split('.')[0]
     var rawPrice = (parseInt(purePrice.replace( /,/g, '')

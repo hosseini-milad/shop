@@ -15,6 +15,7 @@ const crmlist = require('../models/crm/crmlist');
 const bankAccounts = require('../models/product/bankAccounts');
 const transaction = require('../models/product/transaction');
 const FindRemainBank = require('../middleware/FindRemainBank');
+const MergeOrder = require('../middleware/MergeOrder');
 const { TaxRate } = process.env
 
 router.post('/sku/find', jsonParser, async (req, res) => {
@@ -230,14 +231,15 @@ router.post('/list', jsonParser, async (req, res) => {
                 { $match: !data.orderNo ? { initDate: { $lte: new Date(data.dateTo) } } : {} },
                 { $sort: { "initDate": -1 } }
             ]);
+            const mergeOrder = await MergeOrder(openList.map(item => item.cartItems),openList)
 
-            for (var i = 0; i < (openList && openList.length); i++) {
-                var userInfo = openList[i].userInfo
+            for (var i = 0; i < (mergeOrder && mergeOrder.length); i++) {
+                var userInfo = mergeOrder[i].userInfo
                 const userData = userInfo&&userInfo[0]&&userInfo[0].CustomerID
-                var totalPrice = findCartSum(openList[i].cartItems,
-                    openList[i].payValue);
-                var tempStatus = openList[i].InvoiceID?"done":"undone"
-                showCart.push({ ...openList[i], totalCart: totalPrice ,
+                var totalPrice = findCartSum(mergeOrder[i].cartItems,
+                    mergeOrder[i].payValue);
+                var tempStatus = mergeOrder[i].InvoiceID?"done":"undone"
+                showCart.push({ ...mergeOrder[i], totalCart: totalPrice ,
                     status:tempStatus,isOfficial:userData?1:0});
             }
             status = [{title:"انجام نشده",enTitle:"undone",id:0},{title:"انجام شده",enTitle:"done",id:1}]
