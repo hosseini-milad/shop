@@ -304,17 +304,20 @@ const findCartSum = (cartItems, payValue) => {
     var cartSum = 0;
     var cartCount = 0;
     var cartDiscount = 0;
+    var cartTax = 0;
     var cartDescription = ''
     for (var i = 0; i < cartItems.length; i++) {
         //console.log(payValue)
         var cartItemPrice = findPayValuePrice(cartItems[i].price, payValue)
-        //console.log(cartItemPrice)
+        var countTemp = parseInt(cartItems[i].count.toString().replace(/,/g, '').replace(/^\D+/g, ''))
         try {
-            if (cartItems[i].price)
-                cartSum += parseInt(cartItemPrice) *
-                    parseInt(cartItems[i].count.toString().replace(/,/g, '').replace(/^\D+/g, ''))
+            if (cartItems[i].price){
+                var tempPrice = parseInt(cartItemPrice) *countTemp
+                cartSum += tempPrice
+                cartTax += Math.round(tempPrice*TaxRate)
+            }
             if (cartItems[i].count)
-                cartCount += parseInt(cartItems[i].count.toString().replace(/,/g, '').replace(/^\D+/g, ''))
+                cartCount += countTemp
             cartDescription += cartItems[i].description ? cartItems[i].description : ''
             if (cartItems[i].discount) {
                 var off = parseInt(cartItems[i].discount.toString().replace(/,/g, '').replace(/^\D+/g, ''))
@@ -331,8 +334,8 @@ const findCartSum = (cartItems, payValue) => {
         totalFee: cartSum,
         totalCount: cartCount,
         totalDiscount: cartDiscount,
-        totalTax: (cartSum * TaxRate),
-        totalPrice: (cartSum * (1 + TaxRate) - cartDiscount),
+        totalTax: cartTax,
+        totalPrice: (cartSum +cartTax - cartDiscount),
         cartDescription: cartDescription
     })
 }
