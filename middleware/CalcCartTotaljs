@@ -11,12 +11,10 @@ const CalcCartTotal=async(cartNo)=>{
     const cartList = await cart.find({cartNo:{$in:cartNo}})
     
     const mergeOrder = await MergeOrder(cartList.map(item => item.cartItems),cartList)
-    for(var i=0;i<mergeOrder.length;i++){ 
-        var cartItems = mergeOrder[i].cartItems
-        var cartData = findCartSum(cartItems,mergeOrder[i].payValue)
-        cartDetail.push(cartData)
-        totalPriceMerge += cartData.totalPrice
-    }
+    
+    var MergeData = findCartSum(mergeOrder,mergeOrder[0].payValue)
+    totalPriceMerge += MergeData.totalPrice
+
     for(var i=0;i<cartList.length;i++){ 
         var cartItems = cartList[i].cartItems
         var cartData = findCartSum(cartItems,cartList[i].payValue)
@@ -26,7 +24,7 @@ const CalcCartTotal=async(cartNo)=>{
     }
     
     return({cartDetail,totalPrice:Math.round(totalPrice),totalCount:totalCount,
-        totalPriceMerge,mergeOrder})
+        totalPriceMerge,MergeData})
 }
 const findCartSum = (cartItems, payValue) => {
     if (!cartItems) return ({ totalPrice: 0, totalCount: 0 })
