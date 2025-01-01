@@ -233,13 +233,13 @@ router.post('/list', jsonParser, async (req, res) => {
             ]);
             const mergeOrder = await MergeOrder(openList.map(item => item.cartItems),openList)
 
-            for (var i = 0; i < (mergeOrder && mergeOrder.length); i++) {
-                var userInfo = mergeOrder[i].userInfo
+            for (var i = 0; i < (openList && openList.length); i++) {
+                var userInfo = openList[i].userInfo
                 const userData = userInfo&&userInfo[0]&&userInfo[0].CustomerID
-                var totalPrice = findCartSum(mergeOrder[i].cartItems,
-                    mergeOrder[i].payValue);
-                var tempStatus = mergeOrder[i].InvoiceID?"done":"undone"
-                showCart.push({ ...mergeOrder[i], totalCart: totalPrice ,
+                var totalPrice = findCartSum(openList[i].cartItems,
+                    openList[i].payValue);
+                var tempStatus = openList[i].InvoiceID?"done":"undone"
+                showCart.push({ ...openList[i], totalCart: totalPrice ,
                     status:tempStatus,isOfficial:userData?1:0});
             }
             status = [{title:"انجام نشده",enTitle:"undone",id:0},{title:"انجام شده",enTitle:"done",id:1}]
