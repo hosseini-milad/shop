@@ -890,7 +890,8 @@ dialog {
   border: 1px solid #333;
   padding: 2px 7px;
   text-align: center;
-  font-weight: 600;
+  font-weight: 900;
+  
 }
 .hesabfaMainTable tbody {
   width: 100%;
@@ -1018,6 +1019,7 @@ dialog {
   gap: 2rem;
   span {
     font-size: 0.8rem;
+    font-weight: 900;
   }
 }
 .fishPrintArea .faktor-info .info-wrapper {
