@@ -222,6 +222,7 @@ router.post('/list-product',jsonParser,async (req,res)=>{
                 const countData = productsQuantity.find(
                     Item=>Item.ItemID==products[i].ItemID)
                 //const countStock = stockData?countData.find(item=>item.Stock==stockData):''
+                console.log(countData&&countData.quantity)
                 if(!countData||!countData.quantity) 
                     if(!data.exists)continue
                 
