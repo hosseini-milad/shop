@@ -37,9 +37,10 @@ function OrderMultiReg(props){
           props.setErrorPop({message:result.message,color:"green"})
           setTimeout(()=>props.setErrorPop({message:'',color:"brown"}),3000)
         }
-        console.log(result)
+        else{
         setLoader(0)
         setTimeout(()=>window.location.reload(),1000)
+        }
       },
       (error) => {
         console.log(error);
