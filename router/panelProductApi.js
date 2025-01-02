@@ -205,6 +205,7 @@ router.post('/list-product',jsonParser,async (req,res)=>{
                 {sku:new RegExp('.*' + data.title + '.*', "i")}]}:{}},
             { $match:data.sku?{sku:new RegExp('.*' + data.sku + '.*')}:{}},
             { $match:data.category?{category:data.category}:{}},
+            { $match:data.exists?{count:{$nin:[0,'']}}:{}},
             { $match:data.active?{active:true}:{}},
             { $match:data.brand?(data.brand=="unkown")?
                 {$or:[{brandId:{$exists:false}},{brandId:''}]}:{brandId:data.brand}:{}},
