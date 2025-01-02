@@ -4,7 +4,7 @@ const faktorItems = require("../../models/product/faktorItems");
 
 var tax = process.env.TaxRate
 
-const CartToFaktor=async(query,userId,manageId)=>{
+const CartToFaktor=async(query,userId,manageId,result)=>{
     if(!query) return
     await faktor.create({
         initDate: Date.now(),
@@ -13,17 +13,18 @@ const CartToFaktor=async(query,userId,manageId)=>{
         customerID:query.CustomerRef,
         manageId:manageId,
 
-        NetPrice: query.totalNetPrice,
-        InvoiceID:1234,
-        InvoiceNumber:14031111,
+        NetPrice: result.NetPrice?result.NetPrice:
+            query.totalNetPrice,
+        InvoiceID:result.InvoiceID,
+        InvoiceNumber:result.Number,
         totalCount:query.totalNetCount
     })
     const items = query.Items
     for(var i=0;i<(items&&items.length);i++){
         const item = items[i]
         await faktorItems.create({
-            InvoiceID:1234,
-            InvoiceNumber:14031111,
+            InvoiceID:result.InvoiceID,
+            InvoiceNumber:result.Number,
             initDate: Date.now(),
             sku:item.SKU,
             Description:item.Description,
