@@ -23,6 +23,8 @@ const SumArray = require('../middleware/SumArray');
 const FindRemainBank = require('../middleware/FindRemainBank');
 const orderLog = require('../models/orders/orderLog');
 const CalcCartTotal = require('../middleware/CalcCartTotaljs');
+const CartToFaktor = require('../middleware/NewModule/MultiCartToFaktor');
+const faktor = require('../models/product/faktor');
 
 router.post('/sliders', async (req, res) => {
     try {
@@ -161,15 +163,15 @@ router.post('/multi-sepidar', jsonParser, auth, async (req, res) => {
             official?customerData:adminData, 
             adminData.StockId,orderDetails[0].discount,
             orderDetails[0].cartNo,orderDetails[0]&&orderDetails[0].payValue)
-        var bankDetail = await transaction.find({userId:manageId,sepidarID:{$exists:false}})
-        var recieptQuery=''
+        
+        
         var sepidarResult = await sepidarPOST(sepidarQuery, "/api/invoices", 
             ObjectID(adminData._id))
-        var recieptResult
+        //var recieptResult
         if (sepidarResult && sepidarResult.InvoiceID) {
-            recieptQuery = await RecieptFunc(bankDetail,sepidarResult,faktorNo)
-            recieptResult = await sepidarPOST(recieptQuery, "/api/Receipts/BasedOnInvoice", ObjectID(adminData._id))
-            
+            await CartToFaktor(sepidarQuery,customerData._id,manageId,sepidarResult)
+            //res.json({sepidarQuery})
+            //return
             //console.log(recieptResult)
             /*await Invoice.create({ ...sepidarResult, manageId: adminData._id })
             var invoiceItems = sepidarResult.InvoiceItems
@@ -195,9 +197,7 @@ router.post('/multi-sepidar', jsonParser, auth, async (req, res) => {
                     InvoiceID: sepidarResult.InvoiceID
                 } 
             })
-            await transaction.updateMany({userId:manageId,sepidarID:{$exists:false}},
-                {$set:{sepidarID:recieptResult&&recieptResult.ReceiptID}}
-            )
+            
         }
         else{
             error = sepidarResult && sepidarResult.Message
@@ -222,6 +222,48 @@ router.post('/multi-sepidar', jsonParser, auth, async (req, res) => {
     }
 })
 router.post('/reg-sanad-sepidar', jsonParser, auth, async (req, res) => {
+    const InvoiceID = req.body.InvoiceID
+    const NumberID = req.body.NumberID
+    var ReceiptID=''
+    const manageId = req.headers['userid']
+    var bankDetail = await transaction.find({userId:manageId,sepidarID:{$exists:false}})
+    var recieptQuery = await RecieptFunc(bankDetail,InvoiceID,NumberID,"00"+NumberID)
+    
+    recieptResult = await sepidarPOST(recieptQuery, "/api/Receipts/BasedOnInvoice", ObjectID(manageId))
+    
+    ReceiptID = recieptResult&&recieptResult.ReceiptID
+    if(!ReceiptID){
+        res.status(400).json({error:recieptResult&&recieptResult.Message})
+        return
+    }
+    await transaction.updateMany({userId:manageId,sepidarID:{$exists:false}},
+        {$set:{sepidarID:ReceiptID,
+            InvoiceID:InvoiceID
+        }}
+    )
+    await faktor.updateOne({InvoiceID:InvoiceID},
+        {$set:{ReceiptID:ReceiptID}}
+    ) 
+})
+
+router.post('/list-faktors',auth, async (req,res)=>{
+    
+    const data = {
+        userId: req.headers['userid'],
+        title: req.body.title,
+        bankCode: req.body.bankCode,
+        payValue: req.body.payValue,
+        orderNo:req.body.orderNo,
+        description: req.body.description
+    }
+    try{ 
+        const faktorList = await faktor.find()
+        
+        res.json({data:faktorList})
+    }
+    catch(error){
+        res.status(500).json({message: error.message})
+    }
 })
 
 router.post('/add-bank-to-cart',auth, async (req,res)=>{

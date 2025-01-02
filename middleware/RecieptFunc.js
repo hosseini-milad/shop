@@ -1,8 +1,8 @@
-const RecieptFunc=async(data,FaktorInfo,faktorNo)=>{
+const RecieptFunc=async(data,InvoiceID,Number,faktorNo)=>{
     var query ={
-        "GUID": "124ab075-fc79-417f-b8cf-2a"+faktorNo.replace("s","e"),
-        "InvoiceID": (FaktorInfo.InvoiceID),
-        "Description": (FaktorInfo.Number),
+        "GUID": "124ab075-fc79-417f-b8cf-2a"+faktorNo,
+        "InvoiceID": InvoiceID,
+        "Description": Number,
         "Date":new Date(),
         "Drafts": 
           data.filter(n => n).map((pay,i)=>(

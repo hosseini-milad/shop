@@ -8,6 +8,7 @@ const transSchema = new mongoose.Schema({
   payValue:{type:String},
   description:{type:String},
   sepidarID:{type:String},
+  InvoiceID:{type:String},
   date:{type:Date,default:Date.now()}
 });
 

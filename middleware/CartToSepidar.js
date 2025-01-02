@@ -7,6 +7,8 @@ const CartToSepidar=async(data,faktorNo,user,stock,cartOff,orderNo,payValue,full
         for(var i=0;i<data.length;i++)
             data[i].count?
             notNullCartItem.push(data[i]):''
+        var totalNetPrice = 0
+        var totalNetCount = 0
         var query ={
             "GUID": "124ab075-fc79-417f-b8cf-3"+faktorNo,
             "CustomerRef": toInt(user.CustomerID),
@@ -19,22 +21,32 @@ const CartToSepidar=async(data,faktorNo,user,stock,cartOff,orderNo,payValue,full
             "Discount": 0.00,
             "Items": 
             notNullCartItem.map((item,i)=>{
-                const price = fullPrice?findPayValuePrice(item.price,payValue?payValue:4):item.price
+                const fee = fullPrice?findPayValuePrice(item.price,payValue?payValue:4):item.price
                 const itemDiscount = MultiplySum(item.discount,totalOff,1)
-                const discount =itemDiscount?normalPriceRound(price,itemDiscount)/100:0
+                const discount =itemDiscount?normalPriceRound(fee,itemDiscount)/100:0
+                const Price = normalPriceRound(fee,item.count,1)
+                totalNetCount += parseInt(item.count)
+                const Discount = discount?normalPriceRound(discount,item.count):0.0000
+                const Tax = normalPriceRound(fee-discount,item.count,TaxRate)
+                const NetPrice = parseInt(Price) - parseInt(Discount) + parseInt(Tax)
+                totalNetPrice += NetPrice
                 return({
                 "ItemRef": toInt(item.id),
+                "SKU":item.sku,
                 "TracingRef": null,
                 "Description":item.title+"|"+item.sku+"("+item.desc+")",
                 "StockRef":item.stock?item.stock:stock,
                 "Quantity": toInt(item.count),
-                "Fee": toInt(price),
-                "Price": normalPriceRound(price,item.count,1),
-                "Discount": discount?normalPriceRound(discount,item.count):0.0000,
-                "Tax": normalPriceRound(price-discount,item.count,TaxRate),
+                "Fee": toInt(fee),
+                "Price": Price,
+                "Discount": Discount,
+                "Tax": Tax,
+                "NetPrice":NetPrice,
                 "Duty": 0.0000,
                 "Addition": 0.0000
-              })})
+              })}),
+              totalNetPrice:totalNetPrice,
+              totalNetCount:totalNetCount
             
           }
         return(query)
