@@ -50,9 +50,8 @@ function OrderMultiReg(props) {
             );
           }
           else{
-            console.log("123")
             setLoader(0);
-          setTimeout(() => window.location.reload(), 100000);
+          setTimeout(() => window.location.reload(), 1000);
           }
         },
         (error) => {
