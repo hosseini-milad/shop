@@ -205,12 +205,14 @@ router.post('/list-product',jsonParser,async (req,res)=>{
                 {sku:new RegExp('.*' + data.title + '.*', "i")}]}:{}},
             { $match:data.sku?{sku:new RegExp('.*' + data.sku + '.*')}:{}},
             { $match:data.category?{category:data.category}:{}},
-            { $match:data.exists?{count:{$nin:[0,'']}}:{}},
+            //{ $match:data.exists?{count:{$nin:[0,'']}}:{}},
             { $match:data.active?{active:true}:{}},
             { $match:data.brand?(data.brand=="unkown")?
                 {$or:[{brandId:{$exists:false}},{brandId:''}]}:{brandId:data.brand}:{}},
             {$lookup:{from : "brands", 
             localField: "brandId", foreignField: "brandCode", as : "brandInfo"}},
+            {$lookup:{from : "productcount", 
+                localField: "ItemID", foreignField: "ItemID", as : "countList"}},
             ])
         const productsQuantity = await productCount.find({Stock:stockId})
             var quantity = []
@@ -235,7 +237,8 @@ router.post('/list-product',jsonParser,async (req,res)=>{
                 for(var c=0;c<openList.length;c++) openCount+= parseInt(openList[c].count)
                 const priceData = await productPrice.findOne(
                     {ItemID:products[i].ItemID,saleType:SaleType})
-                newProduct.push({
+                (countData?countData.quantity)&&
+                    newProduct.push({
                     ...products[i],
                     price:priceData?priceData.price:'',
                     taxPrice:NormalTax(products[i].price)/10,
