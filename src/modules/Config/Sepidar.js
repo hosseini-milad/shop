@@ -1,104 +1,206 @@
 import { useEffect, useState } from "react";
-import env from "../../env"
-import errortrans from "../../translate/error"
+import Cookies from "universal-cookie";
+import env from "../../env";
+import errortrans from "../../translate/error";
 import ShowError from "../../components/Modal/ShowError";
-
-function Sepidar(props){
-    const direction = props.lang?props.lang.dir:errortrans.defaultDir;
-    const lang = props.lang?props.lang.lang:errortrans.defaultLang;
-    const [error,setError] = useState({message:'',color:"brown"})
-    const [updateTime,setUpdateTime] = useState()
-    console.log(error)
-    useEffect(()=>{
-        fetch(env.siteApi + "/sepidar-update-log")
-      .then(res => res.json())
+import StyleSelect from "../../components/Button/AutoComplete";
+const cookies = new Cookies();
+function Sepidar(props) {
+  const direction = props.lang ? props.lang.dir : errortrans.defaultDir;
+  const lang = props.lang ? props.lang.lang : errortrans.defaultLang;
+  const [error, setError] = useState({ message: "", color: "brown" });
+  const [updateTime, setUpdateTime] = useState();
+  const [Stock, setStock] = useState();
+  const token = cookies.get(env.cookieName);
+  console.log(error);
+  useEffect(() => {
+    fetch(env.siteApi + "/sepidar-update-log")
+      .then((res) => res.json())
       .then(
         (result) => {
-            const logList = result.log
-            var lastLog = {
-                product:logList.find(item=>item.updateQuery==="sepidar-product"),
-                quantity:logList.find(item=>item.updateQuery==="sepidar-quantity"),
-                price:logList.find(item=>item.updateQuery==="sepidar-price"),
-                customer:logList.find(item=>item.updateQuery==="sepidar-customer")
-            }
-            console.log(lastLog)
-            setUpdateTime(lastLog)
+          const logList = result.log;
+          var lastLog = {
+            product: logList.find(
+              (item) => item.updateQuery === "sepidar-product"
+            ),
+            quantity: logList.find(
+              (item) => item.updateQuery === "sepidar-quantity"
+            ),
+            price: logList.find((item) => item.updateQuery === "sepidar-price"),
+            customer: logList.find(
+              (item) => item.updateQuery === "sepidar-customer"
+            ),
+          };
+          console.log(lastLog);
+          setUpdateTime(lastLog);
         },
         (error) => {
-            console.log(error)
-        })
-    },[])
-    const updateSepidar=(db)=>{
-        const postOptions={
-            method:'get',
-            headers: {'Content-Type': 'application/json',
-            'Access-Control-Allow-Origin': '*'}
+          console.log(error);
+        }
+      );
+  }, []);
+  const updateSepidar = (db) => {
+    const postOptions = {
+      method: "post",
+      headers: {
+        "Content-Type": "application/json",
+        "x-access-token": token && token.token,
+        userId: token && token.userId,
+      },
+      body: JSON.stringify({ stock: Stock }),
+    };
+    fetch(env.siteApi + "/sepidar-" + db, postOptions, { mode: "cors" })
+      .then((res) => res.json())
+      .then(
+        (result) => {
+          if (result.error) {
+            setError({ message: result.message, color: "brown" });
+            setTimeout(() => setError({ message: "", color: "brown" }), 3000);
+          } else {
+            setError({ message: result.message, color: "green" });
+            setTimeout(() => window.location.reload(), 3000);
           }
-        fetch(env.siteApi + "/sepidar-"+db,postOptions, {mode:'cors'})
-      .then(res => res.json())
-      .then(
-        (result) => {
-            if(result.error){
-                setError({message:result.message,color:"brown"})
-                setTimeout(()=>setError({message:'',color:"brown"}),3000)
-            }
-            else{
-                setError({message:result.message,color:"green"})
-                setTimeout(()=>window.location.reload(),3000)
-            }
         },
         (error) => {
-            console.log(error)
-        })
-    }
-    const content=[
-        {title:"محصولات",enTitle:"product",description:"بروزرسانی محتوای محصولات"},
-        {title:"تعداد محصولات",enTitle:"quantity",description:"بروزرسانی تعداد محصولات"},
-        {title:"قیمت محصولات",enTitle:"price",description:"بروزرسانی قیمت محصولات"},
-        {title:"مشتریان",enTitle:"customer",description:"بروزرسانی مشتریان"},
-    ]
-    return(
-       
-        <div className="profiles" style={{direction:direction}}>
-           
-        <div className={direction==="ltr"?"profile-table":"profile-table profileRtl"}>
-            <table>
-            <tbody>
-                {content&&content.map((filter,i)=>(
-                    <tr key={i}>
-                    <td>
-                        <div className="profiles-title">
-                        <i className="fa-solid fa-certificate fa-sm" style={{color: "#00c6c6"}}></i>
-                        <div className="p-wrapper">
-                            <p>{filter.title} 
-                                <span>({filter.enTitle})</span></p>
-                            <p>{filter.description}</p>
-                        </div>
-                        </div>
-                    </td>
-                    <td><input type="button" value="بروزرسانی"
-                    className="btn bg-gradient-info my-4 mb-2"
-                    onClick={()=>updateSepidar(filter.enTitle)}/></td>
-                    <td>{updateTime&&updateTime[filter.enTitle]&&
-                    new Date(updateTime[filter.enTitle].date).toLocaleDateString('fa')}<br/>
-                    <smal>{updateTime&&updateTime[filter.enTitle]&&
-                    new Date(updateTime[filter.enTitle].date).toLocaleTimeString('fa')}</smal></td>
-                    <td>
-                        <div className="profiles-icons">
-                        <i className="fa-solid fa-pen-to-square fa-sm" style={{color: "#c0c0c0"}}></i>
-                        <i className="fa-solid fa-trash fa-sm" style={{color: "#c0c0c0"}}></i>
-                        </div>
-                    </td>
-                    </tr>
-                ))}
-                
-            </tbody>
-            </table>
+          console.log(error);
+        }
+      );
+  };
+  const content = [
+    {
+      title: "محصولات",
+      enTitle: "product",
+      description: "بروزرسانی محتوای محصولات",
+    },
+    {
+      title: "تعداد محصولات",
+      enTitle: "quantity",
+      description: "بروزرسانی تعداد محصولات",
+    },
+    {
+      title: "قیمت محصولات",
+      enTitle: "price",
+      description: "بروزرسانی قیمت محصولات",
+    },
+    { title: "مشتریان", enTitle: "customer", description: "بروزرسانی مشتریان" },
+  ];
+  const stockList = [
+    {
+      id: "673d8bb05adbdf04bdf4d063",
+      title: "انبار مرکزی",
+    },
+    {
+      id: "673d8c175adbdf04bdf4d064",
+      title: "انبار فروشگاه",
+    },
+    {
+      id: "673d8c2f5adbdf04bdf4d065",
+      title: " انبار 3",
+    },
+    {
+      id: "673d8c4b5adbdf04bdf4d066",
+      title: " انبار غیر قابل فروش",
+    },
+    {
+      id: "673d8c715adbdf04bdf4d067",
+      title: " انبار فروشگاه جایگاه",
+    },
+    {
+      id: "673d8cd15adbdf04bdf4d068",
+      title: " انبار پخش",
+    },
+    {
+      id: "673d8ce95adbdf04bdf4d069",
+      title: " انبار سایت",
+    },
+  ];
+  return (
+    <div className="profiles" style={{ direction: direction }}>
+      {token.access == "manager" ? (
+        <div class="sepidar-filter">
+          <StyleSelect
+            title={"انبار"}
+            class="filterComponent"
+            direction={props.lang.dir}
+            options={stockList}
+            label="title"
+            action={(e) => setStock(e.id)}
+          />
         </div>
-        {error&&error.message?
-            <ShowError title="" text={error.message} color={error.color}
-            />:<></>}
-        </div>
-    )
+      ) : (
+        <></>
+      )}
+      <div
+        className={
+          direction === "ltr" ? "profile-table" : "profile-table profileRtl"
+        }
+      >
+        <table>
+          <tbody>
+            {content &&
+              content.map((filter, i) => (
+                <tr key={i}>
+                  <td>
+                    <div className="profiles-title">
+                      <i
+                        className="fa-solid fa-certificate fa-sm"
+                        style={{ color: "#00c6c6" }}
+                      ></i>
+                      <div className="p-wrapper">
+                        <p>
+                          {filter.title}
+                          <span>({filter.enTitle})</span>
+                        </p>
+                        <p>{filter.description}</p>
+                      </div>
+                    </div>
+                  </td>
+                  <td>
+                    <input
+                      type="button"
+                      value="بروزرسانی"
+                      className="btn bg-gradient-info my-4 mb-2"
+                      onClick={() => updateSepidar(filter.enTitle)}
+                    />
+                  </td>
+                  <td>
+                    {updateTime &&
+                      updateTime[filter.enTitle] &&
+                      new Date(
+                        updateTime[filter.enTitle].date
+                      ).toLocaleDateString("fa")}
+                    <br />
+                    <smal>
+                      {updateTime &&
+                        updateTime[filter.enTitle] &&
+                        new Date(
+                          updateTime[filter.enTitle].date
+                        ).toLocaleTimeString("fa")}
+                    </smal>
+                  </td>
+                  <td>
+                    <div className="profiles-icons">
+                      <i
+                        className="fa-solid fa-pen-to-square fa-sm"
+                        style={{ color: "#c0c0c0" }}
+                      ></i>
+                      <i
+                        className="fa-solid fa-trash fa-sm"
+                        style={{ color: "#c0c0c0" }}
+                      ></i>
+                    </div>
+                  </td>
+                </tr>
+              ))}
+          </tbody>
+        </table>
+      </div>
+      {error && error.message ? (
+        <ShowError title="" text={error.message} color={error.color} />
+      ) : (
+        <></>
+      )}
+    </div>
+  );
 }
-export default Sepidar
+export default Sepidar;

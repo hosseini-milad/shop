@@ -232,6 +232,10 @@ const tabletrans ={
         english:"Account",
         persian:"پروفایل کاربری"
     },
+    agent:{
+        english:"Agent",
+        persian:"عامل"
+    },
     general:{
         english:"General",
         persian:"عمومی"

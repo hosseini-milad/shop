@@ -59,7 +59,7 @@ function Users(props) {
       },
       body: JSON.stringify(body),
     };
-    console.log(postOptions);
+    
     fetch(env.siteApi + "/panel/product/report-total", postOptions)
       .then((res) => res.json())
       .then(

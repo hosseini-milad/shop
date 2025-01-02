@@ -7,8 +7,11 @@ import UserList from "../modules/Users/UserList";
 import UserCard from "../modules/Users/UserCard";
 import formtrans from "../translate/forms";
 import StyleSelect from "../components/Button/AutoComplete";
+import MultiStyleSelect from "../components/Button/MultiStyleSelect";
 import StyleInput from "../components/Button/Input";
 import Paging from "../modules/Components/Paging";
+import TextField from "@mui/material/TextField";
+import Autocomplete from "@mui/material/Autocomplete";
 import {
   getFiltersFromUrl,
   updateUrlWithFilters,
@@ -21,6 +24,8 @@ const Users = (props) => {
   const direction = props.lang ? props.lang.dir : errortrans.defaultDir;
   const lang = props.lang ? props.lang.lang : errortrans.defaultLang;
 
+  const [extra, setExtra] = useState();
+  console.log(extra);
   const [users, setUsers] = useState([]);
   const [filters, setFilters] = useState("");
   const [selectedUser, setSelectedUser] = useState(null);
@@ -67,7 +72,7 @@ const Users = (props) => {
       const data = await response.json();
       setUsers(data.filter);
       setAccess(data.access);
-      setStoreList(data.storeList)
+      setStoreList(data.storeList);
     } catch (error) {
       console.error("Error fetching users:", error);
     }
@@ -147,7 +152,7 @@ const Users = (props) => {
           "Content-Type": "application/json",
           "x-access-token": token && token.token,
         },
-        body: JSON.stringify(formData),
+        body: JSON.stringify({...formData,StockArr:extra}),
       });
       setShowCreatePanel(false);
       // Refresh the list of users
@@ -223,19 +228,9 @@ const Users = (props) => {
           <StyleSelect
             title={formtrans.profile[lang]}
             direction={direction}
-            defaultValue={profiles.find(
-              (profile) => profile._id === userData.profile
-            )}
             class={"formInput"}
             options={profiles}
             label={"profileName"}
-            action={(e) => {
-              console.log("Selected Profile:", e);
-              setFormData((prevState) => ({
-                ...prevState,
-                profile: e ? e._id : "",
-              }));
-            }}
           />
           <StyleSelect
             title={formtrans.store[lang]}
@@ -253,6 +248,21 @@ const Users = (props) => {
               }));
             }}
           />
+
+          <div class="formInput">
+            <Autocomplete
+              multiple
+              options={storeList || []}
+              getOptionLabel={(item) => item.Title || ""}
+              //value={colorList.cover.find(item=>item.option===extraData.coverCode)||null}
+              style={{ width: "100%" }}
+              defaultValue={userData.StockArr}
+              onChange={(e, value) => setExtra(value)}
+              renderInput={(params) => (
+                <TextField {...params} label="انبار" variant="outlined" />
+              )}
+            />
+          </div>
           <StyleInput
             title={formtrans.customercode[lang]}
             direction={direction}
@@ -354,16 +364,15 @@ const Users = (props) => {
             onEdit={handleUserEdit}
           />
         ))}
-        
       </div>
       <Paging
-          content={Users}
-          size={Users.size}
-          filters={filters}
-          lang={props.lang}
-          setFilters={handleFilterChange}
-          updateUrlWithFilters={updateUrlWithFilters} // Pass the function as a prop
-        />
+        content={Users}
+        size={Users.size}
+        filters={filters}
+        lang={props.lang}
+        setFilters={handleFilterChange}
+        updateUrlWithFilters={updateUrlWithFilters} // Pass the function as a prop
+      />
     </div>
   );
 };

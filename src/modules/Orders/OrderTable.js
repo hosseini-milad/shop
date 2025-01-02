@@ -3,7 +3,8 @@ import OrderTableRow from "./OrderTableRow";
 import tabletrans from "../../translate/tables";
 import OrderMultiReg from "./OrderComponent/OrderMultiReg";
 import OrderMultiDone from "./OrderComponent/OrderMultiDone";
-import env from "../../env";
+import env, { normalPriceCalc, normalPriceCount } from "../../env";
+import { normalArrayCount } from "../../env";
 function OrderTable(props) {
   const data = props.data;
   const orders = props.orders;
@@ -13,6 +14,12 @@ function OrderTable(props) {
   const [detail, showDetail] = useState(-1);
   const [AllCheck, setAllCheck] = useState(0);
   const [DisableAll, setDisableAll] = useState(1);
+  const [Ttp, setTtp] = useState("");
+  console.log(Ttp)
+  const totalPrice = normalArrayCount(
+    selectedOrder &&
+      selectedOrder.map((item) => item.totalCart && item.totalCart.totalPrice)
+  );
   const scrollToBottom = () => {
     window.scrollTo({
       top: document.documentElement.scrollHeight,
@@ -65,6 +72,14 @@ function OrderTable(props) {
         <button className="BtnToBot" onClick={scrollToBottom}>
           <i class="fa fa-angle-down" aria-hidden="true"></i>
         </button>
+        {Ttp ? (
+          <div className="total-top">
+            <span>جمع سفارشات انتخابی:</span>
+            <span>{normalPriceCount(Ttp)}</span>
+          </div>
+        ) : (
+          <></>
+        )}
         <table>
           <thead>
             <tr>
@@ -143,6 +158,8 @@ function OrderTable(props) {
             token={props.token}
             setErrorPop={props.setErrorPop}
             errorPop={props.errorPop}
+            setTtp={setTtp}
+            Ttp={Ttp}
           />
         ) : (
           <OrderMultiDone orders={selectedOrder} token={props.token} />

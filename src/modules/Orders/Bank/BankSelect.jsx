@@ -24,7 +24,7 @@ function BankSelect(props){
       method:'post',
       headers: {'Content-Type': 'application/json',
       "x-access-token":token&&token.token,"userId":token&&token.userId},
-      body:JSON.stringify({totalCartValue:parseInt(props.totalPrice.toString().replace(/\D/g,''))})
+      body:JSON.stringify({cartList:OrderNumList})
     }
     fetch(env.siteApi + "/setting/fetch-bank-of-cart",postOptions)
     .then(res => res.json())
@@ -32,6 +32,7 @@ function BankSelect(props){
     (result) => {
       setTransData(result.transData)
       setAmount(result.transRemain)
+      props.setTtp(result.cartTotal.totalPrice)
     },
     (error) => {
       console.log(error);
