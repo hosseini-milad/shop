@@ -214,7 +214,7 @@ router.post('/multi-sepidar', jsonParser, auth, async (req, res) => {
         })
         }
         res.json({ data: sepidarResult,query:sepidarQuery, 
-            recieptResult:recieptResult, error, InvoiceID:sepidarResult.Number,
+            error, InvoiceID:sepidarResult.Number,
             recieptQuery:recieptQuery,message: error?'':"سفارش در سپیدار ثبت شد" })
     }
     catch (error) {
@@ -229,7 +229,7 @@ router.post('/reg-sanad-sepidar', jsonParser, auth, async (req, res) => {
     var bankDetail = await transaction.find({userId:manageId,sepidarID:{$exists:false}})
     var recieptQuery = await RecieptFunc(bankDetail,InvoiceID,NumberID,"00"+NumberID)
     
-    recieptResult = await sepidarPOST(recieptQuery, "/api/Receipts/BasedOnInvoice", ObjectID(manageId))
+    var recieptResult = await sepidarPOST(recieptQuery, "/api/Receipts/BasedOnInvoice", ObjectID(manageId))
     
     ReceiptID = recieptResult&&recieptResult.ReceiptID
     if(!ReceiptID){
