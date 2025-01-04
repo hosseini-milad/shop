@@ -224,7 +224,7 @@ router.post('/list-product',jsonParser,async (req,res)=>{
                 //const countStock = stockData?countData.find(item=>item.Stock==stockData):''
                 console.log(countData&&countData.quantity)
                 if(!countData||!countData.quantity) 
-                    if(!data.exists)continue
+                    if(data.exists)continue
                 
                 if(newProduct.length>(pageSize+offset)){
                     newProduct.push({})
