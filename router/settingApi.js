@@ -173,7 +173,7 @@ router.post('/multi-sepidar', jsonParser, auth, async (req, res) => {
             NetPrice:"12400000"
         }
         if (sepidarResult && sepidarResult.InvoiceID) {
-            await CartToFaktor(sepidarQuery,customerData._id,manageId,sepidarResult)
+            await CartToFaktor(sepidarQuery,customerData,adminData,sepidarResult)
             //res.json({sepidarQuery})
             //return
             //console.log(recieptResult)

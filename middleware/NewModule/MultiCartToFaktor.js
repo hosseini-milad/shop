@@ -4,14 +4,16 @@ const faktorItems = require("../../models/product/faktorItems");
 
 var tax = process.env.TaxRate
 
-const CartToFaktor=async(query,userId,manageId,result)=>{
+const CartToFaktor=async(query,userData,manageData,result)=>{
     if(!query) return
     await faktor.create({
         initDate: Date.now(),
         progressDate: Date.now(),
-        userId:userId,
+        userId:userData._id,
         customerID:query.CustomerRef,
-        manageId:manageId,
+        customerName:userData.username,
+        manageId:manageData._id,
+        managerName:manageData.username,
 
         NetPrice: result.NetPrice?result.NetPrice:
             query.totalNetPrice,
