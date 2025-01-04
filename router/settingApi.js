@@ -265,8 +265,8 @@ router.post('/list-faktors',auth, async (req,res)=>{
         const faktorList = await faktor.find().lean()
 
         for( var i=0;i<faktorList.length;i++){
-            const faktorItems = await faktorItems.find({InvoiceID:faktorList[i].InvoiceID})
-            faktorList[i].items = faktorItems
+            const faktorData = await faktorItems.find({InvoiceID:faktorList[i].InvoiceID})
+            faktorList[i].items = faktorData
         }
         
         res.json({data:faktorList})
