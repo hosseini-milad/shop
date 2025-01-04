@@ -218,7 +218,7 @@ router.post('/multi-sepidar', jsonParser, auth, async (req, res) => {
             message: error?'':"سفارش در سپیدار ثبت شد" })
     }
     catch (error) {
-        res.status(500).json({ message: error.message })
+        res.status(500).json({ error: error.message })
     }
 })
 router.post('/reg-sanad-sepidar', jsonParser, auth, async (req, res) => {
