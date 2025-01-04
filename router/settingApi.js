@@ -252,7 +252,11 @@ router.post('/reg-sanad-sepidar', jsonParser, auth, async (req, res) => {
 })
 
 router.post('/list-faktors',auth, async (req,res)=>{
-    
+    const adminData = await users.findOne({ _id: ObjectID(req.headers["userid"]) });
+    if (!adminData) {
+        res.status(400).json({ error: "کاربر معتبر نیست" });
+        return;
+    }
     const data = {
         userId: req.headers['userid'],
         title: req.body.title,
@@ -261,6 +265,13 @@ router.post('/list-faktors',auth, async (req,res)=>{
         orderNo:req.body.orderNo,
         description: req.body.description
     }
+    var tabs =adminData.access !== "manager"?[]: [
+        {title:"ویزیتور", type:"Visitor",manager:""},
+        {title:"فروشگاه زهره", type:"Sale",manager:"zohre"},
+        {title:"فروشگاه حصارک", type:"Sale",manager:"hesarak"},
+        {title:"فروشگاه مرکزی", type:"Sale",manager:"markazi"},
+        {title:"وب سایت", type:"Website"},
+    ]
     try{ 
         const faktorList = await faktor.find().lean()
 
@@ -269,7 +280,7 @@ router.post('/list-faktors',auth, async (req,res)=>{
             faktorList[i].cartItems = faktorData
         }
         
-        res.json({filter:faktorList})
+        res.json({filter:faktorList,tabs,size:faktorList.length})
     }
     catch(error){
         res.status(500).json({message: error.message})
