@@ -51,14 +51,15 @@ router.post('/list-products', async (req, res) => {
     const filter = req.body.filters
     const brandId = filter ? filter.brand : ''
     const catId = filter ? filter.category : ''
-    console.log(catId)
     //const subId = filter ? filter.subCategory : ''
     const subId = filter ? filter.subCat : ''
     const stockId = req.body.stockId
-    //const categoryData = await category.findOne({catCode:catId})
-    const subChild = subId ? [] : await category.find({ "parent.catCode": catId })
+    
+    const categoryData = await category.findOne({catCode:catId})
+    const catDataID = categoryData&&categoryData._id
+    const subChild = subId ? [] : await category.find({ parent: catDataID })
     const subChildId = subChild.map(item => item.catCode)
-
+   
     var searchCat = ''
     if (subId)
         searchCat = { catId: subId }
@@ -97,9 +98,13 @@ router.post('/list-products', async (req, res) => {
         for (var i = 0; i < products.length; i++) {
             var count = products[i].countData &&
                 products[i].countData.find(item => item.Stock == stockId)
+            var count3 = products[i].countData &&
+                products[i].countData.find(item => item.Stock == "9")
+              
             if (count) count = count.quantity
             products[i].countData = count
-            if (count)
+            if (count3) count3 = count3.quantity
+            if (count||count3)
                 showProduct.push(products[i])
         }
         //console.log(showProduct)
