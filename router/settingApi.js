@@ -269,7 +269,7 @@ router.post('/list-faktors',auth, async (req,res)=>{
             faktorList[i].items = faktorData
         }
         
-        res.json({data:faktorList})
+        res.json({filter:faktorList})
     }
     catch(error){
         res.status(500).json({message: error.message})
