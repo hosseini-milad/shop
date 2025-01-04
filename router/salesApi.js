@@ -5,6 +5,7 @@ const productSchema = require('../models/product/products');
 const cart = require('../models/product/cart');
 const qCart = require('../models/product/quickCart');
 const users = require('../models/auth/users');
+const category = require('../models/product/category');
 
 router.post('/find-products', auth, async (req, res) => {
     const search = req.body.search
@@ -13,6 +14,18 @@ router.post('/find-products', auth, async (req, res) => {
         const userData = await users.findOne({ _id: req.headers['userid'] })
         const stockId = userData.StockId ? userData.StockId : "13"
         var filter = ''
+        var catArray = []
+        if(filters&&filters.subCat){
+            catArray = [filters.subCat]
+        }
+        else if(filters&&filters.category){
+            const categoryData = await category.findOne({catCode:filters.category})
+            if(categoryData) {
+                const catID = categoryData._id.toString()
+                const catLists = await category.find({parent:catID})
+                catArray.push(catLists.map(item=>item.catCode))
+            }
+        }
         if (userData.group === "bazaryab") filter = "fs"
         const searchProducts = await productSchema.
             aggregate([{
@@ -26,7 +39,7 @@ router.post('/find-products', auth, async (req, res) => {
             },
             {$match:filters&&filters.brand?{brandId:filters.brand}:{}},
             {$match:filters?filters.subCat?{catId:filters.subCat}:
-                filters.category?{catId:filters.category}:{}:{}},
+                filters.category?{catId:{$in:catArray}}:{}:{}},
             filter ? { $match: { sku: { $in: [/fs/i, /cr/i, /pr/i] } } } :
                 { $match: { sku: { $exists: true } } },
             {
