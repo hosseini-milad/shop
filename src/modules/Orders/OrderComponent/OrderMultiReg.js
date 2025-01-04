@@ -43,15 +43,15 @@ function OrderMultiReg(props) {
       .then(
         (result) => {
           if (result.error) {
-            props.setErrorPop({ message: result.message, color: "green" });
+            props.setErrorPop({ message: result.error, color: "green" });
             setTimeout(
               () => props.setErrorPop({ message: "", color: "brown" }),
               3000
             );
-          }
-          else{
             setLoader(0);
-          setTimeout(() => window.location.reload(), 1000);
+          } else {
+            setLoader(0);
+            // setTimeout(() => window.location.reload(), 1000);
           }
         },
         (error) => {
@@ -64,9 +64,8 @@ function OrderMultiReg(props) {
     <>
       {props.orders && props.orders.length ? (
         <div className="bank-wrapper">
-          <h6>روش پرداخت</h6>
           <p>مبلغ کل سفارش: {normalPriceCalc(props.Ttp)}</p>
-          <div className="bank-form">
+          {/* <div className="bank-form">
             <BankSelect
               Amount={Amount}
               setAmount={setAmount}
@@ -81,27 +80,23 @@ function OrderMultiReg(props) {
               setTtp={props.setTtp}
               Ttp={props.Ttp}
             />
-          </div>
+          </div> */}
 
-          {Amount.remain <= 0 ? (
-            <div className="regSepidar">
-              {Loader ? (
-                <div>
-                  <p>درحال پردازش</p>
-                </div>
-              ) : (
-                <div
-                  style={{ cursor: "pointer" }}
-                  className="regSepidar"
-                  onClick={setSepidarTotal}
-                >
-                  <p>ثبت سپیدار</p>
-                </div>
-              )}
-            </div>
-          ) : (
-            <></>
-          )}
+          <div className="regSepidar">
+            {Loader ? (
+              <div>
+                <p>درحال پردازش</p>
+              </div>
+            ) : (
+              <div
+                style={{ cursor: "pointer" }}
+                className="regSepidar"
+                onClick={setSepidarTotal}
+              >
+                <p>ثبت سپیدار</p>
+              </div>
+            )}
+          </div>
         </div>
       ) : (
         <></>

@@ -42,8 +42,8 @@ function ProductFilters(props) {
           direction={props.lang.dir}
           label="title"
           options={[
-            { title: "موجود", value: "" },
-            { title: "نمایش همه", value: "1" },
+            { title: "موجود", value: "1" },
+            { title: "نمایش همه", value: "0" },
           ]}
           defaultValue={"نمایش همه"}
           action={(e) => handleFilterChange("exist", e?e.value:"0")}

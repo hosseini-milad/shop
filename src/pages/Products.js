@@ -45,7 +45,7 @@ function Products(props) {
       status: filters.status,
       active: filters.active,
       store: filters.store,
-      exist: filters.exist?filters.exist:"1",
+      exist: filters.exist?filters.exist:"0",
       brand: filters.brand,
       brandId: filters.brandid,
       dateFrom: filters.date && filters.date.dateFrom,

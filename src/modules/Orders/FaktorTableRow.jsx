@@ -7,7 +7,7 @@ import tabletrans from "../../translate/tables";
 import OrderQuickCart from "./OrderComponent/OrderQuickCart";
 import LinkModal from "../../components/Modal/LinkModal";
 import env from "../../env";
-function OrderTableRow(props) {
+function FaktorTableRow(props) {
   const [openOption, setOpenOption] = useState(false);
   const [checkState, setCheckState] = useState(0);
   const [LinkShare, setLinkShare] = useState("");
@@ -33,40 +33,6 @@ function OrderTableRow(props) {
     };
   });
 
-  useEffect(() => {
-    setCheckState(order.isOfficial ? false : props.allcheck);
-  }, [props.allcheck]);
-
-  const updateCheckBox = (field, action) => {
-    setCheckState(action ? false : true);
-    if (!action) {
-      if (props.tab && field.isOfficial) {
-        return props.setSelectedOrder([field]), props.setDisableAll(0);
-      }
-      if (props.selectedOrder) {
-        var index = props.selectedOrder && props.selectedOrder.length;
-        props.setSelectedOrder((existingItems) => {
-          return [
-            ...existingItems.slice(0, index),
-            field,
-            ...existingItems.slice(index + 1),
-          ];
-        });
-      } else {
-        props.setSelectedOrder([field]);
-      }
-    } else {
-      if (props.selectedOrder && props.selectedOrder.length == 1) {
-        ClearBank();
-      }
-      props.setSelectedOrder((l) =>
-        l.filter((item) => item.cartNo !== field.cartNo)
-      );
-      if (field.isOfficial) {
-        props.setDisableAll(1);
-      }
-    }
-  };
   const CreateLink = () => {
     const postOptions = {
       method: "post",
@@ -94,76 +60,20 @@ function OrderTableRow(props) {
     <React.Fragment>
       <tr className={activeAcc ? "activeAccordion" : "accordion"}>
         <td>{props.index + 1}</td>
-        {order.isSale ? (
-          <td className="checkBoxStyle">
-            {order.status && order.status == "undone" ? (
-              (order.userInfo[0] && order.userInfo[0].CustomerID) ||
-              props.DisableAll ? (
-                <input
-                  type="checkbox"
-                  checked={checkState}
-                  onChange={(e) => updateCheckBox(order, checkState)}
-                />
-              ) : (
-                <></>
-              )
-            ) : (
-              <></>
-            )}
-          </td>
-        ) : (
-          <td className="checkBoxStyle">
-            {order.status && order.status == "done" ? (
-              <input
-                type="checkbox"
-                checked={checkState}
-                onChange={(e) => updateCheckBox(order, checkState)}
-              />
-            ) : (
-              <></>
-            )}
-          </td>
-        )}
         <td>
           <div className="order-id">
-            <p
-              onClick={() =>
-                (window.location.href = "/orders/detail/" + order.cartNo)
-              }
-            >
-              {order.cartNo}
-            </p>
+            <p>{order.InvoiceID}</p>
           </div>
         </td>
         <td>
-          <div className="cu-avatar">
+          <div className="cu-avatar" style={{ minWidth: "150px" }}>
             <img src="/img/avatar/avatar_1.jpg" alt="avatar" />
             <div className="cu-name">
-              <p className="name">
-                {order.userInfo && order.userInfo[0]
-                  ? order.userInfo[0].cName + "---" + order.userInfo[0].sName
-                  : "---"}
-              </p>
-              <p className="name">
-                {order.userInfo && order.userInfo[0]?.Address}
-              </p>
+              <p className="name">{order.customerName && order.customerName}</p>
             </div>
-            {order.moreInformation ? (
-              <i className="fa fa-comment-o" title={order.moreInformation}></i>
-            ) : (
-              <></>
-            )}
           </div>
         </td>
-        <td>
-          <div className="order-num">
-            <p className="email">
-              {order.userInfo && order.userInfo[0]
-                ? order.userInfo[0].phone
-                : tabletrans.notEntered[lang]}
-            </p>
-          </div>
-        </td>
+
         <td>
           <div className="or-date">
             <p className="date">
@@ -178,28 +88,18 @@ function OrderTableRow(props) {
         </td>
         <td>
           <div className="order-price">
-            <p>
-              {normalPriceRound(order.totalCart && order.totalCart.totalPrice)}
-            </p>
+            <p>{normalPriceRound(order.NetPrice && order.NetPrice)}</p>
           </div>
         </td>
         <td>
-          {/* {order.taskInfo&&order.taskInfo[0]&&
-          order.taskInfo[0].taskStep=="archive"?"آماده":""} */}
           <Status
-            status={order.status}
+            status={order.Status}
             class={"order-status"}
             lang={props.lang}
           />
         </td>
         <td>
           <div className="more-btn">
-            <i
-              className={`tableIcon fas ${
-                activeAcc ? "fa-chevron-up" : "fa-chevron-down"
-              }`}
-              onClick={() => props.showDetail(activeAcc ? "-1" : props.index)}
-            ></i>
             <i
               className="tableIcon fas fa-print"
               onClick={() => setOpenOption(openOption ? 0 : 1)}
@@ -255,26 +155,27 @@ function OrderTableRow(props) {
             )}
           </div>
         </td>
+        <td>
+          <button
+            className="register-btn"
+            onClick={() =>
+              props.setBankPop({
+                InvoiceID: order.InvoiceID,
+                NumberID: order.InvoiceNumber,
+              })
+            }
+          >
+            ثبت سند
+          </button>
+        </td>
       </tr>
-      {activeAcc ? (
-        <tr className="sub-order">
-          <td colSpan="10">
-            {order.orderItems ? (
-              <OrderQuickDetail order={order.orderItems} />
-            ) : (
-              <OrderQuickCart order={order.cartItems} />
-            )}
-          </td>
-        </tr>
-      ) : (
-        <React.Fragment></React.Fragment>
-      )}
+
       {LinkShare ? (
-        <LinkModal LinkShare={LinkShare} setLinkShare={setLinkShare} />
+        <LinkModal LinkShare={LinkShare} setLinkShare={setLinkShare} token={token}/>
       ) : (
         <></>
       )}
     </React.Fragment>
   );
 }
-export default OrderTableRow;
+export default FaktorTableRow;

@@ -891,7 +891,6 @@ dialog {
   padding: 2px 7px;
   text-align: center;
   font-weight: 900;
-  
 }
 .hesabfaMainTable tbody {
   width: 100%;
@@ -1043,8 +1042,6 @@ dialog {
 }
 .fishPrintArea .hesabPrintTable {
   overflow: hidden;
-
-  
 }
 .hesabPrintTable .verticalRow {
   width: 30px;
@@ -1090,22 +1087,23 @@ dialog {
   max-width: 300px;
   margin: auto;
 }
-.fishPrintArea .hesabfaMainTable .faktor-total{
-  p,.priceCell{
+.fishPrintArea .hesabfaMainTable .faktor-total {
+  p,
+  .priceCell {
     font-size: 1rem;
     font-weight: 600;
   }
 }
-.fishPrintArea .hesabfaMainTable td p{
+.fishPrintArea .hesabfaMainTable td p {
   margin: 0;
   text-align: left;
   font-size: 11px;
   font-weight: 500;
 }
-.fishPrintArea .hesabfaMainTable td{
+.fishPrintArea .hesabfaMainTable td {
   position: relative;
 }
-.fishPrintArea .hesabfaMainTable td span{
+.fishPrintArea .hesabfaMainTable td span {
   position: absolute;
   top: 0;
   right: 0;
@@ -2010,6 +2008,14 @@ dialog {
     visibility: hidden;
   }
 }
-.sepidar-filter{
+.sepidar-filter {
   width: 25%;
+}
+.register-btn {
+  padding: 0.2rem 1rem;
+  border: none;
+  outline: none;
+  background-color: green;
+  color: white;
+  border-radius: 1rem;
 }

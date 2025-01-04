@@ -117,6 +117,10 @@ const tabletrans ={
         english: "Order Number",
         persian: "شماره سفارش",
     },
+    faktorNumber: {
+        english: "Faktor Number",
+        persian: "شماره فاکتور",
+    },
     mobileOrName: {
         english: "Mobile or Name",
         persian: "نام/تلفن",
