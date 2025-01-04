@@ -165,7 +165,7 @@ router.post('/multi-sepidar', jsonParser, auth, async (req, res) => {
             orderDetails[0].cartNo,orderDetails[0]&&orderDetails[0].payValue)
         
         
-        var sepidarResult = await sepidarPOST(sepidarQuery, "/api/invoices", 
+        var sepidarResult = 0&&await sepidarPOST(sepidarQuery, "/api/invoices", 
             ObjectID(adminData._id))
         //var recieptResult
         if (sepidarResult && sepidarResult.InvoiceID) {

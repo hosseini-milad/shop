@@ -10,7 +10,7 @@ const category = require('../models/product/category');
 router.post('/find-products', auth, async (req, res) => {
     const search = req.body.search
     const filters = req.body.filters
-    if(!filters||(!filters.brand&&!filters.category)){
+    if(!filters||(!filters.brand&&!filters.category)||!search){
         res.status(400).json({error:"brand or category must select"})
     }
     try {
