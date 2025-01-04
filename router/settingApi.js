@@ -25,6 +25,7 @@ const orderLog = require('../models/orders/orderLog');
 const CalcCartTotal = require('../middleware/CalcCartTotaljs');
 const CartToFaktor = require('../middleware/NewModule/MultiCartToFaktor');
 const faktor = require('../models/product/faktor');
+const faktorItems = require('../models/product/faktorItems');
 
 router.post('/sliders', async (req, res) => {
     try {
@@ -261,7 +262,12 @@ router.post('/list-faktors',auth, async (req,res)=>{
         description: req.body.description
     }
     try{ 
-        const faktorList = await faktor.find()
+        const faktorList = await faktor.find().lean()
+
+        for( var i=0;i<faktorList.length;i++){
+            const faktorItems = await faktorItems.find({InvoiceID:faktorList[i].InvoiceID})
+            faktorList[i].items = faktorItems
+        }
         
         res.json({data:faktorList})
     }
