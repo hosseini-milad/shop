@@ -26,6 +26,7 @@ const CalcCartTotal = require('../middleware/CalcCartTotaljs');
 const CartToFaktor = require('../middleware/NewModule/MultiCartToFaktor');
 const faktor = require('../models/product/faktor');
 const faktorItems = require('../models/product/faktorItems');
+const bankAccounts = require('../models/product/bankAccounts');
 
 router.post('/sliders', async (req, res) => {
     try {
