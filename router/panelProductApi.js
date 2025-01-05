@@ -189,7 +189,7 @@ router.post('/list-product',jsonParser,async (req,res)=>{
     var pageSize = req.body.pageSize?req.body.pageSize:"10";
     var offset = req.body.offset?(parseInt(req.body.offset)):0;
     var userData = await users.findOne({_id:ObjectID(req.headers['userid'])})
-    var stockId = req.body.store?req.body.store.StockID:userData.StockId
+    var stockId = req.body.store?req.body.store:userData.StockId
     try{const data={
         category:req.body.category,
         title:req.body.title,
