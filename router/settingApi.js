@@ -228,7 +228,7 @@ router.post('/reg-sanad-sepidar', jsonParser, auth, async (req, res) => {
     const NumberID = req.body.NumberID
     var ReceiptID=''
     const manageId = req.headers['userid']
-    var bankDetail = await transaction.find({userId:manageId,sepidarID:{$exists:false}})
+    var bankDetail = await transaction.find({InvoiceID:InvoiceID,sepidarID:{$exists:false}})
     var recieptQuery = await RecieptFunc(bankDetail,InvoiceID,NumberID,
         Math.floor(Math.random()*9000000000) + 1000000000
     )
@@ -371,7 +371,7 @@ router.post('/add-bank-to-faktor',auth, async (req,res)=>{
             return
         }
         await transaction.create(data)
-        var bankDetail = await transaction.find({userId:data.userId,sepidarID:{$exists:false}})
+        var bankDetail = await transaction.find({InvoiceID:data.InvoiceID,sepidarID:{$exists:false}})
         var payArray = bankDetail.map(item=>item.payValue)
         var total = faktorData.NetPrice
         var transRemain = FindRemainBank(bankDetail,total)
@@ -385,10 +385,11 @@ router.post('/add-bank-to-faktor',auth, async (req,res)=>{
 router.post('/remove-bank-from-faktor', async (req,res)=>{
     const userId = req.headers['userid']
     const id = req.body.id
+    const InvoiceID = req.body.InvoiceID
     const total = req.body.totalCartValue
     try{ 
         await transaction.deleteOne({_id:ObjectID(id),userId:userId})
-        var bankDetail = await transaction.find({userId:userId,sepidarID:{$exists:false}})
+        var bankDetail = await transaction.find({InvoiceID:InvoiceID,sepidarID:{$exists:false}})
         var transRemain = FindRemainBank(bankDetail,total)
         res.json({transData:bankDetail,transRemain})
     } 
@@ -409,7 +410,7 @@ router.post('/fetch-bank-of-faktor', async (req,res)=>{
         }
     try{ 
         //const cartTotal = await CalcCartTotal(carts)
-        var bankDetail = await transaction.find({userId:userId,sepidarID:{$exists:false}})
+        var bankDetail = await transaction.find({InvoiceID:InvoiceID,sepidarID:{$exists:false}})
         var transRemain = FindRemainBank(bankDetail,faktorData.NetPrice)
         res.json({transData:bankDetail,transRemain,total:faktorData.NetPrice})
     } 
