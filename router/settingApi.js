@@ -234,7 +234,7 @@ router.post('/reg-sanad-sepidar', jsonParser, auth, async (req, res) => {
     const manageId = req.headers['userid']
     var bankDetail = await transaction.find({userId:manageId,sepidarID:{$exists:false}})
     var recieptQuery = await RecieptFunc(bankDetail,InvoiceID,NumberID,
-        Math.floor(Math.random()*90000000000) + 10000000000
+        Math.floor(Math.random()*9000000000) + 1000000000
     )
     
     var recieptResult = await sepidarPOST(recieptQuery, "/api/Receipts/BasedOnInvoice", ObjectID(manageId))
