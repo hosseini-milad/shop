@@ -94,31 +94,31 @@ function Sepidar(props) {
       title: "همه",
     },
     {
-      id: "673d8bb05adbdf04bdf4d063",
+      id: "5",
       title: "انبار مرکزی",
     },
     {
-      id: "673d8c175adbdf04bdf4d064",
+      id: "6",
       title: "انبار فروشگاه",
     },
     {
-      id: "673d8c2f5adbdf04bdf4d065",
+      id: "9",
       title: " انبار 3",
     },
     {
-      id: "673d8c4b5adbdf04bdf4d066",
+      id: "12",
       title: " انبار غیر قابل فروش",
     },
     {
-      id: "673d8c715adbdf04bdf4d067",
+      id: "13",
       title: " انبار فروشگاه جایگاه",
     },
     {
-      id: "673d8cd15adbdf04bdf4d068",
+      id: "17",
       title: " انبار پخش",
     },
     {
-      id: "673d8ce95adbdf04bdf4d069",
+      id: "21",
       title: " انبار سایت",
     },
   ];
