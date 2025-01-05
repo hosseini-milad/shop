@@ -377,7 +377,7 @@ router.post('/sepidar-quantity',auth, async (req, res) => {
             return
         }
         var Stock = userData&&userData.StockId
-        if(userData.access==="manager") Stock = req.body.Stock?req.body.Stock:''
+        if(userData.access==="manager") Stock = req.body.stock?req.body.stock:''
         if (sepidarQuantityResult.error || !sepidarQuantityResult.length) {
             res.json({
                 error: "error occure",
