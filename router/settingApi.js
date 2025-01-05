@@ -328,12 +328,12 @@ router.post('/fetch-bank-of-cart', async (req,res)=>{
     const userId = req.headers['userid']
     //const total = req.body.totalCartValue
     var total = 0
-    const carts = req.body.cartList
+    //const carts = req.body.cartList
     try{ 
         if(!carts||!carts.length){
             res.status(400).json({error:"no cart"})
         }
-        const cartTotal = await CalcCartTotal(carts)
+        //const cartTotal = await CalcCartTotal(carts)
         var bankDetail = await transaction.find({userId:userId,sepidarID:{$exists:false}})
         var transRemain = FindRemainBank(bankDetail,cartTotal&&cartTotal.totalPrice)
         res.json({transData:bankDetail,transRemain,cartTotal})
@@ -348,6 +348,71 @@ router.get('/clear-bank-of-cart',auth, async (req,res)=>{
         var bankDetail = await transaction.deleteMany({userId:userId,sepidarID:{$exists:false}})
         var transRemain = 0//FindRemainBank(bankDetail,total)
         res.json({message:"done"})
+    } 
+    catch(error){
+        res.status(500).json({message: error.message})
+    }
+})
+
+
+router.post('/add-bank-to-faktor',auth, async (req,res)=>{
+    
+    const data = {
+        userId: req.headers['userid'],
+        title: req.body.title,
+        bankCode: req.body.bankCode,
+        payValue: req.body.payValue,
+        InvoiceID:req.body.InvoiceID,
+        description: req.body.description
+    }
+    try{ 
+        const faktorData = await faktor.findOne({InvoiceID:data.InvoiceID})
+        if(!faktorData){
+            res.status(400).json({error:"فاکتور پیدا نشد"})
+            return
+        }
+        await transaction.create(data)
+        var bankDetail = await transaction.find({userId:data.userId,sepidarID:{$exists:false}})
+        var payArray = bankDetail.map(item=>item.payValue)
+        var total = faktorData.NetPrice
+        var transRemain = FindRemainBank(bankDetail,total)
+        res.json({transData:bankDetail,transRemain,payArray
+        })
+    }
+    catch(error){
+        res.status(500).json({message: error.message})
+    }
+})
+router.post('/remove-bank-from-faktor', async (req,res)=>{
+    const userId = req.headers['userid']
+    const id = req.body.id
+    const total = req.body.totalCartValue
+    try{ 
+        await transaction.deleteOne({_id:ObjectID(id),userId:userId})
+        var bankDetail = await transaction.find({userId:userId,sepidarID:{$exists:false}})
+        var transRemain = FindRemainBank(bankDetail,total)
+        res.json({transData:bankDetail,transRemain})
+    } 
+    catch(error){
+        res.status(500).json({message: error.message})
+    } 
+}) 
+router.post('/fetch-bank-of-faktor', async (req,res)=>{
+    const userId = req.headers['userid']
+    //const total = req.body.totalCartValue
+    var total = 0
+    //const carts = req.body.cartList
+    const InvoiceID = req.body.InvoiceID
+    const faktorData = await faktor.findOne({InvoiceID:InvoiceID})
+        if(!faktorData){
+            res.status(400).json({error:"فاکتور پیدا نشد"})
+            return
+        }
+    try{ 
+        //const cartTotal = await CalcCartTotal(carts)
+        var bankDetail = await transaction.find({userId:userId,sepidarID:{$exists:false}})
+        var transRemain = FindRemainBank(bankDetail,faktorData.NetPrice)
+        res.json({transData:bankDetail,transRemain,total:faktorData.NetPrice})
     } 
     catch(error){
         res.status(500).json({message: error.message})
