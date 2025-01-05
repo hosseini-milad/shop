@@ -104,7 +104,7 @@ function FaktorTableRow(props) {
               className="tableIcon fas fa-print"
               onClick={() => setOpenOption(openOption ? 0 : 1)}
             ></i>
-            <i
+            {/* <i
               className="tableIcon fas fa-tag"
               onClick={() =>
                 (window.location.href = "/orders/fishprint/" + order.cartNo)
@@ -113,7 +113,7 @@ function FaktorTableRow(props) {
             <i
               className="tableIcon fas fa-paper-plane"
               onClick={() => CreateLink()}
-            ></i>
+            ></i> */}
           </div>
 
           <div
@@ -122,7 +122,7 @@ function FaktorTableRow(props) {
             }
             ref={menuRef}
           >
-            <div
+            {/* <div
               className="sub-option"
               onClick={() =>
                 (window.location.href = "/orders/print/" + order.cartNo)
@@ -137,7 +137,7 @@ function FaktorTableRow(props) {
               }
             >
               <p>چاپ رسمی</p>
-            </div>
+            </div> */}
             {order.InvoiceID ? (
               <>
                 <div
@@ -156,22 +156,31 @@ function FaktorTableRow(props) {
           </div>
         </td>
         <td>
-          <button
-            className="register-btn"
-            onClick={() =>
-              props.setBankPop({
-                InvoiceID: order.InvoiceID,
-                NumberID: order.InvoiceNumber,
-              })
-            }
-          >
-            ثبت سند
-          </button>
+          {order.Status == "unregister" ? (
+            <button
+              className="register-btn"
+              onClick={() =>
+                props.setBankPop({
+                  InvoiceID: order.InvoiceID,
+                  NumberID: order.InvoiceNumber,
+                  Total: order.NetPrice,
+                })
+              }
+            >
+              ثبت سند
+            </button>
+          ) : (
+            <></>
+          )}
         </td>
       </tr>
 
       {LinkShare ? (
-        <LinkModal LinkShare={LinkShare} setLinkShare={setLinkShare} token={token}/>
+        <LinkModal
+          LinkShare={LinkShare}
+          setLinkShare={setLinkShare}
+          token={token}
+        />
       ) : (
         <></>
       )}

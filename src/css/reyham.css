@@ -2019,3 +2019,13 @@ dialog {
   color: white;
   border-radius: 1rem;
 }
+.bank-submit {
+  padding: 0.5rem 1rem;
+  border: none;
+  outline: none;
+  background-color: green;
+  color: white;
+  border-radius: 1rem;
+  margin-right: auto;
+  margin-top: 1rem;
+}

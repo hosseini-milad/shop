@@ -16,12 +16,7 @@ function FaktorTabel(props) {
   const [AllCheck, setAllCheck] = useState(0);
   const [DisableAll, setDisableAll] = useState(1);
   const [BankPop, setBankPop] = useState();
-  const [Ttp, setTtp] = useState("");
-  console.log(Ttp);
-  const totalPrice = normalArrayCount(
-    selectedOrder &&
-      selectedOrder.map((item) => item.totalCart && item.totalCart.totalPrice)
-  );
+
   const scrollToBottom = () => {
     window.scrollTo({
       top: document.documentElement.scrollHeight,
@@ -56,14 +51,7 @@ function FaktorTabel(props) {
         <button className="BtnToBot" onClick={scrollToBottom}>
           <i class="fa fa-angle-down" aria-hidden="true"></i>
         </button>
-        {Ttp ? (
-          <div className="total-top">
-            <span>جمع سفارشات انتخابی:</span>
-            <span>{normalPriceCount(Ttp)}</span>
-          </div>
-        ) : (
-          <></>
-        )}
+
         <table>
           <thead>
             <tr>
@@ -122,7 +110,7 @@ function FaktorTabel(props) {
           </tbody>
         </table>
         {BankPop ? (
-          <BankModal setBankPop={setBankPop} BankPop={BankPop} token={token} />
+          <BankModal setBankPop={setBankPop} BankPop={BankPop} token={token} bankList={props.bankList}/>
         ) : (
           <></>
         )}

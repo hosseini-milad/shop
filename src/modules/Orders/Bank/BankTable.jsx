@@ -7,7 +7,7 @@ function BankTable(props){
   const removeBank=(bankId)=>{
     const body={
       id:bankId,
-      totalCartValue:parseInt(props.totalPrice.toString().replace(/\D/g,''))
+      totalCartValue:props.Total
     }
     const postOptions={
         method:'post',
@@ -15,7 +15,7 @@ function BankTable(props){
         "x-access-token":token&&token.token,"userId":token&&token.userId},
         body:JSON.stringify(body)
       }
-  fetch(env.siteApi + "/setting/remove-bank-from-cart",postOptions)
+  fetch(env.siteApi + "/setting/remove-bank-from-faktor",postOptions)
   .then(res => res.json())
   .then(
     (result) => {

@@ -7,10 +7,12 @@ function BankSelect(props) {
   const bankList = props.bankList;
   const user = props.user;
   const order = props.order;
+  const [SepidarLoad, setSepidarLoad] = useState();
   const [loadBank, setLoadBank] = useState(1);
   const [Amount, setAmount] = useState();
   const [TransData, setTransData] = useState();
   const [TransRemain, setTransRemain] = useState();
+  const [Error, setError] = useState();
   const OrderNumList = useEffect(() => {
     if (TransData) {
       setLoadBank(0);
@@ -27,7 +29,7 @@ function BankSelect(props) {
       },
       body: JSON.stringify({ ...order }),
     };
-    fetch(env.siteApi + "/setting/fetch-bank-of-cart", postOptions)
+    fetch(env.siteApi + "/setting/fetch-bank-of-faktor", postOptions)
       .then((res) => res.json())
       .then(
         (result) => {
@@ -35,11 +37,40 @@ function BankSelect(props) {
           } else {
             setTransData(result.transData);
             setAmount(result.transRemain);
-            
           }
         },
         (error) => {
           console.log(error);
+        }
+      );
+  };
+  const SubmitBank = () => {
+    setSepidarLoad(0);
+    const postOptions = {
+      method: "post",
+      headers: {
+        "Content-Type": "application/json",
+        "x-access-token": token && token.token,
+        userId: token && token.userId,
+      },
+      body: JSON.stringify({ ...order }),
+    };
+    fetch(env.siteApi + "/setting/reg-sanad-sepidar", postOptions)
+      .then((res) => res.json())
+      .then(
+        (result) => {
+          if (result.error) {
+            console.log("error");
+            setSepidarLoad(1);
+            setError(result.error);
+          } else {
+            console.log("done");
+            setSepidarLoad(1);
+          }
+        },
+        (error) => {
+          console.log(error);
+          setSepidarLoad(1);
         }
       );
   };
@@ -65,13 +96,8 @@ function BankSelect(props) {
       );
   };
   useEffect(() => {
-    if (props.order) {
-      FetchBank();
-    } else {
-      console.log("object");
-      ClearBank();
-    }
-  }, [props.orders]);
+    FetchBank();
+  }, [props.order]);
   return (
     <>
       <div>
@@ -79,7 +105,7 @@ function BankSelect(props) {
           <BankNew
             Amount={Amount}
             setAmount={setAmount}
-            totalPrice={props.totalPrice}
+            Total={order.Total}
             bankList={bankList}
             setTransData={setTransData}
             user={user}
@@ -87,10 +113,9 @@ function BankSelect(props) {
             TransData={TransData}
             setLoadBank={setLoadBank}
             token={token}
-            OrderNumList={OrderNumList}
+            order={order}
             TransRemain={TransRemain}
-            setTransRemain={
-              setTransRemain}
+            setTransRemain={setTransRemain}
           />
         ) : (
           <></>
@@ -108,7 +133,7 @@ function BankSelect(props) {
         )}
         {TransData ? (
           <BankTable
-            totalPrice={props.totalPrice}
+            Total={order.Total}
             Amount={Amount}
             setAmount={setAmount}
             TransData={TransData}
@@ -119,6 +144,18 @@ function BankSelect(props) {
         ) : (
           <></>
         )}
+        {Amount && Amount.remain <= "0" ? (
+          SepidarLoad ? (
+            <button className="bank-submit">درحال پردازش </button>
+          ) : (
+            <button className="bank-submit" onClick={SubmitBank}>
+              ثبت رسید
+            </button>
+          )
+        ) : (
+          <></>
+        )}
+        {Error ? <p style={{ color: "red" }}>{Error}</p> : <></>}
       </div>
     </>
   );
