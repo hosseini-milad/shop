@@ -279,8 +279,8 @@ router.post('/list-faktors',auth, async (req,res)=>{
             const faktorData = await faktorItems.find({InvoiceID:faktorList[i].InvoiceID})
             faktorList[i].cartItems = faktorData
         }
-        
-        res.json({filter:faktorList,tabs,size:faktorList.length})
+        const bankList = await bankAccounts.find({limit:{$ne:adminData.username}}) 
+        res.json({filter:faktorList,tabs,size:faktorList.length,bankList})
     }
     catch(error){
         res.status(500).json({message: error.message})
