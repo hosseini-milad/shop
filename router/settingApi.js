@@ -327,12 +327,12 @@ router.post('/fetch-bank-of-cart', async (req,res)=>{
     const userId = req.headers['userid']
     //const total = req.body.totalCartValue
     var total = 0
-    //const carts = req.body.cartList
+    const carts = req.body.cartList
     try{ 
         if(!carts||!carts.length){
             res.status(400).json({error:"no cart"})
         }
-        //const cartTotal = await CalcCartTotal(carts)
+        const cartTotal = await CalcCartTotal(carts)
         var bankDetail = await transaction.find({userId:userId,sepidarID:{$exists:false}})
         var transRemain = FindRemainBank(bankDetail,cartTotal&&cartTotal.totalPrice)
         res.json({transData:bankDetail,transRemain,cartTotal})
