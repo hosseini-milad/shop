@@ -454,12 +454,13 @@ router.get('/sepidar-update-log',auth, async (req, res) => {
             return
         }
         var Stock = userData.StockId
+        var fAccess = userData.access=="manager"?1:0
         const countLog = await updateLog.aggregate([
             {$match:{updateQuery:"sepidar-quantity"}},
-            {$match: {$or:[
+            {$match:!fAccess?{$or:[
                 {Stock:{$exists:false}},
                 {Stock:Stock}
-            ]}},
+            ]}:{}},
             {$sort:{ "date": -1 }},
             {$limit:5}
         ])
