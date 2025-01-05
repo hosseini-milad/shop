@@ -4,6 +4,7 @@ import env from "../../env";
 import errortrans from "../../translate/error";
 import ShowError from "../../components/Modal/ShowError";
 import StyleSelect from "../../components/Button/AutoComplete";
+import SepidarTab from "./SepidarTab";
 const cookies = new Cookies();
 function Sepidar(props) {
   const direction = props.lang ? props.lang.dir : errortrans.defaultDir;
@@ -89,6 +90,10 @@ function Sepidar(props) {
   ];
   const stockList = [
     {
+      id: "",
+      title: "همه",
+    },
+    {
       id: "673d8bb05adbdf04bdf4d063",
       title: "انبار مرکزی",
     },
@@ -117,18 +122,15 @@ function Sepidar(props) {
       title: " انبار سایت",
     },
   ];
+  console.log(Stock);
   return (
-    <div className="profiles" style={{ direction: direction }}>
+    <div
+      className="profiles"
+      style={{ direction: direction, padding: "0px", overflow: "hidden" }}
+    >
       {token.access == "manager" ? (
         <div class="sepidar-filter">
-          <StyleSelect
-            title={"انبار"}
-            class="filterComponent"
-            direction={props.lang.dir}
-            options={stockList}
-            label="title"
-            action={(e) => setStock(e.id)}
-          />
+          <SepidarTab TabList={stockList} setStock={setStock} Stock={Stock} />
         </div>
       ) : (
         <></>

@@ -28,7 +28,7 @@ function ProductFilters(props) {
       }
     };
   };
-
+  console.log(ListStock);
   return (
     <div className="user-filter">
       <div className="serach-input">
@@ -46,7 +46,7 @@ function ProductFilters(props) {
             { title: "نمایش همه", value: "0" },
           ]}
           defaultValue={"نمایش همه"}
-          action={(e) => handleFilterChange("exist", e?e.value:"0")}
+          action={(e) => handleFilterChange("exist", e ? e.value : "0")}
         />
         <StyleSelect
           title={"برند"}
@@ -60,12 +60,6 @@ function ProductFilters(props) {
           direction={props.lang.dir}
           options={["active", "deactive"]}
           defaultValue="active"
-          // action={(e) =>
-          //   props.setFilters((prevState) => ({
-          //     ...prevState,
-          //     active: e === "active" ? 1 : 0,
-          //   }))
-          // }
           action={(e) => handleFilterChange("active", e)}
         />
         <StyleSelect
@@ -73,7 +67,7 @@ function ProductFilters(props) {
           direction={props.lang.dir}
           options={ListStock}
           label="Title"
-          action={(e) => handleFilterChange("store", e)}
+          action={(e) => handleFilterChange("store", e.StockID)}
         />
         <i className="tableIcon fas fa-ellipsis-v"></i>
       </div>

@@ -159,7 +159,7 @@ function Products(props) {
         }
       );
   };
-  //window.scrollTo(0, 270);},[pageNumber,filters,perPage,refreshTable])
+  console.log(filters.store)
   return (
     <div className="user" style={{ direction: direction }}>
       <div className="od-header">
