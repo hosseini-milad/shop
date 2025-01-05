@@ -14,22 +14,24 @@ function Sepidar(props) {
   const token = cookies.get(env.cookieName);
   console.log(error);
   useEffect(() => {
-    fetch(env.siteApi + "/sepidar-update-log")
+    const postOptions = {
+      method: "get",
+      headers: {
+        "Content-Type": "application/json",
+        "x-access-token": token && token.token,
+        userId: token && token.userId,
+      },
+    };
+    fetch(env.siteApi + "/sepidar-update-log", postOptions)
       .then((res) => res.json())
       .then(
         (result) => {
-          const logList = result.log;
+          const logList = result;
           var lastLog = {
-            product: logList.find(
-              (item) => item.updateQuery === "sepidar-product"
-            ),
-            quantity: logList.find(
-              (item) => item.updateQuery === "sepidar-quantity"
-            ),
-            price: logList.find((item) => item.updateQuery === "sepidar-price"),
-            customer: logList.find(
-              (item) => item.updateQuery === "sepidar-customer"
-            ),
+            product: logList.productLog[0],
+            quantity: logList.countLog[0],
+            price: logList.priceLog[0],
+            customer: logList.customerLog[0],
           };
           console.log(lastLog);
           setUpdateTime(lastLog);
@@ -39,6 +41,7 @@ function Sepidar(props) {
         }
       );
   }, []);
+
   const updateSepidar = (db) => {
     const postOptions = {
       method: "post",
@@ -177,6 +180,21 @@ function Sepidar(props) {
                           updateTime[filter.enTitle].date
                         ).toLocaleTimeString("fa")}
                     </smal>
+                  </td>
+                  <td>
+                    <small>
+                      <span>کاربر: </span>
+                      {updateTime &&
+                        updateTime[filter.enTitle] &&
+                        updateTime[filter.enTitle].updateUser}
+                    </small>
+                    <br />
+                    <small>
+                      <span>انبار: </span>
+                      {updateTime &&
+                        updateTime[filter.enTitle] &&
+                        updateTime[filter.enTitle].Stock}
+                    </small>
                   </td>
                   <td>
                     <div className="profiles-icons">
