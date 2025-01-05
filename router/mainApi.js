@@ -465,7 +465,7 @@ router.get('/sepidar-update-log',auth, async (req, res) => {
         ])
         const productLog = await updateLog.find({updateQuery:"sepidar-product"}).sort({ "date": -1 }).limit(5)
         const priceLog = await updateLog.find({updateQuery:"sepidar-price"}).sort({ "date": -1 }).limit(5)
-        const customerLog = await updateLog.find({updateQuery:"sepidar-customers"}).sort({ "date": -1 }).limit(5)
+        const customerLog = await updateLog.find({updateQuery:"sepidar-customer"}).sort({ "date": -1 }).limit(5)
 
         const sepidarLog = await updateLog.find({}).sort({ "date": -1 }).limit(20)
 
