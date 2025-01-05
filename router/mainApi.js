@@ -456,10 +456,10 @@ router.get('/sepidar-update-log',auth, async (req, res) => {
         var Stock = userData.StockId
         const countLog = await updateLog.aggregate([
             {$match:{updateQuery:"sepidar-quantity"}},
-            {$or:[
+            {$match: {$or:[
                 {Stock:{$exists:false}},
                 {Stock:Stock}
-            ]},
+            ]}},
             {$sort:{ "date": -1 }},
             {$limit:5}
         ])
