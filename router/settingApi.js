@@ -248,7 +248,7 @@ router.post('/reg-sanad-sepidar', jsonParser, auth, async (req, res) => {
     await faktor.updateOne({InvoiceID:InvoiceID},
         {$set:{ReceiptID:ReceiptID}}
     ) 
-    res.status({message:"سند سفارش ثبت شد",ReceiptID:ReceiptID,query:recieptQuery})
+    res.json({message:"سند سفارش ثبت شد",ReceiptID:ReceiptID,query:recieptQuery})
 })
 
 router.post('/list-faktors',auth, async (req,res)=>{
