@@ -62,7 +62,7 @@ function FaktorTableRow(props) {
         <td>{props.index + 1}</td>
         <td>
           <div className="order-id">
-            <p>{order.InvoiceID}</p>
+            <p>{order.InvoiceNumber}</p>
           </div>
         </td>
         <td>
