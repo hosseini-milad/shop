@@ -479,4 +479,38 @@ router.get('/sepidar-update-log',auth, async (req, res) => {
     }
 })
 
+router.post('/sepidar-update-log',auth, async (req, res) => {
+    try {
+        const userData = await users.findOne({_id:ObjectID(req.headers['userid'])})
+        if(!userData){
+            res.status(400).json({error:"error not found"})
+            return
+        }
+        var fAccess = userData.access=="manager"?1:0
+        var StockTemp = (fAccess&&req.body.stock)?req.body.stock:''
+        var Stock = StockTemp?StockTemp:userData.StockId
+        const countLog = await updateLog.aggregate([
+            {$match:{updateQuery:"sepidar-quantity"}},
+            {$match:!fAccess?{$or:[
+                {Stock:{$exists:false}},
+                {Stock:Stock}
+            ]}:{}},
+            {$sort:{ "date": -1 }},
+            {$limit:5}
+        ])
+        const productLog = await updateLog.find({updateQuery:"sepidar-product"}).sort({ "date": -1 }).limit(5)
+        const priceLog = await updateLog.find({updateQuery:"sepidar-price"}).sort({ "date": -1 }).limit(5)
+        const customerLog = await updateLog.find({updateQuery:"sepidar-customer"}).sort({ "date": -1 }).limit(5)
+
+        const sepidarLog = await updateLog.find({}).sort({ "date": -1 }).limit(20)
+
+        res.json({ log: sepidarLog,
+            countLog,productLog,priceLog,customerLog,
+             message: "done" })
+    }
+    catch (error) {
+        res.status(500).json({ message: error.message })
+    }
+})
+
 module.exports = router;
