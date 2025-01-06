@@ -237,7 +237,7 @@ router.post('/reg-sanad-sepidar', jsonParser, auth, async (req, res) => {
     
     ReceiptID = recieptResult&&recieptResult.ReceiptID
     if(!ReceiptID){
-        res.status(400).json({error:recieptResult&&recieptResult.Message})
+        res.status(400).json({error:recieptResult&&recieptResult.Message,query:recieptQuery})
         return
     }
     await transaction.updateMany({userId:manageId,sepidarID:{$exists:false}},
@@ -248,7 +248,7 @@ router.post('/reg-sanad-sepidar', jsonParser, auth, async (req, res) => {
     await faktor.updateOne({InvoiceID:InvoiceID},
         {$set:{ReceiptID:ReceiptID}}
     ) 
-    res.status({message:"سند سفارش ثبت شد",ReceiptID:ReceiptID})
+    res.status({message:"سند سفارش ثبت شد",ReceiptID:ReceiptID,query:recieptQuery})
 })
 
 router.post('/list-faktors',auth, async (req,res)=>{
