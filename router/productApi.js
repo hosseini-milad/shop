@@ -281,7 +281,7 @@ router.post('/update-category',jsonParser,auth, async (req,res)=>{
     }
 })
 
-router.post('/cart', async (req,res)=>{
+router.post('/cart',auth, async (req,res)=>{
     const userId =req.body.userId?req.body.userId:req.headers['userid'];
     try{
         const cartDetails = await findCartFunction(userId)
@@ -412,7 +412,7 @@ router.post('/cartlist', async (req,res)=>{
     }
 })
 
-router.post('/update-cart',jsonParser, async (req,res)=>{
+router.post('/update-cart',jsonParser,auth, async (req,res)=>{
     const userId=req.body.userId?req.body.userId:req.headers['userid']
     const data={
         userId:userId,

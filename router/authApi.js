@@ -88,9 +88,8 @@ router.post('/sendOtp', jsonParser, async (req, res) => {
     const { phone } = req.body;
     ////console.log((phone)
     var otpValue = Math.floor(Math.random() * 8999) + 1000;
-
     const user = await customers.findOne({ phone: phone });
-    ////console.log((otpValue)
+    
     if (user) {
 
       /*console.log({
@@ -109,19 +108,20 @@ router.post('/sendOtp', jsonParser, async (req, res) => {
       res.status(200).json({ message: "sms sent for " + phone });
     }
     else {
-      smsResult = api.VerifyLookup({
-        token: otpValue,
-        template: process.env.template,//"mgmVerify",
-        receptor: phone
-      },);
       const newUser = await customers.create(
         {
           username: phone,
           phone: phone,
           otp: otpValue,
+          meliCode:phone,
           email: phone + "@mgmlenz.com",
           date: Date.now()
         });
+      smsResult = api.VerifyLookup({
+        token: otpValue,
+        template: process.env.template,//"mgmVerify",
+        receptor: phone
+      },);
       //res.status(200).json({"error":"user not found"});
       const newUserLog = await loginLogSchema.create({
         title: "ثبت مشتری جدید",

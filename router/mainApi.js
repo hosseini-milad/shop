@@ -436,7 +436,7 @@ router.get('/sepidar-all', async (req, res) => {
             { method: 'post' });
         response = await fetch(ONLINE_URL + "/sepidar-quantity",
             { method: 'post' });
-        response = await fetch(ONLINE_URL + "/sepidar-customers",
+        response = await fetch(ONLINE_URL + "/sepidar-customer",
             { method: 'post' });
         response = await fetch(ONLINE_URL + "/sepidar-bank",
             { method: 'post' });

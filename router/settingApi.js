@@ -273,7 +273,7 @@ router.post('/list-faktors',auth, async (req,res)=>{
         {title:"وب سایت", type:"Website"},
     ]
     try{ 
-        const faktorList = await faktor.find().lean()
+        const faktorList = await faktor.find().sort(-1).lean()
 
         for( var i=0;i<faktorList.length;i++){
             const faktorData = await faktorItems.find({InvoiceID:faktorList[i].InvoiceID})
