@@ -212,6 +212,45 @@ function Sepidar(props) {
                   </td>
                 </tr>
               ))}
+            <tr>
+              <td>
+                <div className="profiles-title">
+                  <i
+                    className="fa-solid fa-certificate fa-sm"
+                    style={{ color: "#00c6c6" }}
+                  ></i>
+                  <div className="p-wrapper">
+                    <p>
+                      همه
+                      <span>(all)</span>
+                    </p>
+                    <p>بروزرسانی همه موارد</p>
+                  </div>
+                </div>
+              </td>
+              <td>
+                <input
+                  type="button"
+                  value="بروزرسانی"
+                  className="btn bg-gradient-success  my-4 mb-2"
+                  onClick={() => updateSepidar("all")}
+                />
+              </td>
+              <td></td>
+              <td></td>
+              <td>
+                <div className="profiles-icons">
+                  <i
+                    className="fa-solid fa-pen-to-square fa-sm"
+                    style={{ color: "#c0c0c0" }}
+                  ></i>
+                  <i
+                    className="fa-solid fa-trash fa-sm"
+                    style={{ color: "#c0c0c0" }}
+                  ></i>
+                </div>
+              </td>
+            </tr>
           </tbody>
         </table>
       </div>

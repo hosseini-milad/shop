@@ -20861,6 +20861,11 @@ fieldset:disabled .btn {
   box-shadow: 0 3px 3px 0 rgba(26, 115, 232, 0.15),
     0 3px 1px -2px rgba(26, 115, 232, 0.2), 0 1px 5px 0 rgba(26, 115, 232, 0.15);
 }
+.btn-all,
+.btn.bg-gradient-all {
+  box-shadow: 0 3px 3px 0 rgba(26, 200, 232, 0.15),
+    0 3px 1px -2px rgba(26, 200, 232, 0.2), 0 1px 5px 0 rgba(26,200, 232, 0.15);
+}
 
 .btn-info:hover,
 .btn.bg-gradient-info:hover {
