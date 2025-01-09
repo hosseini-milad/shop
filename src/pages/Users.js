@@ -152,7 +152,7 @@ const Users = (props) => {
           "Content-Type": "application/json",
           "x-access-token": token && token.token,
         },
-        body: JSON.stringify({...formData,StockArr:extra}),
+        body: JSON.stringify({ ...formData, StockArr: extra }),
       });
       setShowCreatePanel(false);
       // Refresh the list of users
@@ -229,8 +229,15 @@ const Users = (props) => {
             title={formtrans.profile[lang]}
             direction={direction}
             class={"formInput"}
+            defaultValue={userData.profileName ? userData.profileName : ""}
             options={profiles}
             label={"profileName"}
+            action={(e) => {
+              setFormData((prevState) => ({
+                ...prevState,
+                profile: e ? e._id : "",
+              }));
+            }}
           />
           <StyleSelect
             title={formtrans.store[lang]}
