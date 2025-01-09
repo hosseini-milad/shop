@@ -64,7 +64,7 @@ function OrderTable(props) {
         }
       );
   };
-
+  console.log(selectedOrder);
   if (!orders || !orders.length) return <main>waiting</main>;
   else
     return (
@@ -72,10 +72,10 @@ function OrderTable(props) {
         <button className="BtnToBot" onClick={scrollToBottom}>
           <i class="fa fa-angle-down" aria-hidden="true"></i>
         </button>
-        {Ttp ? (
+        {selectedOrder ? (
           <div className="total-top">
             <span>جمع سفارشات انتخابی:</span>
-            <span>{normalPriceCount(Ttp)}</span>
+            <span>{normalPriceCount(totalPrice)}</span>
           </div>
         ) : (
           <></>

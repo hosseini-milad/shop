@@ -147,12 +147,14 @@ function ProductTableRow(props) {
               }`}
               onClick={() => props.showDetail(activeAcc ? "-1" : props.index)}
             ></i>
-            <i
-              className="tableIcon fas fa-edit"
-              onClick={() =>
-                (window.location.href = "/products/detail/" + product._id)
-              }
-            ></i>
+            {token.access == "manager" && (
+              <i
+                className="tableIcon fas fa-edit"
+                onClick={() =>
+                  (window.location.href = "/products/detail/" + product._id)
+                }
+              ></i>
+            )}
             <i
               className="tableIcon fas fa-ellipsis-v"
               onClick={() => setOpenOption(openOption ? 0 : 1)}

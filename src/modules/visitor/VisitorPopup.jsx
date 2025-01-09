@@ -56,7 +56,7 @@ function VisitorPopup(props) {
                   <tr
                     key={i}
                     onClick={() => {
-                      props.setVpop("");
+                      
                       props.setOrderPop(item.title);
                     }}
                   >

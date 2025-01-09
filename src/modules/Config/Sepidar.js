@@ -11,6 +11,7 @@ function Sepidar(props) {
   const lang = props.lang ? props.lang.lang : errortrans.defaultLang;
   const [error, setError] = useState({ message: "", color: "brown" });
   const [updateTime, setUpdateTime] = useState();
+  const [Loader, setLoader] = useState(0);
   const [Stock, setStock] = useState();
   const token = cookies.get(env.cookieName);
   console.log(error);
@@ -44,6 +45,7 @@ function Sepidar(props) {
   }, []);
 
   const updateSepidar = (db) => {
+    setLoader(db);
     const postOptions = {
       method: "post",
       headers: {
@@ -60,13 +62,16 @@ function Sepidar(props) {
           if (result.error) {
             setError({ message: result.message, color: "brown" });
             setTimeout(() => setError({ message: "", color: "brown" }), 3000);
+            setLoader(0);
           } else {
             setError({ message: result.message, color: "green" });
             setTimeout(() => window.location.reload(), 3000);
+            setLoader(0);
           }
         },
         (error) => {
           console.log(error);
+          setLoader(0);
         }
       );
   };
@@ -161,12 +166,20 @@ function Sepidar(props) {
                     </div>
                   </td>
                   <td>
-                    <input
-                      type="button"
-                      value="بروزرسانی"
-                      className="btn bg-gradient-info my-4 mb-2"
-                      onClick={() => updateSepidar(filter.enTitle)}
-                    />
+                    {Loader == filter.enTitle ? (
+                      <input
+                        type="button"
+                        value="درحال بروزرسانی"
+                        className="btn bg-gradient-info my-4 mb-2"
+                      />
+                    ) : (
+                      <input
+                        type="button"
+                        value="بروزرسانی"
+                        className="btn bg-gradient-info my-4 mb-2"
+                        onClick={() => updateSepidar(filter.enTitle)}
+                      />
+                    )}
                   </td>
                   <td>
                     {updateTime &&
@@ -229,12 +242,20 @@ function Sepidar(props) {
                 </div>
               </td>
               <td>
-                <input
-                  type="button"
-                  value="بروزرسانی"
-                  className="btn bg-gradient-success  my-4 mb-2"
-                  onClick={() => updateSepidar("all")}
-                />
+                {Loader == "all" ? (
+                  <input
+                    type="button"
+                    value="درحال بروزرسانی"
+                    className="btn bg-gradient-info my-4 mb-2"
+                  />
+                ) : (
+                  <input
+                    type="button"
+                    value="بروزرسانی"
+                    className="btn bg-gradient-success  my-4 mb-2"
+                    onClick={() => updateSepidar("all")}
+                  />
+                )}
               </td>
               <td></td>
               <td></td>
