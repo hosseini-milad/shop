@@ -29,7 +29,8 @@ router.post("/fetch-user", jsonParser, async (req, res) => {
     try {
         const userData = await user.findOne({ _id: ObjectID(userId) }).lean();
         if(userData){
-            var userProfile = await ProfileAccess.findOne({_id:ObjectID(userData.profile)})
+            var userProfile = userData.profile?
+                await ProfileAccess.findOne({_id:ObjectID(userData.profile)}):''
             if(userProfile)
                 userData.profileName = userProfile.profileName
         }
