@@ -26,8 +26,7 @@ const openOrders = require('../models/orders/openOrders');
 var {StockId,SaleType} = process.env;
 
 router.post('/addToCart', async (req,res)=>{
-    res.status(400).json({error:"call admin"})
-    return
+    
     const userId =req.headers['userid'];
     const sku = req.body.sku
     const ItemID = req.body.ItemID
@@ -47,7 +46,8 @@ router.post('/addToCart', async (req,res)=>{
                 ItemId:ItemID,
                 count:req.body.count
             })
-        res.json({cart:cartDetails,message:"محصول به سبد اضافه شد"})
+        finalCart = await sepCart.findOne({userId:userId})
+        res.json({cart:finalCart,message:"محصول به سبد اضافه شد"})
     }
     catch(error){
         res.status(500).json({message: error.message})
@@ -75,7 +75,7 @@ const newCount=(count1,count2)=>{
 }
 
 router.post('/cart-detail', async (req,res)=>{
-    res.status(400).json({error:"call admin"})
+    //res.status(400).json({error:"call admin"})
     const userId =req.headers['userid'];
     try{
         const cartDetails = await sepCart.aggregate([

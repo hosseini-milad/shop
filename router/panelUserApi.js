@@ -27,7 +27,12 @@ router.post("/fetch-user", jsonParser, async (req, res) => {
     var pageSize = req.body.pageSize ? req.body.pageSize : "10";
     var userId = req.body.userId;
     try {
-        const userData = await user.findOne({ _id: ObjectID(userId) });
+        const userData = await user.findOne({ _id: ObjectID(userId) }).lean();
+        if(userData){
+            var userProfile = await ProfileAccess.findOne({_id:ObjectID(userData.profile)})
+            if(userProfile)
+                userData.profileName = userProfile.profileName
+        }
         res.json({ data: userData });
     } catch (error) {
         res.status(500).json({ message: error.message });
