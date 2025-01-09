@@ -40,6 +40,10 @@ router.post('/login', jsonParser, async (req, res) => {
       res.status(400).json({ error: "password not set" });
       return;
     }
+    if (!user.profile) {
+      res.status(400).json({ error: "profile not set" });
+      return;
+    }
     if (user.active === "false") {
       res.status(400).json({ error: "user not active" });
       return;
