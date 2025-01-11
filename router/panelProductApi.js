@@ -190,7 +190,7 @@ router.post('/list-product',jsonParser,async (req,res)=>{
     var offset = req.body.offset?(parseInt(req.body.offset)):0;
     var userData = await users.findOne({_id:ObjectID(req.headers['userid'])})
     var stockId = req.body.store?req.body.store:userData.StockId
-    var myStock = userData.StoreArr&&userData.StockArr.map(item=>item.StockID)
+    var myStock = userData.StockArr&&userData.StockArr.map(item=>item.StockID)
     try{const data={
         category:req.body.category,
         title:req.body.title,
