@@ -4,10 +4,10 @@ var ObjectID = require('mongodb').ObjectID;
 
 const MergeOrder=async(orderDetail,fullDetail)=>{
     var cart=[]
-    for(var i=0;i<orderDetail.length;i++){
+    for(var i=0;i<orderDetail&&orderDetail.length;i++){
         const payValue = fullDetail[i].payValue
         const orderData = orderDetail[i]
-        for(var j=0;j<orderData.length;j++){
+        for(var j=0;j<orderData&&orderData.length;j++){
             var orderSku = orderData[j].sku
             var index = -1
             if(cart&&cart.length){
