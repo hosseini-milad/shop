@@ -7,6 +7,7 @@ const taskApi = require('./taskApi');
 const yasApi = require('./yasApi');
 const appApi = require('./appApi');
 const cartApi = require('./cartApi');
+const cartWebApi = require('./cartWebApi');
 const settingApi = require('./settingApi');
 const productApi = require('./productApi');
 const formApi = require('./formApi');
@@ -52,6 +53,7 @@ router.use('/task', taskApi)
 router.use('/setting', settingApi)
 router.use('/app', appApi)
 router.use('/cart', cartApi)
+router.use('/cart-web', cartWebApi)
 router.use('/product', productApi)
 router.use('/form', formApi)
 router.use('/user', userApi)

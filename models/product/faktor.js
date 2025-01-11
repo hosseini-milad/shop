@@ -10,6 +10,7 @@ const FaktorSchema = new Schema({
     customerName:{ type: String },
     manageId:{ type: String },
     managerName:{ type: String },
+    faktorNo:{ type: String },
 
     NetPrice:{ type: String },
     InvoiceID:{ type: String ,unique:true},

@@ -14,6 +14,7 @@ const FaktorItems = new Schema({
     fee:{ type: String },
     price:{ type: String },
     tax:{ type: String },
+    faktorNo:String,
     netPrice:{ type: String },
     count:{ type: String }
 })
