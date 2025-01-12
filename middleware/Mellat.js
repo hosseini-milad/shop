@@ -7,6 +7,8 @@ const sepCart = require('../models/product/sepCart');
 const customers = require('../models/auth/customers');
 const PrepareOrder = require('./PrepareOrder');
 const CartToWebFaktor = require('./NewModule/CartToWebFaktor');
+const faktor = require('../models/product/faktor');
+const transaction = require('../models/product/transaction');
 var ObjectID = require('mongodb').ObjectID;
 
 moment.locale('en');
@@ -368,29 +370,30 @@ exports.pay = async (req, res) => {
         const newOrder = await CartToWebFaktor(userid)
         if(newOrder.error)
             return res.status(422).json({error: newOrder.error});
-            let payRequestResult =''
-            const query = {orderNo:newOrder.faktorNo,payStatus:"sendToBank",
-            userId:userid,orderPrice:newOrder.totalPrice}
-            //return
-            await PayLogSchema.create(query)
-            try{
-                payRequestResult = await bpPayRequest(newOrder.faktorNo, parseInt(newOrder.totalPrice), 'ok', callbackUrl);
-            }
-            catch{
-                return res.status(422).json({error: 'اطلاعات ورودی اشتباه است.'});
-            }
-            payRequestResult = payRequestResult.return;
-            payRequestResult = payRequestResult.split(",");
-            if(parseInt(payRequestResult[0]) === 0) {
-                return res.render('redirect_vpos.ejs', {bank_url: PgwSite, RefId: payRequestResult[1]});
+        let payRequestResult =''
+        const query = {faktorNo:newOrder.faktorNo,payStatus:"sendToBank",
+        userId:userid,orderPrice:newOrder.totalPrice}
+        //return
+        await PayLogSchema.create(query)
+        try{
+            payRequestResult = await bpPayRequest(newOrder.faktorNo, 10000
+                /* parseInt(newOrder.totalPrice)*/, 'ok', callbackUrl);
+        }
+        catch{
+            return res.status(422).json({error: 'اطلاعات ورودی اشتباه است.'});
+        }
+        payRequestResult = payRequestResult.return;
+        payRequestResult = payRequestResult.split(",");
+        if(parseInt(payRequestResult[0]) === 0) {
+            return res.render('redirect_vpos.ejs', {bank_url: PgwSite, RefId: payRequestResult[1]});
+        }else {
+            if(payRequestResult[0] === null) {
+                return res.render('mellat_payment_result.ejs', {error: 'هیچ شماره پیگیری برای پرداخت از سمت بانک ارسال نشده است!'})
             }else {
-                if(payRequestResult[0] === null) {
-                    return res.render('mellat_payment_result.ejs', {error: 'هیچ شماره پیگیری برای پرداخت از سمت بانک ارسال نشده است!'})
-                }else {
-                    let error = desribtionStatusCode(parseInt(payRequestResult)).replace(/_/g, " ");
-                    return res.render('mellat_payment_result.ejs', {error})
-                }
+                let error = desribtionStatusCode(parseInt(payRequestResult)).replace(/_/g, " ");
+                return res.render('mellat_payment_result.ejs', {error})
             }
+        }
 
     }else {
         return res.status(422).json({error: 'شماره سفارش را وارد کنید.'});
@@ -414,7 +417,6 @@ exports.callBack = async (req, res) => {
     saleOrderId = parseInt(req.body.SaleOrderId, 10);
     resultCode_bpPayRequest = parseInt(req.body.ResCode);
     const cardHolderPan = req.body.CardHolderPan;
-    console.log(req.body);
 
     //Result Code
     let  resultCode_bpinquiryRequest = "-9999";
@@ -436,10 +438,10 @@ exports.callBack = async (req, res) => {
             if(resultInquiryRequest !== 0) {
                 reversePay(saleOrderId, saleOrderId, saleReferenceId);
                 const error = desribtionStatusCode(resultCode_bpinquiryRequest);
-                const query = {orderNo:saleOrderId,payStatus:"undone",
+                const query = {faktorNo:saleOrderId,payStatus:"undone",
                 saleReferenceId:saleReferenceId,statusCode:resultInquiryRequest}
                 await PayLogSchema.create(query)
-                await orders.updateOne({orderNo:saleOrderId},{$set:{payStatus:"undone"}})
+                await faktor.updateOne({faktorNo:saleOrderId},{$set:{payStatus:"undone"}})
                 return res.render('mellat_payment_result.ejs', {error});
             }
         }
@@ -454,11 +456,11 @@ exports.callBack = async (req, res) => {
             //ﺗﺮاﻛﻨﺶ_ﺑﺎ_ﻣﻮﻓﻘﻴﺖ_اﻧﺠﺎم_ﺷﺪ
             if(resultCode_bpSettleRequest === 0 || resultCode_bpSettleRequest === 45) {
                 //success payment
-                const query = {orderNo:saleOrderId,payStatus:"paid",
+                const query = {faktorNo:saleOrderId,payStatus:"paid",
                 saleReferenceId:saleReferenceId,query:req.body}
                 await PayLogSchema.create(query)
-                await orders.updateOne({orderNo:saleOrderId},{$set:{payStatus:"paid"}})
-                await openOrders.updateMany({orderNo:saleOrderId},{$set:{payStatus:"paid"}})
+                await faktor.updateOne({faktorNo:saleOrderId},{$set:{payStatus:"paid"}})
+                await transaction.create(query)
                 let msg = 'تراکنش شما با موفقیت انجام شد ';
                 msg += " لطفا شماره پیگیری را یادداشت نمایید" + saleReferenceId;
 
@@ -469,10 +471,10 @@ exports.callBack = async (req, res) => {
             }
         }else {
             if (saleOrderId != -999 && saleReferenceId != -999) {
-                const query = {orderNo:saleOrderId,payStatus:"undone",query:req.body,
+                const query = {faktorNo:saleOrderId,payStatus:"undone",query:req.body,
                 saleReferenceId:saleReferenceId,errorMessage:"123",errorCode:resultCode_bpPayRequest}
                 await PayLogSchema.create(query)
-                await orders.updateOne({orderNo:saleOrderId},{$set:{payStatus:"undone"}})
+                await faktor.updateOne({faktorNo:saleOrderId},{$set:{payStatus:"undone"}})
                 if(resultCode_bpPayRequest !== 17)
                     reversePay(saleOrderId, saleOrderId, saleReferenceId);
             }
@@ -486,10 +488,10 @@ exports.callBack = async (req, res) => {
                 if(resultCode_bpPayRequest !== 17)
                 reversePay(saleOrderId, saleOrderId, saleReferenceId);
                 const error = desribtionStatusCode(resultCode_bpPayRequest);
-                const query = {orderNo:saleOrderId,payStatus:"undone",
+                const query = {faktorNo:saleOrderId,payStatus:"undone",
                 saleReferenceId:saleReferenceId,errorMessage:"123",errorCode:resultCode_bpPayRequest}
                 await PayLogSchema.create(query)
-                await orders.updateOne({stockOrderNo:saleOrderId},{$set:{payStatus:"undone"}})
+                await faktor.updateOne({faktorNo:saleOrderId},{$set:{payStatus:"undone"}})
                 return res.render('mellat_payment_result.ejs', {error});
             }
     }

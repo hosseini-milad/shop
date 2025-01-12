@@ -11,6 +11,7 @@ const FaktorSchema = new Schema({
     manageId:{ type: String },
     managerName:{ type: String },
     faktorNo:{ type: String },
+    isWeb:{type: Boolean, default:false},
 
     NetPrice:{ type: String },
     InvoiceID:{ type: String},

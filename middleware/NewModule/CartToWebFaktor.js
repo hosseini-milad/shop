@@ -26,7 +26,7 @@ const CartToWebFaktor=async(userId)=>{
             customerID:userDetail.CustomerID,
             customerName:userDetail.username,
             faktorNo:faktorNo,
-        
+            isWeb:true,
             Status:"initial",
             NetPrice:totalCartData.totalPrice,
             totalCount:totalCartData.totalCount

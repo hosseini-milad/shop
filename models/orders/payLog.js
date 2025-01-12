@@ -3,6 +3,7 @@ const mongoose = require("mongoose");
 const PayLogSchema = new mongoose.Schema({
   userId:{type: mongoose.Schema.Types.ObjectId, ref: 'user'},
   orderNo: {type: String},
+  faktorNo: {type: String},
   payStatus: {type: String},
   orderPrice: {type: String},
   saleReferenceId:{type: String},
