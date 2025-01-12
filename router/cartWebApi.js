@@ -27,6 +27,7 @@ const Faktor = require('../models/product/faktor');
 const FaktorItems = require('../models/product/faktorItems');
 const NewCode = require('../middleware/NewCode');
 const customers = require('../models/auth/customers');
+const CartToWebFaktor = require('../middleware/NewModule/CartToWebFaktor');
 
 
 router.post('/addToCart', async (req,res)=>{
@@ -35,6 +36,10 @@ router.post('/addToCart', async (req,res)=>{
     const sku = req.body.sku
     const ItemID = req.body.ItemID
     try{
+        if(!sku||!ItemID){
+            res.status(400).json({error:"شناسه محصول وارد نشده است"})
+            return
+        }
         const cartDetails = await sepCart.findOne({userId:userId,sku:sku})
         if(cartDetails)
             await sepCart.updateOne({userId:userId,sku:sku},{
@@ -78,7 +83,7 @@ const newCount=(count1,count2)=>{
     return(outPut)
 }
 
-router.post('/cart-detail', async (req,res)=>{
+router.get('/cart-detail',auth, async (req,res)=>{
     //res.status(400).json({error:"call admin"})
     const userId =req.headers['userid'];
     try{
@@ -107,100 +112,11 @@ router.post('/cart-detail', async (req,res)=>{
     }
 })
 
-
-const findCartFunction=async(userId)=>{
-    
+router.get('/remove-cart',auth,jsonParser, async (req,res)=>{
+    const data=req.headers['userid']
     try{
-        const cartData = await cart.find({userId:userId}).sort({"initDate":-1})
-    const qCartData = await qCart.findOne({userId:userId})
-    var cartDetail = []
-    var qCartDetail = ''
-    var description = ''
-    for(var c=0;c<cartData.length;c++)
-        cartDetail.push(findCartSum(cartData[c].cartItems))
-    if(qCartData) qCartDetail =findQuickCartSum(qCartData.cartItems,qCartData.payValue)
-    return({cart:cartData,cartDetail:cartDetail,
-        quickCart:qCartData,qCartDetail:qCartDetail})
-        }
-    catch{
-        return({cart:[],cartDetail:[],
-            quickCart:'',qCartDetail:''})
-    }
-}
-const findQuickCartSum=(cartItems,payValue)=>{
-    if(!cartItems)return({totalPrice:0,totalCount:0})
-    var cartSum=0;
-    var cartCount=0;
-    var cartDescription = ''
-    for (var i=0;i<cartItems.length;i++){
-        //console.log(payValue)
-        var cartItemPrice = ''
-        try{cartItemPrice =cartItems[i].price.find(item=>item.saleType===payValue).price
-            .replace( /,/g, '').replace( /^\D+/g, '')}
-        catch{cartItemPrice =cartItems[i].price&&cartItems[i].price
-            .replace( /,/g, '').replace( /^\D+/g, '')}
-        //console.log(cartItemPrice)
-        if(cartItems[i].price) 
-            cartSum+= parseInt(cartItemPrice)*
-            parseInt(cartItems[i].count.toString().replace( /,/g, '').replace( /^\D+/g, ''))
-        if(cartItems[i].count)
-            cartCount+=parseInt(cartItems[i].count.toString().replace( /,/g, '').replace( /^\D+/g, ''))
-            cartDescription += cartItems[i].description?cartItems[i].description:''
-    }
-    return({totalPrice:cartSum,
-        totalCount:cartCount,cartDescription:cartDescription})
-}
-const findCartSum=(cartItems,payValue)=>{
-    if(!cartItems)return({totalPrice:0,totalCount:0})
-    var cartSum=0;
-    var cartCount=0;
-    var cartDescription = ''
-    for (var i=0;i<cartItems.length;i++){
-        //console.log(payValue)
-        var cartItemPrice = cartItems[i].price
-            .replace( /,/g, '').replace( /^\D+/g, '')
-        //console.log(cartItemPrice)
-        if(cartItems[i].price) 
-            cartSum+= parseInt(cartItemPrice)*
-            parseInt(cartItems[i].count.toString().replace( /,/g, '').replace( /^\D+/g, ''))
-        if(cartItems[i].count)
-            cartCount+=parseInt(cartItems[i].count.toString().replace( /,/g, '').replace( /^\D+/g, ''))
-            cartDescription += cartItems[i].description?cartItems[i].description:''
-    }
-    return({totalPrice:cartSum,
-        totalCount:cartCount,cartDescription:cartDescription})
-}
-
-const removeCart=(cartData,cartID)=>{
-    if(!cartData||!cartData.cartItems)return([])
-var cartItemTemp=cartData.cartItems
-    for(var i=0;i<cartItemTemp.length;i++){
-        if(cartItemTemp[i].id===cartID){
-            cartItemTemp.splice(i,1)
-            return(cartItemTemp)
-        }
-    }
-}
-router.post('/remove-cart',jsonParser, async (req,res)=>{
-    const data={
-        userId:req.headers['userid'],
-
-        date:req.body.date,
-        progressDate:Date.now()
-    }
-    try{
-        var status = "";
-        const cartData = await cart.find({userId:data.userId})
-        const qCartData = await quickCart.findOne({userId:data.userId})
-        const cartItems = removeCart(qCartData,req.body.cartID)
-        data.cartItems =(cartItems)
-        //console.log(req.body.cartItem)
-        cartLog.create({...data,ItemID:req.body.cartID,action:"delete"})
-            await quickCart.updateOne(
-                {userId:data.userId},{$set:data})
-            status = "update cart"
-        const cartDetails = await findCartFunction(data.userId)
-        res.json(cartDetails)
+        const cartData = await sepCart.deleteMany({userId:data})
+        res.json({cart:[]})
     }
     catch(error){
         res.status(500).json({message: error.message})
@@ -210,56 +126,14 @@ router.post('/remove-cart',jsonParser, async (req,res)=>{
 router.get('/cart-to-Faktor',auth,jsonParser, async (req,res)=>{
     const userId = req.headers['userid']
     try{
-        const userDetail = await customers.findOne({_id:ObjectID(userId)})
-        if(!userDetail){
-            res.status(400).json({error:"not valid user"})
-            return
-        }
-        const cartDetails = await sepCart.find({userId:userId})
-        var totalCartData = await CalcCart(cartDetails)
-        const faktorNo = await NewCode("fw")
-        const faktorQuery = {
-            initDate: Date.now(),
-            userId:userId,
-            customerID:userDetail.CustomerID,
-            customerName:userDetail.username,
-            faktorNo:faktorNo,
-        
-            Status:"initial",
-            NetPrice:totalCartData.totalPrice,
-            totalCount:totalCartData.totalCount
-        }
-        var cartItems = []
-        
-        await Faktor.create(faktorQuery)
-        
-        for(var i=0;i<cartDetails.length;i++){
-            var count = Number(cartDetails[i].count)
-            var fee = Number(cartDetails[i].price)
-            var tax = Number(TaxRate)
-            var discount = cartDetails[i].discount?Number(cartDetails[i].discount):0
-            var priceCount = fee*count
-            var taxPrice = priceCount*tax
-            const cartItem={
-                initDate: Date.now(),
-                sku:cartDetails[i].sku,
-                Description:cartDetails[i].ItemId,
-                ItemID:cartDetails[i].ItemId,
-                discount:discount,
-                faktorNo:faktorNo,
-                price:priceCount,
-                tax:taxPrice,
-                netPrice:priceCount-discount,
-                count:count
-            }
-            await FaktorItems.create(cartItem)
-        }
-        
-        res.json({faktorQuery,tax,cartDetails,cartItems})
+        const result = await CartToWebFaktor(userId)
+        res.status(200).json(result)
     }
+    
     catch(error){
         res.status(500).json({message: error.message})
     }
 })
+
 
 module.exports = router;

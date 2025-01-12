@@ -4,7 +4,11 @@ const auth = require("../middleware/auth");
 const cart = require('../models/product/cart');
 const getTimeFilter = require('../middleware/timeFiltering');
 
+<<<<<<< HEAD
 const getBranchFilter = (branchId) => branchId ? { branchId: Number(branchId) } : {};
+=======
+const getBranchFilter = (stockId) => stockId ? { stockId: String(stockId) } : {};
+>>>>>>> 1ca7ba9bc9dedbad484de7a14c589ab61666ac59
 
 router.get('/top-products', auth, async (req, res) => {
     try {
@@ -159,7 +163,11 @@ router.get('/sales-process', auth, async (req, res) => {
             { $unwind: "$cartItems" },
             {
                 $group: {
+<<<<<<< HEAD
                     _id: { date: { $dateToString: { format: "%Y-%m-%d", date: "$initDate" } }, cartNo: "$cartNo" }, // Include cartNo and date
+=======
+                    _id: { date: { $dateToString: { format: "%Y-%m-%d", date: "$initDate" } } },
+>>>>>>> 1ca7ba9bc9dedbad484de7a14c589ab61666ac59
                     totalSales: { $sum: sumField }
                 }
             },
@@ -167,8 +175,12 @@ router.get('/sales-process', auth, async (req, res) => {
         ]);
 
         const response = salesProcess.map(record => ({
+<<<<<<< HEAD
             id: record._id.cartNo, // Use cartNo as the id
             date: record._id.date, // Include date for reference
+=======
+            date: record._id.date,
+>>>>>>> 1ca7ba9bc9dedbad484de7a14c589ab61666ac59
             totalSales: record.totalSales
         }));
 
