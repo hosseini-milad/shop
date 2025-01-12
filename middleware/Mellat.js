@@ -6,6 +6,7 @@ const cart = require('../models/product/cart');
 const sepCart = require('../models/product/sepCart');
 const customers = require('../models/auth/customers');
 const PrepareOrder = require('./PrepareOrder');
+const CartToWebFaktor = require('./NewModule/CartToWebFaktor');
 var ObjectID = require('mongodb').ObjectID;
 
 moment.locale('en');
@@ -177,7 +178,7 @@ function desribtionStatusCode(statusCode)
     return "";
 }
 
- function bpPayRequest (orderId, priceAmount, additionalText, callbackUrl) {
+function bpPayRequest (orderId, priceAmount, additionalText, callbackUrl) {
      const localDate = moment().format('YYYYMMDD');
      const localTime = moment().format('HHmmss');
     const args = {
@@ -206,7 +207,7 @@ function desribtionStatusCode(statusCode)
                 if(err) {
                     console.log("Error: ")
                     console.log(err);
-                    reject(err);
+                    reject({error:err});
                 }
                 return resolve(result);
             })
@@ -348,7 +349,7 @@ exports.pay = async (req, res) => {
 
         var userid = req.query.userid
 
-        const orderDetail = await PrepareOrder(userid)
+        /*const orderDetail = await PrepareOrder(userid)
         const orderId = orderDetail.orderId
         const orderPrice = orderDetail.orderPrice
         const orderCount = orderDetail.orderCount
@@ -363,26 +364,21 @@ exports.pay = async (req, res) => {
             status:"initial",
             payStatus: "undone",
             description:"Test order"
-        })
-        if(newOrder) await sepCart.deleteMany({userId:ObjectID(userid)})
-        if(!orderData)
-            return res.status(422).json({error: 'سفارش پیدا نشد'});
-        //const credit = orderData.stockOrderPrice
-        //orderId = await OrderNoBank(orderId,1)
-        //const orderId = moment().valueOf();
-        console.log("Request Now: ");
+        })*/
+        const newOrder = await CartToWebFaktor(userid)
+        if(newOrder.error)
+            return res.status(422).json({error: newOrder.error});
             let payRequestResult =''
-            const query = {orderNo:orderId,payStatus:"sendToBank",
-            userId:userid,orderPrice:orderPrice}
+            const query = {orderNo:newOrder.faktorNo,payStatus:"sendToBank",
+            userId:userid,orderPrice:newOrder.totalPrice}
             //return
             await PayLogSchema.create(query)
             try{
-                payRequestResult = await bpPayRequest(orderId, parseInt(orderPrice), 'ok', callbackUrl);
+                payRequestResult = await bpPayRequest(newOrder.faktorNo, parseInt(newOrder.totalPrice), 'ok', callbackUrl);
             }
             catch{
                 return res.status(422).json({error: 'اطلاعات ورودی اشتباه است.'});
             }
-            console.log(payRequestResult);
             payRequestResult = payRequestResult.return;
             payRequestResult = payRequestResult.split(",");
             if(parseInt(payRequestResult[0]) === 0) {

@@ -1,4 +1,6 @@
 const customers = require("../../models/auth/customers");
+const faktor = require("../../models/product/faktor");
+const faktorItems = require("../../models/product/faktorItems");
 const sepCart = require("../../models/product/sepCart");
 const CalcCart = require("../CalcCart");
 const NewCode = require("../NewCode");
@@ -9,12 +11,15 @@ const CartToWebFaktor=async(userId)=>{
     try{
         const userDetail = await customers.findOne({_id:ObjectID(userId)})
         if(!userDetail){
-            res.status(400).json({error:"not valid user"})
-            return
+            return({error:"not valid user"})
         }
         const cartDetails = await sepCart.find({userId:userId})
+        if(!cartDetails||!cartDetails.length){
+            return({error:"not valid cart"})
+            
+        }
         var totalCartData = await CalcCart(cartDetails)
-        const faktorNo = await NewCode("fw")
+        const faktorNo = await NewCode("53")
         const faktorQuery = {
             initDate: Date.now(),
             userId:userId,
@@ -28,7 +33,7 @@ const CartToWebFaktor=async(userId)=>{
         }
         var cartItems = []
         
-        //await Faktor.create(faktorQuery)
+        await faktor.create(faktorQuery)
         
         for(var i=0;i<cartDetails.length;i++){
             var count = Number(cartDetails[i].count)
@@ -49,10 +54,10 @@ const CartToWebFaktor=async(userId)=>{
                 netPrice:priceCount-discount,
                 count:count
             }
-            //await FaktorItems.create(cartItem)
+            await faktorItems.create(cartItem)
         }
-        
-       return({faktorQuery,tax,cartDetails,cartItems})
+        await sepCart.deleteMany({userId:userId})
+       return({faktorNo,totalPrice:totalCartData.totalPrice,})
     }
     catch(error){
         return({error: error.message})

@@ -13,7 +13,7 @@ const FaktorSchema = new Schema({
     faktorNo:{ type: String },
 
     NetPrice:{ type: String },
-    InvoiceID:{ type: String ,unique:true},
+    InvoiceID:{ type: String},
     InvoiceNumber:{ type: String },
     ReceiptID:String,
     Status:{type:String,default:"unregister"},
