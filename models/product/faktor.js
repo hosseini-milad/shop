@@ -18,6 +18,7 @@ const FaktorSchema = new Schema({
     InvoiceNumber:{ type: String },
     ReceiptID:String,
     Status:{type:String,default:"unregister"},
+    payStatus:{type:String},
     totalCount:{ type: String }
 })
 module.exports = mongoose.model('faktor',FaktorSchema);

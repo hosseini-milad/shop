@@ -9,6 +9,7 @@ const transSchema = new mongoose.Schema({
   payStatus:{type:String},
   payValue:{type:String},
   description:{type:String},
+  saleReferenceId:{type:String},
   sepidarID:{type:String},
   InvoiceID:{type:String},
   date:{type:Date,default:Date.now()}
