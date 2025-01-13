@@ -430,14 +430,15 @@ router.post('/sepidar-quantity',auth, async (req, res) => {
         res.status(500).json({ message: error.message })
     }
 })
-router.get('/sepidar-all', async (req, res) => {
+router.post('/sepidar-all', async (req, res) => {
+    const body = req.body
     try {
         response = await fetch(ONLINE_URL + "/sepidar-product",
             { method: 'post' });
         response = await fetch(ONLINE_URL + "/sepidar-price",
             { method: 'post' });
         response = await fetch(ONLINE_URL + "/sepidar-quantity",
-            { method: 'post' });
+            { method: 'post' ,body:body});
         response = await fetch(ONLINE_URL + "/sepidar-customer",
             { method: 'post' });
         response = await fetch(ONLINE_URL + "/sepidar-bank",
