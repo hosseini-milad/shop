@@ -28,6 +28,8 @@ const FaktorItems = require('../models/product/faktorItems');
 const NewCode = require('../middleware/NewCode');
 const customers = require('../models/auth/customers');
 const CartToWebFaktor = require('../middleware/NewModule/CartToWebFaktor');
+const faktor = require('../models/product/faktor');
+const logestic = require('../models/orders/logestic');
 
 
 router.post('/addToCart', async (req,res)=>{
@@ -134,6 +136,43 @@ router.get('/cart-to-Faktor',auth,jsonParser, async (req,res)=>{
         res.status(500).json({message: error.message})
     }
 })
+router.get('/logestic-list',auth,jsonParser, async (req,res)=>{
+    try{
+        const result = await logestic.find({})
+        res.status(200).json({data:result})
+    }
+    
+    catch(error){
+        res.status(500).json({message: error.message})
+    }
+})
+router.get('/add-log-to-cart',auth,jsonParser, async (req,res)=>{
+    const userId = req.headers['userid']
+    const logCode = req.body.logCode
+    try{
+        const result = await customers.updateOne({_id:ObjectID(userId)},{$set:{logestic:logCode}})
+        res.status(200).json({data:result,message:"حمل و نقل اضافه شد"})
+    }
+    
+    catch(error){
+        res.status(500).json({error: error.message})
+    }
+})
 
+router.post('/my-Faktors',auth,jsonParser, async (req,res)=>{
+    var pageSize = req.body.pageSize?req.body.pageSize:"10";
+    var offset = req.body.offset?(parseInt(req.body.offset)):0;
+    const userId = req.headers['userid']
+    try{
+        const result = await faktor.find(userId)
+        const faktorList = result.slice(offset,
+            (parseInt(offset)+parseInt(pageSize)))  
+        res.status(200).json({data:faktorList,size:result.length})
+    }
+    
+    catch(error){
+        res.status(500).json({message: error.message})
+    }
+})
 
 module.exports = router;

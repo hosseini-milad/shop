@@ -60,6 +60,7 @@ const customerSchema = new mongoose.Schema({
   stateId:{ type: String },
   city:{ type: String },
   cityId:{ type: String },
+  logestic:{ type: String },
 
   date:{type:Date} 
 });
