@@ -182,8 +182,9 @@ router.get('/logestic-list',auth,jsonParser, async (req,res)=>{
 router.post('/add-log-to-cart',auth,jsonParser, async (req,res)=>{
     const userId = req.headers['userid']
     const logCode = req.body.logCode
+    const logAddress = req.body.logAddress
     try{
-        const result = await customers.updateOne({_id:ObjectID(userId)},{$set:{logestic:logCode}})
+        const result = await customers.updateOne({_id:ObjectID(userId)},{$set:{logestic:logCode,logAddress}})
         res.status(200).json({data:result,message:"حمل و نقل اضافه شد"})
     }
     

@@ -61,6 +61,7 @@ const customerSchema = new mongoose.Schema({
   city:{ type: String },
   cityId:{ type: String },
   logestic:{ type: String },
+  logAddress:{ type: String },
 
   date:{type:Date} 
 });
