@@ -261,7 +261,7 @@ router.post('/list-faktors',auth, async (req,res)=>{
         userId: req.headers['userid'],
         manager:req.body.manager,
         title: req.body.title,
-        bankCode: req.body.bankCode,
+        type: req.body.type,
         payValue: req.body.payValue,
         orderNo:req.body.orderNo,
         description: req.body.description
@@ -276,8 +276,8 @@ router.post('/list-faktors',auth, async (req,res)=>{
     try{ 
         var manData = data.manager?await users.findOne({username:data.manager}):''
         if(manData) manData = manData._id.toString()
-        const faktorList = await faktor.find(adminData.access !== "manager"?{manageId:data.userId}:
-            manData?{manageId:manData}:{})
+        const faktorList = data.type!=="web"?await faktor.find(adminData.access !== "manager"?{manageId:data.userId}:
+            manData?{manageId:manData}:{}):await faktor.find({isWeb:1})
             .sort({initDate:-1}).lean()
 
         for( var i=0;i<faktorList.length;i++){
