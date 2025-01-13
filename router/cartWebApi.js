@@ -136,6 +136,39 @@ router.get('/cart-to-Faktor',auth,jsonParser, async (req,res)=>{
         res.status(500).json({message: error.message})
     }
 })
+router.post('/add-logestic',auth,jsonParser, async (req,res)=>{
+    const data = req.body
+    try{
+        const result = await logestic.create(data)
+        res.status(200).json({data:result})
+    }
+    
+    catch(error){
+        res.status(500).json({message: error.message})
+    }
+})
+router.post('/edit-logestic',auth,jsonParser, async (req,res)=>{
+    const data = {
+        title: req.body.title,
+        code:req.body.code,
+        payValue:req.body.payValue
+    }
+    const logId = req.body.logId
+    if(!logId){
+        res.status(400).json(
+            {error:"شناسه وارد نشده است"}
+        )
+        return
+    }
+    try{
+        const result = await logestic.updateOne({_id:ObjectID(logId)},{$set:data})
+        res.status(200).json({data:result})
+    }
+    
+    catch(error){
+        res.status(500).json({message: error.message})
+    }
+})
 router.get('/logestic-list',auth,jsonParser, async (req,res)=>{
     try{
         const result = await logestic.find({})
@@ -146,7 +179,7 @@ router.get('/logestic-list',auth,jsonParser, async (req,res)=>{
         res.status(500).json({message: error.message})
     }
 })
-router.get('/add-log-to-cart',auth,jsonParser, async (req,res)=>{
+router.post('/add-log-to-cart',auth,jsonParser, async (req,res)=>{
     const userId = req.headers['userid']
     const logCode = req.body.logCode
     try{
