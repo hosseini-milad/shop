@@ -12,7 +12,7 @@ function OrderDetail(props){
         headers: { 'Content-Type': 'application/json' ,
         "x-access-token":token.token,"userId":token.userId}
       }
-      fetch(siteApi+"/auth/list-orders",getOptions)
+      fetch(siteApi+"/cart-web/my-faktors",getOptions)
         .then(res => res.json())
         .then(
         (result) => {

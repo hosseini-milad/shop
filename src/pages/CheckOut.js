@@ -13,13 +13,13 @@ function Checkout(){
     useEffect(() => {
         if (!token) return
         const postOptions = {
-          method: 'post',
+          method: 'get',
           headers: {
             'Content-Type': 'application/json',
             "x-access-token":token&&token.token,"userId":token&&token.userId
           },
         }
-        fetch(siteApi + "/cart/cart-detail", postOptions)
+        fetch(siteApi + "/cart-web/cart-detail", postOptions)
           .then((res) => res.json())
           .then(
             (result) => {
