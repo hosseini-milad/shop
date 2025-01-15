@@ -89,7 +89,7 @@ function OrderTableRow(props) {
         }
       );
   };
-
+  
   return (
     <React.Fragment>
       <tr className={activeAcc ? "activeAccordion" : "accordion"}>

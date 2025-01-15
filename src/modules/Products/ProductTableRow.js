@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import Status from "../Components/Status";
-import env, { normalPriceCount, rxFindCount } from "../../env";
+import env, { normalPriceCount } from "../../env";
 import ProductQuickDetail from "./ProductComponent/ProductQuickDetail";
 
 function ProductTableRow(props) {
@@ -11,6 +11,11 @@ function ProductTableRow(props) {
   const product = props.product;
   const stockId = props.stockId;
   const token = props.token;
+  const OpenEdit = () => {
+    if (token.access == "manager") {
+      window.location.href = "/products/detail/" + product._id;
+    }
+  };
   const CalCount = (sku) => {
     const postOptions = {
       method: "post",
@@ -63,12 +68,7 @@ function ProductTableRow(props) {
               }
               alt={product ? product.title : "default"}
             />
-            <div
-              className="cu-name"
-              onClick={() =>
-                (window.location.href = "/products/detail/" + product._id)
-              }
-            >
+            <div className="cu-name" onClick={OpenEdit}>
               <p className="name">{product.title}</p>
               <p className="email">{product.sku}</p>
             </div>

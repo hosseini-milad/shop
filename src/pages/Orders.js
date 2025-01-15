@@ -68,6 +68,8 @@ function Orders(props) {
         ? {
             offset: filters.offset ? filters.offset : "0",
             pageSize: filters.pageSize ? filters.pageSize : "25",
+            type: filters.category ? filters.category : TabOrder.type,
+            manager: filters.manager ? filters.manager : TabOrder.manager,
           }
         : {
             offset: filters.offset ? filters.offset : "0",
