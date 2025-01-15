@@ -198,7 +198,7 @@ router.post('/my-Faktors',auth,jsonParser, async (req,res)=>{
     var offset = req.body.offset?(parseInt(req.body.offset)):0;
     const userId = req.headers['userid']
     try{
-        const result = await faktor.find(userId)
+        const result = await faktor.find({userId:userId})
         const faktorList = result.slice(offset,
             (parseInt(offset)+parseInt(pageSize)))  
         res.status(200).json({data:faktorList,size:result.length})
