@@ -56,8 +56,8 @@ const calcTasks = async (userId) => {
     const allow = userAccess.find(item => item.title === "Tasks")
     //console.log(userAccess)
     if (!allow && access!==10){
-        res.status(400).json({error:"دسترسی ندارد"})
-        return
+        return({error:"دسترسی ندارد"})
+        
     } 
 
     const crmData = await crmlist.findOne()
