@@ -54,7 +54,6 @@ const calcTasks = async (userId) => {
     if (userData.access === "client") access = 3
     const userAccess = await FindAccess(userData.profile)
     const allow = userAccess.find(item => item.title === "ُSet Order")
-    console.log(userAccess)
     if (!allow && access!==10){
         return({error:"دسترسی ندارد"})
         
@@ -71,7 +70,6 @@ const calcTasks = async (userId) => {
     if(access==3){
         myCreator = [userId]
     }
-    console.log(myCreator)
     var taskList = await tasks.aggregate([
         //{$match:limitTask?{profile:limitTask}:{}},
         { $match: { crmId: crmId } },
