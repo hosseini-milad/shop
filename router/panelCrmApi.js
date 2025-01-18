@@ -48,6 +48,7 @@ try {
 })
 const calcTasks = async (userId) => {
     const userData = await user.findOne({ _id: ObjectID(userId) })
+    console.log(userData)
     var access = 3
     if (userData.access === "manager") access = 10
     if (userData.access === "admin") access = 7
