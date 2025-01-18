@@ -70,17 +70,19 @@ function Step2(props) {
         }
       );
   };
-  const setTransportNow = (transportId) => {
+  const setTransportNow = () => {
     const postOptions = {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
         Authorization: "Bearer " + token.token,
+        "x-access-token": token.token,
+        userId: token.userId,
       },
-      body: JSON.stringify({ transportation_id: transportId }),
+      body: JSON.stringify({ transportDetail }),
     };
     //console.log(postOptions)
-    fetch(siteApi + env.cartTransPortSelect, postOptions)
+    fetch(siteApi + "/cart-web/add-log-to-cart", postOptions)
       .then((res) => res.json())
       .then(
         (result) => {
@@ -112,6 +114,7 @@ function Step2(props) {
                   token={token}
                   setTransportDetail={setTransportDetail}
                   transportDetail={transportDetail}
+                  setTransportNow={setTransportNow}
                 />
               </>
             }
@@ -202,15 +205,7 @@ function Step2(props) {
         {cart.totalprice ? (
           transportDetail ? (
             <a
-              href={
-                siteApi +
-                "/payment/mellat?userid=" +
-                token.userId +
-                "&transport=" +
-                (transportDetail && transportDetail._id
-                  ? transportDetail._id
-                  : transportDetail)
-              }
+              href={siteApi + "/payment/mellat?userid=" + token.userId}
               className="modal-sub-btn"
             >
               پرداخت

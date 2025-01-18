@@ -44,7 +44,9 @@ function Transport(props) {
             <div
               style={{ display: "flex" }}
               onClick={() => (
-                TransUpdate("logAddress", "درب فروشگاه مرکزی"), setDoor(1)
+                TransUpdate("logAddress", "درب فروشگاه مرکزی"),
+                setDoor(1),
+                props.setTransportNow()
               )}
             >
               <input
@@ -57,7 +59,9 @@ function Transport(props) {
             <div
               style={{ display: "flex" }}
               onClick={() => (
-                TransUpdate("logAddress", "درب شعبه 1"), setDoor(2)
+                TransUpdate("logAddress", "درب شعبه 1"),
+                setDoor(2),
+                props.setTransportNow()
               )}
             >
               <input
@@ -70,7 +74,9 @@ function Transport(props) {
             <div
               style={{ display: "flex" }}
               onClick={() => (
-                TransUpdate("logAddress", "درب شعبه 2"), setDoor(3)
+                TransUpdate("logAddress", "درب شعبه 2"),
+                setDoor(3),
+                props.setTransportNow()
               )}
             >
               <input
@@ -87,6 +93,7 @@ function Transport(props) {
             token={props.token}
             close={() => {}}
             transportDetail={props.transportDetail}
+            setTransportNow={props.setTransportNow}
           />
         ) : (
           <></>

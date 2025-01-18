@@ -142,6 +142,7 @@ function AddressDetail(props) {
                   className="offerButton addButton"
                   onClick={() => {
                     selectAddress("logAddress", address);
+                    props.setTransportNow();
                     props.close();
                   }}
                 />
