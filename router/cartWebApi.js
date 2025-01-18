@@ -30,6 +30,7 @@ const customers = require('../models/auth/customers');
 const CartToWebFaktor = require('../middleware/NewModule/CartToWebFaktor');
 const faktor = require('../models/product/faktor');
 const logestic = require('../models/orders/logestic');
+const faktorItems = require('../models/product/faktorItems');
 
 
 router.post('/addToCart', async (req,res)=>{
@@ -198,9 +199,13 @@ router.post('/my-Faktors',auth,jsonParser, async (req,res)=>{
     var offset = req.body.offset?(parseInt(req.body.offset)):0;
     const userId = req.headers['userid']
     try{
-        const result = await faktor.find(userId)
+        const result = await faktor.find({userId:userId}).lean()
         const faktorList = result.slice(offset,
             (parseInt(offset)+parseInt(pageSize)))  
+        for( var i=0;i<faktorList.length;i++){
+            const faktorData = await faktorItems.find({faktorNo:faktorList[i].faktorNo})
+            faktorList[i].cartItems = faktorData
+        }
         res.status(200).json({data:faktorList,size:result.length})
     }
     
