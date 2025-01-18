@@ -37,6 +37,7 @@ router.post('/fetch-crm', jsonParser, async (req, res) => {
 router.post('/fetch-tasks', auth, jsonParser, async (req, res) => {
     const crmId = req.body.crmId
     const userId = req.headers["userid"]
+    console.log(userId)
     
         const tasksList = await calcTasks(userId)
 try {
