@@ -37,10 +37,9 @@ router.post('/fetch-crm', jsonParser, async (req, res) => {
 router.post('/fetch-tasks', auth, jsonParser, async (req, res) => {
     const crmId = req.body.crmId
     const userId = req.headers["userid"]
-    console.log(userId)
-    
+ try {   
         const tasksList = await calcTasks(userId)
-try {
+
         res.json(tasksList)
     }
     catch (error) {
@@ -49,14 +48,13 @@ try {
 })
 const calcTasks = async (userId) => {
     const userData = await user.findOne({ _id: ObjectID(userId) })
-    console.log(userData)
     var access = 3
     if (userData.access === "manager") access = 10
     if (userData.access === "admin") access = 7
     if (userData.access === "client") access = 3
     const userAccess = await FindAccess(userData.profile)
     const allow = userAccess.find(item => item.title === "Tasks")
-    //console.log(userAccess)
+    console.log(userAccess)
     if (!allow && access!==10){
         return({error:"دسترسی ندارد"})
         
