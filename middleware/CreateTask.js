@@ -26,6 +26,8 @@ const CreateTask = async (type, data, user) => {
         content: data.description,
         creator: data.manageId,
         customer: data.userId,
+        profileId: data.profileId,
+        profileName: data.profileName,
         taskStep: step.enTitle,
         orderNo: data.cartNo,
         isQuote:data.isQuote,

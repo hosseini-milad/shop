@@ -9,6 +9,8 @@ const CartSchema = new Schema({
     progressDate: { type: Date },
     userId:{ type: String },
     manageId:{ type: String },
+    profileId:{ type: String },
+    profileName:{ type: String },
     payValue:{ type: String },
     stockId:{type:String},
     description:{type:String},
