@@ -51,7 +51,7 @@ router.post('/getlist', async (req,res)=>{
         const allProducts = await productSchema.aggregate([
             {$match:{catId:catData.catCode}},
             {$match:{enTitle:{$exists:true}}},
-            {$match:(filter&&filter.vs)?{"filters.vs":filter.vs}:{}}
+            //{$match:(filter&&filter.vs)?{"filters.vs":filter.vs}:{}}
         ])
         const availableItems = [];
         for(var a=0;a<allProducts.length;a++){
