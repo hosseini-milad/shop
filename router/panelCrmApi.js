@@ -37,9 +37,9 @@ router.post('/fetch-crm', jsonParser, async (req, res) => {
 router.post('/fetch-tasks', auth, jsonParser, async (req, res) => {
     const crmId = req.body.crmId
     const userId = req.headers["userid"]
-    
+ try {   
         const tasksList = await calcTasks(userId)
-try {
+
         res.json(tasksList)
     }
     catch (error) {
@@ -48,21 +48,23 @@ try {
 })
 const calcTasks = async (userId) => {
     const userData = await user.findOne({ _id: ObjectID(userId) })
-    var access = 0
+    var access = 3
     if (userData.access === "manager") access = 10
     if (userData.access === "admin") access = 7
     if (userData.access === "client") access = 3
     const userAccess = await FindAccess(userData.profile)
-    const allow = userAccess.find(item => item.title === "Tasks")
-    //console.log(userAccess)
-    if (!allow && access!==10) return
+    const allow = userAccess.find(item => item.title === "ُSet Order")
+    if (!allow && access!==10){
+        return({error:"دسترسی ندارد"})
+        
+    } 
 
     const crmData = await crmlist.findOne()
     const crmId = crmData && (crmData._id).toString()
     
     var myCreator = []
     if(access==7){
-        var userList = await user.find({StockId:userData.StockId})
+        var userList = await user.find({profile:{$in:userData.profile}})//{StockId:userData.StockId})
         myCreator = userList.map(item=>item._id.toString())
     }
     if(access==3){

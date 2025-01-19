@@ -51,7 +51,7 @@ router.post('/getlist', async (req,res)=>{
         const allProducts = await productSchema.aggregate([
             {$match:{catId:catData.catCode}},
             {$match:{enTitle:{$exists:true}}},
-            {$match:(filter&&filter.vs)?{"filters.vs":filter.vs}:{}}
+            //{$match:(filter&&filter.vs)?{"filters.vs":filter.vs}:{}}
         ])
         const availableItems = [];
         for(var a=0;a<allProducts.length;a++){
@@ -104,7 +104,7 @@ router.post('/getProduct', async (req,res)=>{
         productData.openOrderCount = openCount
         //logger.warn("main done")
         res.json({data:productData,message:"Products List",
-        quantity:quantity,price:price,categoryData:catData})
+        quantity:quantity?quantity:1,price:price,categoryData:catData})
     }
     catch(error){
         res.status(500).json({error: error.message})

@@ -281,7 +281,17 @@ router.post('/list-faktors',auth, async (req,res)=>{
             .sort({initDate:-1}).lean()
 
         for( var i=0;i<faktorList.length;i++){
-            const faktorData = await faktorItems.find({InvoiceID:faktorList[i].InvoiceID})
+            const faktorData = await faktorItems.aggregate([
+                {$match:{InvoiceID:faktorList[i].InvoiceID}},
+                {
+                    $lookup: {
+                        from: "products",
+                        localField: "ItemID",
+                        foreignField: "ItemID",
+                        as: "productDetail"
+                    }
+                },
+            ])
             faktorList[i].cartItems = faktorData
         }
         const bankList = await bankAccounts.find({limit:{$ne:adminData.username}}) 

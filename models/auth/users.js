@@ -17,7 +17,7 @@ const userSchema = new mongoose.Schema({
   otp: { type: String, default: null },
   mobile: { type: String },
   classes: { type: Array },
-  profile: { type: String },
+  profile: { type: Array },
   address: { type: String },
   meli: { type: String },
 

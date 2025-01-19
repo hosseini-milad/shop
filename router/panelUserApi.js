@@ -30,10 +30,20 @@ router.post("/fetch-user", jsonParser, async (req, res) => {
     try {
         const userData = await user.findOne({ _id: ObjectID(userId) }).lean();
         if(userData){
-            var userProfile = userData.profile?
+            var profile =[]
+            try{
+            for(var p=0;p<(userData.profile&&userData.profile.length);p++){
+                profile.push(await ProfileAccess.findOne({ _id: ObjectID(userData.profile[p]) }))
+            }
+            
+            userData.profileData = profile
+            userData.profileCode = profile.map(item=>item.profileCode)
+            userData.profileName = profile.map(item=>item.profileName)
+        }catch{}
+            /*var userProfile = userData.profile?
                 await ProfileAccess.findOne({_id:ObjectID(userData.profile)}):''
             if(userProfile)
-                userData.profileName = userProfile.profileName
+                userData.profileName = userProfile.profileName*/
         }
         res.json({ data: userData });
     } catch (error) {
@@ -734,13 +744,20 @@ router.get("/allow-menu", auth, jsonParser, async (req, res) => {
     if (!userId) {
         res.status(500).json({ error: "no Credit" });
     }
+
     try {
         const userData = await user.findOne({ _id: ObjectID(userId) });
-        const profileData = await ProfileAccess.findOne({
-            _id: ObjectID(userData.profile),
-        });
-
-        res.json({ access: profileData.access, message: "Profile List" });
+        var profile =[]
+        for(var p=0;p<(userData.profile&&userData.profile.length);p++){
+            var profileData = await ProfileAccess.findOne({ _id: ObjectID(userData.profile[p]) })
+            
+            for(var a=0;a<(profileData.access&&profileData.access.length);a++){
+                var accessProf=profileData.access[a]
+                if(profile.findIndex(item=>item.title==accessProf.title)==-1)
+                    profile.push(accessProf)
+            }
+        }
+        res.json({ access:profile,  message: "Profile List" });
     } catch (error) {
         res.status(500).json({ message: error.message });
     }
