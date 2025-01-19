@@ -203,7 +203,16 @@ router.post('/my-Faktors',auth,jsonParser, async (req,res)=>{
         const faktorList = result.slice(offset,
             (parseInt(offset)+parseInt(pageSize)))  
         for( var i=0;i<faktorList.length;i++){
-            const faktorData = await faktorItems.find({faktorNo:faktorList[i].faktorNo})
+            const faktorData = await faktorItems.aggregate([
+                {$match:{faktorNo:faktorList[i].faktorNo}},
+                {$lookup: {
+                    from: "products",
+                    localField: "sku",
+                    foreignField: "sku",
+                    as: "productDetail"
+                }}
+            ])
+                        
             faktorList[i].cartItems = faktorData
         }
         res.status(200).json({data:faktorList,size:result.length})
