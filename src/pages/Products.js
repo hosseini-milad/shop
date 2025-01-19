@@ -51,6 +51,7 @@ function Products(props) {
       dateFrom: filters.date && filters.date.dateFrom,
       dateTo: filters.date && filters.date.dateTo,
       access: "manager",
+      
     };
     const postOptions = {
       method: "post",

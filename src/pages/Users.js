@@ -24,8 +24,9 @@ const Users = (props) => {
   const direction = props.lang ? props.lang.dir : errortrans.defaultDir;
   const lang = props.lang ? props.lang.lang : errortrans.defaultLang;
 
+  const [ExtraProfile, setExtraProfile] = useState();
   const [extra, setExtra] = useState();
-  console.log(extra);
+
   const [users, setUsers] = useState([]);
   const [filters, setFilters] = useState("");
   const [selectedUser, setSelectedUser] = useState(null);
@@ -36,12 +37,13 @@ const Users = (props) => {
   const [storeList, setStoreList] = useState([]);
   const [formData, setFormData] = useState({
     _id: "",
-    profile: "",
+    // profile: "",
     access: "",
     password: "",
     email: "",
     username: "",
   });
+  console.log(ExtraProfile);
   function handleFilterChange(newFilters) {
     setFilters(newFilters);
     updateUrlWithFilters(newFilters);
@@ -152,7 +154,11 @@ const Users = (props) => {
           "Content-Type": "application/json",
           "x-access-token": token && token.token,
         },
-        body: JSON.stringify({ ...formData, StockArr: extra }),
+        body: JSON.stringify({
+          ...formData,
+          StockArr: extra,
+          profile: ExtraProfile.map((item) => item._id),
+        }),
       });
       setShowCreatePanel(false);
       // Refresh the list of users
@@ -225,7 +231,7 @@ const Users = (props) => {
               }));
             }}
           />
-          <StyleSelect
+          {/* <StyleSelect
             title={formtrans.profile[lang]}
             direction={direction}
             class={"formInput"}
@@ -238,7 +244,22 @@ const Users = (props) => {
                 profile: e ? e._id : "",
               }));
             }}
-          />
+          /> */}
+          <div class="formInput">
+            <Autocomplete
+              multiple
+              options={profiles}
+              getOptionLabel={(item) => item.profileName || ""}
+              //value={colorList.cover.find(item=>item.option===extraData.coverCode)||null}
+              style={{ width: "100%" }}
+              defaultValue={userData.profileData}
+              onChange={(e, value) => setExtraProfile(value)}
+              renderInput={(params) => (
+                <TextField {...params} label="پروفایل" variant="outlined" />
+              )}
+            />
+          </div>
+
           <StyleSelect
             title={formtrans.store[lang]}
             direction={direction}
