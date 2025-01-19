@@ -733,13 +733,20 @@ router.get("/allow-menu", auth, jsonParser, async (req, res) => {
     if (!userId) {
         res.status(500).json({ error: "no Credit" });
     }
+
     try {
         const userData = await user.findOne({ _id: ObjectID(userId) });
-        const profileData = await ProfileAccess.findOne({
-            _id: ObjectID(userData.profile),
-        });
-
-        res.json({ access: profileData.access, message: "Profile List" });
+        var profile =[]
+        for(var p=0;p<(userData.profile&&userData.profile.length);p++){
+            var profileData = await ProfileAccess.findOne({ _id: ObjectID(userData.profile[p]) })
+            
+            for(var a=0;a<(profileData.access&&profileData.access.length);a++){
+                var accessProf=profileData.access[a]
+                if(profile.findIndex(item=>item.title==accessProf.title)==-1)
+                    profile.push(accessProf)
+            }
+        }
+        res.json({ access:profile,  message: "Profile List" });
     } catch (error) {
         res.status(500).json({ message: error.message });
     }

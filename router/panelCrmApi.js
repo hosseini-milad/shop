@@ -64,7 +64,7 @@ const calcTasks = async (userId) => {
     
     var myCreator = []
     if(access==7){
-        var userList = await user.find({profile:userData.profile})//{StockId:userData.StockId})
+        var userList = await user.find({profile:{$in:userData.profile}})//{StockId:userData.StockId})
         myCreator = userList.map(item=>item._id.toString())
     }
     if(access==3){
