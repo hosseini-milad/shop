@@ -22,6 +22,7 @@ const Filters = require("../models/product/Filters");
 const factory = require("../models/product/factory");
 const crmlist = require("../models/crm/crmlist");
 const sepidarPOST = require("../middleware/SepidarPost");
+const file= require("../models/product/file");
 
 router.post("/fetch-user", jsonParser, async (req, res) => {
     var pageSize = req.body.pageSize ? req.body.pageSize : "10";
@@ -777,7 +778,7 @@ router.post("/upload", uploadImg.single("upload"), async (req, res, next) => {
         var matches = req.body.base64image.match(
             /^data:([A-Za-z-+/]+);base64,(.+)$/
         ),
-            response = {};
+        response = {};
         if (matches.length !== 3) {
             return new Error("Invalid input string");
         }
@@ -789,6 +790,38 @@ router.post("/upload", uploadImg.single("upload"), async (req, res, next) => {
         //let extension = mime.extension(type);
         let fileName = `MGM-${Date.now().toString() + "-" + req.body.imgName}`;
         var upUrl = `/upload/${folderName}/${fileName}`;
+        fs.writeFileSync("." + upUrl, imageBuffer, "utf8");
+        return res.send({ status: "success", url: upUrl });
+    } catch (e) {
+        res.send({ status: "failed", error: e });
+    }
+});
+router.post("/uploadImage", uploadImg.single("upload"), async (req, res, next) => {
+    
+    try {
+        const folderName = req.body.folderName ? req.body.folderName : "temp";
+
+        const base64image=req.body.base64image;
+        const imgName =req.body.imgName
+       
+        const fileName = `MGM-${Date.now().toString()}-${imgName}`;
+        const uploadUrl = `/upload/${folderName}/${fileName}`;
+    
+
+        // to declare some path to store your converted image
+
+        var matches = base64image.match(
+            /^data:([A-Za-z-+/]+);base64,(.+)$/
+        )
+
+        if (matches.length !== 3) {
+            return new Error("Invalid input string");
+        }
+        let type = matches[1];
+        let imageBuffer = new Buffer.from(matches[2], "base64");
+
+      const file ={fileName,uploadUrl,type,}
+
         fs.writeFileSync("." + upUrl, imageBuffer, "utf8");
         return res.send({ status: "success", url: upUrl });
     } catch (e) {
