@@ -22,24 +22,24 @@ const Filters = require("../models/product/Filters");
 const factory = require("../models/product/factory");
 const crmlist = require("../models/crm/crmlist");
 const sepidarPOST = require("../middleware/SepidarPost");
-const file= require("../models/product/file");
+const file = require("../models/product/file");
 
 router.post("/fetch-user", jsonParser, async (req, res) => {
     var pageSize = req.body.pageSize ? req.body.pageSize : "10";
     var userId = req.body.userId;
     try {
         const userData = await user.findOne({ _id: ObjectID(userId) }).lean();
-        if(userData){
-            var profile =[]
-            try{
-            for(var p=0;p<(userData.profile&&userData.profile.length);p++){
-                profile.push(await ProfileAccess.findOne({ _id: ObjectID(userData.profile[p]) }))
-            }
-            
-            userData.profileData = profile
-            userData.profileCode = profile.map(item=>item.profileCode)
-            userData.profileName = profile.map(item=>item.profileName)
-        }catch{}
+        if (userData) {
+            var profile = []
+            try {
+                for (var p = 0; p < (userData.profile && userData.profile.length); p++) {
+                    profile.push(await ProfileAccess.findOne({ _id: ObjectID(userData.profile[p]) }))
+                }
+
+                userData.profileData = profile
+                userData.profileCode = profile.map(item => item.profileCode)
+                userData.profileName = profile.map(item => item.profileName)
+            } catch { }
             /*var userProfile = userData.profile?
                 await ProfileAccess.findOne({_id:ObjectID(userData.profile)}):''
             if(userProfile)
@@ -172,7 +172,7 @@ const StoreList = () => {
 router.post("/fetch-customer", jsonParser, async (req, res) => {
     var pageSize = req.body.pageSize ? req.body.pageSize : "10";
     var userId = req.body.userId;
-    try { 
+    try {
         const userData = await customer.findOne({ _id: ObjectID(userId) });
         res.json({ data: userData });
     } catch (error) {
@@ -197,8 +197,8 @@ router.post("/list-customers", jsonParser, async (req, res) => {
             {
                 $match: data.official
                     ? data.official == "official"
-                        ? { CustomerID	: { $exists: true } }
-                        : { CustomerID	: { $exists:  false} }
+                        ? { CustomerID: { $exists: true } }
+                        : { CustomerID: { $exists: false } }
                     : {},
             },
             {
@@ -230,7 +230,7 @@ router.post("/list-customers", jsonParser, async (req, res) => {
                     localField: "agentDB", foreignField: "_id", as: "agentInfo"
                 }
             },
-            	
+
         ]);
         const filter1Report = reportList;
         const orderList = filter1Report.slice(
@@ -747,17 +747,17 @@ router.get("/allow-menu", auth, jsonParser, async (req, res) => {
 
     try {
         const userData = await user.findOne({ _id: ObjectID(userId) });
-        var profile =[]
-        for(var p=0;p<(userData.profile&&userData.profile.length);p++){
+        var profile = []
+        for (var p = 0; p < (userData.profile && userData.profile.length); p++) {
             var profileData = await ProfileAccess.findOne({ _id: ObjectID(userData.profile[p]) })
-            
-            for(var a=0;a<(profileData.access&&profileData.access.length);a++){
-                var accessProf=profileData.access[a]
-                if(profile.findIndex(item=>item.title==accessProf.title)==-1)
+
+            for (var a = 0; a < (profileData.access && profileData.access.length); a++) {
+                var accessProf = profileData.access[a]
+                if (profile.findIndex(item => item.title == accessProf.title) == -1)
                     profile.push(accessProf)
             }
         }
-        res.json({ access:profile,  message: "Profile List" });
+        res.json({ access: profile, message: "Profile List" });
     } catch (error) {
         res.status(500).json({ message: error.message });
     }
@@ -778,7 +778,7 @@ router.post("/upload", uploadImg.single("upload"), async (req, res, next) => {
         var matches = req.body.base64image.match(
             /^data:([A-Za-z-+/]+);base64,(.+)$/
         ),
-        response = {};
+            response = {};
         if (matches.length !== 3) {
             return new Error("Invalid input string");
         }
@@ -797,35 +797,51 @@ router.post("/upload", uploadImg.single("upload"), async (req, res, next) => {
     }
 });
 router.post("/uploadImage", uploadImg.single("upload"), async (req, res, next) => {
-    
-    try {
-        const folderName = req.body.folderName ? req.body.folderName : "temp";
 
-        const base64image=req.body.base64image;
-        const imgName =req.body.imgName
-       
-        const fileName = `MGM-${Date.now().toString()}-${imgName}`;
-        const uploadUrl = `/upload/${folderName}/${fileName}`;
-    
+    try {
+
+        const { fileType, folderName = "temp", base64image, imgName, advType, title } = req.body;
+
+
+        const fileName = `${Date.now().toString()}-${imgName}`;
+        const path = `/upload/adv`
+        const uploadUrl = `${path}/${fileName}`;
+
 
         // to declare some path to store your converted image
 
-        var matches = base64image.match(
-            /^data:([A-Za-z-+/]+);base64,(.+)$/
-        )
+        var matches = base64image.match(/^data:([A-Za-z-+/]+);base64,(.+)$/)
 
         if (matches.length !== 3) {
             return new Error("Invalid input string");
         }
-        let type = matches[1];
+        let filetype = matches[1];
         let imageBuffer = new Buffer.from(matches[2], "base64");
 
-      const file ={fileName,uploadUrl,type,}
-
-        fs.writeFileSync("." + upUrl, imageBuffer, "utf8");
-        return res.send({ status: "success", url: upUrl });
+        const obj = { fileName, uploadUrl, filetype, advType, title }
+        const result = await file.create(obj)
+        if (!fs.existsSync("." + path)) {
+            fs.mkdirSync("." + path);
+        }
+        fs.writeFileSync("." + uploadUrl, imageBuffer, "utf8");
+        return res.send({ status: "success", url: uploadUrl });
     } catch (e) {
-        res.send({ status: "failed", error: e });
+        res.send({ status: "uploadImage", error: e });
+    }
+});
+router.post("/getImage", async (req, res, next) => {
+
+    try {
+
+        const { advType } = req.body;
+
+
+        const result = await file.findOne({ advType })
+
+
+        return res.send({ status: "success", data: result });
+    } catch (e) {
+        res.send({ status: "getImage", error: e });
     }
 });
 
