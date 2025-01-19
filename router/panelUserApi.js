@@ -30,13 +30,15 @@ router.post("/fetch-user", jsonParser, async (req, res) => {
         const userData = await user.findOne({ _id: ObjectID(userId) }).lean();
         if(userData){
             var profile =[]
-                for(var p=0;p<(userData.profile&&userData.profile.length);p++){
+            try{
+            for(var p=0;p<(userData.profile&&userData.profile.length);p++){
                 profile.push(await ProfileAccess.findOne({ _id: ObjectID(userData.profile[p]) }))
-                }
-                
-                userData.profileData = profile
-                userData.profileCode = profile.map(item=>item.profileCode)
-                userData.profileName = profile.map(item=>item.profileName)
+            }
+            
+            userData.profileData = profile
+            userData.profileCode = profile.map(item=>item.profileCode)
+            userData.profileName = profile.map(item=>item.profileName)
+        }catch{}
             /*var userProfile = userData.profile?
                 await ProfileAccess.findOne({_id:ObjectID(userData.profile)}):''
             if(userProfile)
