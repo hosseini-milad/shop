@@ -9,7 +9,7 @@ const FindAccess=async(user)=>{
     if(!profileData||!profileData.length) return([])
     var profileAccess=[]
     for(var i=0;i<profileData.length;i++){
-        profileAccess.push(profileData[i].access)
+        profileAccess.concat(profileData[i].access)
     }
     return(profileAccess)
 }
