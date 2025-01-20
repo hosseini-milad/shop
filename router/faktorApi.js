@@ -1530,7 +1530,8 @@ router.post('/quick-to-cart', jsonParser, async (req, res) => {
         //const cartAll = await cart.find()
         const userData = await customers.findOne({ _id: ObjectID(userId) })
         const adminData = await users.findOne({ _id: ObjectID(data.manageId) })
-        const profileData = adminData&&await profiles.findOne({ _id: ObjectID(adminData.profile) })
+        var adminProfiles = adminData.profile?adminData.profile.map(item=>ObjectID(item)):[]
+        const profileData = adminData&&await profiles.find({ _id: {$in:adminProfiles}})
         const qCartData = await quickCart.findOne({ userId: userId })
         const defaultPay = customers.CustomerID?"3":"4"
         data.payValue = (qCartData && qCartData.payValue)?qCartData.payValue:defaultPay
@@ -1551,7 +1552,7 @@ router.post('/quick-to-cart', jsonParser, async (req, res) => {
         //data.cartItems =pureCartPrice(quickCartItems,qCartData.payValue)
         data.cartNo = await NewCode(isSale ? "s" : "d")
         data.profileId = adminData&&adminData.profile
-        data.profileName = profileData&&profileData.profileName
+        data.profileName = profileData&&profileData.map(item=>item.profileName)
         data.stockId = qCartData && qCartData.stockId
         cartLog.create({ ...data, ItemID: req.body.cartID, action: "quick to cart" })
         await cart.create(data)
