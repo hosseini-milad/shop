@@ -298,6 +298,134 @@ router.post('/list', jsonParser, async (req, res) => {
         res.status(500).json({ message: error.message });
     }
 });
+router.post('/list-client',auth, jsonParser, async (req, res) => {
+    var pageSize = req.body.pageSize ? req.body.pageSize : "10";
+    var offset = req.body.offset ? (parseInt(req.body.offset)) : 0;
+    var nowDate = new Date();
+    try {
+        const data = {
+            orderNo: req.body.orderNo,
+            status: req.body.status,
+            customer: req.body.customer,
+            manager: req.body.manager,
+            brand: req.body.brand,
+            dateFrom:
+                req.body.dateFrom ? req.body.dateFrom[0] + "/" +
+                    req.body.dateFrom[1] + "/" + req.body.dateFrom[2] + " " + "00:00" :
+                    new Date().toISOString().slice(0, 10) + " 00:00",
+            dateTo:
+                req.body.dateTo ? req.body.dateTo[0] + "/" +
+                    req.body.dateTo[1] + "/" + req.body.dateTo[2] + " 23:59" :
+                    new Date().toISOString().slice(0, 10) + " 23:59",
+            pageSize: pageSize
+        }
+
+        const nowIso = nowDate.toISOString();
+        const nowParse = Date.parse(nowIso);
+        const now = new Date(nowParse);
+        var now2 = new Date();
+        var now3 = new Date();
+
+        var type = req.body.type ? req.body.type : "";
+
+        const adminData = await users.findOne({ _id: ObjectID(req.headers["userid"]) });
+
+        const dateFromEn = new Date(now2.setDate(now.getDate() - (data.dateFrom ? data.dateFrom : 1)));
+        dateFromEn.setHours(0, 0, 0, 0);
+        const dateToEn = new Date(now3.setDate(now.getDate() - (data.dateTo ? data.dateTo : 0)));
+        dateToEn.setHours(23, 59, 0, 0);
+
+        if (!adminData) {
+            res.status(400).json({ error: "کاربر معتبر نیست" });
+            return;
+        }
+        var clientList=[]
+        if(adminData.access=="admin"){
+            var userList = await users.find(
+                {profile:{$in:adminData.profile},access:{$nin:["manager","admin"]}})//{StockId:userData.StockId})
+            clientList=(userList.map(item=>item._id.toString()))
+        }
+        clientList.push(adminData._id.toString())
+            var showCart = [];
+            const cartList = await carts.aggregate([
+                { $addFields: { "userId": { "$toObjectId": "$userId" } } },
+                {
+                    $lookup: {
+                        from: "customers",
+                        localField: "userId",
+                        foreignField: "_id",
+                        as: "userInfo"
+                    }
+                },
+                {
+                    $lookup: {
+                        from: "tasks",
+                        localField: "cartNo",
+                        foreignField: "orderNo",
+                        as: "taskInfo"
+                    }
+                },
+                { $match: { manageId: {$in:clientList}}},
+                { $match: data.orderNo ? { cartNo: new RegExp('.*' + data.orderNo + '.*') } : {} },
+                { $match: !data.orderNo ? { initDate: { $gte: new Date(data.dateFrom) } } : {} },
+                { $match: !data.orderNo ? { initDate: { $lte: new Date(data.dateTo) } } : {} },
+                { $sort: { "initDate": -1 } }
+            ]);
+
+            for (var i = 0; i < (cartList && cartList.length); i++) {
+                if (data.customer) {
+                    if (cartList[i].userInfo[0]) {
+                        var userSimilar = cartList[i].userInfo[0].username &&
+                            cartList[i].userInfo[0].username.includes(data.customer);
+                        var phoneSimilar = cartList[i].userInfo[0].phone &&
+                            cartList[i].userInfo[0].phone.includes(data.customer);
+                        if (!userSimilar && !phoneSimilar)
+                            continue;
+                    } else {
+                        continue;
+                    }
+                }
+
+                var cartTask = cartList[i].taskInfo && cartList[i].taskInfo[0];
+                var InvoiceID = cartTask?(cartTask.result?cartTask.result.InvoiceID:''):''
+                var taskStep = cartTask ? cartTask.taskStep : null;
+
+                if (data.status) {
+                    if ((taskStep) !== data.status)
+                        continue;
+                }
+
+                var totalPrice = findCartSum(cartList[i].cartItems, cartList[i].payValue);
+
+                var cartWithTaskStep = {
+                    _id: cartList[i]._id,
+                    status: taskStep, InvoiceID,
+                    ...cartList[i],
+                    totalCart: totalPrice
+                };
+
+                showCart.push(cartWithTaskStep);
+            }
+            var crmData = await crmlist.findOne({crmCode:"main"})
+            status = crmData?crmData.crmSteps:[]
+            brandUnique = [...new Set(showCart &&
+                showCart.map((item) => item.brand))];
+            size = showCart && showCart.length;
+            const orderList = showCart && showCart.slice(offset,
+                (parseInt(offset) + parseInt(pageSize)));
+
+            resultData = orderList;
+        
+
+
+        res.json({
+            filter: resultData, brand: brandUnique, 
+            size,adminData,clientList
+        });
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+});
 
 const findCartSum = (cartItems, payValue) => {
     if (!cartItems) return ({ totalPrice: 0, totalCount: 0 })
