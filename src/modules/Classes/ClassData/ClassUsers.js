@@ -87,9 +87,7 @@ function ClassUser(props){
             <div className="addClassBtn" onClick={addUserToClass}>
               <i className="fa-solid fa-plus"></i></div>
           </div>
-          <div className="user-list">
-          <UserTable userList={{filter:users}} lang={{lang:props.lang}}/>
-          </div>
+          
           <div className="user-list">
           <UserTable userList={{filter:customers}} lang={{lang:props.lang}}/>
           </div>

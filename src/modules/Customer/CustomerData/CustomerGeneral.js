@@ -423,7 +423,7 @@ function CustomerGeneral(props) {
               </textarea>
             </div>
           </div>
-          {userData.agent ? (
+          {!userData.CustomerID ? (
             <div
               className="delete-user-btn formal-btn"
               onClick={() => setFormal(1)}

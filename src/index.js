@@ -47,7 +47,11 @@ import OpenOrders from "./Order/OpenOrders";
 import FilterAdd from "./modules/Filters/FilterAdd";
 import FilterHolder from "./modules/Filters/FilterHolder";
 import Classes from "./pages/Classes";
+import ProductClasses from "./pages/ProductClasses";
+import ProductGroupe from "./pages/ProductGroupe";
 import ClassDetailHolder from "./modules/Classes/ClassData/ClassDetailHolder";
+import ProductClassDetailHolder from "./modules/Classes/ClassData/ProductClassDetailHolder";
+import ProductGroupeDetailHolder from "./modules/Classes/ClassData/ProductGroupeDetailHolder";
 import PolicyDetailHolder from "./modules/Policy/PolicyData/PolicyDetailHolder";
 import Policy from "./pages/Policy";
 import Users from "./pages/Users";
@@ -331,10 +335,42 @@ root.render(
           }
         />
         <Route
+          path="/productclass"
+          element={
+            <Layout>
+              <ProductClasses lang={lang} />
+            </Layout>
+          }
+        />
+        <Route
+          path="/productgroupe"
+          element={
+            <Layout>
+              <ProductGroupe lang={lang} />
+            </Layout>
+          }
+        />
+        <Route
           path="/class/detail/:orderId"
           element={
             <Layout>
               <ClassDetailHolder lang={lang} />
+            </Layout>
+          }
+        />
+        <Route
+          path="/productclass/detail/:orderId"
+          element={
+            <Layout>
+              <ProductClassDetailHolder lang={lang} />
+            </Layout>
+          }
+        />
+        <Route
+          path="/productgroupe/detail/:orderId"
+          element={
+            <Layout>
+              <ProductGroupeDetailHolder lang={lang} />
             </Layout>
           }
         />

@@ -43,6 +43,10 @@ const formtrans ={
         english: "zone",
         persian: "منطقه"
     },
+    product:{
+        english: "product",
+        persian: "محصول"
+    },
     roleId:{
         english: "RoleId",
         persian: "کد نقش"
@@ -210,6 +214,10 @@ const formtrans ={
     brand:{
         english: "Brand",
         persian: "برند"
+    },
+    Percentage:{
+        english: "Percentage",
+        persian: "درصد"
     },
     brandManage:{
         english: "Brand Manage",

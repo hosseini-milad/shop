@@ -45,13 +45,12 @@ function Products(props) {
       status: filters.status,
       active: filters.active,
       store: filters.store,
-      exist: filters.exist?filters.exist:"0",
+      exist: filters.exist ? filters.exist : "0",
       brand: filters.brand,
       brandId: filters.brandid,
       dateFrom: filters.date && filters.date.dateFrom,
       dateTo: filters.date && filters.date.dateTo,
       access: "manager",
-      
     };
     const postOptions = {
       method: "post",
@@ -160,7 +159,7 @@ function Products(props) {
         }
       );
   };
-  console.log(filters.store)
+  console.log(filters.store);
   return (
     <div className="user" style={{ direction: direction }}>
       <div className="od-header">
@@ -169,9 +168,12 @@ function Products(props) {
             <p>{tabletrans.products[lang]}</p>
           </div>
         </div>
-        <div className="od-header-btn">
+        <div
+          className="od-header-btn"
+          style={{ width: "100%", marginInline: "0px" }}
+        >
           <div
-            className="edit-btn add-btn"
+            className="edit-btn"
             onClick={() => (window.location.href = "/products/detail/new")}
           >
             <i className="fa-solid fa-plus"></i>
@@ -181,6 +183,18 @@ function Products(props) {
             <i className="fa-solid fa-refresh"></i>
             <p>{tabletrans.update[lang]}</p>
           </div>
+          <div
+            className="edit-btn"
+            style={{ marginRight: "auto" }}
+            onClick={() => (window.location.href = "/productclass")}
+          >
+            <i className="fa fa-tasks"></i>
+            <p>{tabletrans.productClasses[lang]}</p>
+          </div>
+          {/* <div className="edit-btn">
+            <i className="fa fa-tasks"></i>
+            <p>{tabletrans.productGroupes[lang]}</p>
+          </div> */}
         </div>
       </div>
       <div className="list-container">

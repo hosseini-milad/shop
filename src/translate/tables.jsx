@@ -39,6 +39,14 @@ const tabletrans ={
         english: "Classes",
         persian: "کلاس ها"
     },
+    productClasses:{
+        english: "product Classes",
+        persian: "کلاس بندی محصولات "
+    },
+    productGroupes:{
+        english: "product Groupes",
+        persian: "گروه بندی محصولات"
+    },
     productTitle:{
         english: "Product Title",
         persian: "عنوان محصول"
@@ -424,6 +432,10 @@ const tabletrans ={
     addClass:{
         english:"Add/Edit Class",
         persian:"افزودن یا ویرایش کلاس ها"
+    },
+    addGroupe:{
+        english:"Add/Edit Groupe",
+        persian:"افزودن یا ویرایش گروه ها"
     },
     description:{
         english:"Description",
