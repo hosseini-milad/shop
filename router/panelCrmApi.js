@@ -180,7 +180,7 @@ const calcTasks = async (userId) => {
         catch { }
         //columnOrder.find(item=>item.enTitle===taskStep)
     }
-    return ({
+    return ({userAccess,
         crmData: crmData, tasks: tasksToShow, crm: crmData,
         columnOrder: showColumn, columns: columns,myCreator
     })
