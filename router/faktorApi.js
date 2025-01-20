@@ -1531,6 +1531,7 @@ router.post('/quick-to-cart', jsonParser, async (req, res) => {
         const userData = await customers.findOne({ _id: ObjectID(userId) })
         const adminData = await users.findOne({ _id: ObjectID(data.manageId) })
         var adminProfiles = adminData.profile?adminData.profile.map(item=>ObjectID(item)):[]
+        console.log(adminProfiles)
         const profileData = adminData&&await profiles.find({ _id: {$in:adminProfiles}})
         const qCartData = await quickCart.findOne({ userId: userId })
         const defaultPay = customers.CustomerID?"3":"4"
