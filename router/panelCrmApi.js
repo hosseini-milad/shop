@@ -53,9 +53,9 @@ const calcTasks = async (userId) => {
     if (userData.access === "admin") access = 7
     if (userData.access === "client") access = 3
     const userAccess = await FindAccess(userData.profile)
-    const allow = userAccess.find(item => item.title&&item.title.includes("Set Order"))
+    const allow = userAccess.find(item => (item.title&&item.title.includes("Set Order")))
     if (!allow && access!==10){
-        return({error:"دسترسی ندارد"})
+        //return({error:"دسترسی ندارد"})
         
     } 
 
