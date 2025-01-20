@@ -23,7 +23,7 @@ function Users(props) {
   const [filters, setFilters] = useState(getFiltersFromUrl());
   const [loading, setLoading] = useState(0);
   const [SaveD, setSaveD] = useState(0);
-  const [VisitorOption,setVisitorOption] = useState()
+  const [VisitorOption, setVisitorOption] = useState();
   const [brandOptions, setBrandOptions] = useState();
   const [sample, setSample] = useState([]);
   const [brands, setBrands] = useState([]);
@@ -48,6 +48,7 @@ function Users(props) {
       dateFrom: filters.date && filters.date.dateFrom,
       dateTo: filters.date && filters.date.dateTo,
       access: filters.access,
+      product: filters.product,
       // manageId: filters.manageId,
     };
     const postOptions = {
@@ -59,22 +60,22 @@ function Users(props) {
       },
       body: JSON.stringify(body),
     };
-    
+
     fetch(env.siteApi + "/panel/product/report-total", postOptions)
       .then((res) => res.json())
       .then(
         async (result) => {
-          if(!result.error){
-          setLoading(0);
-          setContent("");
-          setVisitorOption(result.marketList)
-          setTimeout(() => setContent(result), 200);
-          // setContent("");
-          setBrandOptions(result.brandList);
-          handelVisitorInformation(result);
-          handlerBrand(result.brandData);
-          setCustomers(result.userList);
-          // setTimeout(() => setContent(result), 200);
+          if (!result.error) {
+            setLoading(0);
+            setContent("");
+            setVisitorOption(result.marketList);
+            setTimeout(() => setContent(result), 200);
+            // setContent("");
+            setBrandOptions(result.brandList);
+            handelVisitorInformation(result);
+            handlerBrand(result.brandData);
+            setCustomers(result.userList);
+            // setTimeout(() => setContent(result), 200);
           }
         },
         (error) => {
@@ -102,7 +103,7 @@ function Users(props) {
         return {
           ...item,
           value: item.price,
-          label: item.name
+          label: item.name,
         };
       });
     setBrands(convertPriceToValue);
@@ -174,120 +175,121 @@ function Users(props) {
           </div>
         </div>
       </div>
-      {loading?<div className="Loader">{env.loader}</div>
-      :<Box>
-        <Grid container spacing={2}>
-          <Grid item xs={12} md={6}>
-            <Grid item xs={12} md={12} className="wrapper-visitor-chart">
-              {brands.length > 0 && (
-                <PieChart
-                  width={500}
-                  height={400}
-                  series={[
-                    {
-                      arcLabel: (item) => `${item.name} `,
-                      arcLabelMinAngle: 30,
-                      data: brands,
-                      innerRadius: 20,
-                      outerRadius: 200,
-                      paddingAngle: 0,
-                      cornerRadius: 10,
-                      startAngle: -180,
-                      endAngle: 180,
-                    },
-                  ]}
-                  sx={{
-                    [`& .${pieArcLabelClasses.root}`]: {
-                      fill: "white",
-                      fontSize: "12px",
-                    },
-                  }}
-                  slotProps={{
-                    legend: { hidden: true },
-                  }}
-                  onItemClick={(event, pieItemIdentifier, item) =>
-                    selectedSingleBrand(event, pieItemIdentifier, item)
-                  }
-                />
-              )}
-            </Grid>
-            <Grid item xs={12} md={12}>
-              <div
-                className="list-container visitor-list"
-                style={{ width: "100%" }}
-              >
-                <div className="user-list">
-                  {/* <OrderTable lang={props.lang} content={content} /> */}
-                  <CustomerTable lang={props.lang} userList={customers} />
+      {loading ? (
+        <div className="Loader">{env.loader}</div>
+      ) : (
+        <Box>
+          <Grid container spacing={2}>
+            <Grid item xs={12} md={6}>
+              <Grid item xs={12} md={12} className="wrapper-visitor-chart">
+                {brands.length > 0 && (
+                  <PieChart
+                    width={500}
+                    height={400}
+                    series={[
+                      {
+                        arcLabel: (item) => `${item.name} `,
+                        arcLabelMinAngle: 30,
+                        data: brands,
+                        innerRadius: 20,
+                        outerRadius: 200,
+                        paddingAngle: 0,
+                        cornerRadius: 10,
+                        startAngle: -180,
+                        endAngle: 180,
+                      },
+                    ]}
+                    sx={{
+                      [`& .${pieArcLabelClasses.root}`]: {
+                        fill: "white",
+                        fontSize: "12px",
+                      },
+                    }}
+                    slotProps={{
+                      legend: { hidden: true },
+                    }}
+                    onItemClick={(event, pieItemIdentifier, item) =>
+                      selectedSingleBrand(event, pieItemIdentifier, item)
+                    }
+                  />
+                )}
+              </Grid>
+              <Grid item xs={12} md={12}>
+                <div
+                  className="list-container visitor-list"
+                  style={{ width: "100%" }}
+                >
+                  <div className="user-list">
+                    {/* <OrderTable lang={props.lang} content={content} /> */}
+                    <CustomerTable lang={props.lang} userList={customers} />
+                  </div>
                 </div>
-              </div>
+              </Grid>
             </Grid>
-          </Grid>
-          <Grid item xs={12} md={6}>
-            <Grid item xs={12} md={12} className="wrapper-visitor-chart">
-              {/* ${item.username} */}
-              {visitorList.length > 0 && (
-                <PieChart
-                  width={500}
-                  height={400}
-                  series={[
-                    {
-                      arcLabel: (item) => `(${item.value})`,
-                      arcLabelMinAngle: 30,
-                      data: visitorList,
-                      innerRadius: 30,
-                      outerRadius: 200,
-                      paddingAngle: 0,
-                      cornerRadius: 10,
-                      startAngle: -180,
-                      endAngle: 180,
-                    },
-                  ]}
-                  sx={{
-                    [`& .${pieArcLabelClasses.root}`]: {
-                      fill: "white",
-                      fontWeight: "bold",
-                      fontSize: "12px",
-                    },
-                  }}
-                  slotProps={{
-                    legend: { hidden: true },
-                  }}
-                  onItemClick={(event, pieItemIdentifier, item) =>
-                    selectedVisitor(event, pieItemIdentifier, item)
-                  }
-                />
-              )}
-            </Grid>
+            <Grid item xs={12} md={6}>
+              <Grid item xs={12} md={12} className="wrapper-visitor-chart">
+                {/* ${item.username} */}
+                {visitorList.length > 0 && (
+                  <PieChart
+                    width={500}
+                    height={400}
+                    series={[
+                      {
+                        arcLabel: (item) => `(${item.value})`,
+                        arcLabelMinAngle: 30,
+                        data: visitorList,
+                        innerRadius: 30,
+                        outerRadius: 200,
+                        paddingAngle: 0,
+                        cornerRadius: 10,
+                        startAngle: -180,
+                        endAngle: 180,
+                      },
+                    ]}
+                    sx={{
+                      [`& .${pieArcLabelClasses.root}`]: {
+                        fill: "white",
+                        fontWeight: "bold",
+                        fontSize: "12px",
+                      },
+                    }}
+                    slotProps={{
+                      legend: { hidden: true },
+                    }}
+                    onItemClick={(event, pieItemIdentifier, item) =>
+                      selectedVisitor(event, pieItemIdentifier, item)
+                    }
+                  />
+                )}
+              </Grid>
 
-            <Grid item xs={12} md={12}>
-              <div
-                className="list-container visitor-list"
-                style={{ width: "100%" }}
-              >
-                <div className="user-list">
-                  <OrderTable lang={props.lang} content={content} />
+              <Grid item xs={12} md={12}>
+                <div
+                  className="list-container visitor-list"
+                  style={{ width: "100%" }}
+                >
+                  <div className="user-list">
+                    <OrderTable lang={props.lang} content={content} />
+                  </div>
                 </div>
-              </div>
-              <Paging
-                content={content}
-                setFilters={setFilters}
-                filters={filters}
-                lang={props.lang}
-                updateUrlWithFilters={updateUrlWithFilters} // Pass the function as a prop
-              />
+                <Paging
+                  content={content}
+                  setFilters={setFilters}
+                  filters={filters}
+                  lang={props.lang}
+                  updateUrlWithFilters={updateUrlWithFilters} // Pass the function as a prop
+                />
+              </Grid>
             </Grid>
           </Grid>
-        </Grid>
-      </Box>}
+        </Box>
+      )}
 
       {/* <Box>
         <Grid container spacing={2}>
           
         </Grid>
       </Box> */}
-
-
     </div>
   );
 }

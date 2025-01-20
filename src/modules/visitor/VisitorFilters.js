@@ -1,6 +1,7 @@
 import StyleSelect from "../../components/Button/AutoComplete";
 import tabletrans from "../../translate/tables";
 import StyleDatePicker from "../../components/Button/DatePicker";
+import StyleInput from "../../components/Button/Input";
 import { useEffect, useState } from "react";
 import env from "../../env";
 
@@ -46,9 +47,24 @@ function VisitorFilter(props) {
         }
       );
   }, [userSearch]);
+  const createConditionalAction = (minLength) => {
+    return (e) => {
+      if (e.length > minLength || e.length === 0) {
+        props.setFilters((prevState) => ({
+          ...prevState,
+          product: e ? e : "",
+        }));
+      }
+    };
+  };
   return (
     <div className="user-filter d-filter">
       <div className="serach-input">
+        <StyleInput
+          title={tabletrans.productTitle[props.lang.lang]}
+          direction={props.lang.dir}
+          action={createConditionalAction(3)}
+        />
         <StyleSelect
           title={tabletrans.visitor[props.lang.lang]}
           direction={props.lang.dir}

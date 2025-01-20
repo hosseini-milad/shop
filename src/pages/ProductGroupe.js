@@ -2,17 +2,17 @@ import Cookies from "universal-cookie";
 import StatusBar from "../modules/Components/StatusBar";
 import Paging from "../modules/Components/Paging";
 import errortrans from "../translate/error";
+import OrderTable from "../modules/Orders/OrderTable";
 import OrderFilters from "../modules/Orders/OrderComponent/OrderFilters";
 import { useEffect } from "react";
 import { useState } from "react";
 import env from "../env";
 import ProductTable from "../modules/Products/ProductTable";
 import tabletrans from "../translate/tables";
-import BrandTable from "../modules/Brands/BrandTable";
-import PolicyTable from "../modules/Policy/PolicyTable";
+import PClassTable from "../modules/Classes/PClassTable";
 const cookies = new Cookies();
 
-function Policy(props) {
+function ProductGroupe(props) {
   const direction = props.lang ? props.lang.dir : errortrans.defaultDir;
   const lang = props.lang ? props.lang.lang : errortrans.defaultLang;
   const [content, setContent] = useState("");
@@ -21,17 +21,7 @@ function Policy(props) {
   const token = cookies.get(env.cookieName);
   useEffect(() => {
     setLoading(1);
-    const body = {
-      offset: filters.offset ? filters.offset : "0",
-      pageSize: filters.pageSize ? filters.pageSize : "25",
-      customer: filters.customer,
-      orderNo: filters.orderNo,
-      status: filters.status,
-      brand: filters.brand,
-      dateFrom: filters.date && filters.date.dateFrom,
-      dateTo: filters.date && filters.date.dateTo,
-      access: "manager",
-    };
+    const body = {};
     const postOptions = {
       method: "post",
       headers: {
@@ -41,11 +31,12 @@ function Policy(props) {
       },
       body: JSON.stringify(body),
     };
-    //console.log(postOptions)
-    fetch(env.siteApi + "/panel/user/list-policy", postOptions)
+    console.log(postOptions);
+    fetch(env.siteApi + "/panel/user/list-classes", postOptions)
       .then((res) => res.json())
       .then(
         (result) => {
+          console.log(result);
           setLoading(0);
           setContent("");
           setTimeout(() => setContent(result), 200);
@@ -62,16 +53,13 @@ function Policy(props) {
       <div className="od-header">
         <div className="od-header-info">
           <div className="od-header-name">
-            <p>{tabletrans.policies[lang]}</p>
+            <p>{tabletrans.productGroupes[lang]}</p>
           </div>
         </div>
-        <div
-          className="od-header-btn"
-          style={{ width: "100%", marginInline: "0px" }}
-        >
+        <div className="od-header-btn">
           <div
-            className="edit-btn"
-            onClick={() => (window.location.href = "/policy/detail/new")}
+            className="edit-btn add-btn"
+            onClick={() => (window.location.href = "/productgroupe/detail/new")}
           >
             <i className="fa-solid fa-plus"></i>
             <p>{tabletrans.addNew[lang]}</p>
@@ -80,25 +68,15 @@ function Policy(props) {
             <i className="fa-solid fa-pen"></i>
             <p>{tabletrans.edit[lang]}</p>
           </div>
-          <div
-            className="edit-btn"
-            style={{ marginRight: "auto" }}
-            onClick={() => (window.location.href = "/productgroupe")}
-          >
-            <i className="fa-solid fa-tasks"></i>
-            <p>{tabletrans.productGroupes[lang]}</p>
-          </div>
         </div>
       </div>
       <div className="list-container">
-        <OrderFilters
-          lang={props.lang}
-          setFilters={setFilters}
-          options={content.brand}
-          filters={filters}
-        />
+        {/* <StatusBar lang={lang} token={token} filters={filters}
+         status={content.rxStatus} setFilters={setFilters}/> */}
+        {/* <OrderFilters lang={props.lang} setFilters={setFilters}
+          options={content.brand} filters={filters}/> */}
         <div className="user-list">
-          {loading ? env.loader : <PolicyTable policy={content} lang={lang} />}
+          {loading ? env.loader : <PClassTable classes={content} lang={lang} />}
         </div>
         <Paging
           content={content}
@@ -110,4 +88,4 @@ function Policy(props) {
     </div>
   );
 }
-export default Policy;
+export default ProductGroupe;

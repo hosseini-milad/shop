@@ -97,7 +97,9 @@ function Orders(props) {
       env.siteApi +
         (FaktorType == "Faktor"
           ? "/setting/list-faktors"
-          : "/panel/order/list"),
+          : token.access == "manager"
+          ? "/panel/order/list"
+          : "/panel/order/list-client"),
       postOptions
     )
       .then((res) => res.json())
