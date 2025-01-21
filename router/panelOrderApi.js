@@ -371,7 +371,7 @@ router.post('/list-client',auth, jsonParser, async (req, res) => {
                 { $match: !data.orderNo ? { initDate: { $lte: new Date(data.dateTo) } } : {} },
                 { $sort: { "initDate": -1 } }
             ]);
-
+            var isSale = false
             for (var i = 0; i < (cartList && cartList.length); i++) {
                 if (data.customer) {
                     if (cartList[i].userInfo[0]) {
@@ -386,7 +386,7 @@ router.post('/list-client',auth, jsonParser, async (req, res) => {
                     }
                 }
             var tempStatus = cartList[i].InvoiceID?"done":"undone"
-
+                if(!isSale) isSale=cartList[i].isSale?true:false
                 var cartTask = cartList[i].taskInfo && cartList[i].taskInfo[0];
                 var InvoiceID = cartTask?(cartTask.result?cartTask.result.InvoiceID:''):''
                 var taskStep = cartTask ? cartTask.taskStep : null;
@@ -402,7 +402,7 @@ router.post('/list-client',auth, jsonParser, async (req, res) => {
                     _id: cartList[i]._id,
                     status: taskStep, InvoiceID,
                     ...cartList[i], status:tempStatus,
-                    totalCart: totalPrice
+                    totalCart: totalPrice,isSale
                 };
 
                 showCart.push(cartWithTaskStep);
