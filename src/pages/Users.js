@@ -157,7 +157,7 @@ const Users = (props) => {
         body: JSON.stringify({
           ...formData,
           StockArr: extra,
-          profile: ExtraProfile.map((item) => item._id),
+          profile: ExtraProfile && ExtraProfile.map((item) => item._id),
         }),
       });
       setShowCreatePanel(false);
