@@ -402,7 +402,7 @@ router.post('/list-client',auth, jsonParser, async (req, res) => {
                     _id: cartList[i]._id,
                     status: taskStep, InvoiceID,
                     ...cartList[i], status:tempStatus,
-                    totalCart: totalPrice,isSale
+                    totalCart: totalPrice
                 };
 
                 showCart.push(cartWithTaskStep);
@@ -421,7 +421,7 @@ router.post('/list-client',auth, jsonParser, async (req, res) => {
 
         res.json({
             filter: resultData, brand: brandUnique, 
-            size,adminData,clientList
+            size,adminData,clientList,isSale
         });
     } catch (error) {
         res.status(500).json({ message: error.message });
