@@ -66,6 +66,7 @@ function OrderHeader(props) {
       props.setPayValue(4)
     }
   }
+  console.log(props.user)
   return (
     <div className="nav-bar">
       <p>سفارشات</p>

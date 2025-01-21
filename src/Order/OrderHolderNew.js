@@ -104,8 +104,8 @@ function OrderHolder(props) {
       .then(
         (result) => {
           if (result) {
+            setUser(result.defaultUser && result.defaultUser);
             if (token.profileCode == "sale") {
-              setUser(result.defaultUser && result.defaultUser);
               setFilters(result);
               if (result.defaultUser && result.defaultUser.CustomerID) {
                 setPayValue(3);
