@@ -353,7 +353,7 @@ const findElement = (desc, field, index) => {
 export const findFPage = (user) => {
   const userData = user.get(env.cookieName);
   if (userData) {
-    if (userData.profileClass === "660409167887fe34af0d0c77") return "market";
+    if (userData.profileClass == ["660409167887fe34af0d0c77"]) return "market";
     else return "dashboard";
   }
   return "login";
