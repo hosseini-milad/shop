@@ -1,11 +1,11 @@
 const env = {
   //siteApi:'http://localhost:6090/api',
-  siteApi: "https://testadmin.sharifoilco.com/api",
-  // siteApi: "https://shopadmin.sharifoilco.com/api",
+  // siteApi: "https://testadmin.sharifoilco.com/api",
+  siteApi: "https://shopadmin.sharifoilco.com/api",
 
   //siteApiUrl:'http://localhost:6090',
-  siteApiUrl: "https://testadmin.sharifoilco.com",
-  // siteApiUrl: "https://shopadmin.sharifoilco.com",
+  // siteApiUrl: "https://testadmin.sharifoilco.com",
+  siteApiUrl: "https://shopadmin.sharifoilco.com",
   cookieName: "shop-login",
   //cookieName:'panel-login',
   //cookieName:'mehr-login',
@@ -353,7 +353,7 @@ const findElement = (desc, field, index) => {
 export const findFPage = (user) => {
   const userData = user.get(env.cookieName);
   if (userData) {
-    if (userData.profileClass === "660409167887fe34af0d0c77") return "market";
+    if (userData.profileClass == ["660409167887fe34af0d0c77"]) return "market";
     else return "dashboard";
   }
   return "login";
