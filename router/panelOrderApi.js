@@ -385,6 +385,7 @@ router.post('/list-client',auth, jsonParser, async (req, res) => {
                         continue;
                     }
                 }
+            var tempStatus = cartList[i].InvoiceID?"done":"undone"
 
                 var cartTask = cartList[i].taskInfo && cartList[i].taskInfo[0];
                 var InvoiceID = cartTask?(cartTask.result?cartTask.result.InvoiceID:''):''
@@ -400,7 +401,7 @@ router.post('/list-client',auth, jsonParser, async (req, res) => {
                 var cartWithTaskStep = {
                     _id: cartList[i]._id,
                     status: taskStep, InvoiceID,
-                    ...cartList[i],
+                    ...cartList[i], status:tempStatus,
                     totalCart: totalPrice
                 };
 
