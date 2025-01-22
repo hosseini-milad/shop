@@ -229,8 +229,10 @@ router.post('/update-tasks-status', auth, jsonParser, async (req, res) => {
 
         const faktorNo = "F123" + taskData.orderNo
         var sepidarResult = await SepidarOrder(taskData.orderNo,1)
-        res.json(sepidarResult) 
+        //res.json(sepidarResult) 
+        var errorSep='' 
         if (sepidarResult&&sepidarResult.Message)
+            errorSep =sepidarResult.Message 
             await tasks.updateOne({ _id: ObjectID(taskId) },
                 {
                     $set: {
@@ -249,7 +251,8 @@ router.post('/update-tasks-status', auth, jsonParser, async (req, res) => {
     try {
         res.json({
             taskData: tasksList, message: taskId ? "Task Updated" : "Task Created",
-            result: sepidarResult, sepidarQuery: sepidarQuery, userData: adminData
+            result: sepidarResult, sepidarQuery: sepidarQuery, userData: adminData,
+            error:errorSep
         })
     }
     catch (error) {
