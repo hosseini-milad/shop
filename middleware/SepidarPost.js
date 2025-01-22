@@ -13,7 +13,7 @@ const sepidarPOST=async(data,action,user,admin)=>{
         header = SEPIDAR_HEADER_Bazaryab 
     else if(userDetail&&userDetail.StockId==="6")
         header = SEPIDAR_HEADER_HESARAK
-    else if(FindProfile(userDetail&&userDetail.profile,"innerSale"))
+    else if(FindProfile(data&&data.profile,"innerSale"))
         header = MARKAZI_HEADER
     var response = '';
     try{    response = await fetch(SEPIDAR_URL+action,

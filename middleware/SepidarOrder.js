@@ -16,7 +16,7 @@ const SepidarOrder=async(orderNo,fullPrice)=>{
     var sepidarQuery = await CartToSepidar(cartData.cartItems,faktorNo,
         userData.CustomerID?userData:adminData,adminData.StockId,cartData.discount,'',
         cartData.payValue,fullPrice)
-    
+        sepidarQuery.profile = cartData.profileId
     var sepidarResult = await sepidarPOST(sepidarQuery,"/api/invoices",adminData._id)
     if(sepidarResult&&!sepidarResult.Message){
         await tasks.updateOne({orderNo:orderNo},
