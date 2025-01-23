@@ -12,8 +12,11 @@ const FindProfile=async(access,profile)=>{
     if(!profileData||!profileData.length) return(0)
     
     for(var i=0;i<profileData.length;i++){
-        if(profileData[i].profileCode==profile)
+        if(profileData[i].profileCode==profile){
+            console.log(profileData[i].profileCode,
+                profile)
             return(1)
+        }
     }
     return(0)
 }
