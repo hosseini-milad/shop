@@ -5,7 +5,7 @@ var ObjectID = require('mongodb').ObjectID;
 const FindProfile=async(access,profile)=>{
     if(!access) return(0)
     
-    var adminProfiles = access?access.map(item=>(item)):[]
+    var adminProfiles = access?access.map(item=>ObjectID(item)):[]
     const profileData = await ProfileAccess.find({_id: {$in:adminProfiles}})
     if(!profileData||!profileData.length) return(0)
     
