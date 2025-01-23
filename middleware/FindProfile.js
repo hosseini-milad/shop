@@ -7,6 +7,7 @@ const FindProfile=async(access,profile)=>{
     
     var adminProfiles = access?access.map(item=>ObjectID(item)):[]
     const profileData = await ProfileAccess.find({_id: {$in:adminProfiles}})
+    console.log(profileData)
     if(!profileData||!profileData.length) return(0)
     
     for(var i=0;i<profileData.length;i++){
