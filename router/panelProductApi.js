@@ -811,4 +811,21 @@ router.post('/report-total',jsonParser,auth,async(req,res)=>{
         res.status(500).json({message: error.message})
     }
 })
+
+router.post('/fetch-name', jsonParser, auth, async(req,res) => {
+    try {
+        const { name = '' } = req.body;
+        if (!name || name.length < 3) {
+            return res.status(400).json({ error: 'Please enter at least 3 characters of some product name.' });
+        }
+        const fetchedRequestedProducts = await products.find({ title: { $regex: name }}).sort({ _id: -1 }).select({ _id: 0, title: 1, ItemID: 1 }).lean();
+        const responseData = {
+            list: fetchedRequestedProducts,
+        };
+        return res.json(responseData);
+    } catch (error) {
+        return res.status(500).json({message: error.message});
+    }
+});
+
 module.exports = router;
