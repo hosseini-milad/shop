@@ -688,6 +688,9 @@ router.post('/report-total',jsonParser,auth,async(req,res)=>{
                 new Date().toISOString().slice(0, 10)+" 23:59",
             
         }
+        if (req.body.productsList && req.body.productsList.length) {
+            data.productsList = req.body.productsList;
+        }
         const managerList = await users.find({access:"market"})
         const nowIso=nowDate.toISOString();
         const nowParse = Date.parse(nowIso);
@@ -699,6 +702,12 @@ router.post('/report-total',jsonParser,auth,async(req,res)=>{
         const dateToEn = new Date(now3.setDate(now.getDate()-(data.dateTo?data.dateTo:0)));
         dateToEn.setHours(23, 59, 0, 0)
         const reportList = await cart.aggregate([
+            { $unwind: '$cartItems' },
+            { $match:data.manageId?{manageId:data.manageId}:{}},
+            { $match:data.userId?{userId:data.userId}:{}},
+            { $match:{initDate:{$gte:new Date(data.dateFrom)}}},
+            { $match:{initDate:{$lte:new Date(data.dateTo)}}},
+            { $match: data.productsList ? { 'cartItems.id': { $in: data.productsList }} : {} },
             { $addFields: { "userId": { "$toObjectId": "$userId" }}},
             {$lookup:{
                 from : "customers", 
@@ -706,10 +715,6 @@ router.post('/report-total',jsonParser,auth,async(req,res)=>{
                 foreignField: "_id", 
                 as : "userInfo"
             }},
-            { $match:data.manageId?{manageId:data.manageId}:{}},
-            { $match:data.userId?{userId:data.userId}:{}},
-            { $match:{initDate:{$gte:new Date(data.dateFrom)}}},
-            { $match:{initDate:{$lte:new Date(data.dateTo)}}},
             { $sort: {"initDate":-1}},
      
             ])
@@ -728,7 +733,7 @@ router.post('/report-total',jsonParser,auth,async(req,res)=>{
             var analyzeStatus = await CanAnalyze(reportList[i].cartNo)
             if(!analyzeStatus) continue
             var payValue = reportList[i].payValue
-            var cartItems=reportList[i].cartItems
+            var cartItems=[reportList[i].cartItems]
             var manageId =reportList[i].manageId 
             var itemAdd = 0
             for(var j=0;j<(cartItems&&cartItems.length);j++){
