@@ -56,7 +56,7 @@ function ProductGroupe(props) {
             <p>{tabletrans.productGroupes[lang]}</p>
           </div>
         </div>
-        <div className="od-header-btn">
+        {/* <div className="od-header-btn">
           <div
             className="edit-btn add-btn"
             onClick={() => (window.location.href = "/productgroupe/detail/new")}
@@ -68,7 +68,7 @@ function ProductGroupe(props) {
             <i className="fa-solid fa-pen"></i>
             <p>{tabletrans.edit[lang]}</p>
           </div>
-        </div>
+        </div> */}
       </div>
       <div className="list-container">
         {/* <StatusBar lang={lang} token={token} filters={filters}

@@ -897,7 +897,7 @@ dialog {
 }
 .hesabfaMainTable th {
   border: 2px solid #333;
-  
+
   padding: 5px 10px;
   font-size: 13px;
   text-align: center;
@@ -1999,6 +1999,33 @@ dialog {
   border-radius: 0.5rem;
   min-width: 100px;
   margin-right: 1rem;
+}
+.bold-fonts {
+  font-weight: 900;
+  font-size: 20px;
+}
+.image-range {
+  display: flex;
+  flex-direction: column;
+
+  .row-box {
+    width: 100%;
+    padding: 0;
+  }
+  .probs-wrapper {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+  }
+  .rangeHolder {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+
+    .MuiCardContent-root {
+      padding: 0 !important;
+    }
+  }
 }
 @media print {
   .PrintBtn {

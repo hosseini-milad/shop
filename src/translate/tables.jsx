@@ -15,6 +15,10 @@ const tabletrans ={
         english:"Message",
         persian:"متن پیام"
     },
+    Advertisment:{
+        english:"Advertisment",
+        persian:"تبلیغات"
+    },
     discounts:{
         english: "Discounts",
         persian: "تخفیفات"
@@ -76,6 +80,10 @@ const tabletrans ={
     name:{
         english: "Name",
         persian: "نام"
+    },
+    namecat:{
+        english: "Name category",
+        persian: "نام دسته بندی"
     },
     profile:{
         english: "Profile",
@@ -164,6 +172,14 @@ const tabletrans ={
     details:{
         english: "Details",
         persian: "جزئیات"
+    },
+    Advdetails:{
+        english: "Advertisment Details",
+        persian: "جزئیات تبلیغ"
+    },
+    Advinfo:{
+        english: "Advertisment Infos",
+        persian: "اطلاعات تبلیغ"
     },
     print:{
         english: "Print",

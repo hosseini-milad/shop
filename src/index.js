@@ -60,10 +60,12 @@ import PrintSepidar from "./modules/Print/PrintSepidar";
 import Printofficial from "./modules/Print/Printofficial";
 import Discount from "./pages/Discount";
 import OffCustomer from "./pages/Offcustomer";
+import Advertisment from "./pages/Advertisment";
 import PrintStore from "./modules/Crm/PrintStore";
 import PublicFaktor from "./modules/Print/PublicFaktor";
 import PublicOfficial from "./modules/Print/PublicOfficial";
 import PublicSepidar from "./modules/Print/PublicSepidar";
+import AdvDetailHolder from "./modules/Adv/AdvDetailHolder";
 const cookies = new Cookies();
 const style = document.getElementById("style-direction");
 var lang = JSON.parse(localStorage.getItem(env.cookieLang));
@@ -252,6 +254,22 @@ root.render(
           element={<PrintSepidar lang={"fa"} />}
         />
 
+        <Route
+          path="/advertisment"
+          element={
+            <Layout>
+              <Advertisment lang={lang} />
+            </Layout>
+          }
+        />
+        <Route
+          path="/advertisment/detail/:orderId"
+          element={
+            <Layout>
+              <AdvDetailHolder lang={lang} />
+            </Layout>
+          }
+        />
         <Route
           path="/services"
           element={

@@ -47,6 +47,7 @@ function VisitorPopup(props) {
                 <th>کد سفارش</th>
                 <th>نام مشتری</th>
                 <th>تعداد</th>
+                <th></th>
               </tr>
             </thead>
             <tbody>
@@ -56,7 +57,6 @@ function VisitorPopup(props) {
                   <tr
                     key={i}
                     onClick={() => {
-                      
                       props.setOrderPop(item.title);
                     }}
                   >
@@ -64,6 +64,13 @@ function VisitorPopup(props) {
                     <td>{item.title ? item.title : "-"}</td>
                     <td>{item.user ? item.user : "-"}</td>
                     <td>{item.count ? item.count : "-"}</td>
+                    <td>
+                      <i
+                        class="fa fa-eye"
+                        aria-hidden="true"
+                        style={{ cursor: "pointer" }}
+                      ></i>
+                    </td>
                   </tr>
                 ))}
             </tbody>

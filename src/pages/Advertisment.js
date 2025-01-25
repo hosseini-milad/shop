@@ -1,16 +1,11 @@
 import Cookies from "universal-cookie";
-import StatusBar from "../modules/Components/StatusBar";
 import Paging from "../modules/Components/Paging";
 import errortrans from "../translate/error";
-import OrderTable from "../modules/Orders/OrderTable";
-// import OrderFilters from '../modules/Orders/OrderComponent/OrderFilters';
-import BrandFilters from "../modules/Brands/BrandComponent/BrandFilters";
 import { useEffect } from "react";
 import { useState } from "react";
 import env from "../env";
-import ProductTable from "../modules/Products/ProductTable";
 import tabletrans from "../translate/tables";
-import BrandTable from "../modules/Brands/BrandTable";
+import AdvTable from "../modules/Adv/AdvTable";
 import {
   getFiltersFromUrl,
   updateUrlWithFilters,
@@ -19,7 +14,7 @@ import {
 } from "../utils/filterUtils"; // Import the utility functions
 const cookies = new Cookies();
 
-function Brands(props) {
+function Advertisment(props) {
   const direction = props.lang ? props.lang.dir : errortrans.defaultDir;
   const lang = props.lang ? props.lang.lang : errortrans.defaultLang;
   const [content, setContent] = useState("");
@@ -73,31 +68,16 @@ function Brands(props) {
       <div className="od-header">
         <div className="od-header-info">
           <div className="od-header-name">
-            <p>{tabletrans.brands[lang]}</p>
-          </div>
-        </div>
-        <div className="od-header-btn">
-          <div
-            className="edit-btn add-btn"
-            onClick={() => (window.location.href = "/brands/detail/new")}
-          >
-            <i className="fa-solid fa-plus"></i>
-            <p>{tabletrans.addNew[lang]}</p>
-          </div>
-          <div className="edit-btn">
-            <i className="fa-solid fa-pen"></i>
-            <p>{tabletrans.edit[lang]}</p>
+            <p>{tabletrans.Advertisment[lang]}</p>
           </div>
         </div>
       </div>
       <div className="list-container">
-        {/* <BrandFilters lang={props.lang} setFilters={setFilters}
-          options={content.brand} filters={filters}/> */}
         <div className="user-list">
           {loading ? (
             env.loader
           ) : (
-            <BrandTable setLoading={setLoading} brand={content} lang={lang} />
+            <AdvTable setLoading={setLoading} brand={content} lang={lang} />
           )}
         </div>
         <Paging
@@ -106,10 +86,9 @@ function Brands(props) {
           filters={filters}
           lang={props.lang}
           updateUrlWithFilters={updateUrlWithFilters} // Pass the function as a prop
-
         />
       </div>
     </div>
   );
 }
-export default Brands;
+export default Advertisment;

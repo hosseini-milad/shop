@@ -30,6 +30,7 @@ function OrderTable(props) {
             <p>{tabletrans.pricing[lang]}</p>
             <p></p>
           </th>
+          <th></th>
         </tr>
       </thead>
       <tbody>
