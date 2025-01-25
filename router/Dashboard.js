@@ -3,6 +3,7 @@ const router = express.Router();
 const auth = require("../middleware/auth");
 const cart = require('../models/product/cart');
 const getTimeFilter = require('../middleware/timeFiltering');
+const Stocks = require('../models/product/Stocks');
 
 const getBranchFilter = (stockId) => stockId ? { stockId: String(stockId) } : {};
 
@@ -172,6 +173,28 @@ router.get('/sales-process', auth, async (req, res) => {
         }));
 
         res.json({ data: response });
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+});
+
+router.get('/stocks', auth, async (req, res) => {
+    try {
+        const {stockId, stockStatus} = req.query;
+
+        const branch = stockId ? { StockID: Number(stockId) } : {};
+        
+        stStatus = {}
+        if (stockStatus && stockStatus == "active")
+            stStatus = {IsActive: true}
+        else if(stockStatus && stockStatus == "inactive")
+            stStatus = {IsActive: false}
+        else if(stockStatus)
+            return res.status(400).json({ message: "stockStatus must be one of 'active' or 'inactive'" });
+
+        const uniqueBranches = await Stocks.find({...branch, ...stStatus}, { _id: 0 });
+
+        res.json({ data: uniqueBranches });
     } catch (error) {
         res.status(500).json({ message: error.message });
     }

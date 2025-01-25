@@ -12,8 +12,8 @@ const taskSchema = new mongoose.Schema({
   customer:{type:String},
   orderNo:{type:String},
   
-  profileId:{ type: String },
-  profileName:{ type: String },
+  profileId:{ type: Array },
+  profileName:{ type: Array },
   isQuote:{type:Boolean,default:false},
 
   checkList:{type:Array,default:[]},

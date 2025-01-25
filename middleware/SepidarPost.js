@@ -1,6 +1,7 @@
 const { default: fetch } = require("node-fetch");
 const users = require("../models/auth/users");
-const { SEPIDAR_URL,SEPIDAR_HEADER, ADMIN_HEADER,
+const FindProfile = require("./FindProfile");
+const { SEPIDAR_URL,SEPIDAR_HEADER, ADMIN_HEADER,MARKAZI_HEADER,
     SEPIDAR_HEADER_Bazaryab,SEPIDAR_HEADER_HESARAK} = process.env;
  
 const sepidarPOST=async(data,action,user,admin)=>{
@@ -12,6 +13,8 @@ const sepidarPOST=async(data,action,user,admin)=>{
         header = SEPIDAR_HEADER_Bazaryab 
     else if(userDetail&&userDetail.StockId==="6")
         header = SEPIDAR_HEADER_HESARAK
+    else if(await FindProfile(userDetail&&userDetail.profile,"innerSale"))
+        header = MARKAZI_HEADER
     var response = '';
     try{    response = await fetch(SEPIDAR_URL+action,
             {method: 'POST' ,headers:JSON.parse(header),

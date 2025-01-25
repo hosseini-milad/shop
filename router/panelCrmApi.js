@@ -53,9 +53,9 @@ const calcTasks = async (userId) => {
     if (userData.access === "admin") access = 7
     if (userData.access === "client") access = 3
     const userAccess = await FindAccess(userData.profile)
-    const allow = userAccess.find(item => item.title === "ُSet Order")
+    const allow = userAccess.find(item => (item.title&&item.title.includes("Set Order")))
     if (!allow && access!==10){
-        return({error:"دسترسی ندارد"})
+        //return({error:"دسترسی ندارد"})
         
     } 
 
@@ -180,7 +180,7 @@ const calcTasks = async (userId) => {
         catch { }
         //columnOrder.find(item=>item.enTitle===taskStep)
     }
-    return ({
+    return ({userAccess,
         crmData: crmData, tasks: tasksToShow, crm: crmData,
         columnOrder: showColumn, columns: columns,myCreator
     })
@@ -229,8 +229,10 @@ router.post('/update-tasks-status', auth, jsonParser, async (req, res) => {
 
         const faktorNo = "F123" + taskData.orderNo
         var sepidarResult = await SepidarOrder(taskData.orderNo,1)
-        res.json(sepidarResult) 
+        //res.json(sepidarResult) 
+        var errorSep='' 
         if (sepidarResult&&sepidarResult.Message)
+            errorSep =sepidarResult.Message 
             await tasks.updateOne({ _id: ObjectID(taskId) },
                 {
                     $set: {
@@ -249,11 +251,12 @@ router.post('/update-tasks-status', auth, jsonParser, async (req, res) => {
     try {
         res.json({
             taskData: tasksList, message: taskId ? "Task Updated" : "Task Created",
-            result: sepidarResult, sepidarQuery: sepidarQuery, userData: adminData
+            result: sepidarResult, sepidarQuery: sepidarQuery, userData: adminData,
+            error:errorSep
         })
     }
     catch (error) {
-        res.status(500).json({ message: error.message })
+        res.status(500).json({ error: error.message })
     }
 })
 router.post('/update-bulk', auth, jsonParser, async (req, res) => {
