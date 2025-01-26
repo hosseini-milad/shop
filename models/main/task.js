@@ -6,6 +6,8 @@ const TaskSchema = new Schema({
     state:   String, 
     prior:   Number,
     priority:   String,
+    branchId :{type: String},
+    branchName :{type: String},
     date:{ type: Date ,default:Date.now()},
     progressDate:Date
 })

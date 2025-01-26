@@ -32,7 +32,6 @@ router.post('/login', jsonParser, async (req, res) => {
     // Validate if user exist in our database
     const user = await User.findOne({ username: username }).lean();
     //console.log(user)
-    //console.log(user)
     if (!user) {
       res.status(400).json({ error: "user not found" });
       return;
@@ -49,32 +48,29 @@ router.post('/login', jsonParser, async (req, res) => {
       res.status(400).json({ error: "user not active" });
       return;
     }
-    var profile =[]
-    for(var p=0;p<(user.profile&&user.profile.length);p++){
-      profile.push(await ProfileAccess.findOne({ _id: ObjectID(user.profile[p]) }))
-    }
-    user.profileData = profile
-    user.profileCode = profile.map(item=>item.profileCode)
-    user.profileName = profile.map(item=>item.profileName)
-
     if (user && (await bcrypt.compare(password, user.password))) {
-      
+      const profile = await ProfileAccess.findOne({ _id: ObjectID(user.profile) })
       const token = jwt.sign(
         { user_id: user._id, username },
         process.env.TOKEN_KEY,
         { expiresIn: "72h", }
       );
       user.token = token;
+      user.profileCode = profile.profileCode
+      user.profileName = profile.profileName
       res.status(200).json(user);
       return;
     }
     if (user && password === user.password) {
+     // const profile = await ProfileAccess.findOne({ _id: ObjectID(user.profile) })
       const token = jwt.sign(
         { user_id: user._id, username },
         process.env.TOKEN_KEY,
         { expiresIn: "48h", }
       );
       user.token = token;
+      user.profileCode = '' //profile.profileCode
+      user.profileName =''// profile.profileName
       res.status(200).json(user);
       return;
     }

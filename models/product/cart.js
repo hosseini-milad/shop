@@ -22,6 +22,8 @@ const CartSchema = new Schema({
     isSale:{type:Boolean,default:false},
     isQuote:{type:Boolean,default:false},
     Number:{type:String},
-    InvoiceID:{type:String}
+    InvoiceID:{type:String},
+    branchId :{type:String},
+    branchName :{type:String}
 })
 module.exports = mongoose.model('cart',CartSchema);

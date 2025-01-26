@@ -1517,14 +1517,19 @@ const findNullCount = async (items, cart) => {
 }
 router.post('/quick-to-cart', jsonParser, async (req, res) => {
     const userId = req.body.userId ? req.body.userId : req.headers['userid']
+    const {branchName,branchId,date,cartID,isQuote}=req.body
+    
     const data = {
         userId: userId,
         manageId: req.headers['userid'],
-        date: req.body.date,
-        progressDate: Date.now()
+        date,
+        progressDate: Date.now(),
+        branchName,
+        branchId,
+        isQuote
     }
     try {
-        data.isQuote = req.body.isQuote;
+    
         const isSale = await CheckSale(data.manageId)
         data.isSale = isSale
         //const cartAll = await cart.find()
@@ -1555,7 +1560,7 @@ router.post('/quick-to-cart', jsonParser, async (req, res) => {
         data.profileId = adminData&&adminData.profile
         data.profileName = profileData&&profileData.map(item=>item.profileName)
         data.stockId = qCartData && qCartData.stockId
-        cartLog.create({ ...data, ItemID: req.body.cartID, action: "quick to cart" })
+        cartLog.create({ ...data, ItemID: cartID, action: "quick to cart" })
         await cart.create(data)
         status = "create cart"
         await quickCart.deleteOne({ userId: data.userId })
@@ -1596,7 +1601,7 @@ router.post('/quick-to-quote', jsonParser, async (req, res) => {
         cartLog.create({ ...data, ItemID: req.body.cartID, action: "quick to quote" })
         await quote.create(data)
         status = "create quote"
-        await quickCart.deleteOne({ userId: data.userId })
+        await quickCart.deleteOne({ userId })
         if (!isSale)
             await CreateTask("bquote", data, userData)
         const cartDetails = await findCartFunction(userId, req.headers['userid'])

@@ -8,9 +8,7 @@ const userSchema = new mongoose.Schema({
   password: { type: String },
   email: { type: String },
   oldEmail: { type: String },
-  access: {
-    type: String
-  },
+  access: { type: String },
   group: { type: String },
   credit: { type: String },
   token: { type: String },
@@ -24,8 +22,10 @@ const userSchema = new mongoose.Schema({
   StockId: { type: String },
   StockArr: { type: Array },
   CustomerID: { type: String },
-  default:{ type: String },
-  date: { type: Date }
+  default: { type: String },
+  branchId : { type: String },
+  branchName : { type: String },
+  date: { type: Date },
 });
 
 module.exports = mongoose.model("user", userSchema);

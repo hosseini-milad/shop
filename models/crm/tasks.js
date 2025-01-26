@@ -27,6 +27,8 @@ const taskSchema = new mongoose.Schema({
   result:{type:Object},
   date: { type: Date, default:Date.now()},
   progressDate: { type: Date},
+  branchId :{type:String},
+  branchName :{type:String}
 });
 
 module.exports = mongoose.model("task", taskSchema);
