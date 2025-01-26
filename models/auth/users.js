@@ -23,6 +23,8 @@ const userSchema = new mongoose.Schema({
   StockArr: { type: Array },
   CustomerID: { type: String },
   default: { type: String },
+  branchId : { type: String },
+  branchName : { type: String },
   date: { type: Date },
 });
 

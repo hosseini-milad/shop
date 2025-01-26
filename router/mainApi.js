@@ -34,6 +34,7 @@ const quickCart = require('../models/product/quickCart');
 const auth = require("../middleware/auth");
 const users = require('../models/auth/users');
 const dashboard = require ('./Dashboard');
+const branch = require('../models/main/branch');
 var ObjectID = require('mongodb').ObjectID;
 const { ONLINE_URL } = process.env;
 
@@ -510,6 +511,42 @@ router.post('/sepidar-update-log',auth, async (req, res) => {
         res.json({ log: sepidarLog,
             countLog,productLog,priceLog,customerLog,
              message: "done" })
+    }
+    catch (error) {
+        res.status(500).json({ message: error.message })
+    }
+})
+
+router.post('/reference/branch/create',auth, async (req, res) => {
+    try {
+        
+        const {branchName,branchId,branchCode,isActive=true} = req.body
+
+        const exist = await branch.findOne({branchId})
+        if(exist){
+            res.status(500).json({error:"branchId already exist"})
+            return
+        }
+
+       const result=await branch.create({branchName,branchId,branchCode,isActive})
+        
+        res.json({ result,
+             message: "done" })
+    }
+    catch (error) {
+        res.status(500).json({ message: error.message })
+    }
+})
+router.post('/reference/branch/findall',auth, async (req, res) => {
+    try {
+        
+        const {isActive} = req.body;
+        const payload={};
+        if(isActive) payload.isActive=isActive;
+            
+        const branches = await branch.find(payload)
+
+        res.json({ branches, message: "done" })
     }
     catch (error) {
         res.status(500).json({ message: error.message })

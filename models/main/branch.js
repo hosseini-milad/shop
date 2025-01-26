@@ -1,8 +1,11 @@
 const mongoose = require('mongoose');
 
 const branchSchema = new mongoose.Schema({
-    branchId:  String,
-    branchName:  String,
+    branchId:      { type:  String},
+    branchName:    { type:  String},
+    branchCode:    { type:  String},
+    isActive:      { type:  Boolean},
+    userId:        { type:  String},
     date: { type: Date, default: Date.now }
     
 })
