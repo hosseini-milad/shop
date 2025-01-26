@@ -491,7 +491,7 @@
   margin-bottom: 1rem;
   position: relative;
 
-  .slidemenu{
+  .slidemenu {
     width: 100%;
     padding-inline: 6px;
   }
@@ -1044,11 +1044,11 @@
   color: white;
   z-index: 2;
 }
-.sharif-order-main .product-table-sec .more-btn button p{
+.sharif-order-main .product-table-sec .more-btn button p {
   font-size: 0.65rem;
   color: white;
 }
-.sharif-order-main .product-table-sec .more-btn input{
+.sharif-order-main .product-table-sec .more-btn input {
   width: 45px;
   height: 34px;
   border: none;
@@ -1057,7 +1057,7 @@
   border-radius: 0 0.3rem 0.3rem 0;
   border: 1px solid #4b5258;
   border-left: 0;
-  transform:translateX(-3px);
+  transform: translateX(-3px);
 }
 .sharif-order-main .product-table-sec .more-btn i {
   width: 30px;
@@ -1458,10 +1458,10 @@ input[type="number"] {
 
     i {
       align-self: flex-end;
-      font-size: 1.5rem ;
+      font-size: 1.5rem;
     }
   }
-  .newCol .btn-wrapper .tableIcon{
+  .newCol .btn-wrapper .tableIcon {
     font-size: 1.5rem !important;
   }
   .sharif-order-main .order-wrapper .product-table-sec {
@@ -1531,25 +1531,26 @@ input[type="number"] {
     flex-direction: row;
     gap: 1rem;
   }
-  .sharif,.new-sharif {
+  .sharif,
+  .new-sharif {
     padding: 0.5rem !important;
   }
-  .sharif-order-header .filter-tile{
+  .sharif-order-header .filter-tile {
     width: 100px;
     height: 60px;
     padding-top: 0.2rem;
     margin: 0;
     margin: 0.2rem;
   }
-  .sharif-order-header .filter-tile img{
+  .sharif-order-header .filter-tile img {
     width: 35px;
     min-height: 35px;
   }
-  .sharif-order-header .filter-tile p{
+  .sharif-order-header .filter-tile p {
     font-size: 0.7rem;
     margin: 0;
   }
-  .sharif-order-header .tile-filter-wrapper .product-filter-tile-wrapper{
+  .sharif-order-header .tile-filter-wrapper .product-filter-tile-wrapper {
     margin: 0;
   }
 }
@@ -1641,10 +1642,10 @@ input[type="number"] {
   .view-active {
     background-image: linear-gradient(195deg, #c0c0c0 0%, #c0c0c0 100%);
   }
-  .admin-table-sec{
+  .admin-table-sec {
     background-color: unset;
 
-    .slidemenu{
+    .slidemenu {
       width: 100%;
       border-radius: 0.5rem 0.5rem 0 0;
       padding-inline: 6px;
@@ -1815,5 +1816,28 @@ input[type="number"] {
   }
   .product-table-sec tbody {
     background-color: #eaecf0;
+  }
+}
+.reorder-modal .modal-backdrop {
+  justify-content: flex-start;
+  padding-top: 10%;
+
+  .nav-bar {
+    background-color: transparent;
+  }
+  .f-customer {
+    margin: 0;
+    width: 100%;
+  }
+  .d-m-content {
+    flex-direction: row;
+  }
+  button {
+    padding:0.79rem 1rem;
+    background-color: lightgreen;
+    border: none;
+    border-radius: 0.5rem;
+    width: 40%;
+    font-size: 1rem;
   }
 }

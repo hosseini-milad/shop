@@ -27,6 +27,9 @@ function TaskAction(props) {
       .then(
         (result) => {
           if (result.error) {
+            // setShowAlert(result.error);
+            // setTimeout(() => setShowAlert(0), 2000);
+            setTimeout(() => window.location.reload(), 1000);
           } else {
             setTimeout(() => props.close(), 2000);
             props.setBoard(result.taskData);
@@ -76,7 +79,8 @@ function TaskAction(props) {
             type="button"
             className="btn-crm btn-crm-accept"
             onClick={() =>
-              (window.location.href = "/print/official/" + data.result.InvoiceID)
+              (window.location.href =
+                "/print/official/" + data.result.InvoiceID)
             }
           >
             چاپ سپیدار
@@ -85,8 +89,7 @@ function TaskAction(props) {
             type="button"
             className="btn-crm btn-crm-accept btn-crm-official"
             onClick={() =>
-              (window.location.href =
-                "/print/sepidar/" + data.orderNo)
+              (window.location.href = "/print/sepidar/" + data.orderNo)
             }
           >
             {" "}
