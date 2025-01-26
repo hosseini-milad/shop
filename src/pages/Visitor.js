@@ -48,7 +48,8 @@ function Users(props) {
       dateFrom: filters.date && filters.date.dateFrom,
       dateTo: filters.date && filters.date.dateTo,
       access: filters.access,
-      product: filters.product,
+      productsList:
+        filters.productsList && filters.productsList.map((item) => item.ItemID),
       // manageId: filters.manageId,
     };
     const postOptions = {
@@ -146,7 +147,7 @@ function Users(props) {
       brand: item.brandId,
     }));
   };
-
+  console.log(filters.productsList);
   return (
     <div className="user discount-page" style={{ direction: direction }}>
       <div className="od-header">

@@ -2,6 +2,7 @@ import StyleSelect from "../../components/Button/AutoComplete";
 import tabletrans from "../../translate/tables";
 import StyleDatePicker from "../../components/Button/DatePicker";
 import StyleInput from "../../components/Button/Input";
+import { Autocomplete, TextField } from "@mui/material";
 import { useEffect, useState } from "react";
 import env from "../../env";
 
@@ -11,7 +12,11 @@ function VisitorFilter(props) {
   const visitorId = props.visitorid;
   const [userOptions, setUserOptions] = useState();
   const [userSearch, setUserSearch] = useState();
+  const [ProductSearch, setProductSearch] = useState("");
+  const [ProductList, setProductList] = useState();
   const token = props.token;
+  console.log(ProductSearch);
+
   const handleFilterChange = (property, value) => {
     const newValue = value ? (value._id ? value._id : value) : "";
     props.setFilters((prevState) => ({
@@ -47,24 +52,62 @@ function VisitorFilter(props) {
         }
       );
   }, [userSearch]);
-  const createConditionalAction = (minLength) => {
-    return (e) => {
-      if (e.length > minLength || e.length === 0) {
-        props.setFilters((prevState) => ({
-          ...prevState,
-          product: e ? e : "",
-        }));
-      }
+  useEffect(() => {
+    if (!ProductSearch) return;
+    const postOptions = {
+      method: "post",
+      headers: {
+        "Content-Type": "application/json",
+        "x-access-token": token && token.token,
+        userId: token && token.userId,
+      },
+      body: JSON.stringify({ name: ProductSearch }),
     };
-  };
+    //console.log(postOptions);
+    fetch(env.siteApi + "/panel/product/fetch-name", postOptions)
+      .then((res) => res.json())
+      .then(
+        (result) => {
+          setProductList(result.list);
+        },
+        (error) => {
+          console.log(error);
+        }
+      );
+  }, [ProductSearch]);
+
   return (
     <div className="user-filter d-filter">
       <div className="serach-input">
-        <StyleInput
+        {/* <StyleInput
           title={tabletrans.productTitle[props.lang.lang]}
           direction={props.lang.dir}
           action={createConditionalAction(3)}
-        />
+        /> */}
+        <div class="formInput" style={{ width: "50%" }}>
+          <Autocomplete
+            multiple
+            options={ProductList || []}
+            getOptionLabel={(item) => item.title || ""}
+            //value={colorList.cover.find(item=>item.option===extraData.coverCode)||null}
+            style={{ width: "100%" }}
+            // defaultValue={userData.StockArr}
+            onChange={(e, value) =>
+              props.setFilters((prevState) => ({
+                ...prevState,
+                productsList: value ? value : "",
+              }))
+            }
+            renderInput={(params) => (
+              <TextField
+                {...params}
+                label={tabletrans.productTitle[props.lang.lang]}
+                variant="outlined"
+                onChange={(e) => setProductSearch(e.target.value)}
+              />
+            )}
+          />
+        </div>
         <StyleSelect
           title={tabletrans.visitor[props.lang.lang]}
           direction={props.lang.dir}

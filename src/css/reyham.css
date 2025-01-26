@@ -2056,3 +2056,8 @@ dialog {
   margin-right: auto;
   margin-top: 1rem;
 }
+.formInput .MuiChip-label {
+  background-color: lightgrey;
+  font-size: 1rem;
+  border-radius: 999px;
+}
