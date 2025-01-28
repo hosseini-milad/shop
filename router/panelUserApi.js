@@ -23,6 +23,7 @@ const factory = require("../models/product/factory");
 const crmlist = require("../models/crm/crmlist");
 const sepidarPOST = require("../middleware/SepidarPost");
 const file = require("../models/product/file");
+const salePolicyGroupModel = require('../models/sale/salePolicyGroup');
 
 router.post("/fetch-user", jsonParser, async (req, res) => {
     var pageSize = req.body.pageSize ? req.body.pageSize : "10";
@@ -1030,5 +1031,23 @@ const SepidarUser = (data) => {
     };
     return query;
 };
+
+router.get('/sale-policy-groups', async (req, res) => {
+    try {
+        const salePolicyGroups = await salePolicyGroupModel.find({}).lean();
+        const response = {
+            salePolicyGroups: salePolicyGroups.map((i) => {
+                return {
+                    _id: i._id || '',
+                    name: i.name || '',
+                    category: i.category || '',
+                }
+            })
+        }
+        return res.json(response);
+    } catch (error) {
+        return res.staus(500).json({ message: error.message });
+    }
+})
 
 module.exports = router;
