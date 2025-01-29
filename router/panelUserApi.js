@@ -1072,6 +1072,28 @@ router
         } catch (error) {
             return res.status(500).json({ message: error.message });
         }
+    });
+
+router.route('/sale-policy-products/:id')
+    .get(async (req, res) => {
+        try {
+            const { id } = req.params;
+            const { offset = 0 , pageSize = 10 } = req.query;
+            const skip = parseInt(offset);
+            const limit = parseInt(pageSize);
+            const salePolicyGroup = await salePolicyGroupModel.findOne({ _id: id }).lean();
+            if (!salePolicyGroup) {
+                return res.status(400).json({ message: 'گروه مورد نظر یافت نشد.' });
+            }
+            const salePolicyProducts = await products.find({ salePolicyGroupId: salePolicyGroup._id }).skip(skip).limit(limit).lean();
+
+            const response = {
+                products: salePolicyProducts,
+            }
+            return res.json(response);
+        } catch (error) {
+            return res.status(500).json({ message: error.message });
+        }
     })
     .post(jsonParser, async (req, res) => {
         try {
@@ -1110,6 +1132,6 @@ router
         } catch (error) {
             return res.status(500).json({ message: error.message });
         }
-    })
+    });
 
 module.exports = router;
