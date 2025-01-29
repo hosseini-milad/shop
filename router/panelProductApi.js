@@ -33,6 +33,7 @@ const UpdateMarket = require('../middleware/UpdateMarket');
 const crmlist = require('../models/crm/crmlist');
 const CanAnalyze = require('../middleware/CanAnalyze');
 const Stocks = require('../models/product/Stocks');
+const salePolicyGroupModel = require('../models/sale/salePolicyGroup');
 
 router.post('/fetch-service',jsonParser,async (req,res)=>{
     var serviceId = req.body.serviceId?req.body.serviceId:''
@@ -265,46 +266,54 @@ router.post('/list-product',jsonParser,async (req,res)=>{
         res.status(500).json({message: error.message})
     } 
 })
-router.post('/editProduct',jsonParser,async(req,res)=>{
-    var productId= req.body.productId?req.body.productId:''
-    if(productId === "new")productId=''
-    try{ 
-        const data = {
-            title:  req.body.title,
-            catId: req.body.catId,
-            brandId: req.body.brandId,
-            sharifId: req.body.sharifId,
-            type:req.body.type,
-            perBox:req.body.perBox,
-            filters:req.body.filters,
-            value:req.body.value,
-            active:req.body.active,
-            enTitle:req.body.enTitle,
-            description:req.body.description,
-            fullDesc:req.body.fullDesc,
-            productUrl:req.body.productUrl,
-            metaTitle: req.body.metaTitle,
-            productMeta:req.body.productMeta,
-            sku: req.body.sku,
-            productCode: req.body.productCode,
-            price: req.body.price,
-            quantity: req.body.quantity,
-            sort: req.body.sort,
-            imageUrl:  req.body.imageUrl,
-            thumbUrl:  req.body.thumbUrl
+
+router.post('/editProduct', jsonParser, async (req, res) => {
+	let productId = req.body.productId ? req.body.productId : '';
+	if (productId === 'new') productId = '';
+	try {
+		const data = {
+			title: req.body.title,
+			catId: req.body.catId,
+			brandId: req.body.brandId,
+			sharifId: req.body.sharifId,
+			type: req.body.type,
+			perBox: req.body.perBox,
+			filters: req.body.filters,
+			value: req.body.value,
+			active: req.body.active,
+			enTitle: req.body.enTitle,
+			description: req.body.description,
+			fullDesc: req.body.fullDesc,
+			productUrl: req.body.productUrl,
+			metaTitle: req.body.metaTitle,
+			productMeta: req.body.productMeta,
+			sku: req.body.sku,
+			productCode: req.body.productCode,
+			price: req.body.price,
+			quantity: req.body.quantity,
+			sort: req.body.sort,
+			imageUrl: req.body.imageUrl,
+			thumbUrl: req.body.thumbUrl,
+		};
+        // TODO: add to data if exists in req.body
+        if (req.body.salePolicyGroupId) {
+            const checkIfSalePolicyGroupExists = await salePolicyGroupModel.findOne({ _id: req.body.salePolicyGroupId }).lean();
+            if (!checkIfSalePolicyGroupExists) {
+                return res.status(400).json({ message: 'گروه مورد نظر یافت نشد.' });
+            }
+            data.salePolicyGroupId = req.body.salePolicyGroupId;
         }
-        var productResult = ''
-        if(productId) productResult=await ProductSchema.updateOne({_id:productId},
-            {$set:data})
-        else
-        productResult= await ProductSchema.create(data)
-        
-        res.json({result:productResult,success:productId?"Updated":"Created"})
-    }
-    catch(error){
-        res.status(500).json({message: error.message})
-    }
-})
+		const updateResult = productId
+            ? await ProductSchema.updateOne({ _id: productId }, { $set: data })
+            : await ProductSchema.create(data);
+
+        const updatedProduct = await ProductSchema.findOne({ _id: productId }).lean();
+		return res.json({ result: updatedProduct, success: productId ? 'Updated' : 'Created' });
+	} catch (error) {
+		return res.status(500).json({ message: error.message });
+	}
+});
+
 router.post('/updateProduct',jsonParser,async(req,res)=>{
     var productId= req.body.productId?req.body.productId:''
     productId=filterNumber(productId)

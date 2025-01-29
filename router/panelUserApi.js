@@ -24,6 +24,7 @@ const crmlist = require("../models/crm/crmlist");
 const sepidarPOST = require("../middleware/SepidarPost");
 const file = require("../models/product/file");
 const salePolicyGroupModel = require('../models/sale/salePolicyGroup');
+const products = require('../models/product/products');
 
 router.post("/fetch-user", jsonParser, async (req, res) => {
     var pageSize = req.body.pageSize ? req.body.pageSize : "10";
@@ -1032,22 +1033,83 @@ const SepidarUser = (data) => {
     return query;
 };
 
-router.get('/sale-policy-groups', async (req, res) => {
-    try {
-        const salePolicyGroups = await salePolicyGroupModel.find({}).lean();
-        const response = {
-            salePolicyGroups: salePolicyGroups.map((i) => {
-                return {
-                    _id: i._id || '',
-                    name: i.name || '',
-                    category: i.category || '',
-                }
-            })
+router
+    .route('/sale-policy-groups')
+    .get(async (req, res) => {
+        try {
+            const salePolicyGroups = await salePolicyGroupModel.find({}).lean();
+            const response = {
+                salePolicyGroups: salePolicyGroups.map((i) => {
+                    return {
+                        _id: i._id || '',
+                        name: i.name || '',
+                        category: i.category || '',
+                    }
+                })
+            }
+            return res.json(response);
+        } catch (error) {
+            return res.status(500).json({ message: error.message });
         }
-        return res.json(response);
-    } catch (error) {
-        return res.staus(500).json({ message: error.message });
-    }
-})
+    });
+
+router
+    .route('/sale-policy-groups/:id')
+    .get(async (req, res) => {
+        try {
+            const { id } = req.params;
+            const salePolicyGroup = await salePolicyGroupModel.findOne({ _id: id }).lean();
+            const response = {
+                salePolicyGroups: {
+                    _id: salePolicyGroup._id || '',
+                    name: salePolicyGroup.name || '',
+                    category: salePolicyGroup.category || '',
+                    createdAt: salePolicyGroup.createdAt, // TODO: convert to persian date
+                    updateAt: salePolicyGroup.updatedAt, // TODO: convert to persian date
+                }
+            }
+            return res.json(response);
+        } catch (error) {
+            return res.status(500).json({ message: error.message });
+        }
+    })
+    .post(jsonParser, async (req, res) => {
+        try {
+            const { id } = req.params;
+            const { sku } = req.body;
+            const salePolicyGroup = await salePolicyGroupModel.findOne({ _id: id }).lean();
+            if (!salePolicyGroup) {
+                return res.status(400).json({ message: 'گروه مورد نظر یافت نشد.' });
+            }
+            const targetProduct = await products.findOne({ sku }).lean();
+            if (!targetProduct) {
+                return res.status(400).json({ message: 'محصول مورد نظر یافت نشد.' });
+            }
+            const updateProductSalePolicyGroup = await products.updateOne({ sku }, { $set: { salePolicyGroupId: salePolicyGroup._id } });
+            const response = {
+                success: 'محصول به لیست اضافه شد.',
+            }
+            return res.json(response);
+        } catch (error) {
+            return res.status(500).json({ message: error.message });
+        }
+    })
+    .delete(jsonParser, async (req, res) => {
+        try {
+            const { id } = req.params;
+            const { sku } = req.body;
+            const targetProduct = await products.findOne({ sku, salePolicyGroupId: id }).lean();
+            if (!targetProduct) {
+                return res.status(400).json({ message: 'محصول مورد نظر یافت نشد.' });
+            }
+            const updateProductSalePolicyGroup = await products.updateOne({ sku }, { $unset: { salePolicyGroupId: true } });
+            const response = {
+                success: 'محصول از لیست حذف شد.',
+            }
+            return res.json(response);
+        } catch (error) {
+            return res.status(500).json({ message: error.message });
+        }
+    })
 
 module.exports = router;
