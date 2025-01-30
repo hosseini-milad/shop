@@ -1085,10 +1085,14 @@ router.route('/sale-policy-products/:id')
             if (!salePolicyGroup) {
                 return res.status(400).json({ message: 'گروه مورد نظر یافت نشد.' });
             }
-            const salePolicyProducts = await products.find({ salePolicyGroupId: salePolicyGroup._id }).skip(skip).limit(limit).lean();
+            const [salePolicyProducts, count] = await Promise.all([
+                products.find({ salePolicyGroupId: salePolicyGroup._id }).skip(skip).limit(limit).lean(),
+                products.countDocuments({ salePolicyGroupId: salePolicyGroup._id }),
+            ]);
 
             const response = {
                 products: salePolicyProducts,
+                count,
             }
             return res.json(response);
         } catch (error) {
