@@ -33,7 +33,8 @@ const OrderToTask = require('../middleware/OrderToTask');
 const IsToday = require('../middleware/IsToday');
 const NewQuote = require('../middleware/NewQuote');
 const quote = require('../models/product/quote');
-const publicLinks = require ('../models/product/publicLinks')
+const publicLinks = require ('../models/product/publicLinks');
+const salePolicyGroupModel = require('../models/sale/salePolicyGroup');
 const { TaxRate } = process.env
 
 router.post('/products', async (req, res) => {
@@ -1515,6 +1516,68 @@ const findNullCount = async (items, cart) => {
 
     }
 }
+
+const checkForSalePolicyRules = async (qCartData) => {
+	try {
+        const productsList = qCartData.productsList;
+		let isSalePolicyRulesPassed = true;
+        let salePolicyRuleMessage = '';
+        const requiredProducts = {
+            lowSellingProducts1: {
+                message: '',
+                products: [],
+            },
+            lowSellingProducts2: {
+                message: '',
+                products: [],
+            },
+            sideProducts: {
+                message: '',
+                products: [],
+            }
+        }
+		const productsWithSalePolicy = await products
+            .find({ sku: { $in: productsList } })
+            .populate({ path: 'salePolicyGroupId' });
+        const mainProductsCount = productsWithSalePolicy.filter((i) => {
+            return i.salePolicyGroupId.category === 'mainProducts';
+        })
+        if (mainProductsCount.length > 0) {
+            const lowSellingProducts1Count = productsWithSalePolicy.filter((i) => {
+                return i.salePolicyGroupId.category === 'lowSellingProducts1';
+            });
+            const lowSellingProducts2Count = productsWithSalePolicy.filter((i) => {
+                return i.salePolicyGroupId.category === 'lowSellingProducts2';
+            });
+            const sideProducts = productsWithSalePolicy.filter((i) => {
+                return i.salePolicyGroupId.category === 'sideProducts';
+            });
+            const faktorPrice = '';
+            const calculateSideProductsPrice = '';
+            if (lowSellingProducts1Count.length < (mainProductsCount.length * 2)) {
+                isSalePolicyRulesPassed = false;
+                salePolicyRuleMessage = `تعداد ${lowSellingProducts1Count.length} از محصولات کم فروش 1 انتخاب کرده‌اید. می‌بایست حداقل ${mainProductsCount.length * 2} انتخاب نمایید.`;
+            }
+
+            if (lowSellingProducts2Count.length < (mainProductsCount.length * 1)) {
+                isSalePolicyRulesPassed = false;
+                salePolicyRuleMessage = `تعداد ${lowSellingProducts2Count.length} از محصولات کم فروش 2 انتخاب کرده‌اید. می‌بایست حداقل ${mainProductsCount.length * 1} انتخاب نمایید.`;
+            }
+
+            if (calculateSideProductsPrice < faktorPrice) {
+                isSalePolicyRulesPassed = false;
+                salePolicyRuleMessage = `مبلغ ${calculateSideProductsPrice} از محصولات کناری انتخاب کرده‌اید. می‌بایست حداقل ${faktorPrice} انتخاب نمایید.`;
+            }
+        }
+		return {
+            isSalePolicyRulesPassed,
+            salePolicyRuleMessage,
+        };
+	} catch (error) {
+		return false;
+	}
+};
+
 router.post('/quick-to-cart', jsonParser, async (req, res) => {
     const userId = req.body.userId ? req.body.userId : req.headers['userid']
     const {branchName,branchId,date,cartID,isQuote}=req.body
@@ -1530,7 +1593,7 @@ router.post('/quick-to-cart', jsonParser, async (req, res) => {
     }
     try {
     
-        const isSale = await CheckSale(data.manageId)
+        const isSale = await CheckSale(data.manageId) // 1 or 0
         data.isSale = isSale
         //const cartAll = await cart.find()
         const userData = await customers.findOne({ _id: ObjectID(userId) })
@@ -1539,6 +1602,14 @@ router.post('/quick-to-cart', jsonParser, async (req, res) => {
         console.log(adminProfiles)
         const profileData = adminData&&await profiles.find({ _id: {$in:adminProfiles}})
         const qCartData = await quickCart.findOne({ userId: userId })
+        // check sale policy rules
+        const { isSalePolicyRulesPassed, salePolicyRuleMessage } = await checkForSalePolicyRules(qCartData);
+        if (!isSalePolicyRulesPassed) {
+            const response = {
+                message: salePolicyRuleMessage,
+            }
+            return res.json(response);
+        }
         const defaultPay = customers.CustomerID?"3":"4"
         data.payValue = (qCartData && qCartData.payValue)?qCartData.payValue:defaultPay
         data.description = qCartData && qCartData.description
