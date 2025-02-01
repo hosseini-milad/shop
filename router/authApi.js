@@ -72,7 +72,7 @@ router.post('/login', jsonParser, async (req, res) => {
       user.token = token;
       var isVisitor = 0
       for(var i=0;i<profile.length;i++){
-        if(profile[i].profileCode == "visitor")
+        if(profile[i].profileCode == "market")
           isVisitor = 1
           break
       }
