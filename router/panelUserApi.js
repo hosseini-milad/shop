@@ -796,54 +796,16 @@ router.post("/upload", uploadImg.single("upload"), async (req, res, next) => {
         res.send({ status: "failed", error: e });
     }
 });
-router.post("/uploadImage", uploadImg.single("upload"), async (req, res, next) => {
 
-    try {
-
-        const { fileType, folderName = "temp", base64image, imgName, advType, title } = req.body;
-
-
-        const fileName = `${Date.now().toString()}-${imgName}`;
-        const path = `/upload/adv`
-        const uploadUrl = `${path}/${fileName}`;
-
-
-        // to declare some path to store your converted image
-
-        var matches = base64image.match(/^data:([A-Za-z-+/]+);base64,(.+)$/)
-
-        if (matches.length !== 3) {
-            return new Error("Invalid input string");
-        }
-        let filetype = matches[1];
-        let imageBuffer = new Buffer.from(matches[2], "base64");
-
-        const obj = { fileName, uploadUrl, filetype, advType, title }
-        const result = await file.create(obj)
-        if (!fs.existsSync("." + path)) {
-            fs.mkdirSync("." + path);
-        }
-        fs.writeFileSync("." + uploadUrl, imageBuffer, "utf8");
-        return res.send({ status: "success", url: uploadUrl });
-    } catch (e) {
-        res.send({ status: "uploadImage", error: e });
+const storage2 = multer.diskStorage({
+    destination: './uploads',
+    filename: (req, file, cb) => {
+      cb(null, Date.now() + '-' + file.originalname);
     }
-});
-router.post("/getImage", async (req, res, next) => {
-
-    try {
-
-        const { advType } = req.body;
-
-
-        const result = await file.findOne({ advType })
-
-
-        return res.send({ status: "success", data: result });
-    } catch (e) {
-        res.send({ status: "getImage", error: e });
-    }
-});
+  });
+  const uploadArray = multer({ storage: storage2, limits: { fileSize: "5mb" } });
+router.post("/uploadImage", uploadArray.array("uploads"),uploadImage );
+router.post("/getImage",getImage);
 
 router.post("/transactions", jsonParser, async (req, res) => {
     var pageSize = req.body.pageSize ? req.body.pageSize : "10";
@@ -1030,5 +992,57 @@ const SepidarUser = (data) => {
     };
     return query;
 };
+
+async function  uploadImage (req, res, next)  {
+
+    try {
+
+        const files = req.files;
+
+        if (!files || files.length === 0) {
+          return res.status(400).send({ message: 'هیچ فایلی آپلود نشده است' });
+        }
+
+        const { description, productName, advType, title , isActive=true} = req.body;
+
+        const fileDetails = files.map((file) => ({
+            originalName: file.originalname,
+            path: file.path,
+            size: file.size,
+            description,
+            productName,
+            title,
+            isActive,
+            advType
+          }));
+      
+          
+         const result=await file.insertMany(fileDetails)
+    
+
+         
+        
+
+        return res.send({ status: "success", data: result });
+    } catch (e) {
+        res.send({ status: "uploadImage", error: e });
+    }
+}
+
+async function getImage (req, res, next)  {
+
+    try {
+
+        const { advType } = req.body;
+
+
+        const result = await file.findOne({ advType })
+
+
+        return res.send({ status: "success", data: result });
+    } catch (e) {
+        res.send({ status: "getImage", error: e });
+    }
+}
 
 module.exports = router;

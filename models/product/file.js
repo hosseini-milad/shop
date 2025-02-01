@@ -2,10 +2,14 @@ const mongoose = require('mongoose');
 
 
 const FileSchema = new mongoose.Schema({
-    fileName: { type: String },
-    uploadUrl: { type: String },
+    originalName : { type: String },
+    path: { type: String },
+    productName :{ type: String },
+    path: { type: String },
+    size: { type: String },
     advType: { type: String },
     filetype: { type: String },
+    description:{ type: String },
     title: { type: String },
     isActive: { type: Boolean, default: true },
     createAt: { type: Date, default: Date.now() }
