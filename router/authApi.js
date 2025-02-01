@@ -71,7 +71,7 @@ router.post('/login', jsonParser, async (req, res) => {
       );
       user.token = token;
       user.isVisitor = (profile&&profile.includes('visitor'))?1:0
-      user.profileCode = '' //profile.profileCode
+      user.profileCode = profileList
       user.profileName =profile
       res.status(200).json(user);
       return;
