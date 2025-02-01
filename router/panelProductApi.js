@@ -945,7 +945,8 @@ router.route('/sale-commission-groups/:id')
             if (!targetSaleCommissionGroup) {
                 return res.status(400).json({ message: 'گروه مورد نظر یافت نشد.' });
             }
-            const removeSaleCommissionGroup = await saleCommissionGroupModel.deleteOne({ _id: id });
+            const removeThisGroupIdFromProducts = await products.updateMany({ saleCommissionGroupId: targetSaleCommissionGroup._id }, { $unset: { saleCommissionGroupId: true }});
+            const removeSaleCommissionGroup = await saleCommissionGroupModel.deleteOne({ _id: targetSaleCommissionGroup._id });
             const response = {
                 success: 'حذف شد.'
             }
