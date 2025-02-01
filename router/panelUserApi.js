@@ -1033,8 +1033,7 @@ const SepidarUser = (data) => {
     return query;
 };
 
-router
-    .route('/sale-policy-groups')
+router.route('/sale-policy-groups')
     .get(async (req, res) => {
         try {
             const salePolicyGroups = await salePolicyGroupModel.find({}).lean();
@@ -1053,8 +1052,7 @@ router
         }
     });
 
-router
-    .route('/sale-policy-groups/:id')
+router.route('/sale-policy-groups/:id')
     .get(async (req, res) => {
         try {
             const { id } = req.params;

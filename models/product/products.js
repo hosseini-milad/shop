@@ -31,6 +31,10 @@ const ProductSchema = new Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'salePolicyGroup',
     },
+    saleCommissionGroupId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'saleCommissionGroup',
+    },
     categories:String
 })
 module.exports = mongoose.model('product',ProductSchema);
