@@ -296,13 +296,19 @@ router.post('/editProduct', jsonParser, async (req, res) => {
 			imageUrl: req.body.imageUrl,
 			thumbUrl: req.body.thumbUrl,
 		};
-        // TODO: add to data if exists in req.body
         if (req.body.salePolicyGroupId) {
             const checkIfSalePolicyGroupExists = await salePolicyGroupModel.findOne({ _id: req.body.salePolicyGroupId }).lean();
             if (!checkIfSalePolicyGroupExists) {
                 return res.status(400).json({ message: 'گروه مورد نظر یافت نشد.' });
             }
             data.salePolicyGroupId = req.body.salePolicyGroupId;
+        }
+        if (req.body.saleCommissionGroupId) {
+            const checkIfSaleCommissionGroupExists = await saleCommissionGroupModel.findOne({ _id: req.body.saleCommissionGroupId }).lean();
+            if (!checkIfSaleCommissionGroupExists) {
+                return res.status(400).json({ message: 'گروه مورد نظر یافت نشد.' });
+            }
+            data.saleCommissionGroupId = req.body.saleCommissionGroupId;
         }
 		const updateResult = productId
             ? await ProductSchema.updateOne({ _id: productId }, { $set: data })
