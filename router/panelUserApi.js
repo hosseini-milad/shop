@@ -812,6 +812,7 @@ const uploadFields = uploadArray.fields([
 router.post("/uploadImage", uploadFields,uploadImage );
 router.post("/updateImage",updateImage);
 router.post("/getImage",getImage);
+router.post("/deleteImage",deleteImage);
 
 router.post("/transactions", jsonParser, async (req, res) => {
     var pageSize = req.body.pageSize ? req.body.pageSize : "10";
@@ -1038,7 +1039,6 @@ async function  uploadImage (req, res)  {
         res.send({ status: "uploadImage", error: e });
     }
 }
-
 async function  updateImage (req, res)  {
 
     try {
@@ -1066,7 +1066,6 @@ async function  updateImage (req, res)  {
         res.send({ status: "updateImage", error: e.message });
     }
 }
-
 async function getImage (req, res)  {
 
     try {
@@ -1074,7 +1073,7 @@ async function getImage (req, res)  {
         const { advType } = req.body;
 
 
-        const result = await file.findOne({ advType })
+        const result = await file.find({ advType })
 
 
         return res.send({ status: "success", data: result });
@@ -1082,5 +1081,21 @@ async function getImage (req, res)  {
         res.send({ status: "getImage", error: e });
     }
 }
+async function deleteImage (req, res)  {
+
+    try {
+
+        const { id } = req.body;
+
+
+        const result = await file.deleteOne({_id:ObjectID(id) })
+
+
+        return res.send({ status: "success", data: result });
+    } catch (e) {
+        res.send({ status: "deleteImage", error: e.message });
+    }
+}
+
 
 module.exports = router;
