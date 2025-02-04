@@ -798,13 +798,19 @@ router.post("/upload", uploadImg.single("upload"), async (req, res, next) => {
 });
 
 const storage2 = multer.diskStorage({
-    destination: './uploads',
+    destination: './uploads', 
     filename: (req, file, cb) => {
       cb(null, Date.now() + '-' + file.originalname);
     }
   });
-  const uploadArray = multer({ storage: storage2, limits: { fileSize: "5mb" } });
-router.post("/uploadImage", uploadArray.array("uploads"),uploadImage );
+const uploadArray = multer({ storage: storage2, limits: { fileSize: "5mb" }, });
+const uploadFields = uploadArray.fields([
+    { name: "thumbnail", maxCount: 1 },
+    { name: "uploads", maxCount: 1 },
+  ]);
+  
+router.post("/uploadImage", uploadFields,uploadImage );
+router.post("/updateImage",updateImage);
 router.post("/getImage",getImage);
 
 router.post("/transactions", jsonParser, async (req, res) => {
@@ -993,7 +999,7 @@ const SepidarUser = (data) => {
     return query;
 };
 
-async function  uploadImage (req, res, next)  {
+async function  uploadImage (req, res)  {
 
     try {
 
@@ -1003,14 +1009,18 @@ async function  uploadImage (req, res, next)  {
           return res.status(400).send({ message: 'هیچ فایلی آپلود نشده است' });
         }
 
-        const { description, productName, advType, title , isActive=true} = req.body;
+        const { description, productName, productNameEn,advType, brandName,title , isActive=true} = req.body;
 
-        const fileDetails = files.map((file) => ({
+        const fileDetails = files.uploads.map((file) => ({
             originalName: file.originalname,
-            path: file.path,
+            mimetype :file.mimetype ,
+            imagePath: file.path,
+            thumbnailPath: files.thumbnail?.[0].path,
             size: file.size,
             description,
             productName,
+            productNameEn,
+            brandName,
             title,
             isActive,
             advType
@@ -1029,7 +1039,35 @@ async function  uploadImage (req, res, next)  {
     }
 }
 
-async function getImage (req, res, next)  {
+async function  updateImage (req, res)  {
+
+    try {
+
+        let updateProps={};
+        for(prop in req.body)
+        {
+            if(prop)
+             updateProps[prop]=req.body[prop]
+        }
+        if(!updateProps?.id)
+        {
+             return res.status(500).send({ message: 'شناسه تصویر صحیح نمی باشد' });
+        }
+
+        const adv=await file.findOne({ _id: ObjectID(updateProps?.id) })
+        if(!adv) {
+            return res.status(500).send({ message: 'شناسه تصویر صحیح نمی باشد' });
+        }
+        
+         const result=await file.updateOne({ _id: ObjectID(updateProps.id) },updateProps)
+    
+        return res.send({ status: "success", data: result });
+    } catch (e) {
+        res.send({ status: "updateImage", error: e.message });
+    }
+}
+
+async function getImage (req, res)  {
 
     try {
 
