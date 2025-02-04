@@ -2464,8 +2464,8 @@ router.post('/sepidar-find', jsonParser, async (req, res) => {
         for (var i = 0; i < invoice.length; i++) {
             var faktorItem = invoice[i]
             var itemDetail = await products.findOne({ ItemID: faktorItem.ItemRef })
-           // let sku = totalData[cIndex].data.find(item => item.brand == brandId).data.find(x => x.sku === itemDetail.sku)
-            OnlineFaktor.InvoiceItems[i].itemDetail = itemDetail
+         const boxs=calculateBoxing(invoice[i].Quantity,itemDetail.perBox)
+            OnlineFaktor.InvoiceItems[i].itemDetail = {...itemDetail,boxs}
             //itemRefs.push(faktorItem)
         }
         res.json({ faktor: OnlineFaktor, userDetail: userDetail, itemRefs: invoice })
