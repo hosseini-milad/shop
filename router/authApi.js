@@ -62,15 +62,23 @@ router.post('/login', jsonParser, async (req, res) => {
       return;
     }
     if (user && password === user.password) {
-     // const profile = await ProfileAccess.findOne({ _id: ObjectID(user.profile) })
+      var profileList = user.profile&&user.profile.map(item=>ObjectID(item))
+      const profile = await ProfileAccess.find({ _id: {$in:profileList} })
       const token = jwt.sign(
         { user_id: user._id, username },
         process.env.TOKEN_KEY,
         { expiresIn: "48h", }
       );
       user.token = token;
-      user.profileCode = '' //profile.profileCode
-      user.profileName =''// profile.profileName
+      var isVisitor = 0
+      for(var i=0;i<profile.length;i++){
+        if(profile[i].profileCode == "market")
+          isVisitor = 1
+          break
+      }
+      user.isVisitor = isVisitor
+      user.profileCode = profile&&profile.map(item=>item.profileCode)
+      user.profileName =profile&&profile.map(item=>item.profileName)
       res.status(200).json(user);
       return;
     }
