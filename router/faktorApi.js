@@ -2635,18 +2635,19 @@ router.post('/public-sepidar-find', jsonParser, async (req, res) => {
 });
 
 router.post('/copy-quote', jsonParser, async (req, res) => {
-	const { userId, orderNo } = req.body;
+	const { CustomerID, orderNo } = req.body;
 
-	const data = {
-		userId,
-		manageId: req.headers['userid'],
-		// date,
-		progressDate: Date.now(),
-		// branchName,
-		// branchId,
-		isQuote: true,
-	};
 	try {
+        const customer = await customerSchema.findOne({ CustomerID }).lean();
+        const data = {
+            userId: customer._id,
+            manageId: req.headers['userid'],
+            // date,
+            progressDate: Date.now(),
+            // branchName,
+            // branchId,
+            isQuote: true,
+        };
 		const isSale = await CheckSale(data.manageId); // 1 or 0
 		data.isSale = isSale;
 		//const cartAll = await cart.find()
