@@ -2635,12 +2635,11 @@ router.post('/public-sepidar-find', jsonParser, async (req, res) => {
 });
 
 router.post('/copy-quote', jsonParser, async (req, res) => {
-	const { CustomerID, orderNo } = req.body;
+	const { userId, cartNo } = req.body;
 
 	try {
-        const customer = await customerSchema.findOne({ CustomerID }).lean();
         const data = {
-            userId: customer._id,
+            userId,
             manageId: req.headers['userid'],
             // date,
             progressDate: Date.now(),
@@ -2655,7 +2654,7 @@ router.post('/copy-quote', jsonParser, async (req, res) => {
 		const adminData = await users.findOne({ _id: ObjectID(data.manageId) }).lean();
 		const adminProfiles = adminData.profile ? adminData.profile.map((item) => ObjectID(item)) : [];
 		const profileData = adminData && (await profiles.find({ _id: { $in: adminProfiles } }));
-		const targetCart = await cart.findOne({ cartNo: orderNo }).lean();
+		const targetCart = await cart.findOne({ cartNo }).lean();
 		// // check sale policy rules
 		// const { isSalePolicyRulesPassed, salePolicyRuleMessage, requiredProducts } = await checkForSalePolicyRules(qCartData);
 		// if (!isSalePolicyRulesPassed) {

@@ -1034,7 +1034,7 @@ const SepidarUser = (data) => {
 };
 
 router.route('/sale-policy-groups')
-    .get(async (req, res) => {
+    .post(async (req, res) => {
         try {
             const salePolicyGroups = await salePolicyGroupModel.find({}).lean();
             const response = {
@@ -1072,11 +1072,10 @@ router.route('/sale-policy-groups/:id')
         }
     });
 
-router.route('/sale-policy-products/:id')
-    .get(async (req, res) => {
+router.route('/sale-policy-products')
+    .post(jsonParser, async (req, res) => {
         try {
-            const { id } = req.params;
-            const { offset = 0 , pageSize = 10 } = req.query;
+            const { id, offset = 0 , pageSize = 10 } = req.body;
             const skip = parseInt(offset);
             const limit = parseInt(pageSize);
             const salePolicyGroup = await salePolicyGroupModel.findOne({ _id: id }).lean();
@@ -1096,7 +1095,9 @@ router.route('/sale-policy-products/:id')
         } catch (error) {
             return res.status(500).json({ message: error.message });
         }
-    })
+    });
+
+router.route('/sale-policy-products/:id')
     .post(jsonParser, async (req, res) => {
         try {
             const { id } = req.params;
