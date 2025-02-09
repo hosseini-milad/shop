@@ -28,10 +28,10 @@ function PClassUserTableRow(props) {
               (window.location.href = url + "/detail/" + classes._id)
             }
           >
-            <img src="/img/avatar/avatar_1.jpg" alt="avatar" />
+            <img src={env.siteApiUrl + classes.imageUrl} alt="product" />
             <div className="cu-name">
-              <p className="name">{classes.className}</p>
-              <p className="email">کد کلاس: {classes.classEn}</p>
+              <p className="name">{classes.title}</p>
+              <p className="email">کد: {classes.sku}</p>
             </div>
           </div>
         </td>
@@ -47,6 +47,12 @@ function PClassUserTableRow(props) {
               onClick={() =>
                 (window.location.href = url + "/detail/" + classes._id)
               }
+            ></i>
+            <i
+              class="fa fa-trash"
+              aria-hidden="true"
+              style={{ color: "red" }}
+              onClick={() => props.deleteProductToClass(classes.sku)}
             ></i>
           </div>
         </td>

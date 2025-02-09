@@ -1,85 +1,95 @@
-import Cookies from 'universal-cookie';
-import StatusBar from '../modules/Components/StatusBar';
-import Paging from '../modules/Components/Paging';
+import Paging from "../modules/Components/Paging";
 import errortrans from "../translate/error";
-import OrderTable from '../modules/Orders/OrderTable';
-import OrderFilters from '../modules/Orders/OrderComponent/OrderFilters';
-import { useEffect } from 'react';
-import { useState } from 'react';
-import env from '../env';
-import ProductTable from '../modules/Products/ProductTable';
-import tabletrans from '../translate/tables';
-import PClassTable from '../modules/Classes/PClassTable';
-const cookies = new Cookies();
+import OrderFilters from "../modules/Orders/OrderComponent/OrderFilters";
+import { useEffect } from "react";
+import { useState } from "react";
+import env from "../env";
+import tabletrans from "../translate/tables";
+import PClassTable from "../modules/Classes/PClassTable";
+import PostReq from "../utils/PostReq";
 
-function ProductClasses(props){
-    const direction = props.lang?props.lang.dir:errortrans.defaultDir;
-    const lang = props.lang?props.lang.lang:errortrans.defaultLang;
-    const [content,setContent] = useState("")
-    const [filters,setFilters] = useState("")
-    const [loading,setLoading] = useState(0)
-    const token=cookies.get(env.cookieName)
-    useEffect(() => {
-      setLoading(1)
-      const body={
-      }
-      const postOptions={
-          method:'post',
-          headers: {'Content-Type': 'application/json',
-          "x-access-token":token&&token.token,"userId":token&&token.userId},
-          body:JSON.stringify(body)
-        }
-        console.log(postOptions)
-    fetch(env.siteApi + "/panel/user/list-classes",postOptions)
-    .then(res => res.json())
-    .then(
-      (result) => {
-        console.log(result)
-        setLoading(0)
-          setContent('')
-          setTimeout(()=> setContent(result),200)
+
+function ProductClasses(props) {
+  const direction = props.lang ? props.lang.dir : errortrans.defaultDir;
+  const lang = props.lang ? props.lang.lang : errortrans.defaultLang;
+  const [content, setContent] = useState("");
+  const [filters, setFilters] = useState("");
+  const [loading, setLoading] = useState(0);
+  
+  useEffect(() => {
+    setLoading(1);
+    FetchCommission();
+  }, [filters]);
+  const FetchCommission = async () => {
+    const result = await PostReq({
+      method: "post",
+      url: "/panel/product/sale-commission-groups",
+      body: {
+        offset: filters.offset || "0",
+        pageSize: filters.pageSize || "25",
       },
-      (error) => {
-        setLoading(0)
-        console.log(error);
-      }
-      
-  )},[filters])
-  //window.scrollTo(0, 270);},[pageNumber,filters,perPage,refreshTable])
-   return(
-      <div className="user" style={{direction:direction}}>
-      <div className="od-header">
+    });
+
+    setTimeout(() => setContent(result.saleCommissionGroups), 200);
+    setLoading(0);
+  };
+  const deleteClass = async (id) => {
+    const result = await PostReq({
+      method: "DELETE",
+      url: "/panel/product/sale-commission-groups/" + id,
+      body: {},
+    });
+
+    setTimeout(() => (window.location.href = "/productclass"), 2000);
+  };
+
+  return (
+    <div className="user" style={{ direction: direction }}>
+      <div
+        className="od-header"
+        style={{
+          display: "flex",
+          justifyContent: "space-between",
+          flexDirection: "row",
+        }}
+      >
         <div className="od-header-info">
-          
           <div className="od-header-name">
             <p>{tabletrans.productClasses[lang]}</p>
           </div>
-          
         </div>
         <div className="od-header-btn">
-          <div className="edit-btn add-btn" 
-            onClick={()=>window.location.href="/productclass/detail/new"}>
+          <div
+            className="edit-btn add-btn"
+            onClick={() => (window.location.href = "/productclass/detail/new")}
+          >
             <i className="fa-solid fa-plus"></i>
             <p>{tabletrans.addNew[lang]}</p>
-          </div>
-          <div className="edit-btn">
-            <i className="fa-solid fa-pen"></i>
-            <p>{tabletrans.edit[lang]}</p>
           </div>
         </div>
       </div>
       <div className="list-container">
-        {/* <StatusBar lang={lang} token={token} filters={filters}
-         status={content.rxStatus} setFilters={setFilters}/> */}
         {/* <OrderFilters lang={props.lang} setFilters={setFilters}
           options={content.brand} filters={filters}/> */}
-        <div className="user-list"> 
-          {loading?env.loader:<PClassTable classes={content} lang={lang}/>}
+        <div className="user-list">
+          {loading ? (
+            env.loader
+          ) : (
+            <PClassTable
+              classes={content}
+              lang={lang}
+              deleteClass={deleteClass}
+            />
+          )}
         </div>
-        <Paging content={content} setFilters={setFilters} filters={filters} 
-          lang={props.lang}/>
+        <Paging
+          content={content}
+          setFilters={setFilters}
+          filters={filters}
+          lang={props.lang}
+        />
       </div>
     </div>
-    )
+  );
 }
-export default ProductClasses
+export default ProductClasses;

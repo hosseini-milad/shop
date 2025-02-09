@@ -1,80 +1,53 @@
-import React, { useRef, useEffect, useState } from "react";
-import { Editor } from "@tinymce/tinymce-react";
-import StyleInput from "../../../components/Button/Input";
+import React, { useEffect, useState } from "react";
 import formtrans from "../../../translate/forms";
-import tabletrans from "../../../translate/tables";
-import env from "../../../env";
 import StyleSelect from "../../../components/Button/AutoComplete";
 import PClassUserTable from "../PClassUserTable";
-
+import PostReq from "../../../utils/PostReq";
 function ProductClassUsers(props) {
-  const content = props.content;
-  const users = props.users;
-  const customers = props.customers;
-  const userFilter = props.userFilter;
-  const [error, setError] = useState({ errorText: "", errorColor: "brown" });
-
-  const [userSearch, setUserSearch] = useState("");
-  const addUserToClass = () => {
-    var postOptions = {
+  const url = props.url;
+  const [ProductList, setProductList] = useState("");
+  const [ProductSearch, setProductSearch] = useState("");
+  const [Product, setProduct] = useState("");
+  console.log(Product.sku);
+  useEffect(() => {
+    fetchProductList();
+  }, []);
+  const addProductToClass = async () => {
+    const result = await PostReq({
       method: "post",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ userId: userSearch._id, class: content }),
-    };
-    console.log(postOptions);
-    fetch(env.siteApi + "/panel/user/update-customer-class", postOptions)
-      .then((res) => res.json())
-      .then(
-        (result) => {
-          if (result.error) {
-            setError({ errorText: result.error, errorColor: "brown" });
-            setTimeout(
-              () => setError({ errorText: "", errorColor: "brown" }),
-              3000
-            );
-          } else {
-            setError({ errorText: "کلاس پیدا شد", errorColor: "green" });
+      url: "/panel/" + props.typeList + url,
+      body: { sku: Product.sku },
+    });
 
-            setTimeout(() => window.location.reload(), 500);
-          }
-        },
-        (error) => {
-          console.log(error);
-        }
-      );
+    // setTimeout(() => window.location.reload(), 2000);
   };
-  const setUserClass = (search) => {
+  const deleteProductToClass = async (sku) => {
+    const result = await PostReq({
+      method: "DELETE",
+      url: "/panel/" + props.typeList + url,
+      body: { sku: sku },
+    });
+
+    // setTimeout(() => window.location.reload(), 2000);
+  };
+  const SearchProduct = async (search) => {
     if (!search || search.length < 4) return;
-    var postOptions = {
-      method: "post",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ customer: search }),
-    };
-
-    fetch(env.siteApi + "/panel/user/list-customers", postOptions)
-      .then((res) => res.json())
-      .then(
-        (result) => {
-          if (result.error) {
-            setError({ errorText: result.error, errorColor: "brown" });
-            setTimeout(
-              () => setError({ errorText: "", errorColor: "brown" }),
-              3000
-            );
-          } else {
-            setError({ errorText: "سرویس پیدا شد", errorColor: "green" });
-            setUserSearch(result.filter);
-            setTimeout(
-              () => setError({ errorText: "", errorColor: "brown" }),
-              2000
-            );
-          }
-        },
-        (error) => {
-          console.log(error);
-        }
-      );
+    const result = await PostReq({
+      method: "Post",
+      url: "/panel/product/list-product",
+      body: { title: search },
+    });
+    setProductSearch(result.filter);
   };
+  const fetchProductList = async () => {
+    const result = await PostReq({
+      method: "Post",
+      url: "/panel/" + props.typeList,
+      body: { id: url },
+    });
+    setProductList(result);
+  };
+
   return (
     <div className="userItem">
       <strong>لیست محصولات</strong>
@@ -82,21 +55,21 @@ function ProductClassUsers(props) {
         <StyleSelect
           title={formtrans.product[props.lang]}
           direction={props.direction}
-          //defaultValue={content?content.userInfo[0].cName:''} class={"formInput"}
-          options={userSearch || []}
-          label={"username" || ""}
-          textChange={(e) => setUserClass(e)}
-          action={(e) => setUserSearch(e)}
+          options={ProductSearch || []}
+          label={"title" || ""}
+          textChange={(e) => SearchProduct(e)}
+          action={(e) => setProduct(e)}
         />
-        <div className="addClassBtn" onClick={addUserToClass}>
+        <div className="addClassBtn" onClick={addProductToClass}>
           <i className="fa-solid fa-plus"></i>
         </div>
       </div>
 
       <div className="user-list">
         <PClassUserTable
-          userList={{ filter: customers }}
+          ProductList={ProductList && ProductList.products}
           lang={{ lang: props.lang }}
+          deleteProductToClass={deleteProductToClass}
         />
       </div>
     </div>

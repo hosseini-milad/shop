@@ -7,8 +7,10 @@ import formtrans from "../../../translate/forms";
 import ClassDetails from "./ClassDetails";
 import ProductClassUsers from "./ProductClassUsers";
 import ProductClassPolicy from "./ProductClassPolicy";
-
+import Cookies from "universal-cookie";
 function ProductClassDetailHolder(props) {
+  const cookies = new Cookies();
+  const token = cookies.get(env.cookieName);
   const url = window.location.pathname.split("/")[3];
   const direction = props.lang ? props.lang.dir : errortrans.defaultDir;
   const lang = props.lang ? props.lang.lang : errortrans.defaultLang;
@@ -24,12 +26,15 @@ function ProductClassDetailHolder(props) {
   useEffect(() => {
     if (url === "new") return;
     var postOptions = {
-      method: "post",
+      method: "get",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ classId: url }),
+      body: JSON.stringify(),
     };
 
-    fetch(env.siteApi + "/panel/user/fetch-class", postOptions)
+    fetch(
+      env.siteApi + "/panel/product/sale-commission-groups/" + url,
+      postOptions
+    )
       .then((res) => res.json())
       .then(
         (result) => {
@@ -41,10 +46,8 @@ function ProductClassDetailHolder(props) {
             );
           } else {
             setError({ errorText: "سرویس پیدا شد", errorColor: "green" });
-            setContent(result.filter);
-            setUsers(result.userClass);
-            setCustomers(result.customerClass);
-            setPolicy(result.policyClass);
+            setContent(result.saleCommissionGroup);
+
             setTimeout(
               () => setError({ errorText: "", errorColor: "brown" }),
               2000
@@ -62,9 +65,12 @@ function ProductClassDetailHolder(props) {
     var postOptions = {
       method: "post",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ classId: url, ...classChange }),
+      body: JSON.stringify({ ...classChange }),
     };
-    fetch(env.siteApi + "/panel/user/update-class", postOptions)
+    fetch(
+      env.siteApi + "/panel/product/sale-commission-groups/" + url,
+      postOptions
+    )
       .then((res) => res.json())
       .then(
         (result) => {
@@ -102,7 +108,7 @@ function ProductClassDetailHolder(props) {
               <ProductClassPolicy
                 direction={direction}
                 lang={lang}
-                content={policy}
+                content={content}
                 setClassChange={setClassChange}
                 classChange={classChange}
               />
@@ -118,6 +124,10 @@ function ProductClassDetailHolder(props) {
                 userFilter={userFilter}
                 users={users}
                 customers={customers}
+                type={"product/sale-commission-products/"}
+                typeList={"product/sale-commission-products/"}
+                url={url}
+                token={token}
               />
             </div>
             <div className="create-btn-wrapper">

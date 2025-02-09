@@ -9,11 +9,10 @@ function ProductClassPolicy(props) {
   console.log(content);
   return (
     <div className="serviceItem">
-      
       <StyleInput
         title={formtrans.Percentage[props.lang]}
         direction={props.direction}
-        // defaultValue={content ? content.className : ""}
+        defaultValue={content ? content.percentage : ""}
         class={"formInput"}
         action={(e) =>
           props.setClassChange((prevState) => ({

@@ -113,7 +113,7 @@ function QuickNew(props) {
             search={props.search}
             setSearch={props.setSearch}
             setSelectedItem={setSelectedItem}
-            tab={props.tab}
+            
           />
         )}
       </td>

@@ -5,8 +5,8 @@ import PClassUserTableRow from "./PClassUserTableRow";
 function PClassUserTable(props) {
   const url = window.location.pathname;
   console.log(url);
-  const classes = props.classes;
-  const lang=props.lang.lang;
+  const ProductList = props.ProductList;
+  const lang = props.lang.lang;
   const [detail, showDetail] = useState(-1);
   return (
     <table>
@@ -16,7 +16,7 @@ function PClassUserTable(props) {
             <input type="checkbox" name="" id="" />
           </th>
           <th>
-            <p>{tabletrans.name[lang]}</p>
+            <p>{tabletrans.productTitle[lang]}</p>
             <i></i>
           </th>
           <th>
@@ -33,19 +33,22 @@ function PClassUserTable(props) {
         </tr>
       </thead>
       <tbody>
-        {/* {classes && classes.filter
-          ? classes.filter.map((classes, i) => (
-              <PClassUserTableRow
-                url={url}
-                detail={detail}
-                showDetail={showDetail}
-                classes={classes}
-                index={i}
-                key={i}
-                lang={lang}
-              />
-            ))
-          : ""} */}
+        {ProductList ? (
+          ProductList.map((classes, i) => (
+            <PClassUserTableRow
+              url={url}
+              detail={detail}
+              showDetail={showDetail}
+              classes={classes}
+              index={i}
+              key={i}
+              lang={lang}
+              deleteProductToClass={props.deleteProductToClass}
+            />
+          ))
+        ) : (
+          <></>
+        )}
       </tbody>
     </table>
   );

@@ -7,6 +7,7 @@ import formtrans from "../../../translate/forms";
 import ProductName from "./ProductName";
 import ProductSKU from "./ProductSku";
 import ProductPrice from "./ProductPrice";
+import ProductGroupeSelect from "./ProductGroupeSelect";
 
 function ProductDetailHolder(props) {
   const url = window.location.pathname.split("/")[3];
@@ -109,14 +110,24 @@ function ProductDetailHolder(props) {
                 setContent={setContent}
               />
               {url === "new" || content ? (
-                <ProductSKU
-                  direction={direction}
-                  lang={lang}
-                  content={content}
-                  productChange={productChange}
-                  setProductChange={setProductChange}
-                  setFilters={setFilters}
-                />
+                <>
+                  <ProductSKU
+                    direction={direction}
+                    lang={lang}
+                    content={content}
+                    productChange={productChange}
+                    setProductChange={setProductChange}
+                    setFilters={setFilters}
+                  />
+                  <ProductGroupeSelect
+                    direction={direction}
+                    lang={lang}
+                    content={content}
+                    productChange={productChange}
+                    setProductChange={setProductChange}
+                    setFilters={setFilters}
+                  />
+                </>
               ) : (
                 <></>
               )}

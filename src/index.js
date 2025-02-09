@@ -1,12 +1,13 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 
-import "./css/App.css";
-import "./css/board.css";
-import "./css/order.css";
+// import "./css/App.css";
+// import "./css/board.css";
+// import "./css/order.css";
+// import "./css/salimi.css";
+// import "./css/reyham.css";
 import "./css/fontAwesome.css";
-import "./css/salimi.css";
-import "./css/reyham.css";
+import "./css/main.css";
 
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import * as serviceWorkerRegistration from "./serviceWorkerRegistration";
@@ -60,7 +61,7 @@ import PrintSepidar from "./modules/Print/PrintSepidar";
 import Printofficial from "./modules/Print/Printofficial";
 import Discount from "./pages/Discount";
 import OffCustomer from "./pages/Offcustomer";
-import Advertisment from "./pages/Advertisment";
+import Advertisement from "./pages/Advertisement/Advertisement";
 import PrintStore from "./modules/Crm/PrintStore";
 import PublicFaktor from "./modules/Print/PublicFaktor";
 import PublicOfficial from "./modules/Print/PublicOfficial";
@@ -255,15 +256,15 @@ root.render(
         />
 
         <Route
-          path="/advertisment"
+          path="/Advertisement"
           element={
             <Layout>
-              <Advertisment lang={lang} />
+              <Advertisement lang={lang} />
             </Layout>
           }
         />
         <Route
-          path="/advertisment/detail/:orderId"
+          path="/Advertisement/detail/:orderId"
           element={
             <Layout>
               <AdvDetailHolder lang={lang} />

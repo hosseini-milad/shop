@@ -7,82 +7,43 @@ import formtrans from "../../../translate/forms";
 import ClassDetails from "./ClassDetails";
 import ProductClassUsers from "./ProductClassUsers";
 import ProductClassPolicy from "./ProductClassPolicy";
-
+import Cookies from "universal-cookie";
+import PostReq from "../../../utils/PostReq";
 function ProductGroupeDetailHolder(props) {
+  const cookies = new Cookies();
+  const token = cookies.get(env.cookieName);
   const url = window.location.pathname.split("/")[3];
   const direction = props.lang ? props.lang.dir : errortrans.defaultDir;
   const lang = props.lang ? props.lang.lang : errortrans.defaultLang;
-  const [error, setError] = useState({ errorText: "", errorColor: "brown" });
 
-  const [userFilter, setUserFilter] = useState("");
+  const [ProductFilter, setProductFilter] = useState("");
   const [content, setContent] = useState("");
   const [customers, setCustomers] = useState("");
-  const [users, setUsers] = useState("");
-  const [policy, setPolicy] = useState("");
+  const [Products, setProducts] = useState("");
   const [classChange, setClassChange] = useState("");
 
   useEffect(() => {
     if (url === "new") return;
-    var postOptions = {
-      method: "post",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ classId: url }),
-    };
-
-    fetch(env.siteApi + "/panel/user/fetch-class", postOptions)
-      .then((res) => res.json())
-      .then(
-        (result) => {
-          if (result.error) {
-            setError({ errorText: result.error, errorColor: "brown" });
-            setTimeout(
-              () => setError({ errorText: "", errorColor: "brown" }),
-              3000
-            );
-          } else {
-            setError({ errorText: "سرویس پیدا شد", errorColor: "green" });
-            setContent(result.filter);
-            setUsers(result.userClass);
-            setCustomers(result.customerClass);
-            setPolicy(result.policyClass);
-            setTimeout(
-              () => setError({ errorText: "", errorColor: "brown" }),
-              2000
-            );
-          }
-        },
-        (error) => {
-          console.log(error);
-        }
-      );
+    FetchGroupe();
+    FetchProducts();
   }, []);
+  const FetchGroupe = async () => {
+    const result = await PostReq({
+      method: "GET",
+      url: "/panel/user/sale-policy-groups/" + url,
+      body: {},
+    });
 
-  const saveClass = () => {
-    //if(newCustomer) {
-    var postOptions = {
+    setContent(result);
+  };
+  const FetchProducts = async () => {
+    const result = await PostReq({
       method: "post",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ classId: url, ...classChange }),
-    };
-    fetch(env.siteApi + "/panel/user/update-class", postOptions)
-      .then((res) => res.json())
-      .then(
-        (result) => {
-          if (result.error) {
-            setError({ errorText: result.error, errorColor: "brown" });
-            setTimeout(
-              () => setError({ errorText: "", errorColor: "brown" }),
-              3000
-            );
-          } else {
-            setError({ errorText: result.success, errorColor: "green" });
-            setTimeout(() => (window.location.href = "/productclass"), 2000);
-          }
-        },
-        (error) => {
-          console.log(error);
-        }
-      );
+      url: "/panel/user/sale-policy-products/",
+      body: { id: url },
+    });
+
+    setProducts(result.products);
   };
   return (
     <div className="new-item" style={{ direction: direction }}>
@@ -94,7 +55,7 @@ function ProductGroupeDetailHolder(props) {
               <ClassDetails
                 direction={direction}
                 lang={lang}
-                content={content}
+                content={content.salePolicyGroups}
                 setClassChange={setClassChange}
                 classChange={classChange}
               />
@@ -111,16 +72,20 @@ function ProductGroupeDetailHolder(props) {
               <ProductClassUsers
                 direction={direction}
                 lang={lang}
-                content={content}
+                content={content.salePolicyGroups}
                 setClassChange={setClassChange}
                 classChange={classChange}
-                setUserFilter={setUserFilter}
-                userFilter={userFilter}
-                users={users}
+                setProductFilter={setProductFilter}
+                ProductFilter={ProductFilter}
+                Products={Products}
                 customers={customers}
+                type={"user/sale-policy-groups/"}
+                typeList={"user/sale-policy-products/"}
+                token={token}
+                url={url}
               />
             </div>
-            <div className="create-btn-wrapper">
+            {/* <div className="create-btn-wrapper">
               <div className="save-btn" onClick={saveClass}>
                 {formtrans.saveChanges[lang]}
               </div>
@@ -130,7 +95,7 @@ function ProductGroupeDetailHolder(props) {
               >
                 {formtrans.cancel[lang]}
               </div>
-            </div>
+            </div> */}
           </div>
         ) : (
           <div>{env.loader}</div>
