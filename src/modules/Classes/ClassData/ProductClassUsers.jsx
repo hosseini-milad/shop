@@ -19,7 +19,7 @@ function ProductClassUsers(props) {
       body: { sku: Product.sku },
     });
 
-    // setTimeout(() => window.location.reload(), 2000);
+    setTimeout(() => window.location.reload(), 2000);
   };
   const deleteProductToClass = async (sku) => {
     const result = await PostReq({
@@ -28,7 +28,7 @@ function ProductClassUsers(props) {
       body: { sku: sku },
     });
 
-    // setTimeout(() => window.location.reload(), 2000);
+    setTimeout(() => window.location.reload(), 2000);
   };
   const SearchProduct = async (search) => {
     if (!search || search.length < 4) return;
