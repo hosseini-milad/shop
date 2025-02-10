@@ -1037,6 +1037,9 @@ router.route('/sale-policy-groups')
     .post(async (req, res) => {
         try {
             const salePolicyGroups = await salePolicyGroupModel.find({}).lean();
+            if (!salePolicyGroups.length) {
+                return res.status(400).json({ error: 'گروهی یافت نشد.' });
+            }
             const response = {
                 salePolicyGroups: salePolicyGroups.map((i) => {
                     return {
@@ -1048,7 +1051,7 @@ router.route('/sale-policy-groups')
             }
             return res.json(response);
         } catch (error) {
-            return res.status(500).json({ message: error.message });
+            return res.status(500).json({ error: error.message });
         }
     });
 
@@ -1057,6 +1060,9 @@ router.route('/sale-policy-groups/:id')
         try {
             const { id } = req.params;
             const salePolicyGroup = await salePolicyGroupModel.findOne({ _id: id }).lean();
+            if (!salePolicyGroup) {
+                return res.status(500).json({ error: 'گروهی یافت نشد.' });
+            }
             const response = {
                 salePolicyGroups: {
                     _id: salePolicyGroup._id || '',
@@ -1068,7 +1074,7 @@ router.route('/sale-policy-groups/:id')
             }
             return res.json(response);
         } catch (error) {
-            return res.status(500).json({ message: error.message });
+            return res.status(500).json({ error: error.message });
         }
     });
 
@@ -1080,7 +1086,7 @@ router.route('/sale-policy-products')
             const limit = parseInt(pageSize);
             const salePolicyGroup = await salePolicyGroupModel.findOne({ _id: id }).lean();
             if (!salePolicyGroup) {
-                return res.status(400).json({ message: 'گروه مورد نظر یافت نشد.' });
+                return res.status(400).json({ error: 'گروهی یافت نشد.' });
             }
             const [salePolicyProducts, count] = await Promise.all([
                 products.find({ salePolicyGroupId: salePolicyGroup._id }).skip(skip).limit(limit).lean(),
@@ -1093,7 +1099,7 @@ router.route('/sale-policy-products')
             }
             return res.json(response);
         } catch (error) {
-            return res.status(500).json({ message: error.message });
+            return res.status(500).json({ error: error.message });
         }
     });
 
@@ -1104,19 +1110,19 @@ router.route('/sale-policy-products/:id')
             const { sku } = req.body;
             const salePolicyGroup = await salePolicyGroupModel.findOne({ _id: id }).lean();
             if (!salePolicyGroup) {
-                return res.status(400).json({ message: 'گروه مورد نظر یافت نشد.' });
+                return res.status(400).json({ error: 'گروهی یافت نشد.' });
             }
             const targetProduct = await products.findOne({ sku }).lean();
             if (!targetProduct) {
-                return res.status(400).json({ message: 'محصول مورد نظر یافت نشد.' });
+                return res.status(400).json({ error: 'محصولی یافت نشد.' });
             }
             const updateProductSalePolicyGroup = await products.updateOne({ sku }, { $set: { salePolicyGroupId: salePolicyGroup._id } });
             const response = {
-                success: 'محصول به لیست اضافه شد.',
+                message: 'محصول به لیست اضافه شد.',
             }
             return res.json(response);
         } catch (error) {
-            return res.status(500).json({ message: error.message });
+            return res.status(500).json({ error: error.message });
         }
     })
     .delete(jsonParser, async (req, res) => {
@@ -1125,15 +1131,15 @@ router.route('/sale-policy-products/:id')
             const { sku } = req.body;
             const targetProduct = await products.findOne({ sku, salePolicyGroupId: id }).lean();
             if (!targetProduct) {
-                return res.status(400).json({ message: 'محصول مورد نظر یافت نشد.' });
+                return res.status(400).json({ error: 'محصولی یافت نشد.' });
             }
             const updateProductSalePolicyGroup = await products.updateOne({ sku }, { $unset: { salePolicyGroupId: true } });
             const response = {
-                success: 'محصول از لیست حذف شد.',
+                message: 'محصول از لیست حذف شد.',
             }
             return res.json(response);
         } catch (error) {
-            return res.status(500).json({ message: error.message });
+            return res.status(500).json({ error: error.message });
         }
     });
 

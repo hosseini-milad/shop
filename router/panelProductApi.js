@@ -170,6 +170,12 @@ router.post('/fetch-product', jsonParser, async (req, res) => {
             .populate({ path: 'salePolicyGroupId', select: 'name' })
             .populate({ path: 'saleCommissionGroupId', select: 'name percentage' })
             .lean();
+        if (productData.salePolicyGroupId) {
+            productData.salePolicyGroupId = productData.salePolicyGroupId.name;
+        }
+        if (productData.saleCommissionGroupId) {
+            productData.saleCommissionGroupId = `${productData.saleCommissionGroupId.name} (${productData.saleCommissionGroupId.percentage}%)`;
+        }
 		if (!productData) {
 			return res.json({ filter: {} });
 		}
@@ -851,10 +857,16 @@ router.post('/fetch-name', jsonParser, auth, async(req,res) => {
 router.route('/sale-commission-groups')
     .post(jsonParser, async (req, res) => {
         try {
-            const { offset = 0, pageSize = 10 } = req.body;
+            const { offset = 0, pageSize = 10, title = '' } = req.body;
             const skip = parseInt(offset);
             const limit = parseInt(pageSize);
-            const saleCommissionGroups = await saleCommissionGroupModel.find({}).skip(skip).limit(limit).sort({ _id: -1 }).lean();
+            const matchCondition = {};
+            if (title) {
+                matchCondition.name = {
+                    $regex: title
+                };
+            }
+            const saleCommissionGroups = await saleCommissionGroupModel.find(matchCondition).skip(skip).limit(limit).sort({ _id: -1 }).lean();
             const response = {
                 saleCommissionGroups: saleCommissionGroups.map((i) => {
                     return {
@@ -866,7 +878,7 @@ router.route('/sale-commission-groups')
             }
             return res.json(response);
         } catch (error) {
-            return res.status(500).json({ message: error.message });
+            return res.status(500).json({ error: error.message });
         }
     });
 
@@ -874,7 +886,7 @@ router.route('/sale-commission-groups/new')
     .post(jsonParser, async (req, res) => {
         try {
             if (!req.body.name) {
-                return res.status(400).json({ message: 'نام گروه الزامی می‌باشد.' });
+                return res.status(400).json({ error: 'نام گروه الزامی می‌باشد.' });
             }
             const newDoc = {
                 name: req.body.name,
@@ -882,15 +894,15 @@ router.route('/sale-commission-groups/new')
             };
             const doesGroupNameExists = await saleCommissionGroupModel.findOne({ name: newDoc.name }).lean();
             if (doesGroupNameExists) {
-                return res.status(400).json({ message: 'گروه دیگری با این نام وجود دارد. لطفا نام دیگری انتخاب نمایید.' });
+                return res.status(400).json({ error: 'گروه دیگری با این نام وجود دارد. لطفا نام دیگری انتخاب نمایید.' });
             }
             const newSaleCommissionGroup = await saleCommissionGroupModel.create(newDoc);
             const response = {
-                success: ' ایجاد شد.'
+                message: ' ایجاد شد.'
             }
             return res.json(response);
         } catch (error) {
-            return res.status(500).json({ message: error.message });
+            return res.status(500).json({ error: error.message });
         }
     });
 
@@ -900,20 +912,20 @@ router.route('/sale-commission-groups/:id')
             const { id } = req.params;
             const saleCommissionGroup = await saleCommissionGroupModel.findOne({ _id: id }).lean();
             if (!saleCommissionGroup) {
-                return res.status(400).json({ message: 'گروه مورد نظر یافت نشد.' });
+                return res.status(400).json({ error: 'گروهی یافت نشد.' });
             }
             const response = {
                 saleCommissionGroup: {
                     _id: saleCommissionGroup._id || '',
                     name: saleCommissionGroup.name || '',
                     percentage: saleCommissionGroup.percentage || 0,
-                    createdAt: saleCommissionGroup.createdAt, // TODO: convert to persian date
-                    updateAt: saleCommissionGroup.updatedAt, // TODO: convert to persian date
+                    createdAt: saleCommissionGroup.createdAt, // TODO: convert to persian date?
+                    updateAt: saleCommissionGroup.updatedAt, // TODO: convert to persian date?
                 }
             }
             return res.json(response);
         } catch (error) {
-            return res.status(500).json({ message: error.message });
+            return res.status(500).json({ error: error.message });
         }
     })
     .post(jsonParser, async (req, res) => {
@@ -922,7 +934,7 @@ router.route('/sale-commission-groups/:id')
             const { name, percentage } = req.body;
             const targetSaleCommissionGroup = await saleCommissionGroupModel.findOne({ _id: id }).lean();
             if (!targetSaleCommissionGroup) {
-                return res.status(400).json({ message: 'گروه مورد نظر یافت نشد.' });
+                return res.status(400).json({ error: 'گروهی یافت نشد.' });
             }
             const updateData = {};
             if (name) {
@@ -931,7 +943,7 @@ router.route('/sale-commission-groups/:id')
                     name,
                 }).lean();
                 if (doesNameIsAlreadyExistsInOtherDocuments) {
-                    return res.status(400).json({ message: 'گروه دیگری با این نام وجود دارد. لطفا نام دیگری انتخاب نمایید.' });
+                    return res.status(400).json({ error: 'گروه دیگری با این نام وجود دارد. لطفا نام دیگری انتخاب نمایید.' });
                 }
                 updateData.name = req.body.name;
             }
@@ -940,11 +952,11 @@ router.route('/sale-commission-groups/:id')
             }
             const saleCommissionGroup = await saleCommissionGroupModel.updateOne({ _id: id }, { $set: updateData });
             const response = {
-                success: 'ویرایش شد.',
+                message: 'ویرایش شد.',
             };
             return res.json(response);
         } catch (error) {
-            return res.status(500).json({ message: error.message });
+            return res.status(500).json({ error: error.message });
         }
     })
     .delete(async (req, res) => {
@@ -952,16 +964,16 @@ router.route('/sale-commission-groups/:id')
             const { id } = req.params;
             const targetSaleCommissionGroup = await saleCommissionGroupModel.findOne({ _id: id }).lean();
             if (!targetSaleCommissionGroup) {
-                return res.status(400).json({ message: 'گروه مورد نظر یافت نشد.' });
+                return res.status(400).json({ error: 'گروهی یافت نشد.' });
             }
             const removeThisGroupIdFromProducts = await products.updateMany({ saleCommissionGroupId: targetSaleCommissionGroup._id }, { $unset: { saleCommissionGroupId: true }});
             const removeSaleCommissionGroup = await saleCommissionGroupModel.deleteOne({ _id: targetSaleCommissionGroup._id });
             const response = {
-                success: 'حذف شد.'
+                message: 'حذف شد.'
             }
             return res.json(response);
         } catch (error) {
-            return res.status(500).json({ message: error.message });
+            return res.status(500).json({ error: error.message });
         }
     });
 
@@ -973,7 +985,7 @@ router.route('/sale-commission-products')
             const limit = parseInt(pageSize);
             const saleCommissionGroup = await saleCommissionGroupModel.findOne({ _id: id }).lean();
             if (!saleCommissionGroup) {
-                return res.status(400).json({ message: 'گروه مورد نظر یافت نشد.' });
+                return res.status(400).json({ error: 'گروهی یافت نشد.' });
             }
             const [saleCommissionProducts, count] = await Promise.all([
                 products.find({ saleCommissionGroupId: saleCommissionGroup._id }).skip(skip).limit(limit).lean(),
@@ -986,7 +998,7 @@ router.route('/sale-commission-products')
             }
             return res.json(response);
         } catch (error) {
-            return res.status(500).json({ message: error.message });
+            return res.status(500).json({ error: error.message });
         }
     });
 
@@ -997,19 +1009,19 @@ router.route('/sale-commission-products/:id')
             const { sku } = req.body;
             const saleCommissionGroup = await saleCommissionGroupModel.findOne({ _id: id }).lean();
             if (!saleCommissionGroup) {
-                return res.status(400).json({ message: 'گروه مورد نظر یافت نشد.' });
+                return res.status(400).json({ error: 'گروهی یافت نشد.' });
             }
             const targetProduct = await products.findOne({ sku }).lean();
             if (!targetProduct) {
-                return res.status(400).json({ message: 'محصول مورد نظر یافت نشد.' });
+                return res.status(400).json({ error: 'محصولی یافت نشد.' });
             }
             const updateProductSaleCommissionGroup = await products.updateOne({ sku }, { $set: { saleCommissionGroupId: saleCommissionGroup._id } });
             const response = {
-                success: 'محصول به لیست اضافه شد.',
+                message: 'محصول به لیست اضافه شد.',
             }
             return res.json(response);
         } catch (error) {
-            return res.status(500).json({ message: error.message });
+            return res.status(500).json({ error: error.message });
         }
     })
     .delete(jsonParser, async (req, res) => {
@@ -1018,15 +1030,15 @@ router.route('/sale-commission-products/:id')
             const { sku } = req.body;
             const targetProduct = await products.findOne({ sku, saleCommissionGroupId: id }).lean();
             if (!targetProduct) {
-                return res.status(400).json({ message: 'محصول مورد نظر یافت نشد.' });
+                return res.status(400).json({ error: 'محصولی یافت نشد.' });
             }
             const updateProductSaleCommissionGroup = await products.updateOne({ sku }, { $unset: { saleCommissionGroupId: true } });
             const response = {
-                success: 'محصول از لیست حذف شد.',
+                message: 'محصول از لیست حذف شد.',
             }
             return res.json(response);
         } catch (error) {
-            return res.status(500).json({ message: error.message });
+            return res.status(500).json({ error: error.message });
         }
     });
 
