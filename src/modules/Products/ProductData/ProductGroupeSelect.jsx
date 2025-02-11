@@ -74,7 +74,7 @@ function ProductGroupeSelect(props) {
               title={tabletrans.productgroupe[props.lang]}
               direction={props.direction}
               class={"formInput halfWidth"}
-              defaultValue={content && content.salePolicyGroupId}
+              defaultValue={content && content.filter.salePolicyGroupId}
               options={Groups ? Groups : []}
               label={"name"}
               action={(e) =>
@@ -88,7 +88,7 @@ function ProductGroupeSelect(props) {
               title={tabletrans.productclass[props.lang]}
               direction={props.direction}
               class={"formInput halfWidth"}
-              defaultValue={content && content.saleCommissionGroupId}
+              defaultValue={content && content.filter.saleCommissionGroupId}
               options={Classes ? Classes : []}
               label={"name"}
               action={(e) =>
