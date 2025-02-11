@@ -1,13 +1,13 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 
-// import "./css/App.css";
-// import "./css/board.css";
-// import "./css/order.css";
-// import "./css/salimi.css";
-// import "./css/reyham.css";
+import "./css/App.css";
+import "./css/board.css";
+import "./css/order.css";
+import "./css/salimi.css";
+import "./css/reyham.css";
 import "./css/fontAwesome.css";
-import "./css/main.css";
+// import "./css/main.css";
 
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import * as serviceWorkerRegistration from "./serviceWorkerRegistration";

@@ -29370,9 +29370,62 @@ li.board-task {
   }
 }
 
-.link-box {
+.link-box{
   flex-direction: column;
-  min-width: 45%;
+  min-width:45%;
+
+
+  .d-m-header{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    margin-bottom: 1rem;
+
+    i{
+      font-size: 2rem;
+      font-weight: 400;
+      cursor: pointer;
+    }
+    h4{
+      margin: 0;
+      font-weight: 400;
+    }
+  }
+  .d-m-content{
+    width: 100%;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    display: flex;
+
+    .popTitle{
+      width: 100%;
+      border: 1px solid lightgoldenrodyellow;
+      border-radius: 0.5rem;
+      padding: 6px;
+      margin-bottom: 1rem;
+      text-align: left;
+      font-weight: 400;
+    }
+    .btn-wrappper{
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+
+      button{
+        min-width:120px;
+        margin: 0;
+        background-color: rgb(25, 173, 25);
+        color: rgb(0, 0, 0);
+        font-size: 1rem;
+        outline: none;
+        border: none;
+      }
+    }
+  }
 }
 
 .image-box {
@@ -31151,6 +31204,25 @@ input[type="number"] {
 .reorder-modal .modal-backdrop {
   justify-content: flex-start;
   padding-top: 10%;
+
+  .nav-bar {
+    background-color: transparent;
+  }
+  .f-customer {
+    margin: 0;
+    width: 100%;
+  }
+  .d-m-content {
+    flex-direction: row;
+  }
+  button {
+    padding:0.79rem 1rem;
+    background-color: lightgreen;
+    border: none;
+    border-radius: 0.5rem;
+    width: 40%;
+    font-size: 1rem;
+  }
 }
 
 .account h4,

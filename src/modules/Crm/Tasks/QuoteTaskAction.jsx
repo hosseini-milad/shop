@@ -12,7 +12,6 @@ function QuoteTaskAction(props) {
   const [Loader, setLoader] = useState(0);
   const [ShowAlert, setShowAlert] = useState(0);
   const [ShowReorder, setShowReorder] = useState(0);
-  console.log(data);
   const updateTask = () => {
     setLoader(1);
     const postOptions = {
@@ -149,6 +148,7 @@ function QuoteTaskAction(props) {
           setShowReorder={setShowReorder}
           token={token}
           setPayValue={setPayValue}
+          cartNo={ShowReorder}
         />
       ) : (
         <></>

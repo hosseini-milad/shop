@@ -1,42 +1,12 @@
 import { useState } from "react";
 import env from "../../env";
+import PostReq from "../../utils/PostReq";
 function ReorderModal(props) {
   const [user, setUser] = useState();
   const [showDrop, setShowDrop] = useState();
   const [customers, setCustomers] = useState();
   const token = props.token;
 
-  const findCustomer = (search) => {
-    if (search.length < 3) {
-      //setShowPop(0)
-      return;
-    }
-    //console.log(search)
-    const postOptions = {
-      method: "post",
-      headers: {
-        "Content-Type": "application/json",
-        "x-access-token": token && token.token,
-        userId: token && token.userId,
-      },
-      body: JSON.stringify({ search: search }),
-    };
-    fetch(env.siteApi + "/panel/faktor/customer-find", postOptions)
-      .then((res) => res.json())
-      .then(
-        (result) => {
-          if (result.customers)
-            if (result.error) {
-              props.setError({ message: result.error, color: "brown" });
-            } else {
-              setCustomers(result.customers);
-            }
-        },
-        (error) => {
-          console.log(error);
-        }
-      );
-  };
   const setPay = (customer) => {
     if (customer.CustomerID) {
       props.setPayValue(3);
@@ -44,6 +14,24 @@ function ReorderModal(props) {
       props.setPayValue(4);
     }
   };
+  const SearchCustomer = async (search) => {
+    if (!search || search.length < 3) return;
+    const result = await PostReq({
+      method: "Post",
+      url: "/panel/faktor/customer-find",
+      body: { search: search },
+    });
+    setCustomers(result);
+  };
+  const ReOrder = async (search) => {
+    const result = await PostReq({
+      method: "Post",
+      url: "/panel/faktor/copy-quote",
+      body: { cartNo: props.cartNo, userId: user._id },
+    });
+    setTimeout(() => window.location.reload(), 2000);
+  };
+
   return (
     <div className="delete-modal reorder-modal">
       <div className="modal-backdrop show-modal">
@@ -90,7 +78,7 @@ function ReorderModal(props) {
                     name=""
                     id="f-search"
                     placeholder="همه"
-                    onChange={(e) => findCustomer(e.target.value)}
+                    onChange={(e) => SearchCustomer(e.target.value)}
                     onFocus={() => setShowDrop(1)}
                     onBlur={() => setTimeout(() => setShowDrop(0), 200)}
                   />
@@ -99,7 +87,8 @@ function ReorderModal(props) {
               {showDrop ? (
                 <div className="f-customer-dropdpwn">
                   {customers &&
-                    customers.map((customer, i) => (
+                    customers.customers &&
+                    customers.customers.map((customer, i) => (
                       <div
                         className="menu-item"
                         key={i}
@@ -162,7 +151,7 @@ function ReorderModal(props) {
               )}
             </div>
 
-            <button>ثبت سفارش</button>
+            <button onClick={ReOrder}>ثبت سفارش</button>
           </div>
         </div>
       </div>
