@@ -1519,29 +1519,16 @@ const findNullCount = async (items, cart) => {
 
 const checkForSalePolicyRules = async (qCartData) => {
 	try {
-        const productsList = qCartData.cartItems;
-        const productsSku = productsList.map((i) => i.sku);
 		let isSalePolicyRulesPassed = true;
-        let salePolicyRuleMessage = '';
-        const requiredProducts = {
-            lowSellingProducts1: {
-                message: '',
-                productsList: [],
-                productsCount: 0,
-            },
-            lowSellingProducts2: {
-                message: '',
-                productsList: [],
-                productsCount: 0,
-            },
-            sideProducts: {
-                message: '',
-                productsList: [],
-                productsCount: 0,
-            }
-        };
-		const productsWithSalePolicy = await products.find({ sku: { $in: productsSku } }).populate({ path: 'salePolicyGroupId' }).lean();
-        const mainProductsCount = productsWithSalePolicy.filter((i) => {
+        let salePolicyRuleMessage = 'شروط سیاست‌های فروش رعایت نشده است.';
+        const requiredProducts = {};
+        for (let i = 0; i < qCartData.cartItems.length; i++) {
+            const targetProduct = await products.findOne({ sku: qCartData.cartItems[i].sku }).populate({ path: 'salePolicyGroupId' }).lean();
+            qCartData.cartItems[i] = { ...qCartData.cartItems[i], salePolicyGroupId: targetProduct.salePolicyGroupId};
+        }
+        const payValue = qCartData.payValue;
+        const productsList = qCartData.cartItems;
+        const mainProductsCount = productsList.filter((i) => {
             if (i.salePolicyGroupId) {
                 return i.salePolicyGroupId.category === 'mainProducts';
             }
@@ -1551,27 +1538,39 @@ const checkForSalePolicyRules = async (qCartData) => {
                 isSalePolicyRulesPassed,
             };
         }
-        const lowSellingProducts1Count = productsWithSalePolicy.filter((i) => {
+        const lowSellingProducts1Count = productsList.filter((i) => {
             if (i.salePolicyGroupId) {
                 return i.salePolicyGroupId.category === 'lowSellingProducts1';
             }
         });
-        const lowSellingProducts2Count = productsWithSalePolicy.filter((i) => {
+        const lowSellingProducts2Count = productsList.filter((i) => {
             if (i.salePolicyGroupId) {
                 return i.salePolicyGroupId.category === 'lowSellingProducts2';
             }
         });
-        const sideProducts = productsWithSalePolicy.filter((i) => {
+        const withoutSideProducts = productsList.filter((i) => {
+            if (i.salePolicyGroupId) {
+                return i.salePolicyGroupId.category !== 'sideProducts';
+            }
+        });
+        const faktorPriceWithoutSideProducts = withoutSideProducts.reduce((accumulator, currentItem) => {
+            const cartItemPrice = Number(findPayValuePrice(currentItem.price, payValue));
+            const itemPrice = cartItemPrice * currentItem.count;
+            return accumulator + itemPrice;
+        }, 0);
+        const sideProducts = productsList.filter((i) => {
             if (i.salePolicyGroupId) {
                 return i.salePolicyGroupId.category === 'sideProducts';
             }
         });
-        const faktorPriceWithoutSideProducts = '';
-        const calculateSideProductsPrice = '';
+        const calculateSideProductsPrice = sideProducts.reduce((accumulator, currentItem) => {
+            const cartItemPrice = Number(findPayValuePrice(currentItem.price, payValue));
+            const itemPrice = cartItemPrice * currentItem.count;
+            return accumulator + itemPrice;
+        }, 0);
         if (lowSellingProducts1Count.length < (mainProductsCount.length * 2)) {
             isSalePolicyRulesPassed = false;
             salePolicyRuleMessage = 'شروط سیاست‌های فروش رعایت نشدند.'
-            requiredProducts.lowSellingProducts1.message = `تعداد ${lowSellingProducts1Count.length} عدد از محصولات کم فروش 1 انتخاب کرده‌اید. می‌بایست حداقل ${mainProductsCount.length * 2} عدد انتخاب نمایید.`;
             const salePolicyGroup = await salePolicyGroupModel.findOne({ category: 'lowSellingProducts1' }).lean();
             const lowSellingProducts1Condition = {
                 salePolicyGroupId: salePolicyGroup._id,
@@ -1580,14 +1579,16 @@ const checkForSalePolicyRules = async (qCartData) => {
                 products.find(lowSellingProducts1Condition).skip(0).limit(10).lean(),
                 products.countDocuments(lowSellingProducts1Condition),
             ]);
-            requiredProducts.lowSellingProducts1.productsList = salePolicyProducts;
-            requiredProducts.lowSellingProducts1.productsCount = count;
+            requiredProducts.lowSellingProducts1 = {
+                message: `تعداد ${lowSellingProducts1Count.length} عدد از محصولات کم فروش 1 انتخاب کرده‌اید. می‌بایست حداقل ${mainProductsCount.length * 2} عدد انتخاب نمایید.`,
+                productsList: salePolicyProducts,
+                productsCount: count,
+            };
         }
 
         if (lowSellingProducts2Count.length < (mainProductsCount.length * 1)) {
             isSalePolicyRulesPassed = false;
             salePolicyRuleMessage = 'شروط سیاست‌های فروش رعایت نشدند.'
-            requiredProducts.lowSellingProducts2.message = `تعداد ${lowSellingProducts2Count.length} عدد از محصولات کم فروش 2 انتخاب کرده‌اید. می‌بایست حداقل ${mainProductsCount.length * 1} عدد انتخاب نمایید.`;
             const salePolicyGroup = await salePolicyGroupModel.findOne({ category: 'lowSellingProducts2' }).lean();
             const lowSellingProducts2Condition = {
                 salePolicyGroupId: salePolicyGroup._id,
@@ -1596,14 +1597,16 @@ const checkForSalePolicyRules = async (qCartData) => {
                 products.find(lowSellingProducts2Condition).skip(0).limit(10).lean(),
                 products.countDocuments(lowSellingProducts2Condition),
             ]);
-            requiredProducts.lowSellingProducts2.productsList = salePolicyProducts;
-            requiredProducts.lowSellingProducts2.productsCount = count;
+            requiredProducts.lowSellingProducts2 = {
+                message: `تعداد ${lowSellingProducts2Count.length} عدد از محصولات کم فروش 2 انتخاب کرده‌اید. می‌بایست حداقل ${mainProductsCount.length * 1} عدد انتخاب نمایید.`,
+                productsList: salePolicyProducts,
+                productsCount: count,
+            };
         }
 
         if (calculateSideProductsPrice < faktorPriceWithoutSideProducts) {
             isSalePolicyRulesPassed = false;
             salePolicyRuleMessage = 'شروط سیاست‌های فروش رعایت نشدند.'
-            salePolicyRuleMessage = `مبلغ ${calculateSideProductsPrice} از محصولات کناری انتخاب کرده‌اید. می‌بایست حداقل ${faktorPriceWithoutSideProducts} انتخاب نمایید.`;
             const salePolicyGroup = await salePolicyGroupModel.findOne({ category: 'sideProducts' }).lean();
             const sideProductsCondition = {
                 salePolicyGroupId: salePolicyGroup._id,
@@ -1612,8 +1615,11 @@ const checkForSalePolicyRules = async (qCartData) => {
                 products.find(sideProductsCondition).skip(0).limit(10).lean(),
                 products.countDocuments(sideProductsCondition),
             ]);
-            requiredProducts.sideProducts.productsList = salePolicyProducts;
-            requiredProducts.sideProducts.productsCount = count;
+            requiredProducts.sideProducts = {
+                message: `مبلغ ${calculateSideProductsPrice} از محصولات کناری انتخاب کرده‌اید. می‌بایست حداقل ${faktorPriceWithoutSideProducts} انتخاب نمایید.`,
+                productsList: salePolicyProducts,
+                productsCount: count,
+            };
         }
 		return {
             isSalePolicyRulesPassed,
@@ -1652,6 +1658,9 @@ router.post('/quick-to-cart', jsonParser, async (req, res) => {
         const profileData = adminData&&await profiles.find({ _id: {$in:adminProfiles}})
         const qCartData = await quickCart.findOne({ userId: userId })
         // check sale policy rules
+        if (!qCartData) {
+            return res.status(400).json({ error: 'یافت نشد.' });
+        }
         const { isSalePolicyRulesPassed, salePolicyRuleMessage, requiredProducts } = await checkForSalePolicyRules(qCartData);
         if (!isSalePolicyRulesPassed) {
             const response = {
