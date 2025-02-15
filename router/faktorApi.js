@@ -2594,7 +2594,8 @@ router.post('/sepidar-find', jsonParser, async (req, res) => {
         for (var i = 0; i < invoice.length; i++) {
             var faktorItem = invoice[i]
             var itemDetail = await products.findOne({ ItemID: faktorItem.ItemRef })
-            OnlineFaktor.InvoiceItems[i].itemDetail = itemDetail
+         const boxs=calculateBoxing(invoice[i].Quantity,itemDetail.perBox)
+            OnlineFaktor.InvoiceItems[i].itemDetail = {...itemDetail,boxs}
             //itemRefs.push(faktorItem)
         }
         res.json({ faktor: OnlineFaktor, userDetail: userDetail, itemRefs: invoice })
@@ -2603,6 +2604,12 @@ router.post('/sepidar-find', jsonParser, async (req, res) => {
         res.status(500).json({ error: error.message })
     }
 })
+function calculateBoxing(count, boxCapicity) {
+    return {
+        box: parseInt(parseInt(count) / parseInt(boxCapicity)),
+        single: parseInt(parseInt(count) % parseInt(boxCapicity))
+    }
+}
 
 router.post('/public-sepidar-find', jsonParser, async (req, res) => {
     const faktorId = req.body.faktorId;
