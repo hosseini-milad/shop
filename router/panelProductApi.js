@@ -222,10 +222,10 @@ router.post('/list-product',jsonParser,async (req,res)=>{
             {$lookup:{from : "productcount", 
                 localField: "ItemID", foreignField: "ItemID", as : "countList"}},
             ])
-        const productsQuantity = await productCount.find({Stock:stockId})
             .populate({ path: 'salePolicyGroupId', select: 'name' })
             .populate({ path: 'saleCommissionGroupId', select: 'name percentage' })
             .lean();
+        const productsQuantity = await productCount.find({Stock:stockId})
             var quantity = []
             var price = []
             const newProduct=[]
