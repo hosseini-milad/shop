@@ -230,9 +230,9 @@ router.post('/list-product',jsonParser,async (req,res)=>{
                 const countData = productsQuantity.find(
                     Item=>Item.ItemID==products[i].ItemID)
             const saleCom = products[i].saleCommissionGroupId&&
-                await saleCommissionGroupModel.finOne({_id:ObjectID(products[i].saleCommissionGroupId)})
+                await saleCommissionGroupModel.findOne({_id:ObjectID(products[i].saleCommissionGroupId)})
             const saleProd = products[i].salePolicyGroupId&&
-                await salePolicyGroupModel.finOne({_id:ObjectID(products[i].salePolicyGroupId)})
+                await salePolicyGroupModel.findOne({_id:ObjectID(products[i].salePolicyGroupId)})
             if (saleCom) {
                 products[i].salePolicyGroupId = saleCom&&saleCom.name;
             }
