@@ -230,14 +230,14 @@ router.post('/list-product',jsonParser,async (req,res)=>{
                 const countData = productsQuantity.find(
                     Item=>Item.ItemID==products[i].ItemID)
             const saleCom = products[i].salePolicyGroupId&&
-                await saleCommissionGroups.finOne({_id:ObjectID(products[i].salePolicyGroupId)})
+                await saleCommissionGroup.finOne({_id:ObjectID(products[i].salePolicyGroupId)})
             const saleProd = products[i].saleCommissionGroupId&&
-                await saleCommissionProducts.finOne({_id:ObjectID(products[i].saleCommissionGroupId)})
-            if (products[i].salePolicyGroupId) {
+                await saleCommissionProduct.finOne({_id:ObjectID(products[i].saleCommissionGroupId)})
+            if (saleCom) {
                 products[i].salePolicyGroupId = saleCom&&saleCom.name;
             }
-            if (products[i].saleCommissionGroupId) {
-                products[i].saleCommissionGroupId = `${products[i].saleCommissionGroupId.name} (${products[i].saleCommissionGroupId.percentage}%)`;
+            if (saleProd) {
+                products[i].saleCommissionGroupId = `${saleProd.saleCommissionGroupId.name} (${saleProd.saleCommissionGroupId.percentage}%)`;
             }
                 //const countStock = stockData?countData.find(item=>item.Stock==stockData):''
                 //console.log(countData&&countData.quantity)
