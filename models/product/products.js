@@ -27,6 +27,16 @@ const ProductSchema = new Schema({
     },
     perBox:Number,
     price:String,
+    salePolicyGroupId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'salePolicyGroup',
+    },
+    saleCommissionGroupId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'saleCommissionGroup',
+    },
     categories:String
 })
-module.exports = mongoose.model('product',ProductSchema);
+
+const productModel = mongoose.model('product',ProductSchema);
+module.exports = productModel;

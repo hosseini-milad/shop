@@ -5,6 +5,7 @@
   "main": "logger.js",
   "scripts": {
     "start": "nodemon logger.js",
+    "local": "nodemon -r dotenv/config index.js dotenv_config_path=./env/.env.local",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],

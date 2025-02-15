@@ -23,6 +23,8 @@ const factory = require("../models/product/factory");
 const crmlist = require("../models/crm/crmlist");
 const sepidarPOST = require("../middleware/SepidarPost");
 const file = require("../models/product/file");
+const salePolicyGroupModel = require('../models/sale/salePolicyGroup');
+const products = require('../models/product/products');
 
 router.post("/fetch-user", jsonParser, async (req, res) => {
     var pageSize = req.body.pageSize ? req.body.pageSize : "10";
@@ -1044,5 +1046,114 @@ async function getImage (req, res, next)  {
         res.send({ status: "getImage", error: e });
     }
 }
+router.route('/sale-policy-groups')
+    .post(async (req, res) => {
+        try {
+            const salePolicyGroups = await salePolicyGroupModel.find({}).lean();
+            if (!salePolicyGroups.length) {
+                return res.status(400).json({ error: 'گروهی یافت نشد.' });
+            }
+            const response = {
+                salePolicyGroups: salePolicyGroups.map((i) => {
+                    return {
+                        _id: i._id || '',
+                        name: i.name || '',
+                        category: i.category || '',
+                    }
+                })
+            }
+            return res.json(response);
+        } catch (error) {
+            return res.status(500).json({ error: error.message });
+        }
+    });
+
+router.route('/sale-policy-groups/:id')
+    .get(async (req, res) => {
+        try {
+            const { id } = req.params;
+            const salePolicyGroup = await salePolicyGroupModel.findOne({ _id: id }).lean();
+            if (!salePolicyGroup) {
+                return res.status(500).json({ error: 'گروهی یافت نشد.' });
+            }
+            const response = {
+                salePolicyGroups: {
+                    _id: salePolicyGroup._id || '',
+                    name: salePolicyGroup.name || '',
+                    category: salePolicyGroup.category || '',
+                    createdAt: salePolicyGroup.createdAt, // TODO: convert to persian date
+                    updateAt: salePolicyGroup.updatedAt, // TODO: convert to persian date
+                }
+            }
+            return res.json(response);
+        } catch (error) {
+            return res.status(500).json({ error: error.message });
+        }
+    });
+
+router.route('/sale-policy-products')
+    .post(jsonParser, async (req, res) => {
+        try {
+            const { id, offset = 0 , pageSize = 10 } = req.body;
+            const skip = parseInt(offset);
+            const limit = parseInt(pageSize);
+            const salePolicyGroup = await salePolicyGroupModel.findOne({ _id: id }).lean();
+            if (!salePolicyGroup) {
+                return res.status(400).json({ error: 'گروهی یافت نشد.' });
+            }
+            const [salePolicyProducts, count] = await Promise.all([
+                products.find({ salePolicyGroupId: salePolicyGroup._id }).skip(skip).limit(limit).lean(),
+                products.countDocuments({ salePolicyGroupId: salePolicyGroup._id }),
+            ]);
+
+            const response = {
+                products: salePolicyProducts,
+                count,
+            }
+            return res.json(response);
+        } catch (error) {
+            return res.status(500).json({ error: error.message });
+        }
+    });
+
+router.route('/sale-policy-products/:id')
+    .post(jsonParser, async (req, res) => {
+        try {
+            const { id } = req.params;
+            const { sku } = req.body;
+            const salePolicyGroup = await salePolicyGroupModel.findOne({ _id: id }).lean();
+            if (!salePolicyGroup) {
+                return res.status(400).json({ error: 'گروهی یافت نشد.' });
+            }
+            const targetProduct = await products.findOne({ sku }).lean();
+            if (!targetProduct) {
+                return res.status(400).json({ error: 'محصولی یافت نشد.' });
+            }
+            const updateProductSalePolicyGroup = await products.updateOne({ sku }, { $set: { salePolicyGroupId: salePolicyGroup._id } });
+            const response = {
+                message: 'محصول به لیست اضافه شد.',
+            }
+            return res.json(response);
+        } catch (error) {
+            return res.status(500).json({ error: error.message });
+        }
+    })
+    .delete(jsonParser, async (req, res) => {
+        try {
+            const { id } = req.params;
+            const { sku } = req.body;
+            const targetProduct = await products.findOne({ sku, salePolicyGroupId: id }).lean();
+            if (!targetProduct) {
+                return res.status(400).json({ error: 'محصولی یافت نشد.' });
+            }
+            const updateProductSalePolicyGroup = await products.updateOne({ sku }, { $unset: { salePolicyGroupId: true } });
+            const response = {
+                message: 'محصول از لیست حذف شد.',
+            }
+            return res.json(response);
+        } catch (error) {
+            return res.status(500).json({ error: error.message });
+        }
+    });
 
 module.exports = router;

@@ -33,7 +33,8 @@ const OrderToTask = require('../middleware/OrderToTask');
 const IsToday = require('../middleware/IsToday');
 const NewQuote = require('../middleware/NewQuote');
 const quote = require('../models/product/quote');
-const publicLinks = require ('../models/product/publicLinks')
+const publicLinks = require ('../models/product/publicLinks');
+const salePolicyGroupModel = require('../models/sale/salePolicyGroup');
 const { TaxRate } = process.env
 
 router.post('/products', async (req, res) => {
@@ -1515,6 +1516,123 @@ const findNullCount = async (items, cart) => {
 
     }
 }
+
+const checkForSalePolicyRules = async (qCartData) => {
+	try {
+		let isSalePolicyRulesPassed = true;
+        let salePolicyRuleMessage = 'شروط سیاست‌های فروش رعایت نشده است.';
+        const requiredProducts = {};
+        for (let i = 0; i < qCartData.cartItems.length; i++) {
+            const targetProduct = await products.findOne({ sku: qCartData.cartItems[i].sku }).populate({ path: 'salePolicyGroupId' }).lean();
+            qCartData.cartItems[i] = { ...qCartData.cartItems[i], salePolicyGroupId: targetProduct.salePolicyGroupId};
+        }
+        const payValue = qCartData.payValue;
+        const productsList = qCartData.cartItems;
+        const mainProductsCount = productsList.filter((i) => {
+            if (i.salePolicyGroupId) {
+                return i.salePolicyGroupId.category === 'mainProducts';
+            }
+        })
+        if (!mainProductsCount.length) {
+            return {
+                isSalePolicyRulesPassed,
+            };
+        }
+        const lowSellingProducts1Count = productsList.filter((i) => {
+            if (i.salePolicyGroupId) {
+                return i.salePolicyGroupId.category === 'lowSellingProducts1';
+            }
+        });
+        const lowSellingProducts2Count = productsList.filter((i) => {
+            if (i.salePolicyGroupId) {
+                return i.salePolicyGroupId.category === 'lowSellingProducts2';
+            }
+        });
+        const withoutSideProducts = productsList.filter((i) => {
+            if (i.salePolicyGroupId) {
+                return i.salePolicyGroupId.category !== 'sideProducts';
+            }
+        });
+        const faktorPriceWithoutSideProducts = withoutSideProducts.reduce((accumulator, currentItem) => {
+            const cartItemPrice = Number(findPayValuePrice(currentItem.price, payValue));
+            const itemPrice = cartItemPrice * currentItem.count;
+            return accumulator + itemPrice;
+        }, 0);
+        const sideProducts = productsList.filter((i) => {
+            if (i.salePolicyGroupId) {
+                return i.salePolicyGroupId.category === 'sideProducts';
+            }
+        });
+        const calculateSideProductsPrice = sideProducts.reduce((accumulator, currentItem) => {
+            const cartItemPrice = Number(findPayValuePrice(currentItem.price, payValue));
+            const itemPrice = cartItemPrice * currentItem.count;
+            return accumulator + itemPrice;
+        }, 0);
+        if (lowSellingProducts1Count.length < (mainProductsCount.length * 2)) {
+            isSalePolicyRulesPassed = false;
+            salePolicyRuleMessage = 'شروط سیاست‌های فروش رعایت نشدند.'
+            const salePolicyGroup = await salePolicyGroupModel.findOne({ category: 'lowSellingProducts1' }).lean();
+            const lowSellingProducts1Condition = {
+                salePolicyGroupId: salePolicyGroup._id,
+            }
+            const [salePolicyProducts, count] = await Promise.all([
+                products.find(lowSellingProducts1Condition).skip(0).limit(10).lean(),
+                products.countDocuments(lowSellingProducts1Condition),
+            ]);
+            requiredProducts.lowSellingProducts1 = {
+                message: `تعداد ${lowSellingProducts1Count.length} عدد از محصولات کم فروش 1 انتخاب کرده‌اید. می‌بایست حداقل ${mainProductsCount.length * 2} عدد انتخاب نمایید.`,
+                productsList: salePolicyProducts,
+                productsCount: count,
+            };
+        }
+
+        if (lowSellingProducts2Count.length < (mainProductsCount.length * 1)) {
+            isSalePolicyRulesPassed = false;
+            salePolicyRuleMessage = 'شروط سیاست‌های فروش رعایت نشدند.'
+            const salePolicyGroup = await salePolicyGroupModel.findOne({ category: 'lowSellingProducts2' }).lean();
+            const lowSellingProducts2Condition = {
+                salePolicyGroupId: salePolicyGroup._id,
+            }
+            const [salePolicyProducts, count] = await Promise.all([
+                products.find(lowSellingProducts2Condition).skip(0).limit(10).lean(),
+                products.countDocuments(lowSellingProducts2Condition),
+            ]);
+            requiredProducts.lowSellingProducts2 = {
+                message: `تعداد ${lowSellingProducts2Count.length} عدد از محصولات کم فروش 2 انتخاب کرده‌اید. می‌بایست حداقل ${mainProductsCount.length * 1} عدد انتخاب نمایید.`,
+                productsList: salePolicyProducts,
+                productsCount: count,
+            };
+        }
+
+        if (calculateSideProductsPrice < faktorPriceWithoutSideProducts) {
+            isSalePolicyRulesPassed = false;
+            salePolicyRuleMessage = 'شروط سیاست‌های فروش رعایت نشدند.'
+            const salePolicyGroup = await salePolicyGroupModel.findOne({ category: 'sideProducts' }).lean();
+            const sideProductsCondition = {
+                salePolicyGroupId: salePolicyGroup._id,
+            }
+            const [salePolicyProducts, count] = await Promise.all([
+                products.find(sideProductsCondition).skip(0).limit(10).lean(),
+                products.countDocuments(sideProductsCondition),
+            ]);
+            requiredProducts.sideProducts = {
+                message: `مبلغ ${calculateSideProductsPrice} از محصولات کناری انتخاب کرده‌اید. می‌بایست حداقل ${faktorPriceWithoutSideProducts} انتخاب نمایید.`,
+                productsList: salePolicyProducts,
+                productsCount: count,
+            };
+        }
+		return {
+            isSalePolicyRulesPassed,
+            salePolicyRuleMessage,
+            requiredProducts,
+        };
+	} catch (error) {
+		return {
+            isSalePolicyRulesPassed: false,
+        };
+	}
+};
+
 router.post('/quick-to-cart', jsonParser, async (req, res) => {
     const userId = req.body.userId ? req.body.userId : req.headers['userid']
     const {branchName,branchId,date,cartID,isQuote}=req.body
@@ -1530,7 +1648,7 @@ router.post('/quick-to-cart', jsonParser, async (req, res) => {
     }
     try {
     
-        const isSale = await CheckSale(data.manageId)
+        const isSale = await CheckSale(data.manageId) // 1 or 0
         data.isSale = isSale
         //const cartAll = await cart.find()
         const userData = await customers.findOne({ _id: ObjectID(userId) })
@@ -1539,6 +1657,18 @@ router.post('/quick-to-cart', jsonParser, async (req, res) => {
         console.log(adminProfiles)
         const profileData = adminData&&await profiles.find({ _id: {$in:adminProfiles}})
         const qCartData = await quickCart.findOne({ userId: userId })
+        // check sale policy rules
+        if (!qCartData) {
+            return res.status(400).json({ error: 'یافت نشد.' });
+        }
+        const { isSalePolicyRulesPassed, salePolicyRuleMessage, requiredProducts } = await checkForSalePolicyRules(qCartData);
+        if (!isSalePolicyRulesPassed) {
+            const response = {
+                message: salePolicyRuleMessage,
+                productsList: requiredProducts,
+            }
+            return res.status(400).json(response);
+        }
         const defaultPay = customers.CustomerID?"3":"4"
         data.payValue = (qCartData && qCartData.payValue)?qCartData.payValue:defaultPay
         data.description = qCartData && qCartData.description
@@ -2511,6 +2641,69 @@ router.post('/public-sepidar-find', jsonParser, async (req, res) => {
     } catch (error) {
         res.status(500).json({ error: error.message });
     }
+});
+
+router.post('/copy-quote', jsonParser, async (req, res) => {
+	const { userId, cartNo } = req.body;
+
+	try {
+        const data = {
+            userId,
+            manageId: req.headers['userid'],
+            // date,
+            progressDate: Date.now(),
+            // branchName,
+            // branchId,
+            isQuote: true,
+        };
+		const isSale = await CheckSale(data.manageId); // 1 or 0
+		data.isSale = isSale;
+		//const cartAll = await cart.find()
+		const userData = await customers.findOne({ _id: ObjectID(userId) }).lean();
+		const adminData = await users.findOne({ _id: ObjectID(data.manageId) }).lean();
+		const adminProfiles = adminData.profile ? adminData.profile.map((item) => ObjectID(item)) : [];
+		const profileData = adminData && (await profiles.find({ _id: { $in: adminProfiles } }));
+		const targetCart = await cart.findOne({ cartNo }).lean();
+		// // check sale policy rules
+		// const { isSalePolicyRulesPassed, salePolicyRuleMessage, requiredProducts } = await checkForSalePolicyRules(qCartData);
+		// if (!isSalePolicyRulesPassed) {
+		// 	const response = {
+		// 		message: salePolicyRuleMessage,
+		// 		productsList: requiredProducts,
+		// 	};
+		// 	return res.status(400).json(response);
+		// }
+		const defaultPay = customers.CustomerID ? '3' : '4';
+		data.payValue = targetCart && targetCart.payValue ? targetCart.payValue : defaultPay;
+		data.description = targetCart && targetCart.description;
+		data.discount = targetCart && targetCart.discount;
+		const targetCartItems = targetCart && targetCart.cartItems;
+		data.cartItems = targetCartItems;
+		const stockId = userData.StockId ? userData.StockId : '5';
+
+		const availItems = !data.isQuote ? await checkCart(targetCartItems, stockId, data.payValue) : 0;
+
+		if (availItems) {
+			res.status(400).json({ error: availItems });
+			return;
+		}
+		//data.cartItems =pureCartPrice(quickCartItems,qCartData.payValue)
+		data.cartNo = await NewCode(isSale ? 's' : 'd');
+		data.profileId = adminData && adminData.profile;
+		data.profileName = profileData && profileData.map((item) => item.profileName);
+		data.stockId = targetCart && targetCart.stockId;
+		// cartLog.create({ ...data, ItemID: cartID, action: 'copy quote' });
+		cartLog.create({ ...data, action: 'copy quote' });
+		await cart.create(data);
+		// status = 'create cart';
+		// await quickCart.deleteOne({ userId: data.userId });
+		if (!isSale) await CreateTask('border', data, userData);
+		// const cartDetails = await findCartFunction(userId, req.headers['userid']);
+		// setTimeout(() => res.json(cartDetails), 3000);
+        return res.json({ success: 'پیش فاکتور کپی شد.' });
+	} catch (error) {
+		return res.status(500).json({ message: error.message });
+	}
 });
 
 module.exports = router;

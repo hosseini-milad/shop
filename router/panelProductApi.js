@@ -33,6 +33,8 @@ const UpdateMarket = require('../middleware/UpdateMarket');
 const crmlist = require('../models/crm/crmlist');
 const CanAnalyze = require('../middleware/CanAnalyze');
 const Stocks = require('../models/product/Stocks');
+const salePolicyGroupModel = require('../models/sale/salePolicyGroup');
+const saleCommissionGroupModel = require('../models/sale/saleCommissionGroup');
 
 router.post('/fetch-service',jsonParser,async (req,res)=>{
     var serviceId = req.body.serviceId?req.body.serviceId:''
@@ -157,34 +159,38 @@ router.post('/editService',jsonParser,async(req,res)=>{
 
 
 /*Product*/
-router.post('/fetch-product',jsonParser,async (req,res)=>{
-    var productId = req.body.productId?req.body.productId:''
-    try{
-        if(!productId){
-            res.json({filter:{}})
-            return
-        } 
-        const productData = await ProductSchema.findOne({_id: ObjectID(productId)})
-        if(!productData){
-            res.json({filter:{}})
-            return
+router.post('/fetch-product', jsonParser, async (req, res) => {
+	const { productId = '' } = req.body;
+	try {
+		if (!productId) {
+			return res.json({ filter: {} });
+		}
+		const productData = await ProductSchema
+            .findOne({ _id: productId })
+            .populate({ path: 'salePolicyGroupId', select: 'name' })
+            .populate({ path: 'saleCommissionGroupId', select: 'name percentage' })
+            .lean();
+        if (productData.salePolicyGroupId) {
+            productData.salePolicyGroupId = productData.salePolicyGroupId.name;
         }
-        const brandList = await BrandSchema.find({})
-        const categoryList = await category.find({})
-        const brandData = productData.brandId?
-            brandList.find(item=>item.brandCode==productData.brandId):''
-        const catData = productData.catId?
-            categoryList.find(item=>item.catCode==productData.catId):''
-        const filterList = catData?
-            await Filters.find({"category._id":catData._id.toString()}):''
-       
-        res.json({filter:productData,brandList:brandList,categoryList:categoryList,
-        brandData:brandData,catData:catData,filterList:filterList})
-    }
-    catch(error){
-        res.status(500).json({message: error.message})
-    } 
-})
+        if (productData.saleCommissionGroupId) {
+            productData.saleCommissionGroupId = `${productData.saleCommissionGroupId.name} (${productData.saleCommissionGroupId.percentage}%)`;
+        }
+		if (!productData) {
+			return res.json({ filter: {} });
+		}
+		const brandList = await BrandSchema.find({}).lean();
+		const categoryList = await category.find({}).lean();
+		const brandData = productData.brandId ? brandList.find((item) => item.brandCode == productData.brandId) : '';
+		const catData = productData.catId ? categoryList.find((item) => item.catCode == productData.catId) : '';
+		const filterList = catData ? await Filters.find({ 'category._id': catData._id.toString() }) : '';
+
+		return res.json({ filter: productData, brandList, categoryList, brandData, catData, filterList });
+	} catch (error) {
+		return res.status(500).json({ message: error.message });
+	}
+});
+
 router.post('/list-product',jsonParser,async (req,res)=>{
     var pageSize = req.body.pageSize?req.body.pageSize:"10";
     var offset = req.body.offset?(parseInt(req.body.offset)):0;
@@ -217,14 +223,24 @@ router.post('/list-product',jsonParser,async (req,res)=>{
                 localField: "ItemID", foreignField: "ItemID", as : "countList"}},
             ])
         const productsQuantity = await productCount.find({Stock:stockId})
+            .populate({ path: 'salePolicyGroupId', select: 'name' })
+            .populate({ path: 'saleCommissionGroupId', select: 'name percentage' })
+            .lean();
             var quantity = []
             var price = []
             const newProduct=[]
             for(var i=0;i<products.length;i++){
                 const countData = productsQuantity.find(
                     Item=>Item.ItemID==products[i].ItemID)
+                
+            if (products[i].salePolicyGroupId) {
+                products[i].salePolicyGroupId = products[i].salePolicyGroupId.name;
+            }
+            if (products[i].saleCommissionGroupId) {
+                products[i].saleCommissionGroupId = `${products[i].saleCommissionGroupId.name} (${products[i].saleCommissionGroupId.percentage}%)`;
+            }
                 //const countStock = stockData?countData.find(item=>item.Stock==stockData):''
-                console.log(countData&&countData.quantity)
+                //console.log(countData&&countData.quantity)
                 if(!countData||!countData.quantity) 
                     if(data.exists)continue
                 
@@ -265,46 +281,60 @@ router.post('/list-product',jsonParser,async (req,res)=>{
         res.status(500).json({message: error.message})
     } 
 })
-router.post('/editProduct',jsonParser,async(req,res)=>{
-    var productId= req.body.productId?req.body.productId:''
-    if(productId === "new")productId=''
-    try{ 
-        const data = {
-            title:  req.body.title,
-            catId: req.body.catId,
-            brandId: req.body.brandId,
-            sharifId: req.body.sharifId,
-            type:req.body.type,
-            perBox:req.body.perBox,
-            filters:req.body.filters,
-            value:req.body.value,
-            active:req.body.active,
-            enTitle:req.body.enTitle,
-            description:req.body.description,
-            fullDesc:req.body.fullDesc,
-            productUrl:req.body.productUrl,
-            metaTitle: req.body.metaTitle,
-            productMeta:req.body.productMeta,
-            sku: req.body.sku,
-            productCode: req.body.productCode,
-            price: req.body.price,
-            quantity: req.body.quantity,
-            sort: req.body.sort,
-            imageUrl:  req.body.imageUrl,
-            thumbUrl:  req.body.thumbUrl
+
+router.post('/editProduct', jsonParser, async (req, res) => {
+	let productId = req.body.productId ? req.body.productId : '';
+	if (productId === 'new') productId = '';
+	try {
+		const data = {
+			title: req.body.title,
+			catId: req.body.catId,
+			brandId: req.body.brandId,
+			sharifId: req.body.sharifId,
+			type: req.body.type,
+			perBox: req.body.perBox,
+			filters: req.body.filters,
+			value: req.body.value,
+			active: req.body.active,
+			enTitle: req.body.enTitle,
+			description: req.body.description,
+			fullDesc: req.body.fullDesc,
+			productUrl: req.body.productUrl,
+			metaTitle: req.body.metaTitle,
+			productMeta: req.body.productMeta,
+			sku: req.body.sku,
+			productCode: req.body.productCode,
+			price: req.body.price,
+			quantity: req.body.quantity,
+			sort: req.body.sort,
+			imageUrl: req.body.imageUrl,
+			thumbUrl: req.body.thumbUrl,
+		};
+        if (req.body.salePolicyGroupId) {
+            const checkIfSalePolicyGroupExists = await salePolicyGroupModel.findOne({ _id: req.body.salePolicyGroupId }).lean();
+            if (!checkIfSalePolicyGroupExists) {
+                return res.status(400).json({ message: 'گروه مورد نظر یافت نشد.' });
+            }
+            data.salePolicyGroupId = req.body.salePolicyGroupId;
         }
-        var productResult = ''
-        if(productId) productResult=await ProductSchema.updateOne({_id:productId},
-            {$set:data})
-        else
-        productResult= await ProductSchema.create(data)
-        
-        res.json({result:productResult,success:productId?"Updated":"Created"})
-    }
-    catch(error){
-        res.status(500).json({message: error.message})
-    }
-})
+        if (req.body.saleCommissionGroupId) {
+            const checkIfSaleCommissionGroupExists = await saleCommissionGroupModel.findOne({ _id: req.body.saleCommissionGroupId }).lean();
+            if (!checkIfSaleCommissionGroupExists) {
+                return res.status(400).json({ message: 'گروه مورد نظر یافت نشد.' });
+            }
+            data.saleCommissionGroupId = req.body.saleCommissionGroupId;
+        }
+		const updateResult = productId
+            ? await ProductSchema.updateOne({ _id: productId }, { $set: data })
+            : await ProductSchema.create(data);
+
+        const updatedProduct = await ProductSchema.findOne({ _id: productId }).lean();
+		return res.json({ result: updatedProduct, success: productId ? 'Updated' : 'Created' });
+	} catch (error) {
+		return res.status(500).json({ message: error.message });
+	}
+});
+
 router.post('/updateProduct',jsonParser,async(req,res)=>{
     var productId= req.body.productId?req.body.productId:''
     productId=filterNumber(productId)
@@ -689,6 +719,9 @@ router.post('/report-total',jsonParser,auth,async(req,res)=>{
                 new Date().toISOString().slice(0, 10)+" 23:59",
             
         }
+        if (req.body.productsList && req.body.productsList.length) {
+            data.productsList = req.body.productsList;
+        }
         const managerList = await users.find({access:"market"})
         const nowIso=nowDate.toISOString();
         const nowParse = Date.parse(nowIso);
@@ -700,6 +733,12 @@ router.post('/report-total',jsonParser,auth,async(req,res)=>{
         const dateToEn = new Date(now3.setDate(now.getDate()-(data.dateTo?data.dateTo:0)));
         dateToEn.setHours(23, 59, 0, 0)
         const reportList = await cart.aggregate([
+            { $unwind: '$cartItems' },
+            { $match:data.manageId?{manageId:data.manageId}:{}},
+            { $match:data.userId?{userId:data.userId}:{}},
+            { $match:{initDate:{$gte:new Date(data.dateFrom)}}},
+            { $match:{initDate:{$lte:new Date(data.dateTo)}}},
+            { $match: data.productsList ? { 'cartItems.id': { $in: data.productsList }} : {} },
             { $addFields: { "userId": { "$toObjectId": "$userId" }}},
             {$lookup:{
                 from : "customers", 
@@ -707,10 +746,6 @@ router.post('/report-total',jsonParser,auth,async(req,res)=>{
                 foreignField: "_id", 
                 as : "userInfo"
             }},
-            { $match:data.manageId?{manageId:data.manageId}:{}},
-            { $match:data.userId?{userId:data.userId}:{}},
-            { $match:{initDate:{$gte:new Date(data.dateFrom)}}},
-            { $match:{initDate:{$lte:new Date(data.dateTo)}}},
             { $sort: {"initDate":-1}},
      
             ])
@@ -729,7 +764,7 @@ router.post('/report-total',jsonParser,auth,async(req,res)=>{
             var analyzeStatus = await CanAnalyze(reportList[i].cartNo)
             if(!analyzeStatus) continue
             var payValue = reportList[i].payValue
-            var cartItems=reportList[i].cartItems
+            var cartItems=[reportList[i].cartItems]
             var manageId =reportList[i].manageId 
             var itemAdd = 0
             for(var j=0;j<(cartItems&&cartItems.length);j++){
@@ -812,4 +847,209 @@ router.post('/report-total',jsonParser,auth,async(req,res)=>{
         res.status(500).json({message: error.message})
     }
 })
+
+router.post('/fetch-name', jsonParser, auth, async(req,res) => {
+    try {
+        const { name = '' } = req.body;
+        if (!name || name.length < 3) {
+            return res.status(400).json({ error: 'Please enter at least 3 characters of some product name.' });
+        }
+        const fetchedRequestedProducts = await products.find({ title: { $regex: name }}).sort({ _id: -1 }).select({ _id: 0, title: 1, ItemID: 1 }).lean();
+        const responseData = {
+            list: fetchedRequestedProducts,
+        };
+        return res.json(responseData);
+    } catch (error) {
+        return res.status(500).json({message: error.message});
+    }
+});
+
+router.route('/sale-commission-groups')
+    .post(jsonParser, async (req, res) => {
+        try {
+            const { offset = 0, pageSize = 10, title = '' } = req.body;
+            const skip = parseInt(offset);
+            const limit = parseInt(pageSize);
+            const matchCondition = {};
+            if (title) {
+                matchCondition.name = {
+                    $regex: title
+                };
+            }
+            const saleCommissionGroups = await saleCommissionGroupModel.find(matchCondition).skip(skip).limit(limit).sort({ _id: -1 }).lean();
+            const response = {
+                saleCommissionGroups: saleCommissionGroups.map((i) => {
+                    return {
+                        _id: i._id || '',
+                        name: i.name || '',
+                        percentage: i.percentage || 0,
+                    }
+                })
+            }
+            return res.json(response);
+        } catch (error) {
+            return res.status(500).json({ error: error.message });
+        }
+    });
+
+router.route('/sale-commission-groups/new')
+    .post(jsonParser, async (req, res) => {
+        try {
+            if (!req.body.name) {
+                return res.status(400).json({ error: 'نام گروه الزامی می‌باشد.' });
+            }
+            const newDoc = {
+                name: req.body.name,
+                percentage: req.body.percentage,
+            };
+            const doesGroupNameExists = await saleCommissionGroupModel.findOne({ name: newDoc.name }).lean();
+            if (doesGroupNameExists) {
+                return res.status(400).json({ error: 'گروه دیگری با این نام وجود دارد. لطفا نام دیگری انتخاب نمایید.' });
+            }
+            const newSaleCommissionGroup = await saleCommissionGroupModel.create(newDoc);
+            const response = {
+                message: ' ایجاد شد.'
+            }
+            return res.json(response);
+        } catch (error) {
+            return res.status(500).json({ error: error.message });
+        }
+    });
+
+router.route('/sale-commission-groups/:id')
+    .get(async (req, res) => {
+        try {
+            const { id } = req.params;
+            const saleCommissionGroup = await saleCommissionGroupModel.findOne({ _id: id }).lean();
+            if (!saleCommissionGroup) {
+                return res.status(400).json({ error: 'گروهی یافت نشد.' });
+            }
+            const response = {
+                saleCommissionGroup: {
+                    _id: saleCommissionGroup._id || '',
+                    name: saleCommissionGroup.name || '',
+                    percentage: saleCommissionGroup.percentage || 0,
+                    createdAt: saleCommissionGroup.createdAt, // TODO: convert to persian date?
+                    updateAt: saleCommissionGroup.updatedAt, // TODO: convert to persian date?
+                }
+            }
+            return res.json(response);
+        } catch (error) {
+            return res.status(500).json({ error: error.message });
+        }
+    })
+    .post(jsonParser, async (req, res) => {
+        try {
+            const { id } = req.params;
+            const { name, percentage } = req.body;
+            const targetSaleCommissionGroup = await saleCommissionGroupModel.findOne({ _id: id }).lean();
+            if (!targetSaleCommissionGroup) {
+                return res.status(400).json({ error: 'گروهی یافت نشد.' });
+            }
+            const updateData = {};
+            if (name) {
+                const doesNameIsAlreadyExistsInOtherDocuments = await saleCommissionGroupModel.findOne({
+                    _id: { $ne: targetSaleCommissionGroup._id },
+                    name,
+                }).lean();
+                if (doesNameIsAlreadyExistsInOtherDocuments) {
+                    return res.status(400).json({ error: 'گروه دیگری با این نام وجود دارد. لطفا نام دیگری انتخاب نمایید.' });
+                }
+                updateData.name = req.body.name;
+            }
+            if (percentage) {
+                updateData.percentage = percentage;
+            }
+            const saleCommissionGroup = await saleCommissionGroupModel.updateOne({ _id: id }, { $set: updateData });
+            const response = {
+                message: 'ویرایش شد.',
+            };
+            return res.json(response);
+        } catch (error) {
+            return res.status(500).json({ error: error.message });
+        }
+    })
+    .delete(async (req, res) => {
+        try {
+            const { id } = req.params;
+            const targetSaleCommissionGroup = await saleCommissionGroupModel.findOne({ _id: id }).lean();
+            if (!targetSaleCommissionGroup) {
+                return res.status(400).json({ error: 'گروهی یافت نشد.' });
+            }
+            const removeThisGroupIdFromProducts = await products.updateMany({ saleCommissionGroupId: targetSaleCommissionGroup._id }, { $unset: { saleCommissionGroupId: true }});
+            const removeSaleCommissionGroup = await saleCommissionGroupModel.deleteOne({ _id: targetSaleCommissionGroup._id });
+            const response = {
+                message: 'حذف شد.'
+            }
+            return res.json(response);
+        } catch (error) {
+            return res.status(500).json({ error: error.message });
+        }
+    });
+
+router.route('/sale-commission-products')
+    .post(jsonParser, async (req, res) => {
+        try {
+            const { id, offset = 0 , pageSize = 10 } = req.body;
+            const skip = parseInt(offset);
+            const limit = parseInt(pageSize);
+            const saleCommissionGroup = await saleCommissionGroupModel.findOne({ _id: id }).lean();
+            if (!saleCommissionGroup) {
+                return res.status(400).json({ error: 'گروهی یافت نشد.' });
+            }
+            const [saleCommissionProducts, count] = await Promise.all([
+                products.find({ saleCommissionGroupId: saleCommissionGroup._id }).skip(skip).limit(limit).lean(),
+                products.countDocuments({ saleCommissionGroupId: saleCommissionGroup._id }),
+            ]);
+
+            const response = {
+                products: saleCommissionProducts,
+                count,
+            }
+            return res.json(response);
+        } catch (error) {
+            return res.status(500).json({ error: error.message });
+        }
+    });
+
+router.route('/sale-commission-products/:id')
+    .post(jsonParser, async (req, res) => {
+        try {
+            const { id } = req.params;
+            const { sku } = req.body;
+            const saleCommissionGroup = await saleCommissionGroupModel.findOne({ _id: id }).lean();
+            if (!saleCommissionGroup) {
+                return res.status(400).json({ error: 'گروهی یافت نشد.' });
+            }
+            const targetProduct = await products.findOne({ sku }).lean();
+            if (!targetProduct) {
+                return res.status(400).json({ error: 'محصولی یافت نشد.' });
+            }
+            const updateProductSaleCommissionGroup = await products.updateOne({ sku }, { $set: { saleCommissionGroupId: saleCommissionGroup._id } });
+            const response = {
+                message: 'محصول به لیست اضافه شد.',
+            }
+            return res.json(response);
+        } catch (error) {
+            return res.status(500).json({ error: error.message });
+        }
+    })
+    .delete(jsonParser, async (req, res) => {
+        try {
+            const { id } = req.params;
+            const { sku } = req.body;
+            const targetProduct = await products.findOne({ sku, saleCommissionGroupId: id }).lean();
+            if (!targetProduct) {
+                return res.status(400).json({ error: 'محصولی یافت نشد.' });
+            }
+            const updateProductSaleCommissionGroup = await products.updateOne({ sku }, { $unset: { saleCommissionGroupId: true } });
+            const response = {
+                message: 'محصول از لیست حذف شد.',
+            }
+            return res.json(response);
+        } catch (error) {
+            return res.status(500).json({ error: error.message });
+        }
+    });
+
 module.exports = router;
