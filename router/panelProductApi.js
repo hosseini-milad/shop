@@ -203,6 +203,8 @@ router.post('/list-product',jsonParser,async (req,res)=>{
         title:req.body.title,
         sku:req.body.sku,
         exists: req.body?.exist?1:0,
+        saleCommissionGroupId:req.body.saleCommissionGroupId,
+        salePolicyGroupId	:req.body.salePolicyGroupId	,
         brand:req.body.brandId,
         active:req.body.active,
         offset:req.body.offset,
@@ -215,6 +217,8 @@ router.post('/list-product',jsonParser,async (req,res)=>{
             { $match:data.category?{category:data.category}:{}},
             //{ $match:data.exists?{count:{$nin:[0,'']}}:{}},
             { $match:data.active?{active:true}:{}},
+            { $match:data.saleCommissionGroupId?{saleCommissionGroupId:data.saleCommissionGroupId}:{}},
+            { $match:data.salePolicyGroupId?{salePolicyGroupId:data.salePolicyGroupId}:{}},
             { $match:data.brand?(data.brand=="unkown")?
                 {$or:[{brandId:{$exists:false}},{brandId:''}]}:{brandId:data.brand}:{}},
             {$lookup:{from : "brands", 
