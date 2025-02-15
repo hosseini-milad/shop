@@ -222,9 +222,6 @@ router.post('/list-product',jsonParser,async (req,res)=>{
             {$lookup:{from : "productcount", 
                 localField: "ItemID", foreignField: "ItemID", as : "countList"}},
             ])
-            .populate({ path: 'salePolicyGroupId', select: 'name' })
-            .populate({ path: 'saleCommissionGroupId', select: 'name percentage' })
-            .lean();
         const productsQuantity = await productCount.find({Stock:stockId})
             var quantity = []
             var price = []
@@ -232,9 +229,12 @@ router.post('/list-product',jsonParser,async (req,res)=>{
             for(var i=0;i<products.length;i++){
                 const countData = productsQuantity.find(
                     Item=>Item.ItemID==products[i].ItemID)
-                
+            const saleCom = products[i].salePolicyGroupId&&
+                await saleCommissionGroups.finOne({_id:ObjectID(products[i].salePolicyGroupId)})
+            const saleProd = products[i].saleCommissionGroupId&&
+                await saleCommissionProducts.finOne({_id:ObjectID(products[i].saleCommissionGroupId)})
             if (products[i].salePolicyGroupId) {
-                products[i].salePolicyGroupId = products[i].salePolicyGroupId.name;
+                products[i].salePolicyGroupId = saleCom&&saleCom.name;
             }
             if (products[i].saleCommissionGroupId) {
                 products[i].saleCommissionGroupId = `${products[i].saleCommissionGroupId.name} (${products[i].saleCommissionGroupId.percentage}%)`;
