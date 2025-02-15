@@ -234,10 +234,10 @@ router.post('/list-product',jsonParser,async (req,res)=>{
             const saleProd = products[i].salePolicyGroupId&&
                 await salePolicyGroupModel.findOne({_id:ObjectID(products[i].salePolicyGroupId)})
             if (saleCom) {
-                products[i].salePolicyGroupId = saleCom&&saleCom.name;
+                products[i].salePolicyGroupName = saleCom&&saleCom.name;
             }
             if (saleProd) {
-                products[i].saleCommissionGroupId = `${saleProd.saleCommissionGroupId.name} (${saleProd.saleCommissionGroupId.percentage}%)`;
+                products[i].saleCommissionGroupName = `${saleProd.name} (${saleProd.percentage}%)`;
             }
                 //const countStock = stockData?countData.find(item=>item.Stock==stockData):''
                 //console.log(countData&&countData.quantity)
