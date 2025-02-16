@@ -1,0 +1,82 @@
+const cart = require("../models/product/cart")
+const MergeOrder = require('./MergeOrder');
+
+var TAX = process.env.TaxRate
+
+const CalcCartTotal=async(cartNo)=>{
+    var totalPrice = 0
+    var totalPriceMerge = 0
+    var totalCount = 0
+    var cartDetail=[]
+    const cartList = await cart.find({cartNo:{$in:cartNo}})
+    
+    const mergeOrder = await MergeOrder(cartList.map(item => item.cartItems),cartList)
+    
+    var MergeData = findCartSum(mergeOrder,mergeOrder[0].payValue)
+    totalPriceMerge += MergeData.totalPrice
+
+    for(var i=0;i<cartList.length;i++){ 
+        var cartItems = cartList[i].cartItems
+        var cartData = findCartSum(cartItems,cartList[i].payValue)
+        cartDetail.push(cartData)
+        totalPrice += cartData.totalPrice
+        totalCount += cartData.totalCount
+    }
+    
+    return({cartDetail,totalPrice:Math.round(totalPrice),totalCount:totalCount,
+        totalPriceMerge,MergeData})
+}
+const findCartSum = (cartItems, payValue) => {
+    if (!cartItems) return ({ totalPrice: 0, totalCount: 0 })
+    var TaxRate = parseFloat(TAX)
+    var cartSum = 0;
+    var cartCount = 0;
+    var cartDiscount = 0;
+    var cartTax = 0;
+    var cartDescription = ''
+    for (var i = 0; i < (cartItems&&cartItems.length); i++) {
+        //console.log(payValue)
+        var cartItemPrice = findPayValuePrice(cartItems[i].price, payValue)
+        var countTemp = parseInt(cartItems[i].count.toString().replace(/,/g, '').replace(/^\D+/g, ''))
+        try {
+            if (cartItems[i].price){
+                var tempPrice = parseInt(cartItemPrice) *countTemp
+                cartSum += tempPrice
+                cartTax += Math.round(tempPrice*TaxRate)
+            }
+            if (cartItems[i].count)
+                cartCount += countTemp
+            cartDescription += cartItems[i].description ? cartItems[i].description : ''
+            if (cartItems[i].discount) {
+                var off = parseInt(cartItems[i].discount.toString().replace(/,/g, '').replace(/^\D+/g, ''))
+                if (off > 100)
+                    cartDiscount += off
+                else
+                    cartDiscount += parseInt(cartItemPrice)
+                        * Number(cartItems[i].count) *
+                        (1 + TaxRate) * (off) / 100
+            }
+        } catch { }
+    }
+    return ({
+        totalFee: cartSum,
+        totalCount: cartCount,
+        totalDiscount: cartDiscount,
+        totalTax: cartTax,
+        totalPrice: (cartSum +cartTax - cartDiscount),
+        cartDescription: cartDescription
+    })
+}
+
+const findPayValuePrice = (priceArray, payValue) => {
+    if (!priceArray) return (0)
+    if (!payValue) payValue = 3
+    var price = priceArray
+    if (priceArray&&priceArray.length && priceArray.constructor === Array)
+        price = priceArray.find(item => item.saleType == payValue).price
+
+    return (price)
+
+}
+
+module.exports =CalcCartTotal
