@@ -755,6 +755,7 @@ router.post('/report-total',jsonParser,auth,async(req,res)=>{
             ])
         var filterResult = ''
         
+        console.log(reportList.length)
         var productList=[]
         var totalPrice=0
         var totalCount = 0
