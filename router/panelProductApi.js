@@ -756,6 +756,9 @@ router.post('/report-total',jsonParser,auth,async(req,res)=>{
 			},
 			{ $sort: { initDate: -1 } },
 		];
+        if (data.productsList) {
+            cartsAggregation.unshift({ $unwind: '$cartItems' });
+        }
         const reportList = await cart.aggregate(cartsAggregation)
         var filterResult = ''
         
@@ -772,8 +775,8 @@ router.post('/report-total',jsonParser,auth,async(req,res)=>{
             var analyzeStatus = await CanAnalyze(reportList[i].cartNo)
             if(!analyzeStatus) continue
             var payValue = reportList[i].payValue
-            // var cartItems=[reportList[i].cartItems]
-            var cartItems=reportList[i].cartItems
+            // var cartItems = [reportList[i].cartItems]
+            var cartItems = Array.isArray(reportList[i].cartItems) ? reportList[i].cartItems : [reportList[i].cartItems];
             var manageId =reportList[i].manageId 
             var itemAdd = 0
             for(var j=0;j<(cartItems&&cartItems.length);j++){
