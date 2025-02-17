@@ -54,23 +54,26 @@ router.post('/getlist', async (req,res)=>{
             //{$match:(filter&&filter.vs)?{"filters.vs":filter.vs}:{}}
         ])
         const availableItems = [];
+        const unavailableItems = [];
         for(var a=0;a<allProducts.length;a++){
 
             const countDataRaw = await productCount.findOne(
                 {ItemID:allProducts[a].ItemID,Stock:"21"})
             const countData =(countDataRaw&&countDataRaw.quantity)?
-<<<<<<< HEAD
                 parseInt(countDataRaw.quantity):0
-=======
-                parseInt(countDataRaw.quantity):12
->>>>>>> a4fb0c4d9e327a42437734695502e03ee6533f13
+            allProducts[a].count = countData
             if(countData){
-                allProducts[a].count = countData
+                allProducts[a].available = 1
                 availableItems.push(allProducts[a])
             }
+            else{
+                allProducts[a].available = 0
+                unavailableItems.push(allProducts[a])
 
+            }
         }
-        const products = availableItems.slice(offset,
+        var allItems = availableItems.concat(unavailableItems)
+        const products = allItems.slice(offset,
             (parseInt(offset)+parseInt(pageSize)))  
         var quantity = []
         var price = []
@@ -82,8 +85,8 @@ router.post('/getlist', async (req,res)=>{
             
         }
 
-        res.json({data:products,message:"Products List",size:availableItems.length,
-        pages:Math.floor(availableItems.length/parseInt(pageSize)),filterData,filterAll,
+        res.json({data:products,message:"Products List",size:allItems.length,
+        pages:Math.floor(allItems.length/parseInt(pageSize)),filterData,filterAll,
         catData:catData,quantity:quantity,price:price,categories:categoryList})
     }
     catch(error){
