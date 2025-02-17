@@ -722,23 +722,41 @@ router.post('/report-total',jsonParser,auth,async(req,res)=>{
         dateFromEn.setHours(0, 0, 0, 0)
         const dateToEn = new Date(now3.setDate(now.getDate()-(data.dateTo?data.dateTo:0)));
         dateToEn.setHours(23, 59, 0, 0)
-        const reportList = await cart.aggregate([
-            { $unwind: '$cartItems' },
-            { $match:data.manageId?{manageId:data.manageId}:{}},
-            { $match:data.userId?{userId:data.userId}:{}},
-            { $match:{initDate:{$gte:new Date(data.dateFrom)}}},
-            { $match:{initDate:{$lte:new Date(data.dateTo)}}},
-            { $match: data.productsList ? { 'cartItems.id': { $in: data.productsList }} : {} },
-            { $addFields: { "userId": { "$toObjectId": "$userId" }}},
-            {$lookup:{
-                from : "customers", 
-                localField: "userId", 
-                foreignField: "_id", 
-                as : "userInfo"
-            }},
-            { $sort: {"initDate":-1}},
-     
-            ])
+        const cartsMatchCondition = {
+            initDate: { 
+                $gte: new Date(data.dateFrom),
+                $lte: new Date(data.dateTo)
+            },
+        };
+        if (data.manageId) {
+            cartsMatchCondition.manageId = data.manageId;
+        }
+        if (data.userId) {
+            cartsMatchCondition.userId = data.userId;
+        }
+        if (data.productsList) {
+            cartsMatchCondition['cartItems.id'] = { $in: data.productsList };
+        }
+        const cartsAggregation = [
+			// { $unwind: '$cartItems' },
+            { $match: cartsMatchCondition },
+			// { $match: data.manageId ? { manageId: data.manageId } : {} },
+			// { $match: data.userId ? { userId: data.userId } : {} },
+			// { $match: { initDate: { $gte: new Date(data.dateFrom) } } },
+			// { $match: { initDate: { $lte: new Date(data.dateTo) } } },
+			// { $match: data.productsList ? { 'cartItems.id': { $in: data.productsList } } : {} },
+			{ $addFields: { userId: { $toObjectId: '$userId' } } },
+			{
+				$lookup: {
+					from: 'customers',
+					localField: 'userId',
+					foreignField: '_id',
+					as: 'userInfo',
+				},
+			},
+			{ $sort: { initDate: -1 } },
+		];
+        const reportList = await cart.aggregate(cartsAggregation)
         var filterResult = ''
         
         var productList=[]
@@ -754,7 +772,8 @@ router.post('/report-total',jsonParser,auth,async(req,res)=>{
             var analyzeStatus = await CanAnalyze(reportList[i].cartNo)
             if(!analyzeStatus) continue
             var payValue = reportList[i].payValue
-            var cartItems=[reportList[i].cartItems]
+            // var cartItems=[reportList[i].cartItems]
+            var cartItems=reportList[i].cartItems
             var manageId =reportList[i].manageId 
             var itemAdd = 0
             for(var j=0;j<(cartItems&&cartItems.length);j++){
