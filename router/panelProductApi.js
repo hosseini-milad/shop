@@ -772,7 +772,7 @@ router.post('/report-total',jsonParser,auth,async(req,res)=>{
             var manageId =reportList[i].manageId 
             var itemAdd = 0
             for(var j=0;j<(cartItems&&cartItems.length);j++){
-                const productDetail = await products.aggregate([
+                const productDetail = 0&&await products.aggregate([
                     {$match:{sku:cartItems[j].sku}},
                     {$lookup:{
                         from : "brands", 
