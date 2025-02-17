@@ -766,7 +766,7 @@ router.post('/report-total',jsonParser,auth,async(req,res)=>{
                 id:item._id,count:0,price:0}))
         var brandData = await BrandSchema.find().sort({title:-1})
         for(var i=0;i<(reportList&&reportList.length);i++){
-            var analyzeStatus = await CanAnalyze(reportList[i].cartNo)
+            var analyzeStatus = 1||await CanAnalyze(reportList[i].cartNo)
             if(!analyzeStatus) continue
             var payValue = reportList[i].payValue
             var cartItems=[reportList[i].cartItems]
