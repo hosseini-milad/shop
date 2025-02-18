@@ -3,6 +3,7 @@ const bodyParser = require('body-parser');
 const jsonParser = bodyParser.json();
 const router = express.Router()
 var ObjectID = require('mongodb').ObjectID;
+const jMoment = require('moment-jalaali');
 const auth = require("../middleware/auth");
 const logger = require('../middleware/logger');
 const productSchema = require('../models/product/products');
@@ -536,6 +537,136 @@ const findCartFunction = async (userId, managerId,pageSize,offset,search) => {
         })
     }
 }
+
+router.post('/cart2', jsonParser, auth, async (req, res) => {
+    try {
+        const { userId, offset = 0, pageSize = 10, search, dateFrom, dateTo } = req.body;
+        const skip = parseInt(offset);
+        const limit = parseInt(pageSize);
+		const cartDetails = await findCartFunction2(userId, req.headers['userid'], limit, skip, search, dateFrom, dateTo);
+		return res.json(cartDetails);
+	} catch (error) {
+		return res.status(500).json({ message: error.message });
+	}
+});
+
+const findCartFunction2 = async (userId, manageId, pageSize, offset, search, dateFrom, dateTo) => {
+    try {
+        const fromDate = dateFrom ? dateFrom : jMoment().startOf('day').toISOString();
+        const toDate = dateTo ? dateTo : jMoment().toISOString();
+        if (manageId === userId) {
+            userId = '';
+        }
+		const cartDataMatchCondition = {
+            initDate: { $gte: new Date(fromDate), $lte: new Date(toDate) },
+			result: { $exists: false },
+			manageId,
+		};
+		if (userId) {
+			cartDataMatchCondition.userId = userId;
+		}
+        if (search) {
+            cartDataMatchCondition['$or'] = [
+                { 'cartItems.sku': { $regex: search } },
+                { 'cartItems.title': { $regex: search } },
+            ]
+        }
+		const cartDataAggregation = [
+            { $match: cartDataMatchCondition },
+            { $sort: { initDate: -1 } },
+            { $skip: offset },
+            { $limit: pageSize },
+        ];
+		const cartData = await cart.aggregate(cartDataAggregation);
+
+		const qCartData = await qCart.findOne({ userId: userId ? userId : manageId }).lean();
+
+		const qCartAdminMatchCondition = {
+			manageId,
+			cartItems: { $ne: [] }, // TODO
+		};
+		const qCartAdminAggregation = [
+			{ $match: qCartAdminMatchCondition },
+			{ $addFields: { userId: { $toObjectId: '$userId' } } },
+			{
+				$lookup: {
+					from: 'customers',
+					localField: 'userId',
+					foreignField: '_id',
+					as: 'userInfo',
+				},
+			},
+		];
+		const qCartAdmin = await qCart.aggregate(qCartAdminAggregation);
+		//const userData = await customerSchema.findOne({userId:ObjectID(userId)})
+        const isSale = await CheckSale(manageId);
+
+		let cartDetail = [];
+		let qCartDetail = '';
+		let description = '';
+		let todayCartData = [];
+		for (let c = 0; c < (cartData && cartData.length); c++) {
+            // if (!userId && isSale && IsToday(cartData[c].initDate) !== 1) {
+            //     // TODO: what is this if for?
+            //     continue;
+            // }
+			try {
+				for (let j = 0; j < cartData[c].cartItems.length; j++) {
+					try {
+						const cartTemp = cartData[c].cartItems[j];
+						const productData = await products.findOne({ sku: cartTemp.sku }).lean();
+						const cartItemDetail = findCartItemDetail(cartTemp, cartData[c].payValue, cartData[c].discount);
+						cartData[c].cartItems[j].total = cartItemDetail;
+						cartData[c].cartItems[j].productData = productData;
+					} catch {}
+				}
+				const userData = await customers.findOne({ _id: ObjectID(cartData[c].userId) }).lean();
+				let official = 1;
+				if (!userData.CustomerID) {
+                    official = 0;
+                }
+				if (userData.cName && userData.cName.includes('مصرف')) {
+                    official = 0;
+                }
+				cartData[c] = { ...cartData[c], official };
+                todayCartData.push({ ...cartData[c], userData });
+				cartDetail.push(findCartSum(cartData[c].cartItems, cartData[c].payValue));
+			} catch {}
+		}
+		if (qCartData) {
+			for (let j = 0; j < qCartData.cartItems.length; j++) {
+				try {
+					const cartTemp = qCartData.cartItems[j];
+					const productData = await products.findOne({ sku: cartTemp.sku }).lean();
+					const cartItemDetail = findCartItemDetail(cartTemp, qCartData.payValue, qCartData.discount);
+					qCartData.cartItems[j].total = cartItemDetail;
+					qCartData.cartItems[j].productData = productData;
+				} catch {}
+			}
+			qCartDetail = findQuickCartSum(qCartData.cartItems, qCartData.payValue, qCartData.discount);
+		}
+
+		return {
+			cart: cartData,
+			cartDetail,
+			userData: 'userData',
+			isSale,
+			size: todayCartData.length,
+			quickCart: qCartData,
+			qCartDetail,
+			qCartAdmin,
+		};
+	} catch {
+		return {
+			cart: [],
+			cartDetail: [],
+			isSale,
+			quickCart: '',
+			qCartDetail: '',
+		};
+	}
+};
+
 const findQuoteFunction = async (userId, managerId) => {
     const isSale = await CheckSale(managerId)
     try {
