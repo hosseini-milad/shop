@@ -119,20 +119,18 @@ router.post('/list-products', async (req, res) => {
 })
 
 router.get('/get-sub-cats', async (req, res) => {
-    try {
-        const title = req.query.title;
-        const catData = await category.findOne({ catCode: title }, { title: 1, catCode: 1, link: 1, _id: 1, imageUrl: 1, iconUrl: 1, thumbUrl: 1 });
-        if (!catData) {
-            res.status(400).json({ error: "دسته بندی یافت نشد" });
-        }
-        var subCat = await category.find(
-            { parent: catData._id }, { title: 1, catCode: 1, link: 1, _id: 1, imageUrl: 1, iconUrl: 1, thumbUrl: 1 })
-        res.send(subCat);
-    } catch (error) {
-        res.status(500).json({ message: error.message });
-    }
+	try {
+		const title = req.query.title;
+		const catData = await category.findOne({ catCode: title }).lean();
+		if (!catData) {
+			return res.status(400).json({ error: 'دسته بندی یافت نشد' });
+		}
+		const subCat = await category.find({ parent: catData._id }, { description: 0, __v: 0, date: 0 }).lean();
+		return res.send(subCat);
+	} catch (error) {
+		return res.status(500).json({ message: error.message });
+	}
 });
-
 
 router.get('/list-filters', async (req, res) => {
     try {
@@ -552,8 +550,8 @@ router.post('/cart2', jsonParser, auth, async (req, res) => {
 
 const findCartFunction2 = async (userId, manageId, pageSize, offset, search, dateFrom, dateTo) => {
     try {
-        const fromDate = dateFrom ? dateFrom : jMoment().startOf('day').toISOString();
-        const toDate = dateTo ? dateTo : jMoment().toISOString();
+        const fromDate = dateFrom[0] ? jMoment(`${dateFrom[0]}-${dateFrom[1]}-${dateFrom[2]}`).toISOString() : jMoment().startOf('day').toISOString();
+        const toDate = dateTo[0] ? jMoment(`${dateTo[0]}-${dateTo[1]}-${dateTo[2]}`).toISOString() : jMoment().endOf('day').toISOString();
         if (manageId === userId) {
             userId = '';
         }
@@ -577,10 +575,6 @@ const findCartFunction2 = async (userId, manageId, pageSize, offset, search, dat
             { $skip: offset },
             { $limit: pageSize },
         ];
-		const cartData = await cart.aggregate(cartDataAggregation);
-
-		const qCartData = await qCart.findOne({ userId: userId ? userId : manageId }).lean();
-
 		const qCartAdminMatchCondition = {
 			manageId,
 			cartItems: { $ne: [] }, // TODO
@@ -597,19 +591,26 @@ const findCartFunction2 = async (userId, manageId, pageSize, offset, search, dat
 				},
 			},
 		];
-		const qCartAdmin = await qCart.aggregate(qCartAdminAggregation);
-		//const userData = await customerSchema.findOne({userId:ObjectID(userId)})
-        const isSale = await CheckSale(manageId);
+        const [cartData, qCartData, qCartAdmin, isSale] = await Promise.all([
+            cart.aggregate(cartDataAggregation),
+            qCart.findOne({ userId: userId ? userId : manageId }).lean(),
+            qCart.aggregate(qCartAdminAggregation),
+            CheckSale(manageId),
+        ])
+        // const cartData = await cart.aggregate(cartDataAggregation);
+		// const qCartData = await qCart.findOne({ userId: userId ? userId : manageId }).lean();
+		// const qCartAdmin = await qCart.aggregate(qCartAdminAggregation);
+        // const isSale = await CheckSale(manageId);
 
 		let cartDetail = [];
 		let qCartDetail = '';
 		let description = '';
 		let todayCartData = [];
 		for (let c = 0; c < (cartData && cartData.length); c++) {
-            // if (!userId && isSale && IsToday(cartData[c].initDate) !== 1) {
-            //     // TODO: what is this if for?
-            //     continue;
-            // }
+            if (!userId && isSale && IsToday(cartData[c].initDate) !== 1) {
+                // TODO: what is this if for?
+                continue;
+            }
 			try {
 				for (let j = 0; j < cartData[c].cartItems.length; j++) {
 					try {
@@ -2346,49 +2347,35 @@ const compareCount = (count1, count2) => {
     return (parseInt(count1.toString().replace(/\D/g, '')) >=
         (parseInt(count2.toString().replace(/\D/g, ''))))
 }
-router.post('/customer-find', async (req, res) => {
-    const search = req.body.search
-    try {
-        var searchCustomer = await users.
-            aggregate([{
-                $match:
-                {
-                    $or: [
-                        { username: { $regex: search, $options: 'i' } },
-                        { Code: { $regex: search, $options: 'i' } }
-                    ]
-                }
-            },
-            { $match: { active: true } }])
-        //if(!searchCustomer.length){
 
-        const searchUser = await customerSchema.
-            aggregate([{
-                $match:
-                {
-                    $or: [
-                        { username: { $regex: search, $options: 'i' } },
-                        { Code: { $regex: search, $options: 'i' } }
-                    ]
-                }
-            },
-            {
-                $match: {
-                    $or: [
-                        { active: true }
-                    ]
-                }
-            }
-            ])
-        //}
-        const allUser = searchCustomer.concat(searchUser)
-        //logger.warn("main done")
-        res.json({ customers: allUser })
-    }
-    catch (error) {
-        res.status(500).json({ message: error.message })
-    }
-})
+router.post('/customer-find', jsonParser, async (req, res) => {
+	try {
+		const { search } = req.body;
+		const userMatchConditoin = {
+			active: true,
+			$or: [
+                { username: { $regex: search, $options: 'i' } },
+                { Code: { $regex: search, $options: 'i' } }
+            ],
+		};
+		const customerMatchCondition = {
+			active: true,
+			$or: [
+                { username: { $regex: search, $options: 'i' } },
+                { Code: { $regex: search, $options: 'i' } }
+            ],
+		};
+		const [searchUser, searchCustomer] = await Promise.all([
+            users.find(userMatchConditoin).lean(),
+            customerSchema.find(customerMatchCondition).lean()
+        ]);
+		const allUser = searchCustomer.concat(searchUser);
+		return res.json({ customers: allUser });
+	} catch (error) {
+		return res.status(500).json({ message: error.message });
+	}
+});
+
 router.post('/bankCustomer', async (req, res) => {
     const search = req.body.search
     try {
