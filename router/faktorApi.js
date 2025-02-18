@@ -549,7 +549,9 @@ router.post('/cart2', jsonParser, auth, async (req, res) => {
 });
 
 const findCartFunction2 = async (userId, manageId, pageSize, offset, search, dateFrom, dateTo) => {
+    let isSale;
     try {
+        isSale = await CheckSale(manageId);
         const fromDate = dateFrom[0] ? jMoment(`${dateFrom[0]}-${dateFrom[1]}-${dateFrom[2]}`).toISOString() : jMoment().startOf('day').toISOString();
         const toDate = dateTo[0] ? jMoment(`${dateTo[0]}-${dateTo[1]}-${dateTo[2]}`).toISOString() : jMoment().endOf('day').toISOString();
         if (manageId === userId) {
@@ -591,17 +593,14 @@ const findCartFunction2 = async (userId, manageId, pageSize, offset, search, dat
 				},
 			},
 		];
-        const [cartData, qCartData, qCartAdmin, isSale] = await Promise.all([
+        const [cartData, qCartData, qCartAdmin] = await Promise.all([
             cart.aggregate(cartDataAggregation),
             qCart.findOne({ userId: userId ? userId : manageId }).lean(),
             qCart.aggregate(qCartAdminAggregation),
-            CheckSale(manageId),
         ])
         // const cartData = await cart.aggregate(cartDataAggregation);
 		// const qCartData = await qCart.findOne({ userId: userId ? userId : manageId }).lean();
 		// const qCartAdmin = await qCart.aggregate(qCartAdminAggregation);
-        // const isSale = await CheckSale(manageId);
-
 		let cartDetail = [];
 		let qCartDetail = '';
 		let description = '';
@@ -657,7 +656,7 @@ const findCartFunction2 = async (userId, manageId, pageSize, offset, search, dat
 			qCartDetail,
 			qCartAdmin,
 		};
-	} catch {
+	} catch (err) {
 		return {
 			cart: [],
 			cartDetail: [],
