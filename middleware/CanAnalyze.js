@@ -1,9 +1,8 @@
 const tasks = require("../models/crm/tasks")
 
-const CanAnalyze=async(orderNo)=>{
-        const taskData = await tasks.findOne({orderNo:orderNo})
-        if(taskData){
-            if(taskData.taskStep == "cancel"||taskData.taskStep == "quote"){
+const CanAnalyze=async(step)=>{
+        if(step){
+            if(step == "cancel"||step == "quote"){
                 return(0)
             }
             else
