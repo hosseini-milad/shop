@@ -545,7 +545,7 @@ router.post('/cart', jsonParser, auth, async (req, res) => {
 	}
 });
 
-const findCartFunction = async (userId, manageId, pageSize, offset, search, dateFrom, dateTo) => {
+const findCartFunction = async (userId, manageId, pageSize = 10, offset = 0, search, dateFrom = [], dateTo = []) => {
     let isSale;
     try {
         isSale = await CheckSale(manageId);
@@ -1320,41 +1320,36 @@ router.post('/edit-quote', jsonParser, async (req, res) => {
 	}
 });
 
-const checkAvailable = async (items, stockId,cartNo) => {
+const checkAvailable = async (items, stockId = '13', cartNo) => {
+	const existItem = await productcounts.findOne({ ItemID: items.id, Stock: stockId }).lean();
+	const existItem3 = await productcounts.findOne({ ItemID: items.id, Stock: '9' }).lean();
 
-    //console.log(stockId)
-    if (!stockId) stockId = "13"
-    const existItem = await productcounts.findOne({ ItemID: items.id, Stock: stockId })
-    const existItem3 = await productcounts.findOne({ ItemID: items.id, Stock: "9" })
-
-
-    if (!existItem && !existItem3) return ('')
-    var totalCount = existItem ? parseFloat(existItem.quantity) : 0
-    totalCount += existItem3 ? parseFloat(existItem3.quantity) : 0
-
-    const currentOrder = await FindCurrentExist(items.id,cartNo,stockId)
-
-    /*console.log("total: ",totalCount, "- order: ",currentOrder,
-        "- req: ",items.count
-    )*/
-    var minusCount = currentOrder + items.count
-    return (compareCount(totalCount, minusCount))
-}
-const createCart = (cartData, cartItem) => {
-    var cartItemTemp = cartData ? cartData : []
-    var repeat = 0
-    for (var i = 0; i < (cartItemTemp && cartItemTemp.length); i++) {
-        if (cartItemTemp[i].id === cartItem.id) {
-            cartItemTemp[i].count = parseInt(cartItemTemp[i].count) +
-                parseInt(cartItem.count)
-            repeat = 1
-            break
-        }
+	if (!existItem && !existItem3) {
+        return '';
     }
-    !repeat && cartItemTemp.push({ ...cartItem, date: Date.now() })
-    return (cartItemTemp)
 
-}
+	let totalCount = existItem ? parseFloat(existItem.quantity) : 0;
+	totalCount += existItem3 ? parseFloat(existItem3.quantity) : 0;
+
+	const currentOrder = await FindCurrentExist(items.id, cartNo, stockId);
+	let minusCount = currentOrder + items.count;
+	return compareCount(totalCount, minusCount);
+};
+
+const createCart = (cartData, cartItem) => {
+	let cartItemTemp = cartData ? cartData : [];
+	let repeat = 0;
+	for (let i = 0; i < (cartItemTemp && cartItemTemp.length); i++) {
+		if (cartItemTemp[i].id === cartItem.id) {
+			cartItemTemp[i].count = parseInt(cartItemTemp[i].count) + parseInt(cartItem.count);
+			repeat = 1;
+			break;
+		}
+	}
+	!repeat && cartItemTemp.push({ ...cartItem, date: Date.now() });
+	return cartItemTemp;
+};
+
 const removeCart = (cartData, cartID) => {
     if (!cartData || !cartData.cartItems) return ([])
     var cartItemTemp = cartData.cartItems
