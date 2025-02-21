@@ -691,55 +691,53 @@ router.get('/list-status',jsonParser,async(req,res)=>{
         res.status(500).json({message: error.message})
     }
 })
-router.post('/report-total',jsonParser,auth,async(req,res)=>{
-    var nowDate = new Date();
-    try{ 
-        const data = {
-            manageId:req.body.manageId,
-            userId:req.body.userId,
-            brand:req.body.brandId,
-            dateFrom:
-                req.body.dateFrom?req.body.dateFrom[0]+"/"+
-                req.body.dateFrom[1]+"/"+req.body.dateFrom[2]+" "+"00:00":
-                new Date().toISOString().slice(0, 10)+" 00:00",
-                //new Date(nowDate.setDate(nowDate.getDate() - 1)).toISOString().slice(0, 10)+" "+"00:00",
-            dateTo:
-                req.body.dateTo?req.body.dateTo[0]+"/"+
-                req.body.dateTo[1]+"/"+req.body.dateTo[2]+" 23:59":
-                new Date().toISOString().slice(0, 10)+" 23:59",
-            
-        }
-        if (req.body.productsList && req.body.productsList.length) {
-            data.productsList = req.body.productsList;
-        }
-        const managerList = await users.find({access:"market"})
-        const nowIso=nowDate.toISOString();
-        const nowParse = Date.parse(nowIso);
-        const now = new Date(nowParse)
-        var now2 = new Date();
-        var now3 = new Date();
-        const dateFromEn = new Date(now2.setDate(now.getDate()-(data.dateFrom?data.dateFrom:1)));
-        dateFromEn.setHours(0, 0, 0, 0)
-        const dateToEn = new Date(now3.setDate(now.getDate()-(data.dateTo?data.dateTo:0)));
-        dateToEn.setHours(23, 59, 0, 0)
-        const cartsMatchCondition = {
-            initDate: { 
-                $gte: new Date(data.dateFrom),
-                $lte: new Date(data.dateTo)
-            },
-        };
-        if (data.manageId) {
-            cartsMatchCondition.manageId = data.manageId;
-        }
-        if (data.userId) {
-            cartsMatchCondition.userId = data.userId;
-        }
-        if (data.productsList) {
-            cartsMatchCondition['cartItems.id'] = { $in: data.productsList };
-        }
-        const cartsAggregation = [
+
+router.post('/report-total', jsonParser, auth, async (req, res) => {
+    try {
+        var nowDate = new Date();
+		const data = {
+			manageId: req.body.manageId,
+			userId: req.body.userId,
+			brand: req.body.brandId,
+			dateFrom: req.body.dateFrom
+				? req.body.dateFrom[0] + '/' + req.body.dateFrom[1] + '/' + req.body.dateFrom[2] + ' ' + '00:00'
+				: new Date().toISOString().slice(0, 10) + ' 00:00',
+			//new Date(nowDate.setDate(nowDate.getDate() - 1)).toISOString().slice(0, 10)+" "+"00:00",
+			dateTo: req.body.dateTo
+                ? req.body.dateTo[0] + '/' + req.body.dateTo[1] + '/' + req.body.dateTo[2] + ' 23:59'
+                : new Date().toISOString().slice(0, 10) + ' 23:59',
+		};
+		if (req.body.productsList && req.body.productsList.length) {
+			data.productsList = req.body.productsList;
+		}
+		const managerList = await users.find({ access: 'market' }).lean();
+		const nowIso = nowDate.toISOString();
+		const nowParse = Date.parse(nowIso);
+		const now = new Date(nowParse);
+		var now2 = new Date();
+		var now3 = new Date();
+		const dateFromEn = new Date(now2.setDate(now.getDate() - (data.dateFrom ? data.dateFrom : 1)));
+		dateFromEn.setHours(0, 0, 0, 0);
+		const dateToEn = new Date(now3.setDate(now.getDate() - (data.dateTo ? data.dateTo : 0)));
+		dateToEn.setHours(23, 59, 0, 0);
+		const cartsMatchCondition = {
+			initDate: {
+				$gte: new Date(data.dateFrom),
+				$lte: new Date(data.dateTo),
+			},
+		};
+		if (data.manageId) {
+			cartsMatchCondition.manageId = data.manageId;
+		}
+		if (data.userId) {
+			cartsMatchCondition.userId = data.userId;
+		}
+		if (data.productsList) {
+			cartsMatchCondition['cartItems.id'] = { $in: data.productsList };
+		}
+		const cartsAggregation = [
 			// { $unwind: '$cartItems' },
-            { $match: cartsMatchCondition },
+			{ $match: cartsMatchCondition },
 			// { $match: data.manageId ? { manageId: data.manageId } : {} },
 			// { $match: data.userId ? { userId: data.userId } : {} },
 			// { $match: { initDate: { $gte: new Date(data.dateFrom) } } },
@@ -756,109 +754,115 @@ router.post('/report-total',jsonParser,auth,async(req,res)=>{
 			},
 			{ $sort: { initDate: -1 } },
 		];
-        if (data.productsList) {
-            cartsAggregation.unshift({ $unwind: '$cartItems' });
-        }
-        const reportList = await cart.aggregate(cartsAggregation)
-        var filterResult = ''
-        
-        var productList=[]
-        var totalPrice=0
-        var totalCount = 0
-        var userList = []
-        var errorPrice=[]
-        var marketData = managerList.map(item=>(
-            {name:item.cName,username:item.username,
-                id:item._id,count:0,price:0}))
-        var brandData = await BrandSchema.find().sort({title:-1})
-        for(var i=0;i<(reportList&&reportList.length);i++){
-            var analyzeStatus = await CanAnalyze(reportList[i].cartNo)
-            if(!analyzeStatus) continue
-            var payValue = reportList[i].payValue
-            // var cartItems = [reportList[i].cartItems]
-            var cartItems = Array.isArray(reportList[i].cartItems) ? reportList[i].cartItems : [reportList[i].cartItems];
-            var manageId =reportList[i].manageId 
-            var itemAdd = 0
-            for(var j=0;j<(cartItems&&cartItems.length);j++){
-                const productDetail = await products.aggregate([
-                    {$match:{sku:cartItems[j].sku}},
-                    {$lookup:{
-                        from : "brands", 
-                        localField: "brandId", 
-                        foreignField: "brandCode", 
-                        as : "brandInfo"
-                    }},
-                    {$lookup:{
-                        from : "category", 
-                        localField: "catId", 
-                        foreignField: "catCode", 
-                        as : "categoryInfo"
-                    }},
-                ])
-                var price = cartItems[j].price
-                cartItems[j].product = productDetail&&productDetail[0]
-                if(data.brand)
-                    if(cartItems[j].product&&
-                        cartItems[j].product.brandId!=data.brand)
-                        continue
-                   
-                itemAdd=1
-                cartItems[j].brandData = cartItems[j].product&&cartItems[j].product.brandInfo[0]
-                try{
-                    price=cartItems[j].price.find(item=>item.saleType == payValue)
-                    if(price) price = parseInt(price.price)
-                }
-                catch{
-                    errorPrice.push(price)
-                }
-                var myItem = cartItems[j]
-                myItem.totalPrice =price*myItem.count
-                resultData= await UpdateMarket(marketData,manageId,myItem.count,
-                    myItem.totalPrice,brandData,cartItems[j].product)
-                marketData = resultData.marketArray
-                myItem.orderList=[{title:reportList[i].cartNo,count:myItem.count,
-                    user:(reportList[i].userInfo&&reportList[i].userInfo[0])&&reportList[i].userInfo[0].username}]
-                brandData = resultData.brandArray
-                var index = productList.findIndex(item=>item.sku==myItem.sku)
-                if(index == -1){
-                    productList.push(myItem)
-                }
-                else{
-                    var cNumber = parseInt(productList[index].count)
-                    cNumber += parseInt(myItem.count)
-                    productList[index].count = cNumber
-                    productList[index].orderList.push({title:reportList[i].cartNo,count:myItem.count,
-                        user:(reportList[i].userInfo&&reportList[i].userInfo[0])&&reportList[i].userInfo[0].username})
-                    
-                    var cPrice = parseInt(productList[index].totalPrice)
-                    cPrice += parseInt(myItem.totalPrice)
-                    productList[index].totalPrice = cPrice
+		if (data.productsList) {
+			cartsAggregation.unshift({ $unwind: '$cartItems' });
+		}
+		const reportList = await cart.aggregate(cartsAggregation);
+		var filterResult = '';
 
-                }
-                totalPrice+= myItem.totalPrice
-                totalCount+= parseInt(myItem.count)
-            }
-            if(itemAdd){
-                var index = userList.findIndex(item=>item.id == reportList[i].userId)
-                reportList[i].userInfo&& index==-1&&
-                    userList.push({id:reportList[i].userId,
-                        ...reportList[i].userInfo[0]})
-            }
-        }
-        const sortList = productList.sort(function(a, b) {
-            var textA = a.sku.toUpperCase();
-            var textB = b.sku.toUpperCase();
-            return (textA < textB) ? -1 : (textA > textB) ? 1 : 0;
+		var productList = [];
+		var totalPrice = 0;
+		var totalCount = 0;
+		var userList = [];
+		var errorPrice = [];
+		var marketData = managerList.map((item) => ({ name: item.cName, username: item.username, id: item._id, count: 0, price: 0 }));
+		var brandData = await BrandSchema.find().sort({ title: -1 }).lean();
+		for (var i = 0; i < (reportList && reportList.length); i++) {
+			var analyzeStatus = await CanAnalyze(reportList[i].cartNo);
+			if (!analyzeStatus) continue;
+			var payValue = reportList[i].payValue;
+			// var cartItems = [reportList[i].cartItems]
+			var cartItems = Array.isArray(reportList[i].cartItems) ? reportList[i].cartItems : [reportList[i].cartItems];
+			var manageId = reportList[i].manageId;
+			var itemAdd = 0;
+			for (var j = 0; j < (cartItems && cartItems.length); j++) {
+				const productDetail = await products.aggregate([
+					{ $match: { sku: cartItems[j].sku } },
+					{
+						$lookup: {
+							from: 'brands',
+							localField: 'brandId',
+							foreignField: 'brandCode',
+							as: 'brandInfo',
+						},
+					},
+					{
+						$lookup: {
+							from: 'category',
+							localField: 'catId',
+							foreignField: 'catCode',
+							as: 'categoryInfo',
+						},
+					},
+				]);
+				var price = cartItems[j].price;
+				cartItems[j].product = productDetail && productDetail[0];
+				if (data.brand) if (cartItems[j].product && cartItems[j].product.brandId != data.brand) continue;
+
+				itemAdd = 1;
+				cartItems[j].brandData = cartItems[j].product && cartItems[j].product.brandInfo[0];
+				try {
+					price = cartItems[j].price.find((item) => item.saleType == payValue);
+					if (price) price = parseInt(price.price);
+				} catch {
+					errorPrice.push(price);
+				}
+				var myItem = cartItems[j];
+				myItem.totalPrice = price * myItem.count;
+				resultData = await UpdateMarket(marketData, manageId, myItem.count, myItem.totalPrice, brandData, cartItems[j].product);
+				marketData = resultData.marketArray;
+				myItem.orderList = [{
+                    title: reportList[i].cartNo,
+                    count: myItem.count,
+                    user: reportList[i].userInfo && reportList[i].userInfo[0] && reportList[i].userInfo[0].username
+                }];
+				brandData = resultData.brandArray;
+				var index = productList.findIndex((item) => item.sku == myItem.sku);
+				if (index == -1) {
+					productList.push(myItem);
+				} else {
+					var cNumber = parseInt(productList[index].count);
+					cNumber += parseInt(myItem.count);
+					productList[index].count = cNumber;
+					productList[index].orderList.push({
+						title: reportList[i].cartNo,
+						count: myItem.count,
+						user: reportList[i].userInfo && reportList[i].userInfo[0] && reportList[i].userInfo[0].username,
+					});
+
+					var cPrice = parseInt(productList[index].totalPrice);
+					cPrice += parseInt(myItem.totalPrice);
+					productList[index].totalPrice = cPrice;
+				}
+				totalPrice += myItem.totalPrice;
+				totalCount += parseInt(myItem.count);
+			}
+			if (itemAdd) {
+				var index = userList.findIndex((item) => item.id == reportList[i].userId);
+				reportList[i].userInfo && index == -1 && userList.push({ id: reportList[i].userId, ...reportList[i].userInfo[0] });
+			}
+		}
+		const sortList = productList.sort(function (a, b) {
+			var textA = a.sku.toUpperCase();
+			var textB = b.sku.toUpperCase();
+			return textA < textB ? -1 : textA > textB ? 1 : 0;
+		});
+		const brandList = await BrandSchema.find().sort({ title: -1 }).lean();
+		return res.json({
+            data: sortList,
+            marketList: managerList,
+            errorPrice: errorPrice,
+            userList,
+            brandList,
+            totalCount,
+            totalPrice,
+            marketData,
+            brandData,
         });
-        const brandList = await BrandSchema.find().sort({title:-1})
-        res.json({data:sortList,marketList:managerList,
-            errorPrice:errorPrice,userList,brandList,
-            totalCount,totalPrice,marketData,brandData})
-    }
-    catch(error){
-        res.status(500).json({message: error.message})
-    }
-})
+	} catch (error) {
+		return res.status(500).json({ message: error.message });
+	}
+});
 
 router.post('/fetch-name', jsonParser, auth, async(req,res) => {
     try {
