@@ -236,7 +236,7 @@ router.post('/find-products', jsonParser, auth, async (req, res) => {
 			let count = searchProducts[i].countData.find((item) => item.Stock == stockId); // TODO: check for Stock in query
 			let count3 = searchProducts[i].countData.find((item) => item.Stock == '9');
 			let desc = '';
-			let cartCount = 0 && findCartCount(searchProducts[i].sku, currentCart.concat(qCartList), stockId);
+			let cartCount = 0 && await findCartCount(searchProducts[i].sku, currentCart.concat(qCartList), stockId);
 			if (count) {
 				count.quantity = parseInt(count.quantity) - parseInt(cartCount);
 			}
