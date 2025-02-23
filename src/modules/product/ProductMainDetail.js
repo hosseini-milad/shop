@@ -14,7 +14,11 @@ const cookies = new Cookies();
 
 function ProductMainDetail(props) {
   const token = cookies.get(env.cookieName);
-
+  const productCount = props.product.data.count
+    ? props.product.data.count
+    : props.product.quantity
+    ? props.product.quantity.quantity
+    : false;
   const product = props.product.data;
   const cart = props.cart;
   const [pop, setPop] = useState(0);
@@ -45,7 +49,7 @@ function ProductMainDetail(props) {
       });
   };
   var orderFound = "";
-  //console.log(cartAdd)
+  
   return (
     <div className="modal-content">
       <div className="modal-product">
@@ -102,7 +106,7 @@ function ProductMainDetail(props) {
           </div>
           {!token ? (
             <LoginMenu />
-          ) : props.product.quantity.quantity ? (
+          ) : productCount ? (
             <a className="modal-sub-btn" onClick={addToCart}>
               افزودن به سبد خرید
             </a>

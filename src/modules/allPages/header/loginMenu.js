@@ -92,16 +92,19 @@ function LoginMenu(props) {
                     ? 2
                     : 1,
                 name: user.cName + " " + user.sName,
-                name: user.phone,
+                phone: user.phone,
                 date: user.date,
                 token: user.token,
                 username: user.cName + " " + result.sName,
               },
-              { path: "/" }
+              { path: window.location }
             );
-            window.location.href = "/";
+            // Stay on the same page
+            window.location.reload();
           } else {
-            setError((result.error=="wrong otp")?"کد اشتباه است":result.error);
+            setError(
+              result.error == "wrong otp" ? "کد اشتباه است" : result.error
+            );
           }
         },
         (error) => {
