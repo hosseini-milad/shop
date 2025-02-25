@@ -47,8 +47,8 @@ router.route('/customers-list').post(async (req, res) => {
 		const data = {
 			manageId,
 			userId,
-			dateFrom: jMoment().subtract(10, 'days').startOf('day').toISOString(),
-			dateTo: jMoment().subtract(10, 'days').endOf('day').toISOString(),
+			dateFrom: jMoment().startOf('day').toISOString(),
+			dateTo: jMoment().endOf('day').toISOString(),
 		};
 		if (dateFrom[0]) {
 			const [year, month, day] = dateFrom;
@@ -91,14 +91,12 @@ router.route('/customers-list').post(async (req, res) => {
 			},
 			{
 				$match: {
-					taskInfo: { $ne: [] },
+					$and: [
+						{ taskInfo: { $ne: [] } },
+						{ 'taskInfo.taskStep': { $nin: ['cancel', 'quote'] } },
+					],
 				},
 			},
-			// {
-			//     $project: {
-			//         taskInfo: 0
-			//     },
-			// },
 			{ $addFields: { userId: { $toObjectId: '$userId' } } },
 			{
 				$lookup: {
@@ -116,7 +114,7 @@ router.route('/customers-list').post(async (req, res) => {
 			cartsAggregation.unshift({ $unwind: '$cartItems' });
 		}
 		const reportList = await cartModel.aggregate(cartsAggregation);
-		var userList = [];
+		const userList = [];
 
 		for (let i = 0; i < (reportList && reportList.length); i++) {
 			const index = userList.findIndex((item) => item.id === reportList[i].userId);
@@ -138,8 +136,8 @@ router.route('/products-list').post(async (req, res) => {
 		const data = {
 			manageId: req.body.manageId,
 			userId,
-			dateFrom: jMoment().subtract(10, 'days').startOf('day').toISOString(),
-			dateTo: jMoment().subtract(10, 'days').endOf('day').toISOString(),
+			dateFrom: jMoment().startOf('day').toISOString(),
+			dateTo: jMoment().endOf('day').toISOString(),
 		};
 		if (dateFrom[0]) {
 			const [year, month, day] = dateFrom;
@@ -182,7 +180,10 @@ router.route('/products-list').post(async (req, res) => {
 			},
 			{
 				$match: {
-					taskInfo: { $ne: [] },
+					$and: [
+						{ taskInfo: { $ne: [] } },
+						{ 'taskInfo.taskStep': { $nin: ['cancel', 'quote'] } },
+					],
 				},
 			},
 			{
@@ -200,13 +201,6 @@ router.route('/products-list').post(async (req, res) => {
 				},
 			},
 			{
-				$addFields: {
-					username: {
-						$arrayElemAt: ['$userInfo.username', 0],
-					},
-				},
-			},
-			{
 				$lookup: {
 					from: 'products',
 					localField: 'cartItems.sku',
@@ -215,36 +209,22 @@ router.route('/products-list').post(async (req, res) => {
 				},
 			},
 			{
-				$addFields: {
-					'cartItems.product': {
-						$arrayElemAt: ['$product', 0],
-					},
-				},
-			},
-			{
 				$lookup: {
 					from: 'brands',
-					localField: 'cartItems.product.brandId',
+					localField: 'product.brandId',
 					foreignField: 'brandCode',
 					as: 'brandData',
 				},
 			},
 			{
-				$addFields: {
-					'cartItems.brandData': {
-						$arrayElemAt: ['$brandData', 0],
-					},
-				},
-			},
-			{ $sort: { 'cartItems.title': -1 } },
-			{
 				$group: {
-					_id: '$cartItems.id',
+					_id: '$cartItems.sku',
 					list: {
 						$push: '$$ROOT',
 					},
 				},
 			},
+			{ $sort: { _id: 1 } },
 			{ $skip: skip },
 			{ $limit: limit },
 		];
@@ -252,18 +232,18 @@ router.route('/products-list').post(async (req, res) => {
 			cartsAggregation.unshift({ $unwind: '$cartItems' });
 		}
 		const reportList = await cartModel.aggregate(cartsAggregation);
-		let productList = [];
 		const sortList = reportList.map((i) => {
+			const thisCartItem = i.list[0];
 			const temp = {
-				brandData: i.list[0].cartItems.brandData,
+				id: i._id,
 				count: 0,
-				id: i.id,
-				orderList: [],
-				price: i.list[0].cartItems.price,
-				product: i.list[0].cartItems.product,
-				sku: i.list[0].cartItems.sku,
-				title: i.list[0].cartItems.title,
 				totalPrice: 0,
+				orderList: [],
+				sku: thisCartItem.cartItems.sku,
+				title: thisCartItem.cartItems.title,
+				product: thisCartItem.product[0],
+				price: thisCartItem.cartItems.price,
+				brandData: thisCartItem.brandData[0],
 			};
 			i.list.forEach((item) => {
 				const priceByPayValue = item.cartItems.price.find((p) => {
@@ -275,7 +255,7 @@ router.route('/products-list').post(async (req, res) => {
 				temp.orderList.push({
 					title: item.cartNo,
 					count: item.cartItems.count,
-					user: item.username,
+					user: item.userInfo[0].username,
 				})
 			})
 			return temp;
