@@ -1724,13 +1724,13 @@ const checkForSalePolicyRules = async (qCartData) => {
 
         const faktorPriceWithoutSideProducts = withoutSideProducts.reduce((accumulator, currentItem) => {
             const cartItemPrice = findCartItemDetail(currentItem, payValue);
-            const itemPrice = Number(cartItemPrice.total) * currentItem.count;
+            const itemPrice = Number(cartItemPrice.total);
             return accumulator + itemPrice;
         }, 0);
 
         const calculateSideProductsPrice = sideProducts.reduce((accumulator, currentItem) => {
             const cartItemPrice = findCartItemDetail(currentItem, payValue);
-            const itemPrice = Number(cartItemPrice.total) * currentItem.count;
+            const itemPrice = Number(cartItemPrice.total);
             return accumulator + itemPrice;
         }, 0);
 
@@ -1754,7 +1754,7 @@ const checkForSalePolicyRules = async (qCartData) => {
             isSalePolicyRulesPassed = false;
             salePolicyRuleMessage = 'شروط سیاست‌های فروش رعایت نشدند.'
             requiredProducts.sideProducts = {
-                message: `مبلغ ${Math.round(calculateSideProductsPrice)} از محصولات کناری انتخاب کرده‌اید. می‌بایست حداقل ${Math.round(faktorPriceWithoutSideProducts)} انتخاب نمایید.`,
+                message: `مبلغ ${Math.round(calculateSideProductsPrice / 1000) * 1000} از محصولات کناری انتخاب کرده‌اید. می‌بایست حداقل ${Math.round(faktorPriceWithoutSideProducts / 1000) * 1000} انتخاب نمایید.`,
             };
         }
 
