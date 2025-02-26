@@ -191,86 +191,83 @@ router.post('/fetch-product', jsonParser, async (req, res) => {
 	}
 });
 
-router.post('/list-product',jsonParser,async (req,res)=>{
-    var pageSize = req.body.pageSize?req.body.pageSize:"10";
-    var offset = req.body.offset?(parseInt(req.body.offset)):0;
-    var userData = await users.findOne({_id:ObjectID(req.headers['userid'])})
-    var stockId = req.body.store?req.body.store:userData.StockId
-   // var myStock = ["13"] 
-    var myStock = userData.StockArr&&userData.StockArr.map(item=>item.StockID)
-    try{const data={
-        category:req.body.category,
-        title:req.body.title,
-        sku:req.body.sku,
-        exists: req.body?.exist?1:0,
-        brand:req.body.brandId,
-        active:req.body.active,
-        offset:req.body.offset,
-        pageSize:pageSize
-    }
-        const products = await ProductSchema.aggregate([
-            { $match:data.title?{$or:[{title:new RegExp('.*' + data.title + '.*')},
-                {sku:new RegExp('.*' + data.title + '.*', "i")}]}:{}},
-            { $match:data.sku?{sku:new RegExp('.*' + data.sku + '.*')}:{}},
-            { $match:data.category?{category:data.category}:{}},
-            //{ $match:data.exists?{count:{$nin:[0,'']}}:{}},
-            { $match:data.active?{active:true}:{}},
-            { $match:data.brand?(data.brand=="unkown")?
-                {$or:[{brandId:{$exists:false}},{brandId:''}]}:{brandId:data.brand}:{}},
-            {$lookup:{from : "brands", 
-            localField: "brandId", foreignField: "brandCode", as : "brandInfo"}},
-            {$lookup:{from : "productcount", 
-                localField: "ItemID", foreignField: "ItemID", as : "countList"}},
-            ])
-        const productsQuantity = await productCount.find({Stock:stockId})
-            var quantity = []
-            var price = []
-            const newProduct=[]
-            for(var i=0;i<products.length;i++){
-                const countData = productsQuantity.find(
-                    Item=>Item.ItemID==products[i].ItemID)
-                //const countStock = stockData?countData.find(item=>item.Stock==stockData):''
-                console.log(countData&&countData.quantity)
-                if(!countData||!countData.quantity) 
-                    if(data.exists)continue
-                
-                if(newProduct.length>(pageSize+offset)){
-                    newProduct.push({})
-                    continue;
-                }
-                const countAll = await productCount.find(
-                    {ItemID:products[i].ItemID})
-                var openCount = 0
-                //if()
-                const openList = await openOrders.find({sku:products[i].sku,payStatus:"paid"})
-                for(var c=0;c<openList.length;c++) openCount+= parseInt(openList[c].count)
-                const priceData = await productPrice.findOne(
-                    {ItemID:products[i].ItemID,saleType:SaleType})
-                
-                    newProduct.push({
-                    ...products[i],
-                    price:priceData?priceData.price:'',
-                    taxPrice:NormalTax(products[i].price)/10,
-                    count:countData?countData.quantity:'',
-                    countTotal:countAll,
-                    openOrderCount:openCount
-                })
-            }
-            
-            const productList = newProduct.slice(offset,
-                (parseInt(offset)+parseInt(pageSize)))  
-            const typeUnique = [...new Set(productList.map((item) => item.brand))];
-            const brandList = await BrandSchema.find()
-            const stockList = userData.access=="manager"?
-                await Stocks.find():await Stocks.find({StockID:{$in:myStock}})
-           res.json({filter:productList,brands:brandList,
-            size:newProduct.length,exists:data.exists,
-            quantity:quantity,price:price,stockId,stockList})
-    }
-    catch(error){
-        res.status(500).json({message: error.message})
-    } 
-})
+router.post('/list-product', jsonParser, async (req, res) => {
+	let pageSize = req.body.pageSize ? req.body.pageSize : '10';
+	let offset = req.body.offset ? parseInt(req.body.offset) : 0;
+	let userData = await users.findOne({ _id: ObjectID(req.headers['userid']) });
+	let stockId = req.body.store ? req.body.store : userData.StockId;
+	// let myStock = ["13"]
+	let myStock = userData.StockArr && userData.StockArr.map((item) => item.StockID);
+	try {
+		const data = {
+			category: req.body.category,
+			title: req.body.title,
+			sku: req.body.sku,
+			exists: req.body?.exist ? 1 : 0,
+			brand: req.body.brandId,
+			active: req.body.active,
+			offset: req.body.offset,
+			pageSize: pageSize,
+		};
+		const products = await ProductSchema.aggregate([
+			{ $match: data.title ? { $or: [{ title: new RegExp('.*' + data.title + '.*') }, { sku: new RegExp('.*' + data.title + '.*', 'i') }] } : {} },
+			{ $match: data.sku ? { sku: new RegExp('.*' + data.sku + '.*') } : {} },
+			{ $match: data.category ? { category: data.category } : {} },
+			//{ $match:data.exists?{count:{$nin:[0,'']}}:{}},
+			{ $match: data.active ? { active: true } : {} },
+			{ $match: data.brand ? (data.brand == 'unkown' ? { $or: [{ brandId: { $exists: false } }, { brandId: '' }] } : { brandId: data.brand }) : {} },
+			{ $lookup: { from: 'brands', localField: 'brandId', foreignField: 'brandCode', as: 'brandInfo' } },
+			{ $lookup: { from: 'productcount', localField: 'ItemID', foreignField: 'ItemID', as: 'countList' } },
+		]);
+		const productsQuantity = await productCount.find({ Stock: stockId });
+		let quantity = [];
+		let price = [];
+		const newProduct = [];
+		for (let i = 0; i < products.length; i++) {
+			const countData = productsQuantity.find((Item) => Item.ItemID == products[i].ItemID);
+			//const countStock = stockData?countData.find(item=>item.Stock==stockData):''
+			console.log(countData && countData.quantity);
+			if (!countData || !countData.quantity) if (data.exists) continue;
+
+			if (newProduct.length > pageSize + offset) {
+				newProduct.push({});
+				continue;
+			}
+			const countAll = await productCount.find({ ItemID: products[i].ItemID });
+			let openCount = 0;
+			//if()
+			const openList = await openOrders.find({ sku: products[i].sku, payStatus: 'paid' });
+			for (let c = 0; c < openList.length; c++) openCount += parseInt(openList[c].count);
+			const priceData = await productPrice.findOne({ ItemID: products[i].ItemID, saleType: SaleType });
+
+			newProduct.push({
+				...products[i],
+				price: priceData ? priceData.price : '',
+				taxPrice: NormalTax(products[i].price) / 10,
+				count: countData ? countData.quantity : '',
+				countTotal: countAll,
+				openOrderCount: openCount,
+			});
+		}
+
+		const productList = newProduct.slice(offset, parseInt(offset) + parseInt(pageSize));
+		const typeUnique = [...new Set(productList.map((item) => item.brand))];
+		const brandList = await BrandSchema.find();
+		const stockList = userData.access == 'manager' ? await Stocks.find() : await Stocks.find({ StockID: { $in: myStock } });
+		return res.json({
+            filter: productList,
+            brands: brandList,
+            size: newProduct.length,
+            exists: data.exists,
+            quantity,
+            price,
+            stockId,
+            stockList
+        });
+	} catch (error) {
+		return res.status(500).json({ message: error.message });
+	}
+});
 
 router.post('/editProduct', jsonParser, async (req, res) => {
 	let productId = req.body.productId ? req.body.productId : '';
