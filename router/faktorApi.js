@@ -38,6 +38,10 @@ const publicLinks = require ('../models/product/publicLinks');
 const salePolicyGroupModel = require('../models/sale/salePolicyGroup');
 const { TaxRate } = process.env
 
+const commaSeparatedPrices = (number) => {
+    return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+}
+
 router.post('/products', async (req, res) => {
 	try {
 		const products = await productSchema.find({}).lean();
@@ -1049,7 +1053,7 @@ router.post('/cart-fetch', async (req, res) => {
     }
 })
 
-router.post('/cart-delete', auth, async (req, res) => {
+router.post('/cart-delete', jsonParser, auth, async (req, res) => {
 	try {
         const userId = req.headers['userid'];
         const cartID = req.body.cartID;
@@ -1066,7 +1070,7 @@ router.post('/cart-delete', auth, async (req, res) => {
 	}
 });
 
-router.post('/cart-find', async (req, res) => {
+router.post('/cart-find', jsonParser, async (req, res) => {
     const cartNo = req.body.cartNo
     try {
         const cartList = await cart.aggregate
@@ -1704,7 +1708,9 @@ const getCartItemsByPolicyGroup = async (qCartData) => {
 
 const checkForSalePolicyRules = async (qCartData) => {
 	try {
-		let isSalePolicyRulesPassed = true;
+		let isSalePolicyRulesPassed = false;
+        let lowSellingProduct1Rule = false;
+        let lowSellingProduct2Rule = false;
         let salePolicyRuleMessage = 'شروط سیاست‌های فروش رعایت نشده است.';
         const requiredProducts = {};
         const payValue = qCartData.payValue;
@@ -1717,6 +1723,7 @@ const checkForSalePolicyRules = async (qCartData) => {
         } = await getCartItemsByPolicyGroup(qCartData);
 
         if (!mainProductsCount) {
+            isSalePolicyRulesPassed = true;
             return {
                 isSalePolicyRulesPassed,
             };
@@ -1734,28 +1741,32 @@ const checkForSalePolicyRules = async (qCartData) => {
             return accumulator + itemPrice;
         }, 0);
 
-        if (lowSellingProducts1Count < (mainProductsCount * 2)) {
-            isSalePolicyRulesPassed = false;
-            salePolicyRuleMessage = 'شروط سیاست‌های فروش رعایت نشدند.'
-            requiredProducts.lowSellingProducts1 = {
-                message: `تعداد ${lowSellingProducts1Count} عدد از محصولات کم فروش 1 انتخاب کرده‌اید. می‌بایست حداقل ${mainProductsCount * 2} عدد انتخاب نمایید.`,
-            };
+        if (lowSellingProducts1Count >= (mainProductsCount * 2)) {
+            lowSellingProduct1Rule = true;
         }
-
-        if (lowSellingProducts2Count < (mainProductsCount * 1)) {
+        if (lowSellingProducts2Count >= (mainProductsCount * 1)) {
+            lowSellingProduct2Rule = true;
+        }
+        if (!lowSellingProduct1Rule && !lowSellingProduct2Rule) {
             isSalePolicyRulesPassed = false;
             salePolicyRuleMessage = 'شروط سیاست‌های فروش رعایت نشدند.'
-            requiredProducts.lowSellingProducts2 = {
-                message: `تعداد ${lowSellingProducts2Count} عدد از محصولات کم فروش 2 انتخاب کرده‌اید. می‌بایست حداقل ${mainProductsCount * 1} عدد انتخاب نمایید.`,
+            requiredProducts.lowSellingProducts = {
+                message: `می‌بایست حداقل ${mainProductsCount * 2} عدد از محصولات کم فروش 1 یا ${mainProductsCount * 1} عدد از محصولات کم فروش 2 انتخاب نمایید.
+تعداد محصولات کم فروش 1 انتخاب شده: ${lowSellingProducts1Count}
+تعداد محصولات کم فروش 2 انتخاب شده: ${lowSellingProducts2Count}`,
             };
         }
 
         if (calculateSideProductsPrice < faktorPriceWithoutSideProducts) {
+            const selectedPrice = Math.round(calculateSideProductsPrice / 1000) * 1000;
+            const targetPrice = Math.round(faktorPriceWithoutSideProducts / 1000) * 1000;
             isSalePolicyRulesPassed = false;
             salePolicyRuleMessage = 'شروط سیاست‌های فروش رعایت نشدند.'
             requiredProducts.sideProducts = {
-                message: `مبلغ ${Math.round(calculateSideProductsPrice / 1000) * 1000} از محصولات کناری انتخاب کرده‌اید. می‌بایست حداقل ${Math.round(faktorPriceWithoutSideProducts / 1000) * 1000} انتخاب نمایید.`,
-            };
+				message: `مبلغ ${commaSeparatedPrices(selectedPrice)} از محصولات کناری انتخاب کرده‌اید.
+می‌بایست حداقل ${commaSeparatedPrices(targetPrice)} انتخاب نمایید.
+مبلغ باقی مانده: ${commaSeparatedPrices(targetPrice - selectedPrice)}`,
+			};
         }
 
 		return {
