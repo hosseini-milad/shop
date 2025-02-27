@@ -6,6 +6,7 @@ const auth = require("../middleware/auth");
 var ObjectID = require('mongodb').ObjectID;
 const multer = require('multer');
 const fs = require('fs');
+const jMoment = require('moment-jalaali');
 const user = require('../models/auth/users');
 const mime = require('mime');
 const crmlist = require('../models/crm/crmlist');
@@ -36,9 +37,9 @@ router.post('/fetch-crm', jsonParser, async (req, res) => {
 })
 
 router.post('/fetch-tasks', auth, jsonParser, async (req, res) => {
-	const crmId = req.body.crmId;
-	const userId = req.headers['userid'];
 	try {
+        const crmId = req.body.crmId;
+        const userId = req.headers['userid'];
 		const tasksList = await calcTasks(userId);
 		return res.json(tasksList);
 	} catch (error) {
@@ -48,119 +49,33 @@ router.post('/fetch-tasks', auth, jsonParser, async (req, res) => {
 
 const calcTasks = async (userId) => {
 	try {
-		const userData = await user.findOne({ _id: ObjectID(userId) });
-		var access = 3;
-		if (userData.access === 'manager') access = 10;
-		if (userData.access === 'admin') access = 7;
-		if (userData.access === 'client') access = 3;
+		const userData = await user.findOne({ _id: ObjectID(userId) }).lean();
+		let myCreator = [];
+		let access = 3;
+		if (userData.access === 'manager') {
+            access = 10;
+        }
+		if (userData.access === 'admin') {
+            access = 7;
+            const userList = await user.find({ profile: { $in: userData.profile } });
+			myCreator = userList.map((item) => item._id.toString());
+        }
+		if (userData.access === 'client') {
+            access = 3;
+            myCreator = [userId];
+        }
 		const userAccess = await FindAccess(userData.profile);
 		const allow = userAccess.find((item) => item.title && item.title.includes('Set Order'));
 		if (!allow && access !== 10) {
 			//return({error:"دسترسی ندارد"})
 		}
 
-		const crmData = await crmlist.findOne();
+		const crmData = await crmlist.findOne().lean();
 		const crmId = crmData && crmData._id.toString();
-
-		var myCreator = [];
-		if (access == 7) {
-			var userList = await user.find({ profile: { $in: userData.profile } }); //{StockId:userData.StockId})
-			myCreator = userList.map((item) => item._id.toString());
-		}
-		if (access == 3) {
-			myCreator = [userId];
-		}
-		var taskList = await tasks.aggregate([
-			//{$match:limitTask?{profile:limitTask}:{}},
-			{ $match: { crmId: crmId } },
-			{ $match: access < 8 ? { creator: { $in: myCreator } } : {} },
-			{
-				$addFields: {
-					user_Id: {
-						$convert: {
-							input: '$assign',
-							to: 'objectId',
-							onError: '',
-							onNull: '',
-						},
-					},
-				},
-			},
-			{
-				$lookup: {
-					from: 'users',
-					localField: 'user_Id',
-					foreignField: '_id',
-					as: 'userInfo',
-				},
-			},
-			{
-				$addFields: {
-					profile_Id: {
-						$convert: {
-							input: '$profile',
-							to: 'objectId',
-							onError: '',
-							onNull: '',
-						},
-					},
-				},
-			},
-			{
-				$lookup: {
-					from: 'profiles',
-					localField: 'profile_Id',
-					foreignField: '_id',
-					as: 'profileInfo',
-				},
-			},
-			{
-				$addFields: {
-					creator_Id: {
-						$convert: {
-							input: '$creator',
-							to: 'objectId',
-							onError: '',
-							onNull: '',
-						},
-					},
-				},
-			},
-			{
-				$lookup: {
-					from: 'users',
-					localField: 'creator_Id',
-					foreignField: '_id',
-					as: 'creatorInfo',
-				},
-			},
-			{
-				$addFields: {
-					customer_Id: {
-						$convert: {
-							input: '$customer',
-							to: 'objectId',
-							onError: '',
-							onNull: '',
-						},
-					},
-				},
-			},
-			{
-				$lookup: {
-					from: 'customers',
-					localField: 'customer_Id',
-					foreignField: '_id',
-					as: 'customerInfo',
-				},
-			},
-			{ $sort: { progressDate: -1 } },
-		]);
-		//const taskList = await tasks.find({crmCode:crmData._id})
 		const columnOrder = crmData && crmData.crmSteps;
-		var showColumn = [];
-		var columns = {};
-		for (var i = 0; i < columnOrder.length; i++) {
+        let showColumn = [];
+		let columns = {};
+		for (let i = 0; i < columnOrder.length; i++) {
 			const accessTemp = userAccess.find((item) => item.title === columnOrder[i].enTitle);
 			//console.log(access)
 			if (accessTemp || access > 8) {
@@ -169,29 +84,96 @@ const calcTasks = async (userId) => {
 				columns[columnOrder[i].enTitle] = [];
 			}
 		}
-		//console.log(columns)
+
+        const tasksMatchCondition = {
+            crmId,
+        };
+        if (access < 8) {
+            tasksMatchCondition.creator = { $in: myCreator };
+        }
+		let taskList = await tasks.aggregate([
+			//{$match:limitTask?{profile:limitTask}:{}},
+			{ $match: tasksMatchCondition },
+            {
+                $addFields: {
+                    tempTimestamp: { $ifNull: ['$progressDate', '$date'] },
+                },
+            },
+			{
+				$addFields: {
+					taskStep: {
+						$cond: {
+							if: {
+								$and: [{ $in: ['$taskStep', ['archive', 'cancel']] }, { $lt: ['$tempTimestamp', new Date(new Date() - 2 * 24 * 60 * 60 * 1000)] }],
+							},
+							then: null,
+							else: '$taskStep',
+						},
+					},
+					user_Id: { $convert: { input: '$assign', to: 'objectId', onError: '', onNull: '' } },
+					profile_Id: { $convert: { input: '$profile', to: 'objectId', onError: '', onNull: '' } },
+					creator_Id: { $convert: { input: '$creator', to: 'objectId', onError: '', onNull: '' } },
+					customer_Id: { $convert: { input: '$customer', to: 'objectId', onError: '', onNull: '' } },
+				},
+			},
+            { $match: { taskStep: { $ne: null } } },
+			{ $lookup: { from: 'users', localField: 'user_Id', foreignField: '_id', as: 'userInfo' } },
+			{ $lookup: { from: 'profiles', localField: 'profile_Id', foreignField: '_id', as: 'profileInfo' } },
+			{ $lookup: { from: 'users', localField: 'creator_Id', foreignField: '_id', as: 'creatorInfo' } },
+			{ $lookup: { from: 'customers', localField: 'customer_Id', foreignField: '_id', as: 'customerInfo' } },
+			{ $sort: { tempTimestamp: -1 } },
+		]);
+
 		const tasksToShow = [];
-		for (var c = 0; c < taskList.length; c++) {
-			if (taskList[c].result) {
-				var Number = taskList[c].result.Number;
-				var InvoiceID = taskList[c].result.InvoiceID;
-				var Message = taskList[c].result.Message;
-				taskList[c].result = { Number, InvoiceID, Message };
-			}
-			var taskStep = taskList[c].taskStep;
-			var yesterday = new Date(Date.now() - 86400000); // that is: 24 * 60 * 60 * 1000
-			var taskDate = taskList[c].progressDate ? taskList[c].progressDate : taskList[c].date;
+		for (let c = 0; c < taskList.length; c++) {
+			// if (taskList[c].result) {
+			// 	let Number = taskList[c].result.Number;
+			// 	let InvoiceID = taskList[c].result.InvoiceID;
+			// 	let Message = taskList[c].result.Message;
+			// 	taskList[c].result = { Number, InvoiceID, Message };
+			// }
+			let taskStep = taskList[c].taskStep;
+			let yesterday = new Date(Date.now() - 86400000); // that is: 24 * 60 * 60 * 1000
+			// let yesterday = jMoment().subtract(1, 'day').toISOString(); // that is: 24 * 60 * 60 * 1000
+			let taskDate = taskList[c].progressDate ? taskList[c].progressDate : taskList[c].date;
 			if (!taskList[c].progressDate) {
 				yesterday = new Date(Date.now() - 166400000);
 			}
-			if (taskStep == 'archive' || taskStep == 'cancel') if (taskDate < yesterday) continue;
-			try {
+			if (taskStep === 'archive' || taskStep === 'cancel') {
+                if (taskDate < yesterday) {
+                    continue;
+                }
+            }
+			// try {
 				columns[taskStep].push(taskList[c]._id);
 				tasksToShow.push(taskList[c]);
-			} catch {}
+			// } catch {}
 			//columnOrder.find(item=>item.enTitle===taskStep)
 		}
-		return { userAccess, crmData: crmData, tasks: tasksToShow, crm: crmData, columnOrder: showColumn, columns: columns, myCreator };
+
+        // const temp = tasksToShow.map((i) => {
+        //     if (i.result) {
+        //         return {
+        //             ...i,
+        //             result: {
+        //                 Number: i.result.Number,
+        //                 InvoiceID: i.result.InvoiceID,
+        //                 Message: i.result.Message,
+        //             },
+        //         }
+        //     }
+        //     return i;
+        // })
+
+		return {
+            userAccess,
+            crmData,
+            tasks: tasksToShow,
+            crm: crmData,
+            columnOrder: showColumn,
+            columns,
+            myCreator
+        };
 	} catch (error) {
 		return;
 	}
