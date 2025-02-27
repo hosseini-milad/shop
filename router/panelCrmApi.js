@@ -126,45 +126,26 @@ const calcTasks = async (userId) => {
 
 		const tasksToShow = [];
 		for (let c = 0; c < taskList.length; c++) {
-			// if (taskList[c].result) {
-			// 	let Number = taskList[c].result.Number;
-			// 	let InvoiceID = taskList[c].result.InvoiceID;
-			// 	let Message = taskList[c].result.Message;
-			// 	taskList[c].result = { Number, InvoiceID, Message };
-			// }
+			if (taskList[c].result) {
+				let Number = taskList[c].result.Number;
+				let InvoiceID = taskList[c].result.InvoiceID;
+				let Message = taskList[c].result.Message;
+				taskList[c].result = { Number, InvoiceID, Message };
+			}
 			let taskStep = taskList[c].taskStep;
 			let yesterday = new Date(Date.now() - 86400000); // that is: 24 * 60 * 60 * 1000
-			// let yesterday = jMoment().subtract(1, 'day').toISOString(); // that is: 24 * 60 * 60 * 1000
 			let taskDate = taskList[c].progressDate ? taskList[c].progressDate : taskList[c].date;
 			if (!taskList[c].progressDate) {
-				yesterday = new Date(Date.now() - 166400000);
+				yesterday = new Date(Date.now() - 166400000); //  TODO: check for date by jMoment? Is this date means 2 days ago?
 			}
 			if (taskStep === 'archive' || taskStep === 'cancel') {
                 if (taskDate < yesterday) {
                     continue;
                 }
             }
-			// try {
-				columns[taskStep].push(taskList[c]._id);
-				tasksToShow.push(taskList[c]);
-			// } catch {}
-			//columnOrder.find(item=>item.enTitle===taskStep)
+            columns[taskStep].push(taskList[c]._id);
+            tasksToShow.push(taskList[c]);
 		}
-
-        // const temp = tasksToShow.map((i) => {
-        //     if (i.result) {
-        //         return {
-        //             ...i,
-        //             result: {
-        //                 Number: i.result.Number,
-        //                 InvoiceID: i.result.InvoiceID,
-        //                 Message: i.result.Message,
-        //             },
-        //         }
-        //     }
-        //     return i;
-        // })
-
 		return {
             userAccess,
             crmData,
