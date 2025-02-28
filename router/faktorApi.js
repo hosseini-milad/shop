@@ -89,7 +89,7 @@ router.post('/list-products', jsonParser, async (req, res) => {
 		}
 
         const productsMatchCondition = {
-            searchCat,
+            ...searchCat,
         };
         if (brandId) {
             productsMatchCondition.brandId = brandId;
