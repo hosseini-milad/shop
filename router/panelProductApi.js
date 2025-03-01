@@ -751,92 +751,11 @@ router.post('/report-total', jsonParser, auth, async (req, res) => {
 			},
 			{ $sort: { initDate: -1 } },
 		];
-<<<<<<< HEAD
-        if (data.productsList) {
-            cartsAggregation.unshift({ $unwind: '$cartItems' });
-        }
-        const reportList = await cart.aggregate(cartsAggregation)
-        var filterResult = ''
-        
-        console.log(reportList.length)
-        var productList=[]
-        var totalPrice=0
-        var totalCount = 0
-        var userList = []
-        var errorPrice=[]
-        var marketData = managerList.map(item=>(
-            {name:item.cName,username:item.username,
-                id:item._id,count:0,price:0}))
-        var brandData = await BrandSchema.find().sort({title:-1})
-        for(var i=0;i<(reportList&&reportList.length);i++){
-            var analyzeStatus = CanAnalyze(reportList[i].status)
-            if(!analyzeStatus) continue
-            var payValue = reportList[i].payValue
-            // var cartItems = [reportList[i].cartItems]
-            var cartItems = Array.isArray(reportList[i].cartItems) ? reportList[i].cartItems : [reportList[i].cartItems];
-            var manageId =reportList[i].manageId 
-            var itemAdd = 0
-            for(var j=0;j<(cartItems&&cartItems.length);j++){
-                const productDetail = await products.aggregate([
-                    {$match:{sku:cartItems[j].sku}},
-                    {$lookup:{
-                        from : "brands", 
-                        localField: "brandId", 
-                        foreignField: "brandCode", 
-                        as : "brandInfo"
-                    }},
-                    {$lookup:{
-                        from : "category", 
-                        localField: "catId", 
-                        foreignField: "catCode", 
-                        as : "categoryInfo"
-                    }},
-                ])
-                var price = cartItems[j].price
-                cartItems[j].product = productDetail&&productDetail[0]
-                if(data.brand)
-                    if(cartItems[j].product&&
-                        cartItems[j].product.brandId!=data.brand)
-                        continue
-                   
-                itemAdd=1
-                cartItems[j].brandData = cartItems[j].product&&cartItems[j].product.brandInfo[0]
-                try{
-                    price=cartItems[j].price.find(item=>item.saleType == payValue)
-                    if(price) price = parseInt(price.price)
-                }
-                catch{
-                    errorPrice.push(price)
-                }
-                var myItem = cartItems[j]
-                myItem.totalPrice =price*myItem.count
-                resultData= await UpdateMarket(marketData,manageId,myItem.count,
-                    myItem.totalPrice,brandData,cartItems[j].product)
-                marketData = resultData.marketArray
-                myItem.orderList=[{title:reportList[i].cartNo,count:myItem.count,
-                    user:(reportList[i].userInfo&&reportList[i].userInfo[0])&&reportList[i].userInfo[0].username}]
-                brandData = resultData.brandArray
-                var index = productList.findIndex(item=>item.sku==myItem.sku)
-                if(index == -1){
-                    productList.push(myItem)
-                }
-                else{
-                    var cNumber = parseInt(productList[index].count)
-                    cNumber += parseInt(myItem.count)
-                    productList[index].count = cNumber
-                    productList[index].orderList.push({title:reportList[i].cartNo,count:myItem.count,
-                        user:(reportList[i].userInfo&&reportList[i].userInfo[0])&&reportList[i].userInfo[0].username})
-                    
-                    var cPrice = parseInt(productList[index].totalPrice)
-                    cPrice += parseInt(myItem.totalPrice)
-                    productList[index].totalPrice = cPrice
-=======
 		if (data.productsList) {
 			cartsAggregation.unshift({ $unwind: '$cartItems' });
 		}
 		const reportList = await cart.aggregate(cartsAggregation);
 		var filterResult = '';
->>>>>>> dda61c70b1fd2a75148d13735eeb57fde3918114
 
 		var productList = [];
 		var totalPrice = 0;
