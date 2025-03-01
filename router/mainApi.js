@@ -68,6 +68,7 @@ router.use('/panel/product', panelProductApi)
 router.use('/panel/faktor', panelFaktorApi)
 router.use('/panel/quote', panelQuoteApi)
 router.use('/dashboard', dashboard)
+router.use('/panel/reports', require('./reports'));
 
 router.use('/panel/crm', CRMPanelApi)
 schedule.scheduleJob('5 */2 * * *', async () => {
