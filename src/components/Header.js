@@ -83,10 +83,12 @@ function Header(props) {
   const handleLoginHover = () => {
     setLoginMenu("visible");
     setHover(3);
+    console.log(loginMenu);
   };
   const handleLoginOut = () => {
     setLoginMenu("hidden");
     setHover(0);
+    console.log(loginMenu);
   };
 
   const handleCartHover = () => {
@@ -217,8 +219,8 @@ function Header(props) {
           <div className="account">
             <div
               className="mainHolder"
-              onMouseOver={handleLoginHover}
-              onMouseOut={handleLoginOut}
+              onClick={handleLoginHover}
+              // onMouseOut={handleLoginOut}
             >
               <i
                 className="icon-size circleIcon fas fa-user"
@@ -229,12 +231,12 @@ function Header(props) {
               ></i>
               <div className="account-heading">حساب کاربری</div>
               <i className="fas fa-angle-down"></i>
-              <div
-                className="megaMenuHeader megaMenuSingle"
-                style={{ visibility: loginMenu }}
-              >
-                <LoginMenu userInfo={props.userInfo} />
-              </div>
+            </div>
+            <div
+              className="megaMenuHeader megaMenuSingle"
+              style={{ visibility: loginMenu }}
+            >
+              <LoginMenu userInfo={props.userInfo} close={handleLoginOut} />
             </div>
           </div>
           <div className="cart">

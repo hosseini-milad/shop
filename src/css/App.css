@@ -433,6 +433,19 @@ label {
   color: var(--main-light);
   margin: auto;
 }
+.close-login {
+  position: absolute;
+  top: 5px;
+  right: 10px;
+  width: 20px;
+  height: 20px;
+  margin: 0;
+  text-align: center;
+  padding: 5px;
+  line-height: 1.2rem;
+  font-size: 1.1rem;
+  cursor: pointer;
+}
 .notLogin {
   width: 100%;
 }
@@ -1840,9 +1853,11 @@ footer {
   -webkit-box-orient: vertical;
   display: -webkit-box;
 }
+
 .productDetailSection {
   box-shadow: inset 0 1px 0 rgba(0, 0, 0, 0.2);
   background-color: #f0f0f0;
+  padding-bottom: 1rem;
 }
 .productPromises {
   display: flex;
@@ -2212,7 +2227,7 @@ footer {
   align-items: flex-start;
   margin-top: 50px;
 }
-.imgPopUpHolder .close-modal-btn{
+.imgPopUpHolder .close-modal-btn {
   position: absolute;
   top: 10px;
   left: 10px;
@@ -3158,7 +3173,7 @@ footer {
     align-items: center;
     justify-content: center;
   }
-  .offerButton{
+  .offerButton {
     padding-right: 15px;
   }
 
@@ -3219,27 +3234,25 @@ footer {
   .Brand {
     margin: auto;
   }
-  .imgPopUpHolder{
-    flex-direction:column;
+  .imgPopUpHolder {
+    flex-direction: column;
     align-items: center;
     justify-content: center;
     margin-top: 0;
   }
-  .imgPopUpHolder .modalImg{
+  .imgPopUpHolder .modalImg {
     margin-inline: auto;
   }
-  .imgPopUpHolder .modal{
+  .imgPopUpHolder .modal {
     margin: 0;
-    
   }
-  .imgPopUpHolder .modal-header{
+  .imgPopUpHolder .modal-header {
     display: none;
-    
   }
-  .cartMainHandler{
+  .cartMainHandler {
     flex-direction: column;
   }
-  .cartHandler{
+  .cartHandler {
     width: 100%;
   }
 }

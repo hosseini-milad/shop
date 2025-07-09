@@ -116,6 +116,10 @@ function LoginMenu(props) {
 
   return (
     <>
+      <p className="close-login" onClick={props.close}>
+        x
+      </p>
+
       {!token && (
         <div className="notLogin">
           {!login ? (

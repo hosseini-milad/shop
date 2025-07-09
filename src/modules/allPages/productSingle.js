@@ -16,7 +16,8 @@ function ProductSingle(props) {
   const product = props.product;
   const [productShort, setProductShort] = useState("");
   //console.log(product)
-  const productDescription = product.description.split("نوع")[0];
+  // const productDescription = product.description.split("نوع")[0];
+  const productDescription = product.descriptionp;
 
   const [showMobileIcon, setMobileIcon] = useState(0);
   return (
@@ -54,14 +55,7 @@ function ProductSingle(props) {
             ></div>
             {product.price ? <small>و ...</small> : ""}
           </>
-          {/*<div className="offerShare">
-                        <i className="fas fa-star"></i>
-                        <i className="fas fa-star"></i>
-                        <i className="fas fa-star"></i>
-                        <i className="fas fa-star"></i>
-                        <i className="fas fa-star"></i>
-                    <sub></sub>
-                    </div>*/}
+
           <div className="mainPrice">
             {0 ? (
               <>
@@ -98,10 +92,7 @@ function ProductSingle(props) {
             <QuickView product={{ data: product }} cart={props.cart} />
           </a>
         ) : (
-          <a
-            className="offerButton disableBtn"
-            
-          >
+          <a className="offerButton disableBtn">
             <div className="buttonHandler">
               <i className="icon-size fas fa-shopping-cart"></i>
             </div>

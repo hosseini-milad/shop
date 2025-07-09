@@ -14,7 +14,7 @@ const cookies = new Cookies();
 
 function ProductMainDetail(props) {
   const token = cookies.get(env.cookieName);
-  const productCount = props.product.data.count
+  const productCount = props.product.count
     ? props.product.data.count
     : props.product.quantity
     ? props.product.quantity.quantity
@@ -48,8 +48,7 @@ function ProductMainDetail(props) {
         //setTimeout(()=>setError(''),3000)
       });
   };
-  var orderFound = "";
-  
+  console.log(normalPrice(props.product.price));
   return (
     <div className="modal-content">
       <div className="modal-product">
@@ -79,13 +78,13 @@ function ProductMainDetail(props) {
                   ) : (
                     ""
                   )}
-                  {product.price ? (
+                  {props.product.price ? (
                     <strong>
-                      {normalPrice(product.price)} <sub>تومان</sub>
+                      {normalPrice(props.product.price)} <sub>تومان</sub>
                     </strong>
                   ) : (
                     <strong>
-                      {normalPrice(3)} <sub>تومان</sub>
+                      {normalPrice(0)} <sub>تومان</sub>
                     </strong>
                   )}
                 </div>
@@ -99,14 +98,14 @@ function ProductMainDetail(props) {
             <label>تعداد محصول:</label>
             <CounterInput
               min={1}
-              max={10}
+              max={productCount ? productCount : 0}
               count={1}
               onCountChange={(count) => setCount(count)}
             />
           </div>
           {!token ? (
             <LoginMenu />
-          ) : productCount ? (
+          ) : productCount && props.product.canSale ? (
             <a className="modal-sub-btn" onClick={addToCart}>
               افزودن به سبد خرید
             </a>

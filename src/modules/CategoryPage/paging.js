@@ -1,32 +1,35 @@
 import { filterToUrl } from "../../env";
-
-function Paging(props){
-    const products = props.products;
-    const query= {}
-      try{query=JSON.parse(props.query)}catch{}
-    const urlParams = new URLSearchParams(document.location.search);
-    const page = urlParams.get('page')
-    //query.page = 1
-    console.log(products)
-    return(
-        <div className="paging">
-        <ul>
-          {products&&0&&products.data.map((pageNum,i)=>(
-            
-            <li key={i} className={pageNum.active?"pageActive pageItem":
-                pageNum.url?"pageItem":"pageDisabled pageItem"}
-                id={query.page = 
-                  pageNum.label.includes("Next")?(!page?'':parseInt(page)+1):
-                  pageNum.label.includes("Prev")?(!page?'':parseInt(page)-1):
-                  pageNum.label}>
-                
-                <a href={"/category/"+query.category+"?"+filterToUrl(query)}
-                >{pageNum.label.includes("Next")?<i className="fas fa-angle-left"></i>:
-            pageNum.label.includes("Prev")?<i className="fas fa-angle-right"></i>:
-            pageNum.label}</a></li>
-          ))}
-        </ul>
-      </div>
-    )
+import * as React from "react";
+import Typography from "@mui/material/Typography";
+import Pagination from "@mui/material/Pagination";
+import Stack from "@mui/material/Stack";
+function Paging(props) {
+  const { setFilters, Filters, size } = props;
+  const urlParams = new URLSearchParams(window.location.search);
+  const initialPage = parseInt(urlParams.get("page")) || 1;
+  const handleChange = (event, value) => {
+    setFilters((prev) => ({ ...prev, page: value }));
+    const url = new URL(window.location);
+    url.searchParams.set("page", value);
+    window.history.replaceState({}, "", url);
+  };
+  return (
+    <Stack
+      spacing={2}
+      sx={{
+        width: "100%",
+        alignItems: "center",
+        justifyContent: "center",
+        direction: "ltr",
+      }}
+    >
+      <Pagination
+        count={size ? size : 10}
+        page={Filters.page || 1}
+        shape="rounded"
+        onChange={handleChange}
+      />
+    </Stack>
+  );
 }
-export default Paging
+export default Paging;
