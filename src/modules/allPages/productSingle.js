@@ -70,9 +70,9 @@ function ProductSingle(props) {
             ) : (
               <>
                 <div className="offPriceHolder"></div>
-                {product.price && product.count ? (
+                {product.price && product.price.price && product.count ? (
                   <strong>
-                    {normalPrice(product.price)} <sub>تومان</sub>
+                    {normalPrice(product.price.price)} <sub>تومان</sub>
                   </strong>
                 ) : product.count ? (
                   <a href="https://wa.me/+989398920184">تماس بگیرید</a>

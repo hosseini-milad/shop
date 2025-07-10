@@ -21,6 +21,7 @@ function Paging(props) {
         alignItems: "center",
         justifyContent: "center",
         direction: "ltr",
+        marginTop: "auto",
       }}
     >
       <Pagination

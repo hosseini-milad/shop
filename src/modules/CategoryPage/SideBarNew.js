@@ -17,14 +17,10 @@ function SideBarNew(props) {
   //console.log(props.brands)
   const { FilterLists, setFilters, Filters } = props;
   const preFilter = props.productQuery.filter;
-  const preBrands = props.productQuery.brands;
   const pathUrl = window.location.pathname.split("/");
 
   var catPath = pathUrl[2] ? "/" + pathUrl[2] : "";
   if (window.location.pathname.split("/")[1] == "brand") catPath = "";
-  var filtersList = preFilter;
-  const [filterNum, setFilterNum] = useState([]);
-  const cats = props.categories;
   // var catName = "";
   // for (var index = 0; index < cats.length; index++)
   //   if (cats[index].id == props.catId) {

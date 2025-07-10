@@ -13,8 +13,8 @@ import SideBarNew from "../modules/CategoryPage/SideBarNew";
 
 function Category() {
   const urlSplit = window.location.pathname.split("/")[2];
-  var brandName = urlSplit[1] === "brand" ? urlSplit[2] : "";
-  var oilBrandName = urlSplit[1] === "oil-brand" ? urlSplit[2] : "";
+  // var brandName = urlSplit[1] === "brand" ? urlSplit[2] : "";
+  // var oilBrandName = urlSplit[1] === "oil-brand" ? urlSplit[2] : "";
 
   const [catData, setCatData] = useState();
   const [products, setProducts] = useState();
@@ -44,7 +44,7 @@ function Category() {
 
   const productQuery = `{
         "filter":[${filters !== null ? filters : ""}],
-        "category":"${brandName ? "" : oilBrandName ? "motor-oil" : catEName}",
+        "category":"${catEName}",
         "brands":[${brands !== null ? brands : ""}],
         "search_text":"${searchPhrase !== null ? searchPhrase : ""}",
         "max_price":"${price !== null ? price : ""}",
@@ -62,8 +62,8 @@ function Category() {
     //   page: "",
     // };
     const packageBody = {
-      category: brandName ? "" : oilBrandName ? "motor-oil" : catEName,
-      search_text: searchPhrase !== null ? searchPhrase : "",
+      category: catEName,
+      title: searchPhrase !== null ? searchPhrase : "",
       max_price: price !== null ? price : "",
       page: filterParams.searchParams.get("page") || "",
       ...Filters,
