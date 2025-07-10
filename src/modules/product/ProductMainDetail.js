@@ -80,11 +80,11 @@ function ProductMainDetail(props) {
                   )}
                   {props.product.price ? (
                     <strong>
-                      {normalPrice(props.product.price)} <sub>تومان</sub>
+                      {normalPrice(props.product.price)} <sub>ریال</sub>
                     </strong>
                   ) : (
                     <strong>
-                      {normalPrice(0)} <sub>تومان</sub>
+                      {normalPrice(0)} <sub>ریال</sub>
                     </strong>
                   )}
                 </div>
@@ -98,14 +98,14 @@ function ProductMainDetail(props) {
             <label>تعداد محصول:</label>
             <CounterInput
               min={1}
-              max={productCount ? productCount : 0}
+              max={props.product.count ? props.product.count : 0}
               count={1}
               onCountChange={(count) => setCount(count)}
             />
           </div>
           {!token ? (
             <LoginMenu />
-          ) : productCount && props.product.canSale ? (
+          ) : props.product.canSale && props.product.count ? (
             <a className="modal-sub-btn" onClick={addToCart}>
               افزودن به سبد خرید
             </a>

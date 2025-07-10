@@ -1,11 +1,11 @@
 import Cookies from "universal-cookie";
 
 const siteUrl = "http://localhost:3000";
-// export const siteApi = "https://shopadmin.sharifoilco.com/api";
-// export const siteApiUrl = "https://shopadmin.sharifoilco.com";
+export const siteApi = "https://shopadmin.sharifoilco.com/api";
+export const siteApiUrl = "https://shopadmin.sharifoilco.com";
 //test
-export const siteApi = "https://testadmin.sharifoilco.com/api";
-export const siteApiUrl = "https://testadmin.sharifoilco.com";
+// export const siteApi = "https://testadmin.sharifoilco.com/api";
+// export const siteApiUrl = "https://testadmin.sharifoilco.com";
 // export const siteApi = 'http://localhost:6090/api'
 // export const siteApiUrl='http://localhost:6090';
 

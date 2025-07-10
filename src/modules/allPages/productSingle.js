@@ -72,7 +72,7 @@ function ProductSingle(props) {
                 <div className="offPriceHolder"></div>
                 {product.price && product.price.price && product.count ? (
                   <strong>
-                    {normalPrice(product.price.price)} <sub>تومان</sub>
+                    {normalPrice(product.price.price)} <sub>ریال</sub>
                   </strong>
                 ) : product.count ? (
                   <a href="https://wa.me/+989398920184">تماس بگیرید</a>
@@ -88,8 +88,12 @@ function ProductSingle(props) {
     </div>*/}
         </div>
         {product.count && product.price ? (
-          <a className="offerButton">
-            <QuickView product={{ data: product }} cart={props.cart} />
+          <a
+            className="offerButton"
+            href={"/product/" + standardSku(product.sku)}
+          >
+            {/* <QuickView product={{ data: product }} cart={props.cart} /> */}
+            <i className="icon-size fas fa-shopping-cart"></i>
           </a>
         ) : (
           <a className="offerButton disableBtn">

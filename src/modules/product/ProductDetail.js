@@ -32,18 +32,6 @@ function ProductDetail(props) {
             <strong>مشخصات فنی</strong>
           </div>
         </div>
-        {/*<div className="productPromise">
-                    <div className={tabSelect===2?"productPromiseText productPromiseActive":"productPromiseText"}
-                        onClick={()=>setTab(2)}>
-                        <strong>نظرات کاربران</strong>
-                    </div>
-                </div>
-                <div className="productPromise">
-                    <div className={tabSelect===3?"productPromiseText productPromiseActive":"productPromiseText"}
-                        onClick={()=>setTab(3)}>
-                        <strong>نمونه جزئیات </strong>
-                    </div>
-    </div>*/}
       </div>
       <div className="cPanel">
         <div style={{ display: tabSelect === 0 ? "block" : "none" }}>
